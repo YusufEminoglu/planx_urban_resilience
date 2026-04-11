@@ -5,7 +5,7 @@ author=Araş. Gör. Yusuf Eminoğlu
 qgisMinimumVersion=3.10
 description=PlanX urban resilience suite for QGIS. Version 1.0 ships the seismic module: Monte Carlo building collapse, debris on the transport network, and post-earthquake clearance corridors. Additional hazard modules (heat, flood, livability, etc.) will be added over time in the same plugin.
 about=Single Processing provider umbrella for city-scale resilience analyses. Current focus: stochastic seismic debris and logistics on vector road and building layers.
-version=1.0.0
+version=1.0.1
 tracker=https://github.com/YusufEminoglu/planx_urban_resilience/issues
 repository=https://github.com/YusufEminoglu/planx_urban_resilience
 
@@ -20,4 +20,5 @@ hasProcessingProvider=yes
 plugin_dependencies=
 license=GPL-3
 changelog=
+    1.0.1 - Packaging: Hub-conformant ZIP (forward slashes only; avoid Windows Compress-Archive).
     1.0.0 - Initial suite release: seismic debris & evacuation-network module (migrated from former PlanX: Seismic Resilience package).
