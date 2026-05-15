@@ -113,6 +113,13 @@ MODULES = [
         "outputs": "Standalone HTML summary with score statistics, class distribution and top drivers.",
     },
     {
+        "title": "Resilience Studio Brief (Markdown)",
+        "algorithm": "planx_urban_resilience:resilience_studio_brief_markdown",
+        "group": "9 - Report and QA",
+        "inputs": "Any scored resilience layer plus optional class/driver fields and study context.",
+        "outputs": "Markdown brief with executive summary, key metrics, limitations and suggested actions.",
+    },
+    {
         "title": "Apply Resilience Symbology",
         "algorithm": "planx_urban_resilience:apply_resilience_symbology",
         "group": "9 - Report and QA",
@@ -220,7 +227,7 @@ class UrbanResilienceDashboard(QDialog):
         intro.setHtml(
             """
             <h2>Urban resilience cockpit</h2>
-            <p>This suite currently includes a synthetic QA dataset generator, seismic debris logistics, urban heat comfort risk, pluvial flood susceptibility, social vulnerability, Euclidean and network emergency accessibility, air exposure, green infrastructure stress, adaptation priority synthesis, scenario templates, scenario comparison, HTML reporting, and QGIS style presets.</p>
+            <p>This suite currently includes a synthetic QA dataset generator, seismic debris logistics, urban heat comfort risk, pluvial flood susceptibility, social vulnerability, Euclidean and network emergency accessibility, air exposure, green infrastructure stress, adaptation priority synthesis, scenario templates, scenario comparison, HTML/Markdown reporting, and QGIS style presets.</p>
             <p>The first release is offline-first: load your own QGIS layers, review readiness, then run the Processing modules.</p>
             """
         )
@@ -331,7 +338,7 @@ class UrbanResilienceDashboard(QDialog):
           <li>Air: study area, traffic corridors, optional emission sources, sensitive receptors and green buffers.</li>
           <li>Drought: green infrastructure polygons, optional impervious context, water/blue infrastructure and tree points.</li>
           <li>Synthesis: one polygon layer containing joined 0-100 risk fields from previous modules.</li>
-          <li>Report/QA: create scenario templates, compare baseline vs scenario score fields, export a compact HTML score report, or apply a PlanX style preset.</li>
+          <li>Report/QA: create scenario templates, compare baseline vs scenario score fields, export HTML/Markdown reports, or apply a PlanX style preset.</li>
         </ul>
         <p><b>Note:</b> These modules are screening tools for planning support, not engineering-grade simulation models.</p>
         """
