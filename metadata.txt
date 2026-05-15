@@ -3,14 +3,14 @@ name=PlanX: Urban Resilience
 email=yusuf.eminoglu@deu.edu.tr
 author=Yusuf Eminoglu
 qgisMinimumVersion=3.10
-description=PlanX urban resilience suite for QGIS. Includes synthetic QA data, seismic debris logistics, heat, flood, social vulnerability, emergency access, air exposure, drought stress, and adaptation priority screening modules.
-about=Single Processing provider and QGIS dashboard for city-scale resilience analyses. Current modules cover synthetic QA data generation, stochastic seismic debris and logistics, heat comfort exposure, pluvial flood susceptibility, social vulnerability, emergency shelter accessibility, air quality exposure, green infrastructure drought stress, and climate adaptation priority synthesis. Developed with feedback from educational workflows at Dokuz Eylul University, Department of City and Regional Planning.
-version=1.4.0
+description=PlanX urban resilience suite for QGIS. Includes synthetic QA data, seismic, heat, flood, social, emergency, air, drought, adaptation, scenario comparison, and HTML reporting modules.
+about=Single Processing provider and QGIS dashboard for city-scale resilience analyses. Current modules cover synthetic QA data generation, stochastic seismic debris and logistics, heat comfort exposure, pluvial flood susceptibility, social vulnerability, emergency shelter accessibility, air quality exposure, green infrastructure drought stress, climate adaptation priority synthesis, scenario comparison, and HTML reporting. Developed with feedback from educational workflows at Dokuz Eylul University, Department of City and Regional Planning.
+version=1.5.0
 tracker=https://github.com/YusufEminoglu/planx_urban_resilience/issues
 repository=https://github.com/YusufEminoglu/planx_urban_resilience
 
 category=Processing
-tags=planx,urban resilience,drr,seismic,debris,heat,flood,social vulnerability,emergency accessibility,air quality,drought,adaptation,synthetic data,climate,spatial planning,QGIS,processing
+tags=planx,urban resilience,drr,seismic,debris,heat,flood,social vulnerability,emergency accessibility,air quality,drought,adaptation,scenario comparison,reporting,synthetic data,climate,spatial planning,QGIS,processing
 homepage=https://github.com/YusufEminoglu/planx_urban_resilience
 icon=icons/plugin.svg
 experimental=False
@@ -20,6 +20,10 @@ hasProcessingProvider=yes
 plugin_dependencies=
 license=GPL-3
 changelog=
+    PlanX Urban Resilience 1.5.0 - Added reporting and scenario comparison tools for studio-ready outputs.
+        - Added Scenario Comparison / Delta Map to compare baseline and proposed 0-100 score fields.
+        - Added Resilience Score HTML Report for standalone score summaries, class distributions, and top drivers.
+        - Updated dashboard module cards, data readiness guidance, README, metadata, and roadmap.
     PlanX Urban Resilience 1.4.0 - Added synthetic demo data generation and dashboard smoke-test guidance.
         - Added Synthetic Resilience Demo Dataset Processing algorithm for artificial study area, buildings, roads, impervious surfaces, green infrastructure, water, shelters, social units, and sensitive receptors.
         - Added a dashboard Test page that opens the synthetic dataset generator and explains the smoke-test workflow.

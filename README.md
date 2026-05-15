@@ -2,7 +2,7 @@
 
 QGIS **3.10-3.99** - Processing - **GPL-3**
 
-PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. Version **1.4.0** includes a synthetic QA dataset generator, seismic debris logistics, urban heat comfort risk, pluvial flood susceptibility, social vulnerability, emergency accessibility, air exposure, green infrastructure drought stress, and climate adaptation priority synthesis modules, plus a QGIS dashboard for module discovery and data readiness review.
+PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. Version **1.5.0** includes a synthetic QA dataset generator, seismic debris logistics, urban heat comfort risk, pluvial flood susceptibility, social vulnerability, emergency accessibility, air exposure, green infrastructure drought stress, climate adaptation priority synthesis, scenario comparison, and HTML reporting modules, plus a QGIS dashboard for module discovery and data readiness review.
 
 ## Modules
 
@@ -105,6 +105,26 @@ Outputs:
 - `drivers`
 - `missing`
 
+### Scenario Comparison / Delta Map
+
+Compares baseline and proposed scenario score fields in the same layer. Lower scores are treated as better, so negative deltas indicate improvement.
+
+Outputs:
+
+- Scenario comparison layer
+- `delta`
+- `pct_change`
+- `change_cls`
+- `action_hint`
+
+### Resilience Score HTML Report
+
+Exports a compact standalone HTML summary from any scored resilience layer. It summarizes feature count, score range, average score, high-priority feature count, class distribution, and top driver labels.
+
+Outputs:
+
+- HTML report file
+
 ## Dashboard
 
 The plugin adds a `PlanX Urban Resilience` toolbar/menu action. The dashboard includes:
@@ -123,8 +143,8 @@ These modules are screening and prioritization tools. They are designed for plan
 
 - GEE-backed historical climate and land-cover connectors
 - Network-based evacuation and emergency accessibility
-- Resilience report export
-- Scenario comparison templates
+- PDF atlas export
+- Scenario library templates
 
 ## Install
 
