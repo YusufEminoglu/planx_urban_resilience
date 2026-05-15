@@ -22,6 +22,13 @@ from qgis.core import QgsProject
 
 MODULES = [
     {
+        "title": "Synthetic Resilience Demo Dataset",
+        "algorithm": "planx_urban_resilience:synthetic_resilience_demo_dataset",
+        "group": "0 - Demo and QA",
+        "inputs": "No project data required; only a scale multiplier.",
+        "outputs": "Synthetic study area, buildings, roads, impervious surfaces, green infrastructure, water, shelters, social units and sensitive receptors.",
+    },
+    {
         "title": "Seismic Debris and Logistics",
         "algorithm": "planx_urban_resilience:sismik_risk_dinamik_analizor_v2",
         "group": "1 - Seismic",
@@ -139,7 +146,7 @@ class UrbanResilienceDashboard(QDialog):
         shell = QHBoxLayout(self)
         self.nav = QListWidget()
         self.nav.setFixedWidth(170)
-        for label in ("Overview", "Data", "Modules", "Run", "Report"):
+        for label in ("Overview", "Data", "Modules", "Run", "Report", "Test"):
             QListWidgetItem(label, self.nav)
         self.nav.setCurrentRow(0)
         shell.addWidget(self.nav)
@@ -159,6 +166,7 @@ class UrbanResilienceDashboard(QDialog):
             self._modules_page(),
             self._run_page(),
             self._report_page(),
+            self._test_page(),
         ]
         for i, page in enumerate(self.pages):
             page.setVisible(i == 0)
@@ -177,7 +185,7 @@ class UrbanResilienceDashboard(QDialog):
         intro.setHtml(
             """
             <h2>Urban resilience cockpit</h2>
-            <p>This suite currently includes seismic debris logistics, urban heat comfort risk, pluvial flood susceptibility, social vulnerability, emergency accessibility, air exposure, green infrastructure stress, and adaptation priority synthesis.</p>
+            <p>This suite currently includes a synthetic QA dataset generator, seismic debris logistics, urban heat comfort risk, pluvial flood susceptibility, social vulnerability, emergency accessibility, air exposure, green infrastructure stress, and adaptation priority synthesis.</p>
             <p>The first release is offline-first: load your own QGIS layers, review readiness, then run the Processing modules.</p>
             """
         )
@@ -225,6 +233,24 @@ class UrbanResilienceDashboard(QDialog):
         layout.addWidget(self.summary_report)
         return page
 
+    def _test_page(self):
+        page = QWidget()
+        layout = QVBoxLayout(page)
+        test_group = QGroupBox("Synthetic smoke-test workflow")
+        test_layout = QVBoxLayout(test_group)
+        info = QLabel(
+            "Generate the synthetic dataset first, then run Heat, Air, Social, Emergency and Drought modules with the generated layers. Flood still needs a DEM raster; Synthesis needs joined risk fields."
+        )
+        info.setWordWrap(True)
+        test_layout.addWidget(info)
+        button = QPushButton("Generate Synthetic Dataset")
+        button.setObjectName("primaryButton")
+        button.clicked.connect(lambda _checked=False: self._open_algorithm("planx_urban_resilience:synthetic_resilience_demo_dataset"))
+        test_layout.addWidget(button)
+        layout.addWidget(test_group)
+        layout.addStretch(1)
+        return page
+
     def _module_cards(self, with_buttons=False):
         group = QGroupBox("Modules")
         grid = QGridLayout(group)
@@ -262,6 +288,7 @@ class UrbanResilienceDashboard(QDialog):
         <h3>Suggested layer preparation</h3>
         <ul>
           <li>Seismic: buildings, parcels, study/road area, floor and construction year fields.</li>
+          <li>Demo/QA: run the synthetic dataset generator to create artificial test layers for module smoke tests.</li>
           <li>Heat: study area, buildings, hardscape/roads, green areas or trees, optional water and vulnerable assets.</li>
           <li>Flood: DEM raster, study area, optional buildings, roads and drainage/water network.</li>
           <li>Social: neighborhood/census polygons with optional population, elderly, children, disability and deprivation fields.</li>

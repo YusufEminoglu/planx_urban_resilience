@@ -6,6 +6,7 @@ from qgis.PyQt.QtGui import QIcon
 
 from .accessibility.emergency_accessibility import EmergencyAccessibilityAlgorithm
 from .air.air_quality_exposure import AirQualityExposureAlgorithm
+from .demo.synthetic_dataset import SyntheticResilienceDatasetAlgorithm
 from .drought.green_infrastructure_stress import GreenInfrastructureStressAlgorithm
 from .flood.pluvial_flood_susceptibility import PluvialFloodSusceptibilityAlgorithm
 from .heat.urban_heat_comfort import UrbanHeatComfortRiskAlgorithm
@@ -16,6 +17,7 @@ from .synthesis.adaptation_priority_synthesis import AdaptationPrioritySynthesis
 
 class PlanXUrbanResilienceProvider(QgsProcessingProvider):
     def loadAlgorithms(self):
+        self.addAlgorithm(SyntheticResilienceDatasetAlgorithm())
         self.addAlgorithm(UrbanResilienceSeismicAnalystV2())
         self.addAlgorithm(UrbanHeatComfortRiskAlgorithm())
         self.addAlgorithm(PluvialFloodSusceptibilityAlgorithm())

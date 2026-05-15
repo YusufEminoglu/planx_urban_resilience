@@ -2,9 +2,25 @@
 
 QGIS **3.10-3.99** - Processing - **GPL-3**
 
-PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. Version **1.3.0** includes seismic debris logistics, urban heat comfort risk, pluvial flood susceptibility, social vulnerability, emergency accessibility, air exposure, green infrastructure drought stress, and climate adaptation priority synthesis modules, plus a QGIS dashboard for module discovery and data readiness review.
+PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. Version **1.4.0** includes a synthetic QA dataset generator, seismic debris logistics, urban heat comfort risk, pluvial flood susceptibility, social vulnerability, emergency accessibility, air exposure, green infrastructure drought stress, and climate adaptation priority synthesis modules, plus a QGIS dashboard for module discovery and data readiness review.
 
 ## Modules
+
+### Synthetic Resilience Demo Dataset
+
+Creates artificial metric layers for smoke testing and teaching the suite without external data. Outputs include study area, buildings, roads, impervious surfaces, green infrastructure, water, shelters, social units, and sensitive receptors.
+
+Suggested smoke-test flow:
+
+- Generate the synthetic dataset.
+- Run Heat with study area, buildings, impervious, green, water and sensitive layers.
+- Run Air with study area, roads, sensitive receptors and green buffers.
+- Run Social with synthetic social units and the generated demographic fields.
+- Run Emergency with study area, shelters and buildings or sensitive receptors.
+- Run Drought with green infrastructure, impervious surfaces, water and optional tree points.
+- Use Synthesis after joining 0-100 risk fields into one planning-unit layer.
+
+A QGIS Console helper is included at `tools/qgis_synthetic_smoke.py`. It generates the demo data and runs the modules that do not require an external DEM or a pre-joined synthesis layer.
 
 ### Seismic Debris and Logistics
 
