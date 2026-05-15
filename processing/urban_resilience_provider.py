@@ -11,6 +11,7 @@ from .demo.synthetic_dataset import SyntheticResilienceDatasetAlgorithm
 from .drought.green_infrastructure_stress import GreenInfrastructureStressAlgorithm
 from .flood.pluvial_flood_susceptibility import PluvialFloodSusceptibilityAlgorithm
 from .heat.urban_heat_comfort import UrbanHeatComfortRiskAlgorithm
+from .reporting.apply_symbology import ApplyResilienceSymbologyAlgorithm
 from .reporting.resilience_report import ResilienceReportAlgorithm
 from .reporting.scenario_comparison import ScenarioComparisonAlgorithm
 from .seismic.monte_carlo_debris import UrbanResilienceSeismicAnalystV2
@@ -32,6 +33,7 @@ class PlanXUrbanResilienceProvider(QgsProcessingProvider):
         self.addAlgorithm(AdaptationPrioritySynthesisAlgorithm())
         self.addAlgorithm(ScenarioComparisonAlgorithm())
         self.addAlgorithm(ResilienceReportAlgorithm())
+        self.addAlgorithm(ApplyResilienceSymbologyAlgorithm())
 
     def id(self):
         return "planx_urban_resilience"
