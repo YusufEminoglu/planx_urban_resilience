@@ -42,6 +42,20 @@ MODULES = [
         "inputs": "DEM, study area, optional buildings, roads and drainage/water network.",
         "outputs": "Flood susceptibility grid, exposed buildings and exposed road segments.",
     },
+    {
+        "title": "Social Vulnerability Index",
+        "algorithm": "planx_urban_resilience:social_vulnerability_index",
+        "group": "4 - Social",
+        "inputs": "Neighborhood or census polygons with optional population, elderly, children, disability and deprivation fields.",
+        "outputs": "0-100 social vulnerability index with risk classes and data-quality flags.",
+    },
+    {
+        "title": "Emergency Accessibility and Shelter Coverage",
+        "algorithm": "planx_urban_resilience:emergency_accessibility_shelter_coverage",
+        "group": "5 - Emergency",
+        "inputs": "Study area, shelters or safe assembly areas, optional assets and barriers.",
+        "outputs": "Accessibility deficit grid and underserved buildings, facilities or population assets.",
+    },
 ]
 
 
@@ -142,7 +156,7 @@ class UrbanResilienceDashboard(QDialog):
         intro.setHtml(
             """
             <h2>Urban resilience cockpit</h2>
-            <p>This suite currently includes seismic debris logistics, urban heat comfort risk and pluvial flood susceptibility screening.</p>
+            <p>This suite currently includes seismic debris logistics, urban heat comfort risk, pluvial flood susceptibility, social vulnerability, and emergency accessibility screening.</p>
             <p>The first release is offline-first: load your own QGIS layers, review readiness, then run the Processing modules.</p>
             """
         )
@@ -207,10 +221,11 @@ class UrbanResilienceDashboard(QDialog):
             grid.addWidget(card, idx // 2, idx % 2)
         future = QGroupBox("Future modules")
         future_layout = QVBoxLayout(future)
-        future_label = QLabel("Social vulnerability, emergency accessibility, air quality exposure, drought and green infrastructure stress, and optional GEE-backed historical climate connectors.")
+        future_label = QLabel("Next candidates: air quality exposure, drought and green infrastructure stress, climate adaptation priority synthesis, and optional GEE-backed historical climate connectors.")
         future_label.setWordWrap(True)
         future_layout.addWidget(future_label)
-        grid.addWidget(future, 1, 1)
+        next_row = (len(MODULES) + 1) // 2
+        grid.addWidget(future, next_row, 1)
         return group
 
     def _refresh_report(self):
@@ -228,8 +243,10 @@ class UrbanResilienceDashboard(QDialog):
           <li>Seismic: buildings, parcels, study/road area, floor and construction year fields.</li>
           <li>Heat: study area, buildings, hardscape/roads, green areas or trees, optional water and vulnerable assets.</li>
           <li>Flood: DEM raster, study area, optional buildings, roads and drainage/water network.</li>
+          <li>Social: neighborhood/census polygons with optional population, elderly, children, disability and deprivation fields.</li>
+          <li>Emergency: study area, shelters/safe assembly areas, optional population assets and barriers.</li>
         </ul>
-        <p><b>Note:</b> Heat and flood modules are screening tools for planning support, not engineering-grade simulation models.</p>
+        <p><b>Note:</b> These modules are screening tools for planning support, not engineering-grade simulation models.</p>
         """
         self.data_report.setHtml(html)
         self.summary_report.setHtml(html)

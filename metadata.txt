@@ -3,14 +3,14 @@ name=PlanX: Urban Resilience
 email=yusuf.eminoglu@deu.edu.tr
 author=Yusuf Eminoglu
 qgisMinimumVersion=3.10
-description=PlanX urban resilience suite for QGIS. Includes seismic debris logistics, urban heat comfort risk, and pluvial flood susceptibility screening modules for planning-support workflows.
-about=Single Processing provider and QGIS dashboard for city-scale resilience analyses. Current modules cover stochastic seismic debris and logistics, heat comfort exposure, and pluvial flood susceptibility screening. Developed with feedback from educational workflows at Dokuz Eylul University, Department of City and Regional Planning.
-version=1.1.0
+description=PlanX urban resilience suite for QGIS. Includes seismic debris logistics, urban heat comfort, pluvial flood susceptibility, social vulnerability, and emergency accessibility screening modules.
+about=Single Processing provider and QGIS dashboard for city-scale resilience analyses. Current modules cover stochastic seismic debris and logistics, heat comfort exposure, pluvial flood susceptibility, social vulnerability, and emergency shelter accessibility screening. Developed with feedback from educational workflows at Dokuz Eylul University, Department of City and Regional Planning.
+version=1.2.0
 tracker=https://github.com/YusufEminoglu/planx_urban_resilience/issues
 repository=https://github.com/YusufEminoglu/planx_urban_resilience
 
 category=Processing
-tags=planx,urban resilience,drr,seismic,debris,heat,flood,climate,spatial planning,QGIS,processing
+tags=planx,urban resilience,drr,seismic,debris,heat,flood,social vulnerability,emergency accessibility,climate,spatial planning,QGIS,processing
 homepage=https://github.com/YusufEminoglu/planx_urban_resilience
 icon=icons/plugin.svg
 experimental=False
@@ -20,6 +20,10 @@ hasProcessingProvider=yes
 plugin_dependencies=
 license=GPL-3
 changelog=
+    PlanX Urban Resilience 1.2.0 - Expanded the suite with Social Vulnerability Index and Emergency Accessibility/Shelter Coverage modules.
+        - Added a weighted social vulnerability screening algorithm for neighborhood or census polygons.
+        - Added an emergency accessibility and shelter coverage screening algorithm with underserved asset outputs.
+        - Updated the dashboard module catalog, data readiness guidance, README, and Plugin Hub metadata.
     PlanX Urban Resilience 1.1.0 - Added QGIS dashboard, Urban Heat Comfort Risk screening, and Pluvial Flood Susceptibility screening modules.
         - Added module cards, project data readiness guidance, and Processing launch shortcuts.
         - Registered heat and flood Processing groups alongside the existing seismic debris module.
