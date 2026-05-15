@@ -2,7 +2,7 @@
 
 QGIS **3.10-3.99** - Processing - **GPL-3**
 
-PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. Version **1.5.0** includes a synthetic QA dataset generator, seismic debris logistics, urban heat comfort risk, pluvial flood susceptibility, social vulnerability, emergency accessibility, air exposure, green infrastructure drought stress, climate adaptation priority synthesis, scenario comparison, and HTML reporting modules, plus a QGIS dashboard for module discovery and data readiness review.
+PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. Version **1.6.0** includes a synthetic QA dataset generator, seismic debris logistics, urban heat comfort risk, pluvial flood susceptibility, social vulnerability, Euclidean and network emergency accessibility, air exposure, green infrastructure drought stress, climate adaptation priority synthesis, scenario comparison, and HTML reporting modules, plus a QGIS dashboard for module discovery and data readiness review.
 
 ## Modules
 
@@ -70,6 +70,19 @@ Outputs:
 - `access_score`
 - `access_class`
 - Underserved assets
+
+### Network Emergency Accessibility
+
+Road-network screening model that estimates access distance and travel time from origins such as buildings, facilities or population points to shelters or safe assembly areas. It builds an offline graph from road line vertices and uses multi-source shortest paths from destinations.
+
+Outputs:
+
+- Network accessibility origins
+- `net_dist_m`
+- `time_min`
+- `access_cls`
+- `qa_flag`
+- Network underserved origins
 
 ### Air Quality / Urban Exposure
 
@@ -142,7 +155,6 @@ These modules are screening and prioritization tools. They are designed for plan
 ## Future Roadmap
 
 - GEE-backed historical climate and land-cover connectors
-- Network-based evacuation and emergency accessibility
 - PDF atlas export
 - Scenario library templates
 

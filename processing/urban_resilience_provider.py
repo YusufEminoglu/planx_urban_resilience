@@ -5,6 +5,7 @@ from qgis.core import QgsProcessingProvider
 from qgis.PyQt.QtGui import QIcon
 
 from .accessibility.emergency_accessibility import EmergencyAccessibilityAlgorithm
+from .accessibility.network_accessibility import NetworkEmergencyAccessibilityAlgorithm
 from .air.air_quality_exposure import AirQualityExposureAlgorithm
 from .demo.synthetic_dataset import SyntheticResilienceDatasetAlgorithm
 from .drought.green_infrastructure_stress import GreenInfrastructureStressAlgorithm
@@ -25,6 +26,7 @@ class PlanXUrbanResilienceProvider(QgsProcessingProvider):
         self.addAlgorithm(PluvialFloodSusceptibilityAlgorithm())
         self.addAlgorithm(SocialVulnerabilityIndexAlgorithm())
         self.addAlgorithm(EmergencyAccessibilityAlgorithm())
+        self.addAlgorithm(NetworkEmergencyAccessibilityAlgorithm())
         self.addAlgorithm(AirQualityExposureAlgorithm())
         self.addAlgorithm(GreenInfrastructureStressAlgorithm())
         self.addAlgorithm(AdaptationPrioritySynthesisAlgorithm())
