@@ -20,9 +20,9 @@ hasProcessingProvider=yes
 plugin_dependencies=
 license=GPL-3
 changelog=
-    1.0.3 - Author/email metadata standardization, DEU educational context note, stable Hub release refresh.
-    1.0.2 - Release refresh for Plugin Hub publication.
+    PlanX Urban Resilience 1.0.3 - Standardized author/email metadata, added DEU educational context, marked the plugin stable, and refreshed the Plugin Hub release package.
+    PlanX Urban Resilience 1.0.2 - Refreshed the release for Plugin Hub publication.
         - Update package metadata for the next published version.
         - Rebuild the Hub-ready ZIP archive from the current plugin sources.
-    1.0.1 - Packaging: Hub-conformant ZIP (forward slashes only; avoid Windows Compress-Archive).
-    1.0.0 - Initial suite release: seismic debris & evacuation-network module (migrated from former PlanX: Seismic Resilience package).
+    PlanX Urban Resilience 1.0.1 - Built a Hub-conformant ZIP package with forward-slash paths.
+    PlanX Urban Resilience 1.0.0 - Initial suite release with the seismic debris and evacuation-network module migrated from the former PlanX Seismic Resilience package.
