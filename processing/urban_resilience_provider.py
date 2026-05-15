@@ -5,10 +5,13 @@ from qgis.core import QgsProcessingProvider
 from qgis.PyQt.QtGui import QIcon
 
 from .accessibility.emergency_accessibility import EmergencyAccessibilityAlgorithm
+from .air.air_quality_exposure import AirQualityExposureAlgorithm
+from .drought.green_infrastructure_stress import GreenInfrastructureStressAlgorithm
 from .flood.pluvial_flood_susceptibility import PluvialFloodSusceptibilityAlgorithm
 from .heat.urban_heat_comfort import UrbanHeatComfortRiskAlgorithm
 from .seismic.monte_carlo_debris import UrbanResilienceSeismicAnalystV2
 from .social.social_vulnerability_index import SocialVulnerabilityIndexAlgorithm
+from .synthesis.adaptation_priority_synthesis import AdaptationPrioritySynthesisAlgorithm
 
 
 class PlanXUrbanResilienceProvider(QgsProcessingProvider):
@@ -18,6 +21,9 @@ class PlanXUrbanResilienceProvider(QgsProcessingProvider):
         self.addAlgorithm(PluvialFloodSusceptibilityAlgorithm())
         self.addAlgorithm(SocialVulnerabilityIndexAlgorithm())
         self.addAlgorithm(EmergencyAccessibilityAlgorithm())
+        self.addAlgorithm(AirQualityExposureAlgorithm())
+        self.addAlgorithm(GreenInfrastructureStressAlgorithm())
+        self.addAlgorithm(AdaptationPrioritySynthesisAlgorithm())
 
     def id(self):
         return "planx_urban_resilience"

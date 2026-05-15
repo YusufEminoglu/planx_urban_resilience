@@ -56,6 +56,27 @@ MODULES = [
         "inputs": "Study area, shelters or safe assembly areas, optional assets and barriers.",
         "outputs": "Accessibility deficit grid and underserved buildings, facilities or population assets.",
     },
+    {
+        "title": "Air Quality / Urban Exposure",
+        "algorithm": "planx_urban_resilience:air_quality_exposure_screening",
+        "group": "6 - Air",
+        "inputs": "Study area, major roads, optional emission sources, sensitive receptors and green buffers.",
+        "outputs": "Air exposure grid and exposed sensitive receptors.",
+    },
+    {
+        "title": "Drought and Green Infrastructure Stress",
+        "algorithm": "planx_urban_resilience:green_infrastructure_drought_stress",
+        "group": "7 - Drought",
+        "inputs": "Green infrastructure polygons, optional impervious surfaces, water layers and tree points.",
+        "outputs": "Green infrastructure stress index and high-priority patches.",
+    },
+    {
+        "title": "Climate Adaptation Priority Synthesis",
+        "algorithm": "planx_urban_resilience:climate_adaptation_priority_synthesis",
+        "group": "8 - Synthesis",
+        "inputs": "Planning units with joined 0-100 risk fields from other modules.",
+        "outputs": "Adaptation priority score, class, top drivers and missing-data flags.",
+    },
 ]
 
 
@@ -156,7 +177,7 @@ class UrbanResilienceDashboard(QDialog):
         intro.setHtml(
             """
             <h2>Urban resilience cockpit</h2>
-            <p>This suite currently includes seismic debris logistics, urban heat comfort risk, pluvial flood susceptibility, social vulnerability, and emergency accessibility screening.</p>
+            <p>This suite currently includes seismic debris logistics, urban heat comfort risk, pluvial flood susceptibility, social vulnerability, emergency accessibility, air exposure, green infrastructure stress, and adaptation priority synthesis.</p>
             <p>The first release is offline-first: load your own QGIS layers, review readiness, then run the Processing modules.</p>
             """
         )
@@ -221,7 +242,7 @@ class UrbanResilienceDashboard(QDialog):
             grid.addWidget(card, idx // 2, idx % 2)
         future = QGroupBox("Future modules")
         future_layout = QVBoxLayout(future)
-        future_label = QLabel("Next candidates: air quality exposure, drought and green infrastructure stress, climate adaptation priority synthesis, and optional GEE-backed historical climate connectors.")
+        future_label = QLabel("Next candidates: GEE-backed historical climate connectors, network-based evacuation/accessibility, resilience report export, and scenario comparison templates.")
         future_label.setWordWrap(True)
         future_layout.addWidget(future_label)
         next_row = (len(MODULES) + 1) // 2
@@ -245,6 +266,9 @@ class UrbanResilienceDashboard(QDialog):
           <li>Flood: DEM raster, study area, optional buildings, roads and drainage/water network.</li>
           <li>Social: neighborhood/census polygons with optional population, elderly, children, disability and deprivation fields.</li>
           <li>Emergency: study area, shelters/safe assembly areas, optional population assets and barriers.</li>
+          <li>Air: study area, traffic corridors, optional emission sources, sensitive receptors and green buffers.</li>
+          <li>Drought: green infrastructure polygons, optional impervious context, water/blue infrastructure and tree points.</li>
+          <li>Synthesis: one polygon layer containing joined 0-100 risk fields from previous modules.</li>
         </ul>
         <p><b>Note:</b> These modules are screening tools for planning support, not engineering-grade simulation models.</p>
         """

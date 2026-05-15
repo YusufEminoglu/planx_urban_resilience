@@ -2,7 +2,7 @@
 
 QGIS **3.10-3.99** - Processing - **GPL-3**
 
-PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. Version **1.2.0** includes seismic debris logistics, urban heat comfort risk, pluvial flood susceptibility, social vulnerability, and emergency accessibility modules, plus a QGIS dashboard for module discovery and data readiness review.
+PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. Version **1.3.0** includes seismic debris logistics, urban heat comfort risk, pluvial flood susceptibility, social vulnerability, emergency accessibility, air exposure, green infrastructure drought stress, and climate adaptation priority synthesis modules, plus a QGIS dashboard for module discovery and data readiness review.
 
 ## Modules
 
@@ -55,6 +55,40 @@ Outputs:
 - `access_class`
 - Underserved assets
 
+### Air Quality / Urban Exposure
+
+Planning-support exposure model that combines major road proximity, optional industrial or emission-source proximity, sensitive receptors, and green buffer mitigation.
+
+Outputs:
+
+- Air exposure grid
+- `air_score`
+- `risk_class`
+- Exposed sensitive receptors
+
+### Drought and Green Infrastructure Stress
+
+Green infrastructure stress model for parks, canopy patches, and ecological open spaces. It combines impervious context, distance to water or blue infrastructure, patch size, and optional tree density.
+
+Outputs:
+
+- Green infrastructure stress polygons
+- `stress_score`
+- `stress_class`
+- High-priority patches
+
+### Climate Adaptation Priority Synthesis
+
+Weighted synthesis model for joined planning units. After spatially joining outputs from other modules into one polygon layer, this tool creates a single `adapt_score`, `adapt_class`, top-driver summary, and missing-data flags.
+
+Outputs:
+
+- Climate adaptation priority layer
+- `adapt_score`
+- `adapt_class`
+- `drivers`
+- `missing`
+
 ## Dashboard
 
 The plugin adds a `PlanX Urban Resilience` toolbar/menu action. The dashboard includes:
@@ -71,10 +105,10 @@ These modules are screening and prioritization tools. They are designed for plan
 
 ## Future Roadmap
 
-- Air Quality / Urban Exposure
-- Drought and Green Infrastructure Stress
-- Climate adaptation priority synthesis
-- Optional Google Earth Engine backed historical heat/flood/land-cover connector
+- GEE-backed historical climate and land-cover connectors
+- Network-based evacuation and emergency accessibility
+- Resilience report export
+- Scenario comparison templates
 
 ## Install
 
