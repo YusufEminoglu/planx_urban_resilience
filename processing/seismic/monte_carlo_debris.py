@@ -2,7 +2,7 @@
 
 """
 PlanX: Urban Resilience — Seismic / debris module (Monte Carlo).
-Yazar: Araş. Gör. Yusuf Eminoğlu
+Yazar: Yusuf Eminoglu
 """
 
 from qgis.core import (
