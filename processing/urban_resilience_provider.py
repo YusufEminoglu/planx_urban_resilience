@@ -14,6 +14,7 @@ from .heat.urban_heat_comfort import UrbanHeatComfortRiskAlgorithm
 from .reporting.apply_symbology import ApplyResilienceSymbologyAlgorithm
 from .reporting.resilience_report import ResilienceReportAlgorithm
 from .reporting.scenario_comparison import ScenarioComparisonAlgorithm
+from .reporting.scenario_template import ScenarioTemplateAlgorithm
 from .seismic.monte_carlo_debris import UrbanResilienceSeismicAnalystV2
 from .social.social_vulnerability_index import SocialVulnerabilityIndexAlgorithm
 from .synthesis.adaptation_priority_synthesis import AdaptationPrioritySynthesisAlgorithm
@@ -32,6 +33,7 @@ class PlanXUrbanResilienceProvider(QgsProcessingProvider):
         self.addAlgorithm(GreenInfrastructureStressAlgorithm())
         self.addAlgorithm(AdaptationPrioritySynthesisAlgorithm())
         self.addAlgorithm(ScenarioComparisonAlgorithm())
+        self.addAlgorithm(ScenarioTemplateAlgorithm())
         self.addAlgorithm(ResilienceReportAlgorithm())
         self.addAlgorithm(ApplyResilienceSymbologyAlgorithm())
 

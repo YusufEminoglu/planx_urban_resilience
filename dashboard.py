@@ -99,6 +99,13 @@ MODULES = [
         "outputs": "Delta, percent change, improved/stable/worsened class and action hint.",
     },
     {
+        "title": "Scenario Planning Template",
+        "algorithm": "planx_urban_resilience:scenario_planning_template",
+        "group": "9 - Report and QA",
+        "inputs": "Planning units or scored layer, optional baseline score field and intervention settings.",
+        "outputs": "Editable scenario worksheet with baseline/proposed score fields and notes.",
+    },
+    {
         "title": "Resilience Score HTML Report",
         "algorithm": "planx_urban_resilience:resilience_score_html_report",
         "group": "9 - Report and QA",
@@ -213,7 +220,7 @@ class UrbanResilienceDashboard(QDialog):
         intro.setHtml(
             """
             <h2>Urban resilience cockpit</h2>
-            <p>This suite currently includes a synthetic QA dataset generator, seismic debris logistics, urban heat comfort risk, pluvial flood susceptibility, social vulnerability, Euclidean and network emergency accessibility, air exposure, green infrastructure stress, adaptation priority synthesis, scenario comparison, HTML reporting, and QGIS style presets.</p>
+            <p>This suite currently includes a synthetic QA dataset generator, seismic debris logistics, urban heat comfort risk, pluvial flood susceptibility, social vulnerability, Euclidean and network emergency accessibility, air exposure, green infrastructure stress, adaptation priority synthesis, scenario templates, scenario comparison, HTML reporting, and QGIS style presets.</p>
             <p>The first release is offline-first: load your own QGIS layers, review readiness, then run the Processing modules.</p>
             """
         )
@@ -296,7 +303,7 @@ class UrbanResilienceDashboard(QDialog):
             grid.addWidget(card, idx // 2, idx % 2)
         future = QGroupBox("Future modules")
         future_layout = QVBoxLayout(future)
-        future_label = QLabel("Next candidates: GEE-backed historical climate connectors, PDF atlas export, scenario library templates, and richer report layouts.")
+        future_label = QLabel("Next candidates: GEE-backed historical climate connectors, PDF atlas export, richer report layouts, and optional map-book presets.")
         future_label.setWordWrap(True)
         future_layout.addWidget(future_label)
         next_row = (len(MODULES) + 1) // 2
@@ -324,7 +331,7 @@ class UrbanResilienceDashboard(QDialog):
           <li>Air: study area, traffic corridors, optional emission sources, sensitive receptors and green buffers.</li>
           <li>Drought: green infrastructure polygons, optional impervious context, water/blue infrastructure and tree points.</li>
           <li>Synthesis: one polygon layer containing joined 0-100 risk fields from previous modules.</li>
-          <li>Report/QA: compare baseline vs scenario score fields, export a compact HTML score report, or apply a PlanX style preset.</li>
+          <li>Report/QA: create scenario templates, compare baseline vs scenario score fields, export a compact HTML score report, or apply a PlanX style preset.</li>
         </ul>
         <p><b>Note:</b> These modules are screening tools for planning support, not engineering-grade simulation models.</p>
         """

@@ -2,7 +2,7 @@
 
 QGIS **3.10-3.99** - Processing - **GPL-3**
 
-PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. Version **1.7.0** includes a synthetic QA dataset generator, seismic debris logistics, urban heat comfort risk, pluvial flood susceptibility, social vulnerability, Euclidean and network emergency accessibility, air exposure, green infrastructure drought stress, climate adaptation priority synthesis, scenario comparison, HTML reporting, and QGIS style preset modules, plus a QGIS dashboard for module discovery and data readiness review.
+PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. Version **1.8.0** includes a synthetic QA dataset generator, seismic debris logistics, urban heat comfort risk, pluvial flood susceptibility, social vulnerability, Euclidean and network emergency accessibility, air exposure, green infrastructure drought stress, climate adaptation priority synthesis, scenario planning templates, scenario comparison, HTML reporting, and QGIS style preset modules, plus a QGIS dashboard for module discovery and data readiness review.
 
 ## Modules
 
@@ -130,6 +130,18 @@ Outputs:
 - `change_cls`
 - `action_hint`
 
+### Scenario Planning Template
+
+Creates an editable scenario worksheet from planning units or scored resilience layers. It adds baseline and proposed score fields, a scenario name, intervention type, expected reduction, draft status, and notes.
+
+Outputs:
+
+- Scenario planning template layer
+- `base_score`
+- `scen_score`
+- `interv_type`
+- `edit_status`
+
 ### Resilience Score HTML Report
 
 Exports a compact standalone HTML summary from any scored resilience layer. It summarizes feature count, score range, average score, high-priority feature count, class distribution, and top driver labels.
@@ -165,7 +177,7 @@ These modules are screening and prioritization tools. They are designed for plan
 
 - GEE-backed historical climate and land-cover connectors
 - PDF atlas export
-- Scenario library templates
+- Optional map-book presets
 
 ## Install
 
