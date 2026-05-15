@@ -4,12 +4,16 @@ import os
 from qgis.core import QgsProcessingProvider
 from qgis.PyQt.QtGui import QIcon
 
+from .flood.pluvial_flood_susceptibility import PluvialFloodSusceptibilityAlgorithm
+from .heat.urban_heat_comfort import UrbanHeatComfortRiskAlgorithm
 from .seismic.monte_carlo_debris import UrbanResilienceSeismicAnalystV2
 
 
 class PlanXUrbanResilienceProvider(QgsProcessingProvider):
     def loadAlgorithms(self):
         self.addAlgorithm(UrbanResilienceSeismicAnalystV2())
+        self.addAlgorithm(UrbanHeatComfortRiskAlgorithm())
+        self.addAlgorithm(PluvialFloodSusceptibilityAlgorithm())
 
     def id(self):
         return "planx_urban_resilience"

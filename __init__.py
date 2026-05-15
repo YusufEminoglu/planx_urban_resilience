@@ -4,4 +4,4 @@
 def classFactory(iface):
     from .urban_resilience_plugin import PlanXUrbanResiliencePlugin
 
-    return PlanXUrbanResiliencePlugin()
+    return PlanXUrbanResiliencePlugin(iface)
