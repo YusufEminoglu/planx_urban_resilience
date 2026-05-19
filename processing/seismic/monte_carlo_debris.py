@@ -22,7 +22,7 @@ from qgis.core import (
     QgsMessageLog,
     Qgis
 )
-from PyQt5.QtCore import QVariant
+from qgis.PyQt.QtCore import QVariant  # Qt5/Qt6 forward-compatible (was: PyQt5.QtCore)
 import math
 import random
 
@@ -181,7 +181,7 @@ class UrbanResilienceSeismicAnalystV2(QgsProcessingAlgorithm):
 
         debris_all_list = []
         debris_on_road_list = []
-        total_buildings = source_buildings.featureCount()
+        total_buildings = max(source_buildings.featureCount(), 1)  # avoid divide-by-zero on empty input
 
         idx_f = source_buildings.fields().indexFromName(f_floors)
         idx_y = source_buildings.fields().indexFromName(f_year)
@@ -189,8 +189,11 @@ class UrbanResilienceSeismicAnalystV2(QgsProcessingAlgorithm):
         total_debris_volume = 0.0
 
         for current_step, b_feat in enumerate(source_buildings.getFeatures()):
-            if feedback.isCanceled(): break
+            if feedback.isCanceled():
+                break
 
+            if not b_feat.hasGeometry():
+                continue
             b_geom = b_feat.geometry().makeValid()
             b_attrs = b_feat.attributes()
             b_area = b_geom.area()
@@ -198,10 +201,16 @@ class UrbanResilienceSeismicAnalystV2(QgsProcessingAlgorithm):
             is_encroaching = original_road_union.intersects(b_geom)
             S = -1.0 * math.sqrt(b_geom.intersection(original_road_union).area()) if is_encroaching else b_geom.distance(original_road_union)
 
-            try: floors = float(b_attrs[idx_f]) if b_attrs[idx_f] is not None else 1.0
-            except: floors = 1.0
-            try: year = int(b_attrs[idx_y]) if b_attrs[idx_y] is not None else 2000
-            except: year = 2000
+            # Narrowed exception scope: only catch type/value errors from bad attribute values,
+            # not KeyboardInterrupt / SystemExit (bare except was masking real errors).
+            try:
+                floors = float(b_attrs[idx_f]) if idx_f >= 0 and b_attrs[idx_f] is not None else 1.0
+            except (TypeError, ValueError):
+                floors = 1.0
+            try:
+                year = int(b_attrs[idx_y]) if idx_y >= 0 and b_attrs[idx_y] is not None else 2000
+            except (TypeError, ValueError):
+                year = 2000
 
             H = floors * floor_h
 

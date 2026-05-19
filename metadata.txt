@@ -5,7 +5,7 @@ author=Yusuf Eminoglu
 qgisMinimumVersion=3.10
 description=PlanX urban resilience suite for QGIS. Includes synthetic QA data, seismic, heat, flood, social, Euclidean/network emergency access, air, drought, adaptation, scenario templates/comparison, HTML/Markdown reporting, and style presets.
 about=Single Processing provider and QGIS dashboard for city-scale resilience analyses. Current modules cover synthetic QA data generation, stochastic seismic debris and logistics, heat comfort exposure, pluvial flood susceptibility, social vulnerability, Euclidean and network emergency shelter accessibility, air quality exposure, green infrastructure drought stress, climate adaptation priority synthesis, scenario planning templates, scenario comparison, HTML and Markdown reporting, and QGIS style presets. Developed with feedback from educational workflows at Dokuz Eylul University, Department of City and Regional Planning.
-version=1.9.0
+version=1.10.0
 tracker=https://github.com/YusufEminoglu/planx_urban_resilience/issues
 repository=https://github.com/YusufEminoglu/planx_urban_resilience
 
@@ -20,6 +20,14 @@ hasProcessingProvider=yes
 plugin_dependencies=
 license=GPL-3
 changelog=
+    PlanX Urban Resilience 1.10.0 - New icon, dashboard UX overhaul, correctness pass, roadmap.
+        - Replaced the seismic-only icon with a new mark representing the full suite: stratified city skyline, sweeping renewal arc and cycle dots on a soft teal-green base.
+        - Dashboard: Overview/Modules/Run pages now scroll inside a QScrollArea, fixing overflow on small screens.
+        - Dashboard: search bar on the Modules and Run pages filters cards by title, category, inputs and outputs in real time.
+        - Dashboard: module cards are grouped by category (Seismic, Heat, Flood, Social, Emergency, Air, Drought, Synthesis, Report and QA) instead of a flat 2-column grid.
+        - Seismic / Monte Carlo Debris: replaced hard-coded PyQt5 import with qgis.PyQt (forward-compatible with Qt6 QGIS), added empty-input guard, narrowed bare except clauses, and guarded the field-index lookup.
+        - Added ROADMAP.md outlining the next nine algorithm candidates and a suggested release schedule.
+        - Added tests/smoke_pipeline.py - one-shot QGIS-console smoke run across seven modules using synthetic inputs.
     PlanX Urban Resilience 1.9.0 - Added Markdown studio brief generation for planning communication.
         - Added Resilience Studio Brief to create first-draft executive summaries, key metrics, class distributions, dominant drivers, limitations, and suggested next actions.
         - Updated dashboard module cards, README, metadata, and Plugin Hub changelog for HTML/Markdown reporting workflows.

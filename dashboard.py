@@ -6,13 +6,17 @@ from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtWidgets import (
     QDialog,
     QDialogButtonBox,
+    QFrame,
     QGridLayout,
     QGroupBox,
     QHBoxLayout,
     QLabel,
+    QLineEdit,
     QListWidget,
     QListWidgetItem,
     QPushButton,
+    QScrollArea,
+    QSizePolicy,
     QTextBrowser,
     QVBoxLayout,
     QWidget,
@@ -224,6 +228,7 @@ class UrbanResilienceDashboard(QDialog):
         page = QWidget()
         layout = QVBoxLayout(page)
         intro = QTextBrowser()
+        intro.setMaximumHeight(180)
         intro.setHtml(
             """
             <h2>Urban resilience cockpit</h2>
@@ -232,7 +237,13 @@ class UrbanResilienceDashboard(QDialog):
             """
         )
         layout.addWidget(intro)
-        layout.addWidget(self._module_cards())
+
+        # Module cards in a scroll area so the overview never overflows the dialog.
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setFrameShape(QFrame.NoFrame)
+        scroll.setWidget(self._module_cards())
+        layout.addWidget(scroll, 1)
         return page
 
     def _data_page(self):
@@ -248,25 +259,69 @@ class UrbanResilienceDashboard(QDialog):
     def _modules_page(self):
         page = QWidget()
         layout = QVBoxLayout(page)
-        layout.addWidget(self._module_cards(with_buttons=True))
+
+        # Search filter — narrows visible modules by title / inputs / outputs.
+        search_bar = QLineEdit()
+        search_bar.setPlaceholderText("Search modules (title, inputs, outputs)…")
+        search_bar.setClearButtonEnabled(True)
+        layout.addWidget(search_bar)
+
+        # Scroll area wrapping grouped category cards
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setFrameShape(QFrame.NoFrame)
+        cards_widget, modules_index = self._build_grouped_cards(with_buttons=True)
+        scroll.setWidget(cards_widget)
+        layout.addWidget(scroll, 1)
+
+        search_bar.textChanged.connect(lambda text: self._filter_modules(text, modules_index))
         return page
 
     def _run_page(self):
         page = QWidget()
         layout = QVBoxLayout(page)
-        run_group = QGroupBox("Open Processing tools")
-        grid = QGridLayout(run_group)
-        for row, module in enumerate(MODULES):
-            label = QLabel(f"<b>{module['title']}</b><br><span style='color:#64748b'>{module['outputs']}</span>")
-            label.setWordWrap(True)
-            button = QPushButton("Open")
-            button.setObjectName("primaryButton")
-            button.clicked.connect(lambda _checked=False, alg=module["algorithm"]: self._open_algorithm(alg))
-            grid.addWidget(label, row, 0)
-            grid.addWidget(button, row, 1)
-        layout.addWidget(run_group)
-        layout.addStretch(1)
+
+        search_bar = QLineEdit()
+        search_bar.setPlaceholderText("Search to open a Processing tool…")
+        search_bar.setClearButtonEnabled(True)
+        layout.addWidget(search_bar)
+
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setFrameShape(QFrame.NoFrame)
+        run_widget, run_index = self._build_run_rows()
+        scroll.setWidget(run_widget)
+        layout.addWidget(scroll, 1)
+
+        search_bar.textChanged.connect(lambda text: self._filter_modules(text, run_index))
         return page
+
+    @staticmethod
+    def _matches(text: str, module: dict) -> bool:
+        if not text:
+            return True
+        needle = text.strip().lower()
+        haystack = " ".join((
+            module.get("title", ""),
+            module.get("group", ""),
+            module.get("inputs", ""),
+            module.get("outputs", ""),
+        )).lower()
+        return needle in haystack
+
+    def _filter_modules(self, text: str, index):
+        """index = list[(QWidget, dict)] — show/hide row widgets and roll up empty group boxes."""
+        groups_visible: dict = {}
+        for widget, module in index:
+            visible = self._matches(text, module)
+            widget.setVisible(visible)
+            group = widget.parent()
+            while group is not None and not isinstance(group, QGroupBox):
+                group = group.parent()
+            if group is not None:
+                groups_visible[group] = groups_visible.get(group, False) or visible
+        for group, any_visible in groups_visible.items():
+            group.setVisible(any_visible)
 
     def _report_page(self):
         page = QWidget()
@@ -294,28 +349,118 @@ class UrbanResilienceDashboard(QDialog):
         return page
 
     def _module_cards(self, with_buttons=False):
-        group = QGroupBox("Modules")
-        grid = QGridLayout(group)
-        for idx, module in enumerate(MODULES):
-            card = QGroupBox(module["title"])
-            card_layout = QVBoxLayout(card)
-            card_layout.addWidget(QLabel(f"<b>{module['group']}</b>"))
-            body = QLabel(f"Inputs: {module['inputs']}<br>Outputs: {module['outputs']}")
-            body.setWordWrap(True)
-            card_layout.addWidget(body)
-            if with_buttons:
-                button = QPushButton("Open Processing")
-                button.clicked.connect(lambda _checked=False, alg=module["algorithm"]: self._open_algorithm(alg))
-                card_layout.addWidget(button)
-            grid.addWidget(card, idx // 2, idx % 2)
+        """Legacy entry: returns a QWidget wrapping grouped cards.
+
+        Kept for the Overview page (no search there); for filterable pages use
+        `_build_grouped_cards`.
+        """
+        widget, _ = self._build_grouped_cards(with_buttons=with_buttons)
+        return widget
+
+    def _build_grouped_cards(self, with_buttons=False):
+        """Build a vertical layout of category group-boxes, each holding the
+        module cards that belong to that category.
+
+        Returns:
+            (container_widget, index)
+            index = list[(card_widget, module_dict)] for search filtering.
+        """
+        # Group modules by their "group" field (e.g. "1 - Seismic", "2 - Heat").
+        ordered_groups: list[str] = []
+        bucket: dict[str, list[dict]] = {}
+        for module in MODULES:
+            key = module.get("group", "Other")
+            if key not in bucket:
+                bucket[key] = []
+                ordered_groups.append(key)
+            bucket[key].append(module)
+
+        container = QWidget()
+        outer = QVBoxLayout(container)
+        outer.setContentsMargins(0, 0, 0, 0)
+        outer.setSpacing(10)
+
+        index: list = []
+        for group_name in ordered_groups:
+            group_box = QGroupBox(group_name)
+            grid = QGridLayout(group_box)
+            grid.setHorizontalSpacing(8)
+            grid.setVerticalSpacing(8)
+            for idx, module in enumerate(bucket[group_name]):
+                card = QGroupBox(module["title"])
+                card.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+                card_layout = QVBoxLayout(card)
+                body = QLabel(f"Inputs: {module['inputs']}<br>Outputs: {module['outputs']}")
+                body.setWordWrap(True)
+                card_layout.addWidget(body)
+                if with_buttons:
+                    button = QPushButton("Open Processing")
+                    button.setObjectName("primaryButton")
+                    button.clicked.connect(
+                        lambda _checked=False, alg=module["algorithm"]: self._open_algorithm(alg)
+                    )
+                    card_layout.addWidget(button)
+                grid.addWidget(card, idx // 2, idx % 2)
+                index.append((card, module))
+            outer.addWidget(group_box)
+
+        # Future-work hint stays at the bottom
         future = QGroupBox("Future modules")
         future_layout = QVBoxLayout(future)
-        future_label = QLabel("Next candidates: GEE-backed historical climate connectors, PDF atlas export, richer report layouts, and optional map-book presets.")
+        future_label = QLabel(
+            "Next candidates: multi-hazard composite, climate projection overlay, "
+            "PDF atlas export, evacuation simulation, network betweenness for "
+            "criticality. See README for the full roadmap."
+        )
         future_label.setWordWrap(True)
         future_layout.addWidget(future_label)
-        next_row = (len(MODULES) + 1) // 2
-        grid.addWidget(future, next_row, 1)
-        return group
+        outer.addWidget(future)
+        outer.addStretch(1)
+        return container, index
+
+    def _build_run_rows(self):
+        """Compact "Open Processing tool" rows grouped by category."""
+        ordered_groups: list[str] = []
+        bucket: dict[str, list[dict]] = {}
+        for module in MODULES:
+            key = module.get("group", "Other")
+            if key not in bucket:
+                bucket[key] = []
+                ordered_groups.append(key)
+            bucket[key].append(module)
+
+        container = QWidget()
+        outer = QVBoxLayout(container)
+        outer.setContentsMargins(0, 0, 0, 0)
+        outer.setSpacing(8)
+
+        index: list = []
+        for group_name in ordered_groups:
+            group_box = QGroupBox(group_name)
+            grid = QGridLayout(group_box)
+            for row, module in enumerate(bucket[group_name]):
+                row_widget = QWidget()
+                row_layout = QHBoxLayout(row_widget)
+                row_layout.setContentsMargins(0, 0, 0, 0)
+                label = QLabel(
+                    f"<b>{module['title']}</b>"
+                    f"<br><span style='color:#64748b'>{module['outputs']}</span>"
+                )
+                label.setWordWrap(True)
+                button = QPushButton("Open")
+                button.setObjectName("primaryButton")
+                button.setFixedWidth(96)
+                button.clicked.connect(
+                    lambda _checked=False, alg=module["algorithm"]: self._open_algorithm(alg)
+                )
+                row_layout.addWidget(label, 1)
+                row_layout.addWidget(button)
+                grid.addWidget(row_widget, row, 0)
+                index.append((row_widget, module))
+            outer.addWidget(group_box)
+
+        outer.addStretch(1)
+        return container, index
 
     def _refresh_report(self):
         project = QgsProject.instance()
