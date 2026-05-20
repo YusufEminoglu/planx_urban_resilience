@@ -3,6 +3,32 @@
 All notable changes to **PlanX: Urban Resilience** are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · versioning: [SemVer](https://semver.org/).
 
+## [1.23.0] - 2026-05-21
+
+Four advanced modules — cross-hazard correlation, temporal × spatial fusion, facility location, lifecycle economics.
+
+### Added
+- **Multi-Hazard Correlation Matrix** — `multi_hazard_correlation_matrix` (Report and QA):
+  - Pure-Python Pearson + Spearman correlation between N numeric score fields on the same layer (2-12 fields).
+  - Standalone HTML report with colour-coded heatmaps (diverging blue/red), top-10 correlations table with strength interpretation, and per-pair n_pairs counts.
+  - Also returns a long-format QGIS table sink (field_a, field_b, pearson_r, spearman_r, n_pairs) for further joining/styling.
+- **Risk Trend Hot-Spot (Gi\* × Δ score)** — `risk_trend_hotspot` (Synthesis):
+  - Fuses temporal trend (delta between two snapshots) with spatial clustering (local Getis-Ord Gi\* on the later snapshot).
+  - Per-unit `trh_gi_z`, `trh_gi_significant`, `trh_delta`, `trh_label` (Rising / Stable / Cooling hot spot, Rising / Stable / Cooling cold spot, Hot/Cold no cluster, or Not significant).
+  - Direct pair with `resilience_time_series` outputs (`ts_later_score`, `ts_delta`).
+- **Optimal Shelter Siting** — `optimal_shelter_siting` (Emergency):
+  - Greedy maximal-coverage facility-location problem. Picks K candidate sites that cover the most uncovered population within a max distance.
+  - Optional existing-shelter layer pre-covers some demand so the K new picks fill gaps.
+  - Per-candidate `oss_selected`, `oss_rank` (1..K), `oss_pop_added`, `oss_pop_total_cum`; per-step coverage curve and uncovered top-10 list in the processing log.
+- **Lifecycle Cost Calculator (25-year NPV)** — `lifecycle_cost_calculator` (Synthesis):
+  - Discounts capex + annual opex + periodic maintenance + replacement events over a configurable horizon (default 25 years) and discount rate (default 4 % per year).
+  - Per-feature `lc_capex_npv`, `lc_opex_npv`, `lc_maintenance_npv`, `lc_replacement_npv`, `lc_total_npv`, `lc_annualised` (equivalent flat annual cost via annuity factor).
+  - Optional area scaling for per-m² cost inputs.
+
+### Changed
+- Provider registers all four new algorithms. **Suite total: 43 algorithms.**
+- Dashboard module catalog updated.
+
 ## [1.22.0] - 2026-05-20
 
 Four advanced modules — 3D City bridge, multi-objective optimisation, temporal aggregation, point-to-surface interpolation.

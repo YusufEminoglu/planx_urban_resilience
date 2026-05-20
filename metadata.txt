@@ -5,7 +5,7 @@ author=Yusuf Eminoglu
 qgisMinimumVersion=3.10
 description=PlanX urban resilience suite (28 tools): seismic, heat, flood, social, emergency access, evacuation, network criticality, air, drought, synthesis, risk-recovery matrix, time-series, scenario tools, HTML/Markdown/PDF atlas, symbology.
 about=28 Processing algorithms and a QGIS dashboard for city-scale resilience screening: synthetic QA, seismic debris, heat and flood, social vulnerability, Euclidean and network emergency access, evacuation simulation with optional timestep queue, network criticality, air and drought, multi-hazard and equity-adjusted synthesis, climate projection overlay, recovery capacity, scenario sensitivity, risk-recovery priority matrix, time-series tracking, scenario templates, HTML/Markdown/PDF atlas with map-book presets, shelter arrival summaries, and symbology. DEU City and Regional Planning educational workflows.
-version=1.22.0
+version=1.23.0
 tracker=https://github.com/YusufEminoglu/planx_urban_resilience/issues
 repository=https://github.com/YusufEminoglu/planx_urban_resilience
 
@@ -20,6 +20,12 @@ hasProcessingProvider=yes
 plugin_dependencies=
 license=GPL-3
 changelog=
+    PlanX Urban Resilience 1.23.0 - Four advanced modules: cross-hazard correlation, temporal x spatial fusion, facility location, lifecycle economics.
+        - Multi-Hazard Correlation Matrix: Pearson + Spearman correlation between N numeric score fields on the same layer; standalone HTML report with colour-coded heatmap and top-10 correlations table, plus a long-format QGIS table sink.
+        - Risk Trend Hot-Spot (Gi* x Delta): fuses temporal trend (delta between two snapshots) with spatial clustering (local Gi* on the later snapshot) into a single label per unit (Rising / Stable / Cooling hot or cold spot, Hot/Cold no cluster, or Not significant). Pair with the resilience_time_series outputs.
+        - Optimal Shelter Siting: greedy maximal-coverage location problem. Picks K candidate sites that cover the most uncovered population within a max distance; optional existing-shelter layer pre-covers some demand. Per-step coverage curve in the log.
+        - Lifecycle Cost Calculator: per planning unit NPV across capex + annual opex + periodic maintenance + replacement, over a configurable horizon (default 25 years) and discount rate. Outputs lc_capex_npv, lc_opex_npv, lc_maintenance_npv, lc_replacement_npv, lc_total_npv and lc_annualised (equivalent flat annual cost). Optional polygon-area scaling for per-m^2 inputs.
+        - Provider and dashboard module catalog updated. Suite total: 43 algorithms.
     PlanX Urban Resilience 1.22.0 - Four advanced modules: 3D City bridge, multi-objective optimization, temporal aggregation, point-to-surface interpolation.
         - 3D Risk Volume Export: scored polygon -> GeoJSON in EPSG:4326 with extrusion_height (= score x scale) and color_hex (Yellow-Red, Blue-Red, or Greys ramps) per feature. Drops straight into the PlanX 3D City Viewer / Three.js / deck.gl / Cesium. Optional base-height field is additive.
         - Pareto-Optimal Intervention Selector: non-dominated sorting on (cost, benefit). Outputs pareto_rank (1 = first frontier, 2 = next, etc.), pareto_dominated and pareto_dominates counts. rank == 1 set is the budget-bounded best pick.

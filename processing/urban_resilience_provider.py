@@ -43,6 +43,10 @@ from .reporting.risk_3d_export import Risk3DVolumeExportAlgorithm
 from .synthesis.pareto_selector import ParetoSelectorAlgorithm
 from .synthesis.hazard_frequency import HazardFrequencyAggregationAlgorithm
 from .synthesis.vulnerability_surface_idw import VulnerabilitySurfaceIDWAlgorithm
+from .reporting.correlation_matrix import CorrelationMatrixAlgorithm
+from .synthesis.risk_trend_hotspot import RiskTrendHotspotAlgorithm
+from .accessibility.optimal_shelter_siting import OptimalShelterSitingAlgorithm
+from .synthesis.lifecycle_cost import LifecycleCostAlgorithm
 
 
 class PlanXUrbanResilienceProvider(QgsProcessingProvider):
@@ -86,6 +90,10 @@ class PlanXUrbanResilienceProvider(QgsProcessingProvider):
         self.addAlgorithm(ParetoSelectorAlgorithm())
         self.addAlgorithm(HazardFrequencyAggregationAlgorithm())
         self.addAlgorithm(VulnerabilitySurfaceIDWAlgorithm())
+        self.addAlgorithm(CorrelationMatrixAlgorithm())
+        self.addAlgorithm(RiskTrendHotspotAlgorithm())
+        self.addAlgorithm(OptimalShelterSitingAlgorithm())
+        self.addAlgorithm(LifecycleCostAlgorithm())
 
     def id(self):
         return "planx_urban_resilience"
