@@ -3,6 +3,20 @@
 All notable changes to **PlanX: Urban Resilience** are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · versioning: [SemVer](https://semver.org/).
 
+## [1.13.0] - 2026-05-20
+
+Recovery capacity + time-series tracker. (v1.11/1.12 git tags were pushed but their metadata version bump did not land; this release packages all four new synthesis algorithms plus Network Criticality and the time-series tracker under one version.)
+
+### Added
+- **Recovery Capacity Index** (`recovery_capacity_index`) under Synthesis: composite of four offline-derivable proxies (HHI land-use diversity, road-access redundancy, green coverage, social cohesion). Outputs `rc_diversity`, `rc_redundancy`, `rc_green`, `rc_cohesion`, `rc_score`, `rc_class`, `rc_data_gap`. Pair with Adaptation Priority to surface units that are both high-risk AND low-recovery.
+- **Resilience Time-Series Tracker** (`resilience_time_series`) under Report and QA: join two snapshots of the same scored layer on a stable unit ID; per-unit `ts_earlier_score`, `ts_later_score`, `ts_delta`, `ts_delta_pct`, `ts_trend`, optional `ts_target_gap`. Geometry from the later snapshot.
+
+### Already shipped on main (re-packaged into this metadata bump)
+- **Multi-Hazard Composite Index** (`multi_hazard_composite_index`): weighted composite + dominant hazard + Shannon diversity + top drivers + data-gap count.
+- **Equity-Adjusted Adaptation Priority** (`equity_adjusted_priority`): equity factor from SVI, normalized 0-100 priority + class.
+- **Network Criticality** (`network_criticality`): edge betweenness proxy via origin → nearest-destination shortest paths, `usage_count` + `criticality_score`.
+- **Climate Projection Overlay** (`climate_projection_overlay`): built-in +1.5°C / +2°C / +3°C scenarios or custom amplification factor; today / projected / delta / class.
+
 ## [1.12.0] - 2026-05-20
 
 Network criticality + climate projection overlay.

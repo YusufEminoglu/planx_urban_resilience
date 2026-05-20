@@ -5,7 +5,7 @@ author=Yusuf Eminoglu
 qgisMinimumVersion=3.10
 description=PlanX urban resilience suite for QGIS. Includes synthetic QA data, seismic, heat, flood, social, Euclidean/network emergency access, air, drought, adaptation, scenario templates/comparison, HTML/Markdown reporting, and style presets.
 about=Single Processing provider and QGIS dashboard for city-scale resilience analyses. Current modules cover synthetic QA data generation, stochastic seismic debris and logistics, heat comfort exposure, pluvial flood susceptibility, social vulnerability, Euclidean and network emergency shelter accessibility, air quality exposure, green infrastructure drought stress, climate adaptation priority synthesis, scenario planning templates, scenario comparison, HTML and Markdown reporting, and QGIS style presets. Developed with feedback from educational workflows at Dokuz Eylul University, Department of City and Regional Planning.
-version=1.11.0
+version=1.13.0
 tracker=https://github.com/YusufEminoglu/planx_urban_resilience/issues
 repository=https://github.com/YusufEminoglu/planx_urban_resilience
 
@@ -20,6 +20,14 @@ hasProcessingProvider=yes
 plugin_dependencies=
 license=GPL-3
 changelog=
+    PlanX Urban Resilience 1.13.0 - Six new algorithms across synthesis, emergency and reporting.
+        - Multi-Hazard Composite Index: weighted composite, dominant hazard label, Shannon diversity, top drivers, data-gap count.
+        - Equity-Adjusted Adaptation Priority: equity factor from SVI, normalized adjusted priority (0-100) + class.
+        - Network Criticality (edge betweenness proxy): origin to nearest-destination shortest-path edge usage; outputs usage_count and criticality_score 0-100 per edge.
+        - Climate Projection Overlay: amplification factor (built-in 1.5C/2C/3C or custom) to a today score, with delta and delta class per unit.
+        - Recovery Capacity Index: composite of four offline-derivable proxies (HHI diversity, redundancy, green coverage, social cohesion). Complementary to Adaptation Priority.
+        - Resilience Time-Series Tracker: join two snapshots on a stable ID, emit per-unit delta, percent change, trend (Improved/Stable/Worsened), optional target gap.
+        - All registered in the Processing provider and the dashboard catalog under Synthesis, Emergency and Report-and-QA groups.
     PlanX Urban Resilience 1.11.0 - Two new synthesis algorithms.
         - Multi-Hazard Composite Index: combine N hazard score fields per planning unit. Outputs weighted composite, class, dominant hazard, Shannon diversity index (single-stress -> multi-stress), top 3 drivers, and data-gap count.
         - Equity-Adjusted Adaptation Priority: multiply a hazard score by an equity factor derived from the Social Vulnerability Index. Surfaces units that are both high-hazard and high-vulnerability.

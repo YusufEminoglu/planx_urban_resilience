@@ -23,6 +23,8 @@ from .synthesis.adaptation_priority_synthesis import AdaptationPrioritySynthesis
 from .synthesis.multi_hazard_composite import MultiHazardCompositeAlgorithm
 from .synthesis.equity_adjusted_priority import EquityAdjustedPriorityAlgorithm
 from .synthesis.climate_projection_overlay import ClimateProjectionOverlayAlgorithm
+from .synthesis.recovery_capacity_index import RecoveryCapacityIndexAlgorithm
+from .reporting.time_series_tracker import ResilienceTimeSeriesAlgorithm
 
 
 class PlanXUrbanResilienceProvider(QgsProcessingProvider):
@@ -41,6 +43,8 @@ class PlanXUrbanResilienceProvider(QgsProcessingProvider):
         self.addAlgorithm(EquityAdjustedPriorityAlgorithm())
         self.addAlgorithm(NetworkCriticalityAlgorithm())
         self.addAlgorithm(ClimateProjectionOverlayAlgorithm())
+        self.addAlgorithm(RecoveryCapacityIndexAlgorithm())
+        self.addAlgorithm(ResilienceTimeSeriesAlgorithm())
         self.addAlgorithm(ScenarioComparisonAlgorithm())
         self.addAlgorithm(ScenarioTemplateAlgorithm())
         self.addAlgorithm(ResilienceReportAlgorithm())
