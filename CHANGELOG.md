@@ -3,6 +3,20 @@
 All notable changes to **PlanX: Urban Resilience** are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · versioning: [SemVer](https://semver.org/).
 
+## [1.21.0] - 2026-05-20
+
+Four advanced modules — spatial-statistics outliers, hazard cascading, planning economics, criticality overlay.
+
+### Added
+- **LISA Local Moran's I** (`lisa_local_moran`, Synthesis): companion to Gi\*. Outputs `lisa_z`, `lisa_lag`, `lisa_I`, `lisa_pvalue`, `lisa_quadrant` (HH / LL / HL / LH / Not significant). The HL and LH outlier classes are the under-served pockets next to thriving neighbourhoods that Gi\* cannot expose.
+- **Seismic Cascade — Debris → Network Degradation** (`seismic_cascade_accessibility`, Emergency): pipes seismic debris polygons into the road graph, drops blocked edges, re-runs a multi-source Dijkstra on the degraded network. Per origin: `cas_pre_dist`, `cas_post_dist`, `cas_delta_dist`, `cas_pre_reachable`, `cas_post_reachable`, `cas_status` (Newly cut off / Always cut off / Worse / Same / Recovered). Genuine cross-domain hazard chain modelling.
+- **Cost-Benefit Analyzer** (`cost_benefit_analyzer`, Synthesis): `cost = unit_cost × area`; `benefit = score × reduction_factor × population_weight`. Outputs `cb_cost`, `cb_benefit`, `cb_ratio`, 1-N `cb_priority_rank`. Log prints the cumulative-benefit curve (10/25/50/75/90 % breakpoints).
+- **Critical Infrastructure Exposure** (`critical_infrastructure_exposure`, Synthesis): combines hazard score and facility criticality into one 0-100 `ci_combined` score per facility. Top-10 list and mean-by-class breakdown in the log.
+
+### Changed
+- Provider registers all four new algorithms.
+- Dashboard module catalog updated.
+
 ## [1.20.0] - 2026-05-20
 
 Four new algorithms pushing the suite to elite scientific + planning-actionable level.

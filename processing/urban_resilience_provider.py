@@ -35,6 +35,10 @@ from .synthesis.hotspot_analysis import HotSpotAnalysisAlgorithm
 from .synthesis.population_weighted_exposure import PopulationWeightedExposureAlgorithm
 from .reporting.bivariate_symbology import BivariateSymbologyAlgorithm
 from .reporting.recommended_actions import RecommendedActionsAlgorithm
+from .synthesis.lisa_local_moran import LisaLocalMoranAlgorithm
+from .synthesis.cost_benefit import CostBenefitAnalyzerAlgorithm
+from .synthesis.critical_infrastructure_exposure import CriticalInfrastructureExposureAlgorithm
+from .accessibility.seismic_cascade import SeismicCascadeAlgorithm
 
 
 class PlanXUrbanResilienceProvider(QgsProcessingProvider):
@@ -70,6 +74,10 @@ class PlanXUrbanResilienceProvider(QgsProcessingProvider):
         self.addAlgorithm(PopulationWeightedExposureAlgorithm())
         self.addAlgorithm(BivariateSymbologyAlgorithm())
         self.addAlgorithm(RecommendedActionsAlgorithm())
+        self.addAlgorithm(LisaLocalMoranAlgorithm())
+        self.addAlgorithm(CostBenefitAnalyzerAlgorithm())
+        self.addAlgorithm(CriticalInfrastructureExposureAlgorithm())
+        self.addAlgorithm(SeismicCascadeAlgorithm())
 
     def id(self):
         return "planx_urban_resilience"
