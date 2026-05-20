@@ -124,6 +124,55 @@ MODULES = [
         "outputs": "Per-edge usage count and 0-100 criticality score; high-score edges are bottlenecks whose closure forces the most reroutes.",
     },
     {
+        "title": "Evacuation Time Simulation",
+        "algorithm": "planx_urban_resilience:evacuation_time_simulation",
+        "group": "5 - Emergency",
+        "inputs": "Road network (capacity field or road class), origins with population, shelters with capacity; optional timestep queue (0 = instant).",
+        "outputs": "Origins (travel_min, evac_delay_min, evac_min, evac_timestep, class), shelter utilization, edges (trip_count, load_pop, congestion_pct, bottleneck_score).",
+    },
+    {
+        "title": "Recovery Capacity Index",
+        "algorithm": "planx_urban_resilience:recovery_capacity_index",
+        "group": "8 - Synthesis",
+        "inputs": "Planning units with optional land-use mix CSV, road-access count, green share and social-cohesion proxy fields.",
+        "outputs": "Four sub-scores, composite rc_score (0-100), rc_class and rc_data_gap. Pair with Adaptation Priority for high-risk + low-recovery units.",
+    },
+    {
+        "title": "Risk-Recovery Priority Matrix",
+        "algorithm": "planx_urban_resilience:risk_recovery_priority_matrix",
+        "group": "8 - Synthesis",
+        "inputs": "Planning units with hazard/adaptation score (0-100) and recovery capacity score (e.g. rc_score).",
+        "outputs": "rr_priority_score, deficit/factor diagnostics, Immediate/High/Medium/Monitor class. Highlights high-risk + low-recovery units.",
+    },
+    {
+        "title": "Scenario Sensitivity Analysis",
+        "algorithm": "planx_urban_resilience:scenario_sensitivity",
+        "group": "8 - Synthesis",
+        "inputs": "Planning units with two or more component score fields; optional nominal weights, perturbation band and LHS sample count.",
+        "outputs": "Baseline/mean/std, p05/p95, range and ss_stability (0-100) showing how robust each unit's composite is to weight choices.",
+    },
+    {
+        "title": "Resilience Time-Series Tracker",
+        "algorithm": "planx_urban_resilience:resilience_time_series",
+        "group": "9 - Report and QA",
+        "inputs": "Earlier and later snapshots of the same scored layer joined on a stable unit ID field.",
+        "outputs": "Per-unit delta, percent change, trend (Improved/Stable/Worsened) and optional target gap.",
+    },
+    {
+        "title": "Resilience PDF Atlas",
+        "algorithm": "planx_urban_resilience:resilience_pdf_atlas",
+        "group": "9 - Report and QA",
+        "inputs": "Scored layer with 0-100 field; optional class field; map-book preset (A3/A4/Studio); title and metadata.",
+        "outputs": "Multi-page PDF (cover, overview, per-class maps) via QgsLayout.",
+    },
+    {
+        "title": "Evacuation Shelter Arrival Summary",
+        "algorithm": "planx_urban_resilience:evacuation_shelter_arrival_summary",
+        "group": "9 - Report and QA",
+        "inputs": "Evacuation origin outputs with evac_shelter, evac_pop and evac_timestep or evac_min.",
+        "outputs": "Per-shelter arrival table (step, arrivals, cumulative, pct) and optional HTML summary.",
+    },
+    {
         "title": "Scenario Comparison / Delta Map",
         "algorithm": "planx_urban_resilience:resilience_scenario_comparison",
         "group": "9 - Report and QA",
@@ -260,7 +309,7 @@ class UrbanResilienceDashboard(QDialog):
         intro.setHtml(
             """
             <h2>Urban resilience cockpit</h2>
-            <p>This suite currently includes a synthetic QA dataset generator, seismic debris logistics, urban heat comfort risk, pluvial flood susceptibility, social vulnerability, Euclidean and network emergency accessibility, air exposure, green infrastructure stress, adaptation priority synthesis, scenario templates, scenario comparison, HTML/Markdown reporting, and QGIS style presets.</p>
+            <p>This suite includes synthetic QA data, seismic debris, heat, flood, social vulnerability, Euclidean and network emergency access, network criticality, evacuation time simulation, air and drought screening, multi-hazard and equity-adjusted synthesis, climate projection overlay, recovery capacity, scenario sensitivity, time-series tracking, scenario templates/comparison, HTML/Markdown/PDF reporting, and QGIS style presets.</p>
             <p>The first release is offline-first: load your own QGIS layers, review readiness, then run the Processing modules.</p>
             """
         )
@@ -436,9 +485,8 @@ class UrbanResilienceDashboard(QDialog):
         future = QGroupBox("Future modules")
         future_layout = QVBoxLayout(future)
         future_label = QLabel(
-            "Next candidates: multi-hazard composite, climate projection overlay, "
-            "PDF atlas export, evacuation simulation, network betweenness for "
-            "criticality. See README for the full roadmap."
+            "Next candidates: GEE-backed climate connectors and evacuation directional-network refinements. "
+            "See ROADMAP.md for details."
         )
         future_label.setWordWrap(True)
         future_layout.addWidget(future_label)

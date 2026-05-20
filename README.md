@@ -2,7 +2,7 @@
 
 QGIS **3.10-3.99** - Processing - **GPL-3**
 
-PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. Version **1.9.0** includes a synthetic QA dataset generator, seismic debris logistics, urban heat comfort risk, pluvial flood susceptibility, social vulnerability, Euclidean and network emergency accessibility, air exposure, green infrastructure drought stress, climate adaptation priority synthesis, scenario planning templates, scenario comparison, HTML/Markdown reporting, and QGIS style preset modules, plus a QGIS dashboard for module discovery and data readiness review.
+PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. Version **1.18.0** ships **27 Processing algorithms**: synthetic QA data, seismic debris, heat, flood, social vulnerability, Euclidean and network emergency access, network criticality, air and drought screening, adaptation/multi-hazard/equity/climate/recovery/sensitivity synthesis, time-series tracking, scenario templates and comparison, HTML/Markdown/PDF reporting, and QGIS style presets — plus a dashboard for module discovery and data readiness review.
 
 ## Modules
 
@@ -83,6 +83,28 @@ Outputs:
 - `access_cls`
 - `qa_flag`
 - Network underserved origins
+
+### Evacuation Time Simulation
+
+Greedy, capacity-constrained shelter assignment on the road network. Road segments carry a capacity (numeric field or class-based lookup: arterial / collector / local). Set **timestep minutes** to 0 for instant assignment, or > 0 to defer departures when per-interval road flow is exceeded.
+
+Outputs:
+
+- Evacuation origins (`evac_shelter`, `travel_min`, `evac_delay_min`, `evac_min`, `evac_timestep`, `evac_class`, `qa_flag`)
+- Shelter utilization (`cap_used`, `cap_pct`, `assign_count`)
+- Edge load (`trip_count`, `load_pop`, `congestion_pct`, `bottleneck_score`)
+- P50/P95 evacuation times in the Processing log
+
+Macro screening only — not a microsimulation with signals or directional traffic.
+
+### Evacuation Shelter Arrival Summary
+
+Builds per-shelter arrival timelines from evacuation origin outputs (`evac_shelter`, `evac_pop`, `evac_timestep` or binned `evac_min`).
+
+Outputs:
+
+- Table layer (`shelter`, `step_index`, `arrivals`, `cumulative`, `pct_total`)
+- Optional HTML summary
 
 ### Air Quality / Urban Exposure
 
@@ -167,6 +189,53 @@ Outputs:
 - In-place QGIS layer styling
 - Optional QML style export
 
+### Recovery Capacity Index
+
+Scores how well a planning unit can recover after a shock (complement to hazard/exposure modules). Combines land-use diversity, road-access redundancy, green coverage and a social-cohesion proxy.
+
+### Risk-Recovery Priority Matrix
+
+Combines a hazard or adaptation priority score with recovery capacity. Surfaces units that are both **high-risk** and **low-recovery** — the highest intervention priority.
+
+Outputs:
+
+- `rr_hazard`, `rr_recovery`, `rr_deficit`, `rr_factor`
+- `rr_priority_score` (0-100)
+- `rr_priority_class` (Immediate / High / Medium / Monitor)
+
+Outputs:
+
+- `rc_diversity`, `rc_redundancy`, `rc_green`, `rc_cohesion`
+- `rc_score`, `rc_class`, `rc_data_gap`
+
+### Scenario Sensitivity Analysis
+
+Stress-tests composite scores by varying component weights with Latin Hypercube Sampling. High `ss_stability` means the unit's priority rank is robust to reasonable weight choices.
+
+Outputs:
+
+- `ss_baseline`, `ss_mean`, `ss_std`, `ss_p05`, `ss_p95`, `ss_range`
+- `ss_stability` (0-100)
+- `ss_samples`
+
+### Resilience Time-Series Tracker
+
+Joins two snapshots of the same scored layer on a stable unit ID and reports progress between dates.
+
+Outputs:
+
+- `ts_earlier_score`, `ts_later_score`, `ts_delta`, `ts_delta_pct`
+- `ts_trend` (Improved / Stable / Worsened)
+- Optional `ts_target_gap`
+
+### Resilience PDF Atlas
+
+Builds a printable atlas from any scored resilience layer using QgsLayout. Presets: **A3 Standard**, **A4 Compact**, or **A3 Studio HQ** (300 dpi).
+
+Outputs:
+
+- Multi-page PDF (cover, overview map + statistics, optional per-class map pages)
+
 ## Dashboard
 
 The plugin adds a `PlanX Urban Resilience` toolbar/menu action. The dashboard includes:
@@ -184,8 +253,9 @@ These modules are screening and prioritization tools. They are designed for plan
 ## Future Roadmap
 
 - GEE-backed historical climate and land-cover connectors
-- PDF atlas export
 - Optional map-book presets
+
+See [ROADMAP.md](ROADMAP.md) for the full candidate list and release history.
 
 ## Install
 

@@ -31,25 +31,7 @@ from qgis.core import (
     QgsProcessingParameterString,
 )
 
-
-def _clamp(value, low=0.0, high=100.0):
-    try:
-        v = float(value)
-    except (TypeError, ValueError):
-        return None
-    if math.isnan(v):
-        return None
-    return max(low, min(high, v))
-
-
-def _composite_class(score: float) -> str:
-    if score >= 75:
-        return "Very High"
-    if score >= 55:
-        return "High"
-    if score >= 35:
-        return "Moderate"
-    return "Low"
+from .._helpers import clamp, composite_risk_class, parse_weights_csv
 
 
 def _shannon_index(weighted_scores: list[float]) -> float:
@@ -69,26 +51,7 @@ def _shannon_index(weighted_scores: list[float]) -> float:
         p = s / total
         entropy -= p * math.log(p)
     max_entropy = math.log(n)
-    return _clamp(100.0 * entropy / max_entropy) or 0.0
-
-
-def _parse_weights(text: str, n: int) -> list[float]:
-    """Parse comma/space separated weights. Falls back to equal weights on failure."""
-    if not text:
-        return [1.0] * n
-    raw = [tok.strip() for tok in text.replace(";", ",").replace(" ", ",").split(",") if tok.strip()]
-    weights: list[float] = []
-    for token in raw:
-        try:
-            w = float(token)
-            weights.append(max(0.0, w))
-        except ValueError:
-            weights.append(1.0)
-    if not weights:
-        return [1.0] * n
-    while len(weights) < n:
-        weights.append(weights[-1])  # pad with last value
-    return weights[:n]
+    return clamp(100.0 * entropy / max_entropy) or 0.0
 
 
 class MultiHazardCompositeAlgorithm(QgsProcessingAlgorithm):
@@ -176,7 +139,7 @@ class MultiHazardCompositeAlgorithm(QgsProcessingAlgorithm):
             raise QgsProcessingException("Select at least two hazard score fields.")
 
         weight_text = self.parameterAsString(parameters, self.WEIGHTS, context)
-        weights = _parse_weights(weight_text, len(hazard_fields))
+        weights = parse_weights_csv(weight_text, len(hazard_fields))
         weight_sum = sum(weights) or 1.0
 
         out_fields = source.fields()
@@ -202,7 +165,7 @@ class MultiHazardCompositeAlgorithm(QgsProcessingAlgorithm):
                 break
             scores: list[float | None] = []
             for fname in hazard_fields:
-                scores.append(_clamp(feature.attribute(fname)))
+                scores.append(clamp(feature.attribute(fname)))
             gaps = sum(1 for s in scores if s is None)
 
             weighted = [
@@ -210,7 +173,7 @@ class MultiHazardCompositeAlgorithm(QgsProcessingAlgorithm):
             ]
             present_weight = sum(weights[i] for i, s in enumerate(scores) if s is not None)
             composite = (sum(weighted) / present_weight) if present_weight > 0 else 0.0
-            composite = _clamp(composite) or 0.0
+            composite = clamp(composite) or 0.0
 
             # Dominant + drivers based on weighted contribution
             ranked = sorted(
@@ -231,7 +194,7 @@ class MultiHazardCompositeAlgorithm(QgsProcessingAlgorithm):
             # Pad to match field count if input layer has fewer attributes than out_fields
             while len(new_attrs) < out_fields.size() - 6:
                 new_attrs.append(None)
-            new_attrs.extend([composite, _composite_class(composite), dominant, diversity, drivers, gaps])
+            new_attrs.extend([composite, composite_risk_class(composite), dominant, diversity, drivers, gaps])
             new_feat.setAttributes(new_attrs)
             sink.addFeature(new_feat, QgsFeatureSink.FastInsert)
 

@@ -135,6 +135,47 @@ def run_all():
         "green infrastructure drought stress",
     )
 
+    # 8) Evacuation (instant greedy)
+    _run(
+        "planx_urban_resilience:evacuation_time_simulation",
+        {"ROADS": roads, "ORIGINS": buildings, "POP_FIELD": "population",
+         "SHELTERS": shelters, "CAPACITY_FIELD": "capacity",
+         "ROAD_CAPACITY_FIELD": "capacity_ph", "ROAD_CLASS_FIELD": "class",
+         "ROAD_DIRECTION_FIELD": "direction",
+         "SPEED_KMH": 30, "TARGET_MINUTES": 15, "CRITICAL_MINUTES": 45,
+         "TIMESTEP_MINUTES": 0, "MAX_TIMESTEPS": 48,
+         "SNAP_TOLERANCE": 2.0, "ASSIGN_ORDER": 0,
+         "OUTPUT_ORIGINS": "memory:evac_origins",
+         "OUTPUT_SHELTERS": "memory:evac_shelters",
+         "OUTPUT_EDGES": "memory:evac_edges"},
+        "evacuation (instant)",
+    )
+
+    # 9) Evacuation (timestep queue)
+    _run(
+        "planx_urban_resilience:evacuation_time_simulation",
+        {"ROADS": roads, "ORIGINS": buildings, "POP_FIELD": "population",
+         "SHELTERS": shelters, "CAPACITY_FIELD": "capacity",
+         "ROAD_CLASS_FIELD": "class",
+         "SPEED_KMH": 30, "TIMESTEP_MINUTES": 5, "MAX_TIMESTEPS": 24,
+         "SNAP_TOLERANCE": 2.0, "ASSIGN_ORDER": 1,
+         "OUTPUT_ORIGINS": "memory:evac_q_origins",
+         "OUTPUT_SHELTERS": "memory:evac_q_shelters",
+         "OUTPUT_EDGES": "memory:evac_q_edges"},
+        "evacuation (timestep queue)",
+    )
+
+    # 10) Shelter arrival summary (from queue evacuation output)
+    _run(
+        "planx_urban_resilience:evacuation_shelter_arrival_summary",
+        {"INPUT": "memory:evac_q_origins",
+         "SHELTER_FIELD": "evac_shelter", "POP_FIELD": "evac_pop",
+         "TIMESTEP_FIELD": "evac_timestep", "MINUTES_FIELD": "evac_min",
+         "MINUTE_BIN": 5,
+         "OUTPUT_TABLE": "memory:arrival_table"},
+        "evacuation shelter arrival summary",
+    )
+
     print("-" * 60)
     print("  Smoke pipeline finished.")
     return True

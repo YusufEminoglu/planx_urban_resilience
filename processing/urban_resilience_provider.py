@@ -7,6 +7,7 @@ from qgis.PyQt.QtGui import QIcon
 from .accessibility.emergency_accessibility import EmergencyAccessibilityAlgorithm
 from .accessibility.network_accessibility import NetworkEmergencyAccessibilityAlgorithm
 from .accessibility.network_criticality import NetworkCriticalityAlgorithm
+from .accessibility.evacuation_simulation import EvacuationTimeSimulationAlgorithm
 from .air.air_quality_exposure import AirQualityExposureAlgorithm
 from .demo.synthetic_dataset import SyntheticResilienceDatasetAlgorithm
 from .drought.green_infrastructure_stress import GreenInfrastructureStressAlgorithm
@@ -25,6 +26,10 @@ from .synthesis.equity_adjusted_priority import EquityAdjustedPriorityAlgorithm
 from .synthesis.climate_projection_overlay import ClimateProjectionOverlayAlgorithm
 from .synthesis.recovery_capacity_index import RecoveryCapacityIndexAlgorithm
 from .reporting.time_series_tracker import ResilienceTimeSeriesAlgorithm
+from .reporting.pdf_atlas import ResiliencePdfAtlasAlgorithm
+from .reporting.evacuation_arrival_summary import EvacuationArrivalSummaryAlgorithm
+from .synthesis.scenario_sensitivity import ScenarioSensitivityAlgorithm
+from .synthesis.risk_recovery_priority import RiskRecoveryPriorityAlgorithm
 
 
 class PlanXUrbanResilienceProvider(QgsProcessingProvider):
@@ -42,9 +47,14 @@ class PlanXUrbanResilienceProvider(QgsProcessingProvider):
         self.addAlgorithm(MultiHazardCompositeAlgorithm())
         self.addAlgorithm(EquityAdjustedPriorityAlgorithm())
         self.addAlgorithm(NetworkCriticalityAlgorithm())
+        self.addAlgorithm(EvacuationTimeSimulationAlgorithm())
         self.addAlgorithm(ClimateProjectionOverlayAlgorithm())
         self.addAlgorithm(RecoveryCapacityIndexAlgorithm())
+        self.addAlgorithm(RiskRecoveryPriorityAlgorithm())
         self.addAlgorithm(ResilienceTimeSeriesAlgorithm())
+        self.addAlgorithm(ResiliencePdfAtlasAlgorithm())
+        self.addAlgorithm(EvacuationArrivalSummaryAlgorithm())
+        self.addAlgorithm(ScenarioSensitivityAlgorithm())
         self.addAlgorithm(ScenarioComparisonAlgorithm())
         self.addAlgorithm(ScenarioTemplateAlgorithm())
         self.addAlgorithm(ResilienceReportAlgorithm())

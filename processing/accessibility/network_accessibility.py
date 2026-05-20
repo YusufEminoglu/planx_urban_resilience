@@ -1,18 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 
-import heapq
-import math
-from collections import defaultdict
-
 from qgis.PyQt.QtCore import QVariant
 from qgis.core import (
     QgsFeature,
     QgsFeatureSink,
     QgsField,
     QgsFields,
-    QgsGeometry,
-    QgsPointXY,
     QgsProcessing,
     QgsProcessingAlgorithm,
     QgsProcessingParameterFeatureSink,
@@ -22,58 +16,8 @@ from qgis.core import (
     QgsWkbTypes,
 )
 
-
-def _risk_class(minutes, target, critical):
-    if minutes <= target:
-        return "Covered"
-    if minutes <= (target + critical) * 0.5:
-        return "Watch"
-    if minutes <= critical:
-        return "Underserved"
-    return "Critical"
-
-
-def _features(source):
-    if source is None:
-        return []
-    return [feature for feature in source.getFeatures() if feature.hasGeometry()]
-
-
-def _parts(geometry):
-    if geometry.isMultipart():
-        return geometry.asMultiPolyline()
-    line = geometry.asPolyline()
-    return [line] if line else []
-
-
-def _node(point, tolerance):
-    return (round(point.x() / tolerance) * tolerance, round(point.y() / tolerance) * tolerance)
-
-
-def _dist(a, b):
-    return math.hypot(a[0] - b[0], a[1] - b[1])
-
-
-def _build_graph(roads, tolerance):
-    graph = defaultdict(list)
-    nodes = {}
-    edge_count = 0
-    for feature in _features(roads):
-        for part in _parts(feature.geometry()):
-            if len(part) < 2:
-                continue
-            for p1, p2 in zip(part[:-1], part[1:]):
-                n1 = _node(p1, tolerance)
-                n2 = _node(p2, tolerance)
-                length = _dist(n1, n2)
-                if length <= 0:
-                    continue
-                graph[n1].append((n2, length))
-                graph[n2].append((n1, length))
-                nodes[n1] = QgsGeometry.fromPointXY(QgsPointXY(n1[0], n1[1]))
-                nodes[n2] = QgsGeometry.fromPointXY(QgsPointXY(n2[0], n2[1]))
-                edge_count += 1
-    return graph, nodes, edge_count
+from .._helpers import access_risk_class
+from ._network_graph import build_simple_road_graph, iter_features, multi_source_dijkstra, travel_time_minutes
 
 
 def _nearest_node(point_geom, node_features, node_index):
@@ -87,24 +31,6 @@ def _nearest_node(point_geom, node_features, node_index):
         return None, None
     distance = point_geom.distance(node["geometry"])
     return node["key"], distance
-
-
-def _multi_source_dijkstra(graph, start_nodes):
-    distances = {}
-    queue = []
-    for node in start_nodes:
-        distances[node] = 0.0
-        heapq.heappush(queue, (0.0, node))
-    while queue:
-        current_dist, node = heapq.heappop(queue)
-        if current_dist > distances.get(node, float("inf")):
-            continue
-        for neighbor, weight in graph.get(node, []):
-            new_dist = current_dist + weight
-            if new_dist < distances.get(neighbor, float("inf")):
-                distances[neighbor] = new_dist
-                heapq.heappush(queue, (new_dist, neighbor))
-    return distances
 
 
 class NetworkEmergencyAccessibilityAlgorithm(QgsProcessingAlgorithm):
@@ -165,7 +91,7 @@ class NetworkEmergencyAccessibilityAlgorithm(QgsProcessingAlgorithm):
         critical_minutes = max(self.parameterAsDouble(parameters, self.CRITICAL_MINUTES, context), target_minutes)
         tolerance = self.parameterAsDouble(parameters, self.SNAP_TOLERANCE, context)
 
-        graph, nodes, edge_count = _build_graph(roads, tolerance)
+        graph, nodes, edge_count = build_simple_road_graph(roads, tolerance)
         if not nodes or edge_count == 0:
             raise Exception("Road network did not produce graph nodes. Check line geometry and CRS.")
 
@@ -173,9 +99,6 @@ class NetworkEmergencyAccessibilityAlgorithm(QgsProcessingAlgorithm):
         node_fields.append(QgsField("node_id", QVariant.Int))
         node_features = {}
         for idx, (key, geometry) in enumerate(nodes.items()):
-            feature = QgsFeature(node_fields)
-            feature.setGeometry(geometry)
-            feature.setAttributes([idx])
             node_features[idx] = {"key": key, "geometry": geometry}
         node_index = QgsSpatialIndex()
         for idx, data in node_features.items():
@@ -186,15 +109,14 @@ class NetworkEmergencyAccessibilityAlgorithm(QgsProcessingAlgorithm):
             node_index.addFeature(feature)
 
         destination_nodes = []
-        for feature in _features(destinations):
+        for feature in iter_features(destinations):
             node, _snap = _nearest_node(feature.geometry().centroid(), node_features, node_index)
             if node is not None:
                 destination_nodes.append(node)
         if not destination_nodes:
             raise Exception("No destination could be snapped to the road graph.")
 
-        network_distances = _multi_source_dijkstra(graph, destination_nodes)
-        meters_per_minute = max(speed_kmh * 1000.0 / 60.0, 0.0001)
+        network_distances = multi_source_dijkstra(graph, destination_nodes)
 
         fields = QgsFields()
         for field in origins.fields():
@@ -207,7 +129,7 @@ class NetworkEmergencyAccessibilityAlgorithm(QgsProcessingAlgorithm):
         (origin_sink, origin_id) = self.parameterAsSink(parameters, self.OUTPUT_ORIGINS, context, fields, QgsWkbTypes.Point, origins.sourceCrs())
         (underserved_sink, underserved_id) = self.parameterAsSink(parameters, self.OUTPUT_UNDERSERVED, context, fields, QgsWkbTypes.Point, origins.sourceCrs())
 
-        origin_features = _features(origins)
+        origin_features = iter_features(origins)
         total = max(len(origin_features), 1)
         for idx, feature in enumerate(origin_features):
             if feedback.isCanceled():
@@ -221,8 +143,8 @@ class NetworkEmergencyAccessibilityAlgorithm(QgsProcessingAlgorithm):
                 qa_flag = "not_connected"
             else:
                 net_dist = network_distances[node] + (snap_dist or 0.0)
-                time_min = net_dist / meters_per_minute
-                access_cls = _risk_class(time_min, target_minutes, critical_minutes)
+                time_min = travel_time_minutes(net_dist, speed_kmh)
+                access_cls = access_risk_class(time_min, target_minutes, critical_minutes)
                 qa_flag = "ok" if (snap_dist or 0.0) <= tolerance * 5.0 else "large_snap_distance"
             out = QgsFeature(fields)
             out.setGeometry(point)

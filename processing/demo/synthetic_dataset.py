@@ -113,8 +113,14 @@ class SyntheticResilienceDatasetAlgorithm(QgsProcessingAlgorithm):
             ("katadedi", QVariant.Int),
             ("uipfonksiyon", QVariant.String),
             ("year", QVariant.Int),
+            ("population", QVariant.Int),
         ])
-        road_fields = _fields([("name", QVariant.String), ("class", QVariant.String)])
+        road_fields = _fields([
+            ("name", QVariant.String),
+            ("class", QVariant.String),
+            ("capacity_ph", QVariant.Int),
+            ("direction", QVariant.String),
+        ])
         imperv_fields = _fields([("name", QVariant.String), ("type", QVariant.String)])
         green_fields = _fields([("name", QVariant.String), ("type", QVariant.String)])
         water_fields = _fields([("name", QVariant.String), ("type", QVariant.String)])
@@ -152,18 +158,24 @@ class SyntheticResilienceDatasetAlgorithm(QgsProcessingAlgorithm):
             _add(social_sink, social_fields, _polygon(x1, y1, x2, y2), [name, pop, elderly, children, disability, low_income])
 
         for idx, x in enumerate((0.35 * s, 0.75 * s, 1.15 * s, 1.55 * s)):
-            _add(buildings_sink, building_fields, _polygon(x, 0.18 * s, x + 0.16 * s, 0.34 * s), [f"Residential {idx + 1}", 4 + idx, "Residential", 1990 + idx * 8])
-            _add(buildings_sink, building_fields, _polygon(x, 0.86 * s, x + 0.18 * s, 1.08 * s), [f"Mixed use {idx + 1}", 6 + idx, "Mixed Use", 1980 + idx * 6])
-        _add(buildings_sink, building_fields, _polygon(0.18 * s, 0.45 * s, 0.38 * s, 0.62 * s), ["School block", 3, "Education", 2008])
-        _add(buildings_sink, building_fields, _polygon(1.62 * s, 0.42 * s, 1.84 * s, 0.62 * s), ["Health block", 5, "Health", 2015])
+            floors_res = 4 + idx
+            floors_mix = 6 + idx
+            _add(buildings_sink, building_fields, _polygon(x, 0.18 * s, x + 0.16 * s, 0.34 * s),
+                 [f"Residential {idx + 1}", floors_res, "Residential", 1990 + idx * 8, floors_res * 45])
+            _add(buildings_sink, building_fields, _polygon(x, 0.86 * s, x + 0.18 * s, 1.08 * s),
+                 [f"Mixed use {idx + 1}", floors_mix, "Mixed Use", 1980 + idx * 6, floors_mix * 55])
+        _add(buildings_sink, building_fields, _polygon(0.18 * s, 0.45 * s, 0.38 * s, 0.62 * s),
+             ["School block", 3, "Education", 2008, 420])
+        _add(buildings_sink, building_fields, _polygon(1.62 * s, 0.42 * s, 1.84 * s, 0.62 * s),
+             ["Health block", 5, "Health", 2015, 180])
 
-        for name, pts, cls in (
-            ("Main avenue", [(0, 0.42 * s), (2 * s, 0.42 * s)], "arterial"),
-            ("North connector", [(0.25 * s, 0), (0.25 * s, 1.4 * s)], "collector"),
-            ("Central connector", [(1.0 * s, 0), (1.0 * s, 1.4 * s)], "collector"),
-            ("East connector", [(1.75 * s, 0), (1.75 * s, 1.4 * s)], "local"),
+        for name, pts, cls, cap_ph, direction in (
+            ("Main avenue", [(0, 0.42 * s), (2 * s, 0.42 * s)], "arterial", 2400, "both"),
+            ("North connector", [(0.25 * s, 0), (0.25 * s, 1.4 * s)], "collector", 1200, "ft"),
+            ("Central connector", [(1.0 * s, 0), (1.0 * s, 1.4 * s)], "collector", 1200, "both"),
+            ("East connector", [(1.75 * s, 0), (1.75 * s, 1.4 * s)], "local", 600, "both"),
         ):
-            _add(roads_sink, road_fields, _line(pts), [name, cls])
+            _add(roads_sink, road_fields, _line(pts), [name, cls, cap_ph, direction])
 
         _add(imperv_sink, imperv_fields, _polygon(0.0, 0.35 * s, 2 * s, 0.50 * s), ["Main hardscape corridor", "road_hardscape"])
         _add(imperv_sink, imperv_fields, _polygon(0.95 * s, 0.0, 1.10 * s, 1.4 * s), ["Central hardscape corridor", "road_hardscape"])

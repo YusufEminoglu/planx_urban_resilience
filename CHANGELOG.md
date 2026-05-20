@@ -1,7 +1,77 @@
 # Changelog
 
+## [1.18.0] - 2026-05-20
+
+- Release v1.18.0: evacuation suite, risk-recovery matrix, reporting and network graph refactor (27 algorithms).
+
 All notable changes to **PlanX: Urban Resilience** are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · versioning: [SemVer](https://semver.org/).
+
+## [1.18.0] - 2026-05-20
+
+Risk-recovery matrix, directional road graph, helper rollout.
+
+### Added
+- **Risk-Recovery Priority Matrix** (`risk_recovery_priority_matrix`): `priority = hazard * (1 + w * (100 - recovery) / 100)` with `rr_priority_score` and intervention class.
+- **Directional roads** in `_network_graph`: optional `direction_field` values `both` / `ft` / `bt` (digitized direction) for evacuation and network criticality.
+
+### Changed
+- Synthetic demo roads include a `direction` attribute.
+- **Equity-Adjusted Priority** and **Scenario Sensitivity** use `processing/_helpers.py`.
+
+## [1.17.0] - 2026-05-20
+
+Arrival summary, PDF map-book presets, architecture cleanup.
+
+### Added
+- **Evacuation Shelter Arrival Summary** (`evacuation_shelter_arrival_summary`): aggregate assigned origins into per-shelter arrival curves; table + optional HTML.
+- **PDF Atlas map-book presets**: A3 Standard (200 dpi), A4 Compact (150 dpi), A3 Studio HQ (300 dpi).
+- **`processing/_helpers.py`**: shared `clamp`, `composite_risk_class`, `access_risk_class`, `parse_weights_csv`.
+
+### Changed
+- **Network Emergency Accessibility** refactored onto `_network_graph` (`build_simple_road_graph`, `multi_source_dijkstra`, `travel_time_minutes`).
+- **Multi-Hazard Composite** uses shared helpers.
+
+## [1.16.0] - 2026-05-20
+
+Evacuation v2: per-edge road capacity and optional timestep queue.
+
+### Added
+- **`build_road_graph`** returns `edge_capacity` (persons/hour) from `capacity_ph`-style numeric fields or road-class lookup (`ROAD_CLASS_CAPACITY_PH` defaults).
+- **Evacuation** parameters: `ROAD_CLASS_FIELD`, `TIMESTEP_MINUTES` (0 = instant greedy), `MAX_TIMESTEPS`.
+- Origin outputs: `travel_min`, `evac_delay_min`, `evac_timestep` (queue mode).
+- Edge outputs: `trip_count`, `load_pop`, `road_capacity_ph`, `congestion_pct`, `bottleneck_score`.
+- Synthetic roads: `capacity_ph` field on demo network segments.
+
+### Changed
+- Timestep queue processes origins in waves when road segments exceed per-interval flow capacity.
+
+## [1.15.0] - 2026-05-20
+
+Evacuation simulation + shared road-network graph module.
+
+### Added
+- **`processing/accessibility/_network_graph.py`** — shared graph build, snap, multi-target Dijkstra, path reconstruction, travel-time and percentile helpers.
+- **Evacuation Time Simulation** (`evacuation_time_simulation`) under Emergency:
+  - Greedy capacity-constrained assignment (Farthest-first or Largest-population-first order).
+  - Outputs: origins with `evac_shelter`, `evac_min`, `evac_class`, `qa_flag`; shelters with `cap_used` / `cap_pct`; edges with `load_count` / `bottleneck_score`.
+  - Processing log reports assigned vs unassigned population and P50/P95 evacuation times.
+- Synthetic demo buildings include **`population`** for smoke-test evacuation workflows.
+
+### Changed
+- **`network_criticality.py`** refactored to import from `_network_graph` (behaviour unchanged).
+
+## [1.14.0] - 2026-05-20
+
+PDF atlas release + scenario sensitivity + dashboard catch-up.
+
+### Added
+- **Resilience PDF Atlas** (`resilience_pdf_atlas`) under Report and QA: A3 multi-page PDF via QgsLayout (cover, overview with legend/stats, optional per-class map pages). Algorithm existed in source but was not registered until this release.
+- **Scenario Sensitivity Analysis** (`scenario_sensitivity`) under Synthesis: Latin Hypercube Sampling over component weights within a perturbation band. Outputs `ss_baseline`, `ss_mean`, `ss_std`, `ss_p05`, `ss_p95`, `ss_range`, `ss_stability`, `ss_samples`.
+
+### Fixed
+- **Dashboard** module catalog now lists Recovery Capacity Index, Resilience Time-Series Tracker and Resilience PDF Atlas (added in v1.13 but omitted from `MODULES`).
+- Overview text and future-modules hint refreshed to match the current roadmap.
 
 ## [1.13.0] - 2026-05-20
 

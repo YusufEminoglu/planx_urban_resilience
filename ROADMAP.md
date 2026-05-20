@@ -1,8 +1,8 @@
 # PlanX Urban Resilience — Roadmap
 
-Mevcut 15 algoritmaya **eklenebilir** modüller. Önceliklendirme önerisi: yüksek-değer + düşük-bağımlılık önce.
+Mevcut **27** algoritma. Aşağıdaki maddelerin çoğu v1.11–v1.14 arasında tamamlandı; kalanlar için öncelik: yüksek-değer + düşük-bağımlılık.
 
-## 1. Multi-Hazard Composite Index ⭐ (yüksek değer, hızlı)
+## 1. Multi-Hazard Composite Index ✅ (v1.11)
 
 **Sorun:** Adaptation Priority Synthesis tek bir composite score üretiyor ama hangi hazard'ın dominant olduğunu gizliyor.
 
@@ -13,7 +13,7 @@ Mevcut 15 algoritmaya **eklenebilir** modüller. Önceliklendirme önerisi: yük
 
 **Tahmini iş:** 1 algoritma dosyası (~150 satır), `synthesis/multi_hazard_composite.py`.
 
-## 2. Network Betweenness for Criticality ⭐ (yol ağı önemine bakar)
+## 2. Network Betweenness for Criticality ✅ (v1.12, `network_criticality`)
 
 **Sorun:** Network Emergency Accessibility origin→shelter zamanını veriyor ama hangi yol segmenti kritik?
 
@@ -24,7 +24,7 @@ Mevcut 15 algoritmaya **eklenebilir** modüller. Önceliklendirme önerisi: yük
 
 **Tahmini iş:** ~200 satır, NetworkX dependency yoksa graph yapısı zaten `network_accessibility.py`'de var, oradan adapt edilebilir.
 
-## 3. Evacuation Time Simulation (basit kuyruk modeli)
+## 3. Evacuation Time Simulation ✅ (v1.15 greedy v1, v1.16 timestep queue + edge capacity)
 
 **Sorun:** Static accessibility ≠ acil tahliye gerçekliği (yol kapasitesi, nüfus yığılması).
 
@@ -35,7 +35,7 @@ Mevcut 15 algoritmaya **eklenebilir** modüller. Önceliklendirme önerisi: yük
 
 **Tahmini iş:** ~300 satır, daha karmaşık. İlk versiyon basit greedy assignment, sonra iyileştirilebilir.
 
-## 4. Climate Projection Overlay (offline-first)
+## 4. Climate Projection Overlay ✅ (v1.12)
 
 **Sorun:** Mevcut analizler bugün için; gelecekte iklim değişikliğine nasıl direnç?
 
@@ -48,7 +48,7 @@ Mevcut 15 algoritmaya **eklenebilir** modüller. Önceliklendirme önerisi: yük
 
 **Tahmini iş:** ~120 satır.
 
-## 5. Recovery Capacity Index
+## 5. Recovery Capacity Index ✅ (v1.13)
 
 **Sorun:** Resilience = absorb + recover. Şu an sadece "stress/exposure" var.
 
@@ -59,7 +59,7 @@ Mevcut 15 algoritmaya **eklenebilir** modüller. Önceliklendirme önerisi: yük
 
 **Tahmini iş:** ~180 satır.
 
-## 6. PDF Atlas Export (Reporting)
+## 6. PDF Atlas Export ✅ (v1.14, `resilience_pdf_atlas`)
 
 **Sorun:** HTML/Markdown var ama saha çalışmaları için printable atlas isteniyor.
 
@@ -70,7 +70,7 @@ Mevcut 15 algoritmaya **eklenebilir** modüller. Önceliklendirme önerisi: yük
 
 **Tahmini iş:** ~250 satır, QgsLayout API öğrenme eğrisi.
 
-## 7. Resilience Time-Series Tracker
+## 7. Resilience Time-Series Tracker ✅ (v1.13)
 
 **Sorun:** Tek snapshot. İlerleme nasıl ölçülecek?
 
@@ -80,7 +80,7 @@ Mevcut 15 algoritmaya **eklenebilir** modüller. Önceliklendirme önerisi: yük
 
 **Tahmini iş:** ~150 satır. Veri sahipliği zor.
 
-## 8. Equity-Adjusted Adaptation Priority
+## 8. Equity-Adjusted Adaptation Priority ✅ (v1.11)
 
 **Sorun:** Adaptation Priority en yüksek risk olanları öne çıkarır, ama bu zaten zengin mahalleler olabilir (better data + better infrastructure).
 
@@ -91,7 +91,7 @@ Mevcut 15 algoritmaya **eklenebilir** modüller. Önceliklendirme önerisi: yük
 
 **Tahmini iş:** ~100 satır. Mevcut iki algoritmanın çıktısını birleştirir.
 
-## 9. Scenario Sensitivity Analysis
+## 9. Scenario Sensitivity Analysis ✅ (v1.14, `scenario_sensitivity`)
 
 **Sorun:** Composite skorlar ağırlıklara hassas. Hangi ağırlık ne kadar etkili?
 
@@ -104,13 +104,13 @@ Mevcut 15 algoritmaya **eklenebilir** modüller. Önceliklendirme önerisi: yük
 
 ---
 
-## Önerilen sürüm planı
+## Önerilen sürüm planı (güncel)
 
-- **v1.10.0 (bu sürüm):** Bug fix + UX overhaul + new icon. Yeni modül yok.
-- **v1.11.0:** Multi-Hazard Composite + Equity-Adjusted Priority (en hızlı 2)
-- **v1.12.0:** Network Criticality + Climate Projection Overlay
-- **v1.13.0:** Recovery Capacity Index + Scenario Sensitivity
-- **v2.0.0:** PDF Atlas Export + Evacuation Simulation (büyük adım)
+- **v1.10–v1.14:** Tamamlandı (yukarıdaki ✅ maddeler).
+- **v1.17:** Shelter arrival summary ✅, PDF map-book presets ✅, `_helpers.py` ✅, `network_accessibility` → `_network_graph` ✅.
+- **v1.18:** Risk-recovery matrix ✅, directional roads (ft/bt) ✅, equity/scenario → `_helpers` ✅.
+- **v1.19+:** Remaining hazard modules on `_helpers`; GEE climate connectors (v2.0).
+- **v2.0.0:** GEE climate connectors + map-book presets (büyük adım).
 
 ## Mimari notlar
 

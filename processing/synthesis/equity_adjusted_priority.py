@@ -27,8 +27,6 @@ Output fields:
 """
 from __future__ import annotations
 
-import math
-
 from qgis.PyQt.QtCore import QVariant
 from qgis.core import (
     QgsFeature,
@@ -43,25 +41,7 @@ from qgis.core import (
     QgsProcessingParameterNumber,
 )
 
-
-def _clamp(value, low=0.0, high=100.0):
-    try:
-        v = float(value)
-    except (TypeError, ValueError):
-        return None
-    if math.isnan(v):
-        return None
-    return max(low, min(high, v))
-
-
-def _class(score: float) -> str:
-    if score >= 75:
-        return "Very High"
-    if score >= 55:
-        return "High"
-    if score >= 35:
-        return "Moderate"
-    return "Low"
+from .._helpers import clamp, composite_risk_class
 
 
 class EquityAdjustedPriorityAlgorithm(QgsProcessingAlgorithm):
@@ -174,18 +154,18 @@ class EquityAdjustedPriorityAlgorithm(QgsProcessingAlgorithm):
         for idx, feature in enumerate(source.getFeatures()):
             if feedback.isCanceled():
                 break
-            hazard = _clamp(feature.attribute(hazard_field)) or 0.0
-            svi = _clamp(feature.attribute(svi_field)) or 0.0
+            hazard = clamp(feature.attribute(hazard_field)) or 0.0
+            svi = clamp(feature.attribute(svi_field)) or 0.0
             factor = 1.0 + equity_w * (svi / 100.0)
             raw = hazard * factor
-            score = _clamp(100.0 * raw / max_possible) or 0.0
+            score = clamp(100.0 * raw / max_possible) or 0.0
 
             new_feat = QgsFeature(out_fields)
             new_feat.setGeometry(feature.geometry())
             new_attrs = list(feature.attributes())
             while len(new_attrs) < out_fields.size() - 6:
                 new_attrs.append(None)
-            new_attrs.extend([hazard, svi, factor, raw, score, _class(score)])
+            new_attrs.extend([hazard, svi, factor, raw, score, composite_risk_class(score)])
             new_feat.setAttributes(new_attrs)
             sink.addFeature(new_feat, QgsFeatureSink.FastInsert)
 

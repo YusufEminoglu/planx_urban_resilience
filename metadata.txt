@@ -3,9 +3,9 @@ name=PlanX: Urban Resilience
 email=yusuf.eminoglu@deu.edu.tr
 author=Yusuf Eminoglu
 qgisMinimumVersion=3.10
-description=PlanX urban resilience suite for QGIS. Includes synthetic QA data, seismic, heat, flood, social, Euclidean/network emergency access, air, drought, adaptation, scenario templates/comparison, HTML/Markdown reporting, and style presets.
-about=Single Processing provider and QGIS dashboard for city-scale resilience analyses. Current modules cover synthetic QA data generation, stochastic seismic debris and logistics, heat comfort exposure, pluvial flood susceptibility, social vulnerability, Euclidean and network emergency shelter accessibility, air quality exposure, green infrastructure drought stress, climate adaptation priority synthesis, scenario planning templates, scenario comparison, HTML and Markdown reporting, and QGIS style presets. Developed with feedback from educational workflows at Dokuz Eylul University, Department of City and Regional Planning.
-version=1.13.0
+description=PlanX urban resilience suite (27 tools): seismic, heat, flood, social, emergency access, evacuation, network criticality, air, drought, synthesis, risk-recovery matrix, time-series, scenario tools, HTML/Markdown/PDF atlas, symbology.
+about=27 Processing algorithms and a QGIS dashboard for city-scale resilience screening: synthetic QA, seismic debris, heat and flood, social vulnerability, Euclidean and network emergency access, evacuation simulation with optional timestep queue, network criticality, air and drought, multi-hazard and equity-adjusted synthesis, climate projection overlay, recovery capacity, scenario sensitivity, risk-recovery priority matrix, time-series tracking, scenario templates, HTML/Markdown/PDF atlas with map-book presets, shelter arrival summaries, and symbology. DEU City and Regional Planning educational workflows.
+version=1.18.0
 tracker=https://github.com/YusufEminoglu/planx_urban_resilience/issues
 repository=https://github.com/YusufEminoglu/planx_urban_resilience
 
@@ -20,6 +20,27 @@ hasProcessingProvider=yes
 plugin_dependencies=
 license=GPL-3
 changelog=
+    PlanX Urban Resilience 1.18.0 - Risk-recovery matrix, directional roads, helper rollout.
+        - Risk-Recovery Priority Matrix: combine hazard/adapt score with recovery capacity deficit; rr_priority_score and intervention class.
+        - Directional road network: optional direction field (both/ft/bt) on evacuation and network criticality via build_road_graph.
+        - Synthetic roads include direction (North connector one-way ft); equity and scenario sensitivity use processing/_helpers.
+    PlanX Urban Resilience 1.17.0 - Arrival curves, PDF presets, shared helpers, network refactor.
+        - Evacuation Shelter Arrival Summary: per-shelter timestep/minute arrival table plus optional HTML from evacuation origin outputs.
+        - Resilience PDF Atlas: map-book presets (A3 standard, A4 compact, A3 studio 300 dpi).
+        - processing/_helpers.py shared clamp/risk-class/weight parsers; network_accessibility uses _network_graph.
+    PlanX Urban Resilience 1.16.0 - Evacuation v2: road capacity mapping and timestep queue.
+        - build_road_graph now maps per-edge capacity from a numeric field or road-class lookup (arterial/collector/local defaults).
+        - Evacuation Time Simulation: optional timestep queue (minutes > 0) defers departures when segment flow exceeds per-interval capacity; new origin fields travel_min, evac_delay_min, evac_timestep; edge outputs trip_count, load_pop, congestion_pct.
+        - Synthetic demo roads include capacity_ph and class for evacuation smoke tests.
+    PlanX Urban Resilience 1.15.0 - Evacuation simulation and shared network graph module.
+        - Evacuation Time Simulation: greedy capacity-constrained shelter assignment on the road network; outputs assigned origins, shelter utilization, edge load/bottleneck scores; P50/P95 evacuation times in the log.
+        - Shared processing/accessibility/_network_graph.py; network_criticality refactored to use it.
+        - Synthetic demo buildings now include a population field for evacuation smoke tests.
+    PlanX Urban Resilience 1.14.0 - PDF atlas wired up, scenario sensitivity, dashboard sync.
+        - Resilience PDF Atlas: multi-page A3 QgsLayout export (cover, overview, per-class maps) now registered in Processing and the dashboard.
+        - Scenario Sensitivity Analysis: Latin Hypercube weight perturbation with baseline, mean, std, p05/p95, range and stability score per unit.
+        - Dashboard: Recovery Capacity Index, Time-Series Tracker and PDF Atlas module cards added (were missing from v1.13).
+        - Future-modules hint updated (evacuation simulation, GEE connectors remain on the roadmap).
     PlanX Urban Resilience 1.13.0 - Six new algorithms across synthesis, emergency and reporting.
         - Multi-Hazard Composite Index: weighted composite, dominant hazard label, Shannon diversity, top drivers, data-gap count.
         - Equity-Adjusted Adaptation Priority: equity factor from SVI, normalized adjusted priority (0-100) + class.
