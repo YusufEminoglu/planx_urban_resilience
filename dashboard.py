@@ -96,6 +96,20 @@ MODULES = [
         "outputs": "Adaptation priority score, class, top drivers and missing-data flags.",
     },
     {
+        "title": "Multi-Hazard Composite Index",
+        "algorithm": "planx_urban_resilience:multi_hazard_composite_index",
+        "group": "8 - Synthesis",
+        "inputs": "Planning units with two or more 0-100 hazard score fields (e.g. seismic, heat, flood, social, etc.).",
+        "outputs": "Composite score, class, dominant hazard label, Shannon diversity index, top 3 drivers, and data-gap count per unit.",
+    },
+    {
+        "title": "Equity-Adjusted Adaptation Priority",
+        "algorithm": "planx_urban_resilience:equity_adjusted_priority",
+        "group": "8 - Synthesis",
+        "inputs": "Planning units with a hazard/composite score field and a social vulnerability score field (both 0-100).",
+        "outputs": "Equity factor, raw and normalized adjusted priority score, and class. Surfaces high-risk + high-vulnerability units.",
+    },
+    {
         "title": "Scenario Comparison / Delta Map",
         "algorithm": "planx_urban_resilience:resilience_scenario_comparison",
         "group": "9 - Report and QA",

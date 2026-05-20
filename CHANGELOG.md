@@ -3,6 +3,21 @@
 All notable changes to **PlanX: Urban Resilience** are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · versioning: [SemVer](https://semver.org/).
 
+## [1.11.0] - 2026-05-20
+
+Two new synthesis algorithms from the roadmap.
+
+### Added
+- **Multi-Hazard Composite Index** (`multi_hazard_composite_index`): combine N hazard score fields per planning unit. Outputs:
+  - `mh_score` weighted composite (0-100)
+  - `mh_class` Very High / High / Moderate / Low
+  - `mh_dominant` field name with largest weighted contribution
+  - `mh_diversity` Shannon entropy 0-100 (single-stress -> multi-stress)
+  - `mh_drivers` top 3 contributing field names (CSV)
+  - `mh_data_gap` number of missing/non-numeric hazard fields
+- **Equity-Adjusted Adaptation Priority** (`equity_adjusted_priority`): multiplies a hazard/composite score by an equity factor `1 + w * (SVI/100)`. Outputs `eq_factor`, `eq_adjusted_raw`, `eq_adjusted_score` (0-100 normalized), and `eq_priority_class`. Surfaces units that are simultaneously high-hazard and high-vulnerability.
+- Both algorithms registered in the Processing provider and dashboard MODULES list under group "8 - Synthesis".
+
 ## [1.10.0] - 2026-05-19
 
 New icon, dashboard UX overhaul, correctness pass, roadmap.

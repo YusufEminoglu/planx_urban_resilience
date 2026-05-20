@@ -19,6 +19,8 @@ from .reporting.studio_brief import StudioBriefAlgorithm
 from .seismic.monte_carlo_debris import UrbanResilienceSeismicAnalystV2
 from .social.social_vulnerability_index import SocialVulnerabilityIndexAlgorithm
 from .synthesis.adaptation_priority_synthesis import AdaptationPrioritySynthesisAlgorithm
+from .synthesis.multi_hazard_composite import MultiHazardCompositeAlgorithm
+from .synthesis.equity_adjusted_priority import EquityAdjustedPriorityAlgorithm
 
 
 class PlanXUrbanResilienceProvider(QgsProcessingProvider):
@@ -33,6 +35,8 @@ class PlanXUrbanResilienceProvider(QgsProcessingProvider):
         self.addAlgorithm(AirQualityExposureAlgorithm())
         self.addAlgorithm(GreenInfrastructureStressAlgorithm())
         self.addAlgorithm(AdaptationPrioritySynthesisAlgorithm())
+        self.addAlgorithm(MultiHazardCompositeAlgorithm())
+        self.addAlgorithm(EquityAdjustedPriorityAlgorithm())
         self.addAlgorithm(ScenarioComparisonAlgorithm())
         self.addAlgorithm(ScenarioTemplateAlgorithm())
         self.addAlgorithm(ResilienceReportAlgorithm())
