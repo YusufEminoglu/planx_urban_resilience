@@ -5,7 +5,7 @@ author=Yusuf Eminoglu
 qgisMinimumVersion=3.10
 description=PlanX urban resilience suite (28 tools): seismic, heat, flood, social, emergency access, evacuation, network criticality, air, drought, synthesis, risk-recovery matrix, time-series, scenario tools, HTML/Markdown/PDF atlas, symbology.
 about=28 Processing algorithms and a QGIS dashboard for city-scale resilience screening: synthetic QA, seismic debris, heat and flood, social vulnerability, Euclidean and network emergency access, evacuation simulation with optional timestep queue, network criticality, air and drought, multi-hazard and equity-adjusted synthesis, climate projection overlay, recovery capacity, scenario sensitivity, risk-recovery priority matrix, time-series tracking, scenario templates, HTML/Markdown/PDF atlas with map-book presets, shelter arrival summaries, and symbology. DEU City and Regional Planning educational workflows.
-version=1.21.0
+version=1.22.0
 tracker=https://github.com/YusufEminoglu/planx_urban_resilience/issues
 repository=https://github.com/YusufEminoglu/planx_urban_resilience
 
@@ -20,6 +20,12 @@ hasProcessingProvider=yes
 plugin_dependencies=
 license=GPL-3
 changelog=
+    PlanX Urban Resilience 1.22.0 - Four advanced modules: 3D City bridge, multi-objective optimization, temporal aggregation, point-to-surface interpolation.
+        - 3D Risk Volume Export: scored polygon -> GeoJSON in EPSG:4326 with extrusion_height (= score x scale) and color_hex (Yellow-Red, Blue-Red, or Greys ramps) per feature. Drops straight into the PlanX 3D City Viewer / Three.js / deck.gl / Cesium. Optional base-height field is additive.
+        - Pareto-Optimal Intervention Selector: non-dominated sorting on (cost, benefit). Outputs pareto_rank (1 = first frontier, 2 = next, etc.), pareto_dominated and pareto_dominates counts. rank == 1 set is the budget-bounded best pick.
+        - Multi-Period Hazard Frequency Aggregation: collapses 2-8 source hazard layers (temporal snapshots, magnitude bins, climate scenarios) into one composite per planning unit. Outputs hf_frequency, hf_mean, hf_max, hf_min, hf_composite (Mean / Max / Frequency-weighted mean), hf_class.
+        - Vulnerability Surface (IDW): interpolates sparse point samples into a polygon grid using inverse-distance weighting. Per-cell vs_value, vs_class, vs_n_points. Optional search radius and neighbour cap for bounded runtime.
+        - Provider and dashboard module catalog updated. Suite total: 39 algorithms.
     PlanX Urban Resilience 1.21.0 - Four advanced modules: spatial outliers, hazard cascading, planning economics, criticality overlay.
         - LISA Local Moran's I: companion to Hot-Spot Gi*. Outputs lisa_z, lisa_lag, lisa_I, lisa_pvalue, lisa_quadrant (HH/LL/HL/LH/Not significant). The HL and LH outlier classes are the under-served pockets Gi* cannot expose.
         - Seismic Cascade (Debris -> Network Degradation): pipes seismic debris polygons into the road graph, drops blocked edges, re-runs multi-source Dijkstra and compares pre- vs post-hazard accessibility per origin. Outputs cas_pre_dist, cas_post_dist, cas_delta_dist, reachable flags and a status label (Newly cut off / Always cut off / Worse / Same / Recovered). Genuine cross-domain hazard chain modelling.

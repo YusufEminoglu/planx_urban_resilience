@@ -3,6 +3,34 @@
 All notable changes to **PlanX: Urban Resilience** are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · versioning: [SemVer](https://semver.org/).
 
+## [1.22.0] - 2026-05-20
+
+Four advanced modules — 3D City bridge, multi-objective optimisation, temporal aggregation, point-to-surface interpolation.
+
+### Added
+- **3D Risk Volume Export** — `risk_3d_volume_export` (Report and QA):
+  - Scored polygon → GeoJSON in EPSG:4326 with `extrusion_height` (= score × max_height_m) and `color_hex` per feature.
+  - Three colour ramps: Yellow-Red (sequential), Blue-Red (diverging), Greys.
+  - Optional base-height field is additive (handy when buildings already carry a roof height).
+  - In-QGIS sink in the source CRS too so the attributes can be inspected/edited.
+  - Result drops straight into the PlanX 3D City Viewer or any Three.js / deck.gl / Cesium scene.
+- **Pareto-Optimal Intervention Selector** — `pareto_optimal_selector` (Synthesis):
+  - Non-dominated sorting (NSGA-II-style peeling) on a cost field (lower = better) and a benefit field (higher = better). Pair with the Cost-Benefit Analyzer outputs.
+  - Per-feature `pareto_rank`, `pareto_dominated`, `pareto_dominates`.
+  - `pareto_rank == 1` is the budget-bounded best pick: no other intervention is objectively better.
+- **Multi-Period Hazard Frequency Aggregation** — `hazard_frequency_aggregation` (Synthesis):
+  - Collapses 2-8 source hazard layers (temporal snapshots, magnitude bins, climate scenarios) into ONE composite per planning unit.
+  - Per-unit `hf_frequency`, `hf_mean`, `hf_max`, `hf_min`, `hf_composite` (Mean / Max / Frequency-weighted mean), `hf_class`.
+  - Frequency-weighted mean = `mean × (freq / N)` — units that score high in BOTH many periods AND high intensity rise to the top.
+- **Vulnerability Surface (IDW)** — `vulnerability_surface_idw` (Synthesis):
+  - Pure-Python inverse-distance-weighted interpolation from a point layer into a polygon grid clipped to the study area.
+  - Configurable cell size, IDW power, search radius, and maximum-neighbours cap for bounded runtime.
+  - Per-cell `vs_value`, `vs_class`, `vs_n_points`.
+
+### Changed
+- Provider registers all four new algorithms. **Suite total: 39 algorithms.**
+- Dashboard module catalog updated.
+
 ## [1.21.0] - 2026-05-20
 
 Four advanced modules — spatial-statistics outliers, hazard cascading, planning economics, criticality overlay.

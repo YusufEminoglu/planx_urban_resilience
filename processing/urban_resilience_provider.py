@@ -39,6 +39,10 @@ from .synthesis.lisa_local_moran import LisaLocalMoranAlgorithm
 from .synthesis.cost_benefit import CostBenefitAnalyzerAlgorithm
 from .synthesis.critical_infrastructure_exposure import CriticalInfrastructureExposureAlgorithm
 from .accessibility.seismic_cascade import SeismicCascadeAlgorithm
+from .reporting.risk_3d_export import Risk3DVolumeExportAlgorithm
+from .synthesis.pareto_selector import ParetoSelectorAlgorithm
+from .synthesis.hazard_frequency import HazardFrequencyAggregationAlgorithm
+from .synthesis.vulnerability_surface_idw import VulnerabilitySurfaceIDWAlgorithm
 
 
 class PlanXUrbanResilienceProvider(QgsProcessingProvider):
@@ -78,6 +82,10 @@ class PlanXUrbanResilienceProvider(QgsProcessingProvider):
         self.addAlgorithm(CostBenefitAnalyzerAlgorithm())
         self.addAlgorithm(CriticalInfrastructureExposureAlgorithm())
         self.addAlgorithm(SeismicCascadeAlgorithm())
+        self.addAlgorithm(Risk3DVolumeExportAlgorithm())
+        self.addAlgorithm(ParetoSelectorAlgorithm())
+        self.addAlgorithm(HazardFrequencyAggregationAlgorithm())
+        self.addAlgorithm(VulnerabilitySurfaceIDWAlgorithm())
 
     def id(self):
         return "planx_urban_resilience"
