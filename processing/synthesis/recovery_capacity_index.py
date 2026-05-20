@@ -44,27 +44,7 @@ from qgis.core import (
     QgsProcessingParameterString,
 )
 
-
-def _clamp(value, low=0.0, high=100.0):
-    try:
-        v = float(value)
-    except (TypeError, ValueError):
-        return None
-    if math.isnan(v):
-        return None
-    return max(low, min(high, v))
-
-
-def _capacity_class(score: float) -> str:
-    if score >= 80:
-        return "Very High"
-    if score >= 60:
-        return "High"
-    if score >= 40:
-        return "Moderate"
-    if score >= 20:
-        return "Low"
-    return "Very Low"
+from .._helpers import clamp, recovery_capacity_class
 
 
 def _shares_to_diversity(shares: list[float]) -> float:
@@ -248,11 +228,11 @@ class RecoveryCapacityIndexAlgorithm(QgsProcessingAlgorithm):
 
             # 2) Redundancy
             if redundancy_field:
-                count = _clamp(feature.attribute(redundancy_field), low=0, high=1e6)
+                count = clamp(feature.attribute(redundancy_field), low=0, high=1e6)
                 if count is None:
                     rc_red = None
                 else:
-                    rc_red = _clamp(count * red_scale)
+                    rc_red = clamp(count * red_scale)
             else:
                 rc_red = None
 
@@ -267,14 +247,14 @@ class RecoveryCapacityIndexAlgorithm(QgsProcessingAlgorithm):
                     rc_grn = None
                 else:
                     if 0 <= gf <= 1:
-                        rc_grn = _clamp(gf * 100.0)
+                        rc_grn = clamp(gf * 100.0)
                     else:
-                        rc_grn = _clamp(gf)
+                        rc_grn = clamp(gf)
             else:
                 rc_grn = None
 
             # 4) Cohesion
-            rc_coh = _clamp(feature.attribute(cohesion_field)) if cohesion_field else None
+            rc_coh = clamp(feature.attribute(cohesion_field)) if cohesion_field else None
 
             sub = [
                 (rc_div, w_div),
@@ -287,7 +267,7 @@ class RecoveryCapacityIndexAlgorithm(QgsProcessingAlgorithm):
             if present:
                 weight_sum = sum(w for _s, w in present) or 1.0
                 score = sum(s * w for s, w in present) / weight_sum
-                score = _clamp(score) or 0.0
+                score = clamp(score) or 0.0
             else:
                 score = 0.0
 
@@ -296,7 +276,7 @@ class RecoveryCapacityIndexAlgorithm(QgsProcessingAlgorithm):
             new_attrs = list(feature.attributes())
             while len(new_attrs) < out_fields.size() - 7:
                 new_attrs.append(None)
-            new_attrs.extend([rc_div, rc_red, rc_grn, rc_coh, score, _capacity_class(score), gaps])
+            new_attrs.extend([rc_div, rc_red, rc_grn, rc_coh, score, recovery_capacity_class(score), gaps])
             new_feat.setAttributes(new_attrs)
             sink.addFeature(new_feat, QgsFeatureSink.FastInsert)
 

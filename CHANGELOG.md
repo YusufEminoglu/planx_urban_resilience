@@ -1,11 +1,34 @@
 # Changelog
 
-## [1.18.0] - 2026-05-20
-
-- Release v1.18.0: evacuation suite, risk-recovery matrix, reporting and network graph refactor (27 algorithms).
-
 All notable changes to **PlanX: Urban Resilience** are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · versioning: [SemVer](https://semver.org/).
+
+## [1.19.1] - 2026-05-20
+
+Hub-scan hygiene patch (response to the 1.19.0 plugins.qgis.org security scan).
+
+### Fixed
+- Removed `build_local_zip.ps1` from the plugin folder. It was a local-dev wrapper that should never have shipped; the Hub security scan flagged it as a "suspicious file" in 1.19.0.
+- Hardened `packaging/zip_hub.py` to skip `.ps1`, `.bat`, `.cmd`, `.exe`, `.dll`, `.lnk`, `.pyc`, `.pyo`, `.pyd` and OS clutter (`.DS_Store`, `Thumbs.db`, etc.) by default. No future Hub upload from this monorepo can accidentally ship a local executable.
+- Cleared the 32 flake8 issues from the Hub Code Quality report:
+  - Unused imports: `Qt` (dashboard.py), `QgsPointXY` (heat/urban_heat_comfort.py), `QgsWkbTypes` (reporting/scenario_comparison.py), `os`/`QSizeF`/`QgsProcessingOutputFile`/`QgsColorRampShader` (reporting/pdf_atlas.py).
+  - Dead variable `ys` in `flood/pluvial_flood_susceptibility.py` (only `xs` was used).
+  - `seismic/monte_carlo_debris.py`: E302 fixed (two blank lines before class), W293 fixed (no whitespace on blank lines), E701 fixed (one statement per line for the year tier branch).
+
+### Added
+- `setup.cfg` disabling W503 (modern PEP 8 prefers line-break-before-operator) and E203 (Black-style slicing). Centralises flake8 config so future scans stay quiet about stylistic-only flags.
+
+## [1.19.0] - 2026-05-20
+
+Join scores to planning units + helpers rollout across hazard modules.
+
+### Added
+- **Join Hazard Scores to Planning Units** (`join_scores_to_planning_units`): up to five score layers joined by max intersecting value.
+- **`build_local_zip.ps1`**: local Hub zip without git push.
+
+### Changed
+- All scored modules (hazard, synthesis, reporting) use `processing/_helpers.py` for clamp and class labels.
+- `_helpers`: `accessibility_deficit_class`, `recovery_capacity_class`.
 
 ## [1.18.0] - 2026-05-20
 

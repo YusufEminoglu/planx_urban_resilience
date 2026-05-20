@@ -13,12 +13,9 @@ from qgis.core import (
     QgsProcessingParameterFeatureSource,
     QgsProcessingParameterField,
     QgsProcessingParameterNumber,
-    QgsWkbTypes,
 )
 
-
-def _clamp(value, low=0.0, high=100.0):
-    return max(low, min(high, value))
+from .._helpers import clamp
 
 
 def _numeric(feature, field_name):
@@ -103,8 +100,8 @@ class ScenarioComparisonAlgorithm(QgsProcessingAlgorithm):
         for idx, feature in enumerate(features):
             if feedback.isCanceled():
                 break
-            baseline = _clamp(_numeric(feature, baseline_field))
-            scenario = _clamp(_numeric(feature, scenario_field))
+            baseline = clamp(_numeric(feature, baseline_field))
+            scenario = clamp(_numeric(feature, scenario_field))
             delta = scenario - baseline
             pct_change = 0.0 if baseline == 0 else (delta / baseline) * 100.0
             change_cls = _change_class(delta, threshold)

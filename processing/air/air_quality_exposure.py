@@ -18,19 +18,7 @@ from qgis.core import (
     QgsWkbTypes,
 )
 
-
-def _clamp(value, low=0.0, high=100.0):
-    return max(low, min(high, value))
-
-
-def _risk_class(score):
-    if score >= 75:
-        return "Very High"
-    if score >= 55:
-        return "High"
-    if score >= 35:
-        return "Moderate"
-    return "Low"
+from .._helpers import clamp, composite_risk_class
 
 
 def _features(source):
@@ -52,14 +40,14 @@ def _area_share(cell_geom, target_union):
     inter = cell_geom.intersection(target_union)
     if inter.isEmpty():
         return 0.0
-    return _clamp(inter.area() / cell_geom.area(), 0.0, 1.0)
+    return clamp(inter.area() / cell_geom.area(), 0.0, 1.0)
 
 
 def _distance_risk(geom, target_union, max_distance, missing_score=0.0):
     if target_union is None or target_union.isEmpty():
         return missing_score
     distance = geom.distance(target_union)
-    return _clamp(100.0 - (distance / max(max_distance, 1.0)) * 100.0)
+    return clamp(100.0 - (distance / max(max_distance, 1.0)) * 100.0)
 
 
 def _point_count(cell_geom, features, index):
@@ -192,11 +180,11 @@ class AirQualityExposureAlgorithm(QgsProcessingAlgorithm):
                 road_score = _distance_risk(centroid, road_union, road_distance, missing_score=0.0)
                 source_score = _distance_risk(centroid, source_union, source_distance, missing_score=0.0)
                 sens_count = _point_count(clipped, sensitive_features, sensitive_index)
-                sensitive_score = _clamp(sens_count * 25.0)
+                sensitive_score = clamp(sens_count * 25.0)
                 green_share = _area_share(clipped, green_union)
                 raw = (road_score * w_road + source_score * w_source + sensitive_score * w_sensitive) / weight_sum
-                air_score = _clamp(raw - green_share * 100.0 * w_buffer)
-                risk = _risk_class(air_score)
+                air_score = clamp(raw - green_share * 100.0 * w_buffer)
+                risk = composite_risk_class(air_score)
                 feat = QgsFeature(fields)
                 feat.setGeometry(clipped)
                 feat.setAttributes([cell_id, road_score, source_score, sens_count, green_share, air_score, risk])
@@ -215,7 +203,7 @@ class AirQualityExposureAlgorithm(QgsProcessingAlgorithm):
                     score = max(_distance_risk(point, road_union, road_distance), _distance_risk(point, source_union, source_distance))
                     out = QgsFeature(exposed_fields)
                     out.setGeometry(point)
-                    out.setAttributes(["sensitive_receptor", score, _risk_class(score)])
+                    out.setAttributes(["sensitive_receptor", score, composite_risk_class(score)])
                     exposed_sink.addFeature(out, QgsFeatureSink.FastInsert)
 
         return {self.OUTPUT_GRID: grid_id, self.OUTPUT_EXPOSED: exposed_id}

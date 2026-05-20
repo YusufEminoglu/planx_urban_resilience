@@ -18,19 +18,7 @@ from qgis.core import (
     QgsWkbTypes,
 )
 
-
-def _clamp(value, low=0.0, high=100.0):
-    return max(low, min(high, value))
-
-
-def _risk_class(score):
-    if score >= 75:
-        return "Critical"
-    if score >= 55:
-        return "Underserved"
-    if score >= 35:
-        return "Watch"
-    return "Covered"
+from .._helpers import clamp, accessibility_deficit_class
 
 
 def _features(source):
@@ -162,14 +150,14 @@ class EmergencyAccessibilityAlgorithm(QgsProcessingAlgorithm):
                 centroid = clipped.centroid()
                 distance = _nearest_distance(centroid, shelter_features, shelter_index)
                 dist_value = distance if distance is not None else critical_distance
-                access_score = _clamp(((dist_value - service_distance) / max(critical_distance - service_distance, 1.0)) * 100.0)
+                access_score = clamp(((dist_value - service_distance) / max(critical_distance - service_distance, 1.0)) * 100.0)
                 barrier_pct = 0.0
                 if barrier_union and not barrier_union.isEmpty():
                     inter = clipped.intersection(barrier_union)
                     if not inter.isEmpty() and clipped.area() > 0:
-                        barrier_pct = _clamp(inter.area() / clipped.area() * 100.0)
-                        access_score = _clamp(access_score + (barrier_pct / 100.0) * barrier_weight)
-                access_class = _risk_class(access_score)
+                        barrier_pct = clamp(inter.area() / clipped.area() * 100.0)
+                        access_score = clamp(access_score + (barrier_pct / 100.0) * barrier_weight)
+                access_class = accessibility_deficit_class(access_score)
                 feat = QgsFeature(fields)
                 feat.setGeometry(clipped)
                 feat.setAttributes([cell_id, dist_value, barrier_pct, access_score, access_class])
@@ -186,12 +174,12 @@ class EmergencyAccessibilityAlgorithm(QgsProcessingAlgorithm):
             point = feature.geometry().centroid()
             distance = _nearest_distance(point, shelter_features, shelter_index)
             dist_value = distance if distance is not None else critical_distance
-            score = _clamp(((dist_value - service_distance) / max(critical_distance - service_distance, 1.0)) * 100.0)
+            score = clamp(((dist_value - service_distance) / max(critical_distance - service_distance, 1.0)) * 100.0)
             if score < 55 and not (underserved_union and feature.geometry().intersects(underserved_union)):
                 continue
             out = QgsFeature(asset_fields)
             out.setGeometry(point)
-            out.setAttributes(["asset", dist_value, score, _risk_class(score)])
+            out.setAttributes(["asset", dist_value, score, accessibility_deficit_class(score)])
             asset_sink.addFeature(out, QgsFeatureSink.FastInsert)
 
         return {

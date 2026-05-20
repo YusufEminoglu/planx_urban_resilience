@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import processing
-from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtWidgets import (
     QDialog,
     QDialogButtonBox,
@@ -143,6 +142,13 @@ MODULES = [
         "group": "8 - Synthesis",
         "inputs": "Planning units with hazard/adaptation score (0-100) and recovery capacity score (e.g. rc_score).",
         "outputs": "rr_priority_score, deficit/factor diagnostics, Immediate/High/Medium/Monitor class. Highlights high-risk + low-recovery units.",
+    },
+    {
+        "title": "Join Hazard Scores to Planning Units",
+        "algorithm": "planx_urban_resilience:join_scores_to_planning_units",
+        "group": "8 - Synthesis",
+        "inputs": "Planning-unit polygons plus up to five score layers with field and output column names.",
+        "outputs": "Same units with joined score fields (max intersecting value) ready for composite or adaptation synthesis.",
     },
     {
         "title": "Scenario Sensitivity Analysis",

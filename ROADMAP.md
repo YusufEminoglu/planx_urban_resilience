@@ -109,7 +109,8 @@ Mevcut **27** algoritma. Aşağıdaki maddelerin çoğu v1.11–v1.14 arasında 
 - **v1.10–v1.14:** Tamamlandı (yukarıdaki ✅ maddeler).
 - **v1.17:** Shelter arrival summary ✅, PDF map-book presets ✅, `_helpers.py` ✅, `network_accessibility` → `_network_graph` ✅.
 - **v1.18:** Risk-recovery matrix ✅, directional roads (ft/bt) ✅, equity/scenario → `_helpers` ✅.
-- **v1.19+:** Remaining hazard modules on `_helpers`; GEE climate connectors (v2.0).
+- **v1.19:** Join scores to planning units ✅; full `_helpers` rollout (hazard + reporting/synthesis) ✅; `build_local_zip.ps1` ✅.
+- **v2.0+:** GEE climate connectors (büyük adım).
 - **v2.0.0:** GEE climate connectors + map-book presets (büyük adım).
 
 ## Mimari notlar

@@ -20,8 +20,6 @@ Outputs:
 """
 from __future__ import annotations
 
-import math
-
 from qgis.PyQt.QtCore import QVariant
 from qgis.core import (
     QgsFeature,
@@ -36,15 +34,7 @@ from qgis.core import (
     QgsProcessingParameterNumber,
 )
 
-
-def _clamp(value, low=-1e9, high=1e9):
-    try:
-        v = float(value)
-    except (TypeError, ValueError):
-        return None
-    if math.isnan(v):
-        return None
-    return max(low, min(high, v))
+from .._helpers import clamp
 
 
 def _trend(delta: float, tol: float = 1.0) -> str:
@@ -158,7 +148,7 @@ class ResilienceTimeSeriesAlgorithm(QgsProcessingAlgorithm):
             key = feat.attribute(e_id)
             if key is None:
                 continue
-            score = _clamp(feat.attribute(e_score))
+            score = clamp(feat.attribute(e_score), -1e9, 1e9)
             earlier_map[str(key)] = score
 
         # Build output fields
@@ -185,7 +175,7 @@ class ResilienceTimeSeriesAlgorithm(QgsProcessingAlgorithm):
             if feedback.isCanceled():
                 break
             key = feat.attribute(l_id)
-            later_score = _clamp(feat.attribute(l_score))
+            later_score = clamp(feat.attribute(l_score), -1e9, 1e9)
             earlier_score = earlier_map.get(str(key)) if key is not None else None
             if earlier_score is not None and later_score is not None:
                 delta = later_score - earlier_score

@@ -16,19 +16,7 @@ from qgis.core import (
     QgsWkbTypes,
 )
 
-
-def _clamp(value, low=0.0, high=100.0):
-    return max(low, min(high, value))
-
-
-def _priority_class(score):
-    if score >= 75:
-        return "Immediate"
-    if score >= 55:
-        return "High"
-    if score >= 35:
-        return "Medium"
-    return "Monitor"
+from .._helpers import clamp, intervention_priority_class
 
 
 def _numeric(feature, field_name):
@@ -152,15 +140,15 @@ class AdaptationPrioritySynthesisAlgorithm(QgsProcessingAlgorithm):
                 if not field_name:
                     missing.append(key)
                     continue
-                score = _clamp(_numeric(feature, field_name))
+                score = clamp(_numeric(feature, field_name))
                 weighted += score * weight
                 weight_sum += weight
                 driver_scores.append((key, score))
-            adapt_score = _clamp(weighted / max(weight_sum, 0.0001))
+            adapt_score = clamp(weighted / max(weight_sum, 0.0001))
             top_drivers = ", ".join([f"{name}:{round(score, 1)}" for name, score in sorted(driver_scores, key=lambda item: item[1], reverse=True)[:3]])
             out = QgsFeature(out_fields)
             out.setGeometry(feature.geometry())
-            out.setAttributes(feature.attributes() + [adapt_score, _priority_class(adapt_score), top_drivers, ", ".join(missing) or "ok"])
+            out.setAttributes(feature.attributes() + [adapt_score, intervention_priority_class(adapt_score), top_drivers, ", ".join(missing) or "ok"])
             sink.addFeature(out, QgsFeatureSink.FastInsert)
             feedback.setProgress(int((idx + 1) / total * 100))
 

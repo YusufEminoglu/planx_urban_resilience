@@ -19,19 +19,7 @@ from qgis.core import (
     QgsWkbTypes,
 )
 
-
-def _clamp(value, low=0.0, high=100.0):
-    return max(low, min(high, value))
-
-
-def _risk_class(score):
-    if score >= 75:
-        return "Very High"
-    if score >= 55:
-        return "High"
-    if score >= 35:
-        return "Moderate"
-    return "Low"
+from .._helpers import clamp, composite_risk_class
 
 
 def _features(source):
@@ -151,7 +139,6 @@ class PluvialFloodSusceptibilityAlgorithm(QgsProcessingAlgorithm):
 
         extent = study.sourceExtent()
         xs = []
-        ys = []
         sample_step = max(cell_size * 2.0, radius)
         x = extent.xMinimum()
         while x <= extent.xMaximum():
@@ -196,16 +183,16 @@ class PluvialFloodSusceptibilityAlgorithm(QgsProcessingAlgorithm):
                     if value is not None:
                         neighbors.append(value)
                 local_relief = max(neighbors) - min(neighbors) if len(neighbors) > 1 else 0.0
-                rel_low = _clamp((1.0 - ((elev - min_elev) / elev_range)) * 100.0)
-                slope_proxy = _clamp(100.0 - (local_relief / max(radius, 1.0)) * 100.0)
+                rel_low = clamp((1.0 - ((elev - min_elev) / elev_range)) * 100.0)
+                slope_proxy = clamp(100.0 - (local_relief / max(radius, 1.0)) * 100.0)
                 if drainage_union and not drainage_union.isEmpty():
                     drain_dist = clipped.centroid().distance(drainage_union)
-                    drain_score = _clamp(100.0 - (drain_dist / max(radius * 4.0, 1.0)) * 100.0)
+                    drain_score = clamp(100.0 - (drain_dist / max(radius * 4.0, 1.0)) * 100.0)
                 else:
                     drain_dist = -1.0
                     drain_score = 50.0
-                flood_score = _clamp((rel_low * w_elev + slope_proxy * w_slope + drain_score * w_drain) / weight_sum)
-                risk = _risk_class(flood_score)
+                flood_score = clamp((rel_low * w_elev + slope_proxy * w_slope + drain_score * w_drain) / weight_sum)
+                risk = composite_risk_class(flood_score)
                 attrs = [cell_id, elev, rel_low, slope_proxy, drain_dist, flood_score, risk]
                 feat = QgsFeature(fields)
                 feat.setGeometry(clipped)
@@ -225,14 +212,14 @@ class PluvialFloodSusceptibilityAlgorithm(QgsProcessingAlgorithm):
                     point = feature.geometry().centroid()
                     out = QgsFeature(asset_fields)
                     out.setGeometry(point)
-                    out.setAttributes(["building", threshold, _risk_class(threshold)])
+                    out.setAttributes(["building", threshold, composite_risk_class(threshold)])
                     building_sink.addFeature(out, QgsFeatureSink.FastInsert)
             for feature in _features(roads):
                 inter = feature.geometry().intersection(high_union)
                 if not inter.isEmpty():
                     out = QgsFeature(asset_fields)
                     out.setGeometry(inter)
-                    out.setAttributes(["road", threshold, _risk_class(threshold)])
+                    out.setAttributes(["road", threshold, composite_risk_class(threshold)])
                     road_sink.addFeature(out, QgsFeatureSink.FastInsert)
 
         return {

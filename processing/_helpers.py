@@ -26,6 +26,17 @@ def composite_risk_class(score: float) -> str:
     return "Low"
 
 
+def accessibility_deficit_class(score: float) -> str:
+    """0-100 accessibility deficit score (high = worse)."""
+    if score >= 75:
+        return "Critical"
+    if score >= 55:
+        return "Underserved"
+    if score >= 35:
+        return "Watch"
+    return "Covered"
+
+
 def access_risk_class(minutes: float, target: float, critical: float) -> str:
     """Network / Euclidean access time classes."""
     if minutes <= target:
@@ -35,6 +46,19 @@ def access_risk_class(minutes: float, target: float, critical: float) -> str:
     if minutes <= critical:
         return "Underserved"
     return "Critical"
+
+
+def recovery_capacity_class(score: float) -> str:
+    """0-100 recovery capacity (high = better recovery)."""
+    if score >= 80:
+        return "Very High"
+    if score >= 60:
+        return "High"
+    if score >= 40:
+        return "Moderate"
+    if score >= 20:
+        return "Low"
+    return "Very Low"
 
 
 def intervention_priority_class(score: float) -> str:

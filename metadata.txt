@@ -3,9 +3,9 @@ name=PlanX: Urban Resilience
 email=yusuf.eminoglu@deu.edu.tr
 author=Yusuf Eminoglu
 qgisMinimumVersion=3.10
-description=PlanX urban resilience suite (27 tools): seismic, heat, flood, social, emergency access, evacuation, network criticality, air, drought, synthesis, risk-recovery matrix, time-series, scenario tools, HTML/Markdown/PDF atlas, symbology.
-about=27 Processing algorithms and a QGIS dashboard for city-scale resilience screening: synthetic QA, seismic debris, heat and flood, social vulnerability, Euclidean and network emergency access, evacuation simulation with optional timestep queue, network criticality, air and drought, multi-hazard and equity-adjusted synthesis, climate projection overlay, recovery capacity, scenario sensitivity, risk-recovery priority matrix, time-series tracking, scenario templates, HTML/Markdown/PDF atlas with map-book presets, shelter arrival summaries, and symbology. DEU City and Regional Planning educational workflows.
-version=1.18.0
+description=PlanX urban resilience suite (28 tools): seismic, heat, flood, social, emergency access, evacuation, network criticality, air, drought, synthesis, risk-recovery matrix, time-series, scenario tools, HTML/Markdown/PDF atlas, symbology.
+about=28 Processing algorithms and a QGIS dashboard for city-scale resilience screening: synthetic QA, seismic debris, heat and flood, social vulnerability, Euclidean and network emergency access, evacuation simulation with optional timestep queue, network criticality, air and drought, multi-hazard and equity-adjusted synthesis, climate projection overlay, recovery capacity, scenario sensitivity, risk-recovery priority matrix, time-series tracking, scenario templates, HTML/Markdown/PDF atlas with map-book presets, shelter arrival summaries, and symbology. DEU City and Regional Planning educational workflows.
+version=1.19.1
 tracker=https://github.com/YusufEminoglu/planx_urban_resilience/issues
 repository=https://github.com/YusufEminoglu/planx_urban_resilience
 
@@ -20,6 +20,15 @@ hasProcessingProvider=yes
 plugin_dependencies=
 license=GPL-3
 changelog=
+    PlanX Urban Resilience 1.19.1 - Hub-scan hygiene patch.
+        - Removed the build_local_zip.ps1 local-dev script from the shipped zip (flagged as suspicious file by Hub security scan in 1.19.0).
+        - Hardened packaging/zip_hub.py to skip .ps1, .bat, .exe, .lnk, .dll, .pyc and similar non-plugin files by default so no future Hub upload accidentally ships executables.
+        - Cleaned the 32 flake8 issues from the Hub Code Quality report: removed unused imports (dashboard.py, heat, scenario_comparison, pdf_atlas), removed dead 'ys' list in pluvial flood, fixed E302/E701/W293 in monte_carlo_debris (one statement per line, two blank lines before class, blank-line whitespace).
+        - Added setup.cfg disabling W503 (modern PEP 8 prefers break-before-operator) and E203 (Black-style slicing).
+    PlanX Urban Resilience 1.19.0 - Join scores to units + helpers rollout across hazard modules.
+        - Join Hazard Scores to Planning Units: up to five intersecting score layers on planning-unit polygons.
+        - processing/_helpers.py extended; heat/flood/social/air/drought/emergency/adaptation/recovery use shared clamp and class helpers.
+        - build_local_zip.ps1 for local Hub zip without git.
     PlanX Urban Resilience 1.18.0 - Risk-recovery matrix, directional roads, helper rollout.
         - Risk-Recovery Priority Matrix: combine hazard/adapt score with recovery capacity deficit; rr_priority_score and intervention class.
         - Directional road network: optional direction field (both/ft/bt) on evacuation and network criticality via build_road_graph.

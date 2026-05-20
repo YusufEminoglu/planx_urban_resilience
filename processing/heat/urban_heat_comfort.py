@@ -8,7 +8,6 @@ from qgis.core import (
     QgsField,
     QgsFields,
     QgsGeometry,
-    QgsPointXY,
     QgsProcessing,
     QgsProcessingAlgorithm,
     QgsProcessingParameterFeatureSink,
@@ -19,19 +18,7 @@ from qgis.core import (
     QgsWkbTypes,
 )
 
-
-def _clamp(value, low=0.0, high=100.0):
-    return max(low, min(high, value))
-
-
-def _risk_class(score):
-    if score >= 75:
-        return "Very High"
-    if score >= 55:
-        return "High"
-    if score >= 35:
-        return "Moderate"
-    return "Low"
+from .._helpers import clamp, composite_risk_class
 
 
 def _features(source):
@@ -54,14 +41,14 @@ def _area_share(cell_geom, target_union):
     if inter.isEmpty():
         return 0.0
     area = cell_geom.area()
-    return 0.0 if area <= 0 else _clamp(inter.area() / area, 0.0, 1.0)
+    return 0.0 if area <= 0 else clamp(inter.area() / area, 0.0, 1.0)
 
 
 def _distance_score(point_geom, target_union, max_distance):
     if target_union is None or target_union.isEmpty():
         return 100.0
     distance = point_geom.distance(target_union)
-    return _clamp((distance / max(max_distance, 1.0)) * 100.0)
+    return clamp((distance / max(max_distance, 1.0)) * 100.0)
 
 
 def _source_fields(source):
@@ -200,22 +187,22 @@ class UrbanHeatComfortRiskAlgorithm(QgsProcessingAlgorithm):
                 building_share = _area_share(clipped, building_union)
                 green_share = _area_share(clipped, green_union)
                 cooling_score = _distance_score(centroid, cooling_union, cooling_distance)
-                green_deficit = _clamp((1.0 - green_share) * 100.0)
+                green_deficit = clamp((1.0 - green_share) * 100.0)
                 vuln_count = 0
                 if vulnerable_index:
                     for fid in vulnerable_index.intersects(clipped.boundingBox()):
                         feature = next((f for f in vulnerable_features if f.id() == fid), None)
                         if feature and feature.geometry().intersects(clipped):
                             vuln_count += 1
-                vuln_score = _clamp(vuln_count * 20.0)
+                vuln_score = clamp(vuln_count * 20.0)
                 heat_score = (
                     imperv_share * 100.0 * w_imperv
                     + building_share * 100.0 * w_build
                     + ((green_deficit + cooling_score) * 0.5) * w_green
                     + vuln_score * w_vuln
                 ) / weight_sum
-                heat_score = _clamp(heat_score)
-                risk = _risk_class(heat_score)
+                heat_score = clamp(heat_score)
+                risk = composite_risk_class(heat_score)
                 attrs = [cell_id, imperv_share, building_share, green_share, cooling_score, vuln_count, heat_score, risk]
                 feat = QgsFeature(fields)
                 feat.setGeometry(clipped)
@@ -236,7 +223,7 @@ class UrbanHeatComfortRiskAlgorithm(QgsProcessingAlgorithm):
                     continue
                 out = QgsFeature(exposed_fields)
                 out.setGeometry(point)
-                out.setAttributes([asset_type, score, _risk_class(score)])
+                out.setAttributes([asset_type, score, composite_risk_class(score)])
                 exposed_sink.addFeature(out, QgsFeatureSink.FastInsert)
 
         return {

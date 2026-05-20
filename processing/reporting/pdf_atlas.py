@@ -23,9 +23,7 @@ Outputs:
 from __future__ import annotations
 
 import datetime as _dt
-import os
 
-from qgis.PyQt.QtCore import QSizeF
 from qgis.PyQt.QtGui import QColor, QFont
 from qgis.core import (
     Qgis,
@@ -46,7 +44,6 @@ from qgis.core import (
     QgsProcessing,
     QgsProcessingAlgorithm,
     QgsProcessingException,
-    QgsProcessingOutputFile,
     QgsProcessingParameterEnum,
     QgsProcessingParameterFeatureSource,
     QgsProcessingParameterField,
@@ -112,7 +109,7 @@ def _apply_classified_renderer(layer: QgsVectorLayer, field: str, method_idx: in
         renderer.setClassificationMethod(classifier)
         renderer.updateClasses(layer, 5)
         # Color ramp: yellow -> orange -> red (resilience risk convention)
-        from qgis.core import QgsColorRampShader, QgsStyle
+        from qgis.core import QgsStyle
         ramp = QgsStyle.defaultStyle().colorRamp("Reds")
         if ramp is not None:
             renderer.updateColorRamp(ramp)

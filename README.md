@@ -2,7 +2,7 @@
 
 QGIS **3.10-3.99** - Processing - **GPL-3**
 
-PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. Version **1.18.0** ships **27 Processing algorithms**: synthetic QA data, seismic debris, heat, flood, social vulnerability, Euclidean and network emergency access, network criticality, air and drought screening, adaptation/multi-hazard/equity/climate/recovery/sensitivity synthesis, time-series tracking, scenario templates and comparison, HTML/Markdown/PDF reporting, and QGIS style presets — plus a dashboard for module discovery and data readiness review.
+PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. Version **1.19.0** ships **28 Processing algorithms**: synthetic QA data, seismic debris, heat, flood, social vulnerability, Euclidean and network emergency access, network criticality, air and drought screening, adaptation/multi-hazard/equity/climate/recovery/sensitivity synthesis, time-series tracking, scenario templates and comparison, HTML/Markdown/PDF reporting, and QGIS style presets — plus a dashboard for module discovery and data readiness review.
 
 ## Modules
 
@@ -192,6 +192,10 @@ Outputs:
 ### Recovery Capacity Index
 
 Scores how well a planning unit can recover after a shock (complement to hazard/exposure modules). Combines land-use diversity, road-access redundancy, green coverage and a social-cohesion proxy.
+
+### Join Hazard Scores to Planning Units
+
+Attaches up to five hazard score fields from other layers onto planning-unit polygons (maximum intersecting value). Use before Multi-Hazard Composite or Adaptation Priority when scores live on separate layers.
 
 ### Risk-Recovery Priority Matrix
 

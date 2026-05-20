@@ -17,9 +17,7 @@ from qgis.core import (
     QgsProcessingParameterString,
 )
 
-
-def _clamp(value, low=0.0, high=100.0):
-    return max(low, min(high, value))
+from .._helpers import clamp
 
 
 def _numeric(feature, field_name, fallback):
@@ -115,8 +113,8 @@ class ScenarioTemplateAlgorithm(QgsProcessingAlgorithm):
         for idx, feature in enumerate(features):
             if feedback.isCanceled():
                 break
-            base_score = _clamp(_numeric(feature, base_score_field, default_base))
-            scenario_score = _clamp(base_score * (1.0 - expected_reduction / 100.0))
+            base_score = clamp(_numeric(feature, base_score_field, default_base))
+            scenario_score = clamp(base_score * (1.0 - expected_reduction / 100.0))
             out = QgsFeature(fields)
             out.setGeometry(feature.geometry())
             out.setAttributes(

@@ -26,6 +26,7 @@ from qgis.PyQt.QtCore import QVariant  # Qt5/Qt6 forward-compatible (was: PyQt5.
 import math
 import random
 
+
 class UrbanResilienceSeismicAnalystV2(QgsProcessingAlgorithm):
 
     INPUT_BUILDINGS = 'INPUT_BUILDINGS'
@@ -68,7 +69,7 @@ class UrbanResilienceSeismicAnalystV2(QgsProcessingAlgorithm):
             """
             <h3><b>Algoritma Metodolojisi ve Teorik Çerçeve</b></h3>
             <p>Bu modül, sismik senaryolara dayalı olarak yapısal kırılganlık ve kentsel mobilite kaybını modelleyen gelişmiş bir stokastik mekansal karar destek sistemidir. Monte Carlo simülasyonu ile yapı yaşı ve moment magnitüd (Mw) etkileşimini değerlendirerek her iterasyonda dinamik risk zarfları üretir.</p>
-            
+
             <h3><b>Girdi Parametreleri Kılavuzu</b></h3>
             <table border="1" style="border-collapse: collapse; width: 100%;">
               <tr>
@@ -214,10 +215,14 @@ class UrbanResilienceSeismicAnalystV2(QgsProcessingAlgorithm):
 
             H = floors * floor_h
 
-            if year <= 1985: base_p = 0.85
-            elif year <= 2000: base_p = 0.60
-            elif year <= 2018: base_p = 0.25
-            else: base_p = 0.05
+            if year <= 1985:
+                base_p = 0.85
+            elif year <= 2000:
+                base_p = 0.60
+            elif year <= 2018:
+                base_p = 0.25
+            else:
+                base_p = 0.05
 
             mag_factor = math.exp(0.8 * (magnitude - 7.0))
             p_collapse = min(base_p * mag_factor, 1.0)

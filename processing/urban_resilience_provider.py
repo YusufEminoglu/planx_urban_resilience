@@ -30,6 +30,7 @@ from .reporting.pdf_atlas import ResiliencePdfAtlasAlgorithm
 from .reporting.evacuation_arrival_summary import EvacuationArrivalSummaryAlgorithm
 from .synthesis.scenario_sensitivity import ScenarioSensitivityAlgorithm
 from .synthesis.risk_recovery_priority import RiskRecoveryPriorityAlgorithm
+from .synthesis.join_scores_to_units import JoinScoresToPlanningUnitsAlgorithm
 
 
 class PlanXUrbanResilienceProvider(QgsProcessingProvider):
@@ -51,6 +52,7 @@ class PlanXUrbanResilienceProvider(QgsProcessingProvider):
         self.addAlgorithm(ClimateProjectionOverlayAlgorithm())
         self.addAlgorithm(RecoveryCapacityIndexAlgorithm())
         self.addAlgorithm(RiskRecoveryPriorityAlgorithm())
+        self.addAlgorithm(JoinScoresToPlanningUnitsAlgorithm())
         self.addAlgorithm(ResilienceTimeSeriesAlgorithm())
         self.addAlgorithm(ResiliencePdfAtlasAlgorithm())
         self.addAlgorithm(EvacuationArrivalSummaryAlgorithm())

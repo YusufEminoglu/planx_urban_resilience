@@ -17,19 +17,7 @@ from qgis.core import (
     QgsWkbTypes,
 )
 
-
-def _clamp(value, low=0.0, high=100.0):
-    return max(low, min(high, value))
-
-
-def _risk_class(score):
-    if score >= 75:
-        return "Very High"
-    if score >= 55:
-        return "High"
-    if score >= 35:
-        return "Moderate"
-    return "Low"
+from .._helpers import clamp, composite_risk_class
 
 
 def _features(source):
@@ -51,14 +39,14 @@ def _area_share(geom, target_union):
     inter = geom.intersection(target_union)
     if inter.isEmpty():
         return 0.0
-    return _clamp(inter.area() / geom.area(), 0.0, 1.0)
+    return clamp(inter.area() / geom.area(), 0.0, 1.0)
 
 
 def _distance_score(geom, target_union, max_distance, missing_score=75.0):
     if target_union is None or target_union.isEmpty():
         return missing_score
     distance = geom.centroid().distance(target_union)
-    return _clamp((distance / max(max_distance, 1.0)) * 100.0)
+    return clamp((distance / max(max_distance, 1.0)) * 100.0)
 
 
 def _count_near(geom, features, index):
@@ -177,11 +165,11 @@ class GreenInfrastructureStressAlgorithm(QgsProcessingAlgorithm):
             imperv_ctx = _area_share(context_buffer, impervious_union) * 100.0
             water_dist = _distance_score(working, water_union, max_water_distance)
             area = max(working.area(), 0.0)
-            size_score = _clamp((1.0 - ((area - min_area) / area_range)) * 100.0)
+            size_score = clamp((1.0 - ((area - min_area) / area_range)) * 100.0)
             tree_count = _count_near(working, tree_features, tree_index)
-            tree_density_score = _clamp(100.0 - tree_count * 10.0)
-            stress_score = _clamp((imperv_ctx * w_imperv + water_dist * w_water + size_score * w_size + tree_density_score * w_tree) / weight_sum)
-            stress_class = _risk_class(stress_score)
+            tree_density_score = clamp(100.0 - tree_count * 10.0)
+            stress_score = clamp((imperv_ctx * w_imperv + water_dist * w_water + size_score * w_size + tree_density_score * w_tree) / weight_sum)
+            stress_class = composite_risk_class(stress_score)
             out = QgsFeature(fields)
             out.setGeometry(working)
             out.setAttributes(feature.attributes() + [imperv_ctx, water_dist, size_score, tree_count, stress_score, stress_class])

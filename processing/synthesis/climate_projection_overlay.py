@@ -26,8 +26,6 @@ Output fields added per feature:
 """
 from __future__ import annotations
 
-import math
-
 from qgis.PyQt.QtCore import QVariant
 from qgis.core import (
     QgsFeature,
@@ -43,6 +41,8 @@ from qgis.core import (
     QgsProcessingParameterNumber,
 )
 
+from .._helpers import clamp
+
 
 SCENARIOS = [
     ("Stable (today)", 1.00),
@@ -51,16 +51,6 @@ SCENARIOS = [
     ("High (+3C, ~2100)", 1.60),
     ("Custom (use override)", None),
 ]
-
-
-def _clamp(value, low=0.0, high=100.0):
-    try:
-        v = float(value)
-    except (TypeError, ValueError):
-        return None
-    if math.isnan(v):
-        return None
-    return max(low, min(high, v))
 
 
 def _delta_class(delta: float) -> str:
@@ -185,7 +175,7 @@ class ClimateProjectionOverlayAlgorithm(QgsProcessingAlgorithm):
         for idx, feature in enumerate(source.getFeatures()):
             if feedback.isCanceled():
                 break
-            today = _clamp(feature.attribute(score_field))
+            today = clamp(feature.attribute(score_field))
             if today is None:
                 today_attr = None
                 projected = None
@@ -193,7 +183,7 @@ class ClimateProjectionOverlayAlgorithm(QgsProcessingAlgorithm):
                 cls = "No data"
             else:
                 today_attr = today
-                projected = _clamp(today * factor) or 0.0
+                projected = clamp(today * factor) or 0.0
                 delta = projected - today
                 cls = _delta_class(delta)
 
