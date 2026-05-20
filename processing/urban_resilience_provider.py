@@ -6,6 +6,7 @@ from qgis.PyQt.QtGui import QIcon
 
 from .accessibility.emergency_accessibility import EmergencyAccessibilityAlgorithm
 from .accessibility.network_accessibility import NetworkEmergencyAccessibilityAlgorithm
+from .accessibility.network_criticality import NetworkCriticalityAlgorithm
 from .air.air_quality_exposure import AirQualityExposureAlgorithm
 from .demo.synthetic_dataset import SyntheticResilienceDatasetAlgorithm
 from .drought.green_infrastructure_stress import GreenInfrastructureStressAlgorithm
@@ -21,6 +22,7 @@ from .social.social_vulnerability_index import SocialVulnerabilityIndexAlgorithm
 from .synthesis.adaptation_priority_synthesis import AdaptationPrioritySynthesisAlgorithm
 from .synthesis.multi_hazard_composite import MultiHazardCompositeAlgorithm
 from .synthesis.equity_adjusted_priority import EquityAdjustedPriorityAlgorithm
+from .synthesis.climate_projection_overlay import ClimateProjectionOverlayAlgorithm
 
 
 class PlanXUrbanResilienceProvider(QgsProcessingProvider):
@@ -37,6 +39,8 @@ class PlanXUrbanResilienceProvider(QgsProcessingProvider):
         self.addAlgorithm(AdaptationPrioritySynthesisAlgorithm())
         self.addAlgorithm(MultiHazardCompositeAlgorithm())
         self.addAlgorithm(EquityAdjustedPriorityAlgorithm())
+        self.addAlgorithm(NetworkCriticalityAlgorithm())
+        self.addAlgorithm(ClimateProjectionOverlayAlgorithm())
         self.addAlgorithm(ScenarioComparisonAlgorithm())
         self.addAlgorithm(ScenarioTemplateAlgorithm())
         self.addAlgorithm(ResilienceReportAlgorithm())

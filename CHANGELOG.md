@@ -3,6 +3,21 @@
 All notable changes to **PlanX: Urban Resilience** are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · versioning: [SemVer](https://semver.org/).
 
+## [1.12.0] - 2026-05-20
+
+Network criticality + climate projection overlay.
+
+### Added
+- **Network Criticality** (`network_criticality`) under the Emergency group:
+  - Builds a graph from the road network, runs an origin→nearest-destination multi-target Dijkstra per origin, and counts edge usage.
+  - Output line layer per edge with `edge_id`, `length_m`, `usage_count`, `criticality_score` (0-100).
+  - High-score edges are bottlenecks: closing them forces the most reroutes. Pair with Network Emergency Accessibility to see where demand concentrates.
+- **Climate Projection Overlay** (`climate_projection_overlay`) under the Synthesis group:
+  - Applies a literature-based amplification factor (built-in +1.5°C / +2°C / +3°C scenarios or custom) to a today's score field.
+  - Outputs `cp_today`, `cp_scenario`, `cp_factor`, `cp_projected`, `cp_delta`, `cp_delta_class` (Improved / Stable / Slight / Notable / Major increase).
+  - Offline-first: no CMIP/downscaled rasters required.
+- Both algorithms registered in the Processing provider and the dashboard module catalog.
+
 ## [1.11.0] - 2026-05-20
 
 Two new synthesis algorithms from the roadmap.

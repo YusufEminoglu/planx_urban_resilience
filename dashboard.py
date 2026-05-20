@@ -110,6 +110,20 @@ MODULES = [
         "outputs": "Equity factor, raw and normalized adjusted priority score, and class. Surfaces high-risk + high-vulnerability units.",
     },
     {
+        "title": "Climate Projection Overlay",
+        "algorithm": "planx_urban_resilience:climate_projection_overlay",
+        "group": "8 - Synthesis",
+        "inputs": "Any scored layer with a 0-100 hazard/composite field; choose a warming scenario or custom factor.",
+        "outputs": "Today vs projected score (clamped 0-100), delta, delta class (Improved/Stable/Slight/Notable/Major) and scenario metadata.",
+    },
+    {
+        "title": "Network Criticality (edge betweenness)",
+        "algorithm": "planx_urban_resilience:network_criticality",
+        "group": "5 - Emergency",
+        "inputs": "Road network + origins (assets/buildings) + destinations (shelters/safe areas).",
+        "outputs": "Per-edge usage count and 0-100 criticality score; high-score edges are bottlenecks whose closure forces the most reroutes.",
+    },
+    {
         "title": "Scenario Comparison / Delta Map",
         "algorithm": "planx_urban_resilience:resilience_scenario_comparison",
         "group": "9 - Report and QA",
