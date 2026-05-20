@@ -3,6 +3,26 @@
 All notable changes to **PlanX: Urban Resilience** are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · versioning: [SemVer](https://semver.org/).
 
+## [1.20.0] - 2026-05-20
+
+Four new algorithms pushing the suite to elite scientific + planning-actionable level.
+
+### Added
+- **Hot-Spot Cluster Analysis (Getis-Ord Gi\*)** — `hotspot_analysis_getis_ord` (Synthesis):
+  - For each feature i, computes the Gi\* statistic over a configurable distance band using either inverse-distance row-standardised weights or a fixed-distance binary band.
+  - Pure-Python; `QgsSpatialIndex`-prefiltered neighbour lookup keeps it interactive on 5 000+ feature layers.
+  - Output fields: `gi_zscore`, `gi_pvalue`, `gi_class` (Hot-99 / Hot-95 / Hot-90 / Not significant / Cold-90 / Cold-95 / Cold-99). Self included (Gi\*, not Gi).
+- **Population-Weighted Exposure** — `population_weighted_exposure` (Synthesis):
+  - Translates a 0-100 hazard score into per-unit `pop_exposed = score/100 × pop`. Population comes from a field on the same layer or from a separate point/polygon layer summed by `QgsSpatialIndex`-prefiltered intersection.
+  - Logs a study-area summary: total population, breakdown by risk class, top 10 exposed units.
+- **Bivariate Choropleth Symbology** — `bivariate_choropleth_symbology` (Report and QA):
+  - Tertile-classifies units on a risk axis and a vulnerability axis, then applies a Stevens-style 9-colour categorised renderer.
+  - Adds `bv_class` (e.g. `R-H_V-M`), `bv_risk_bin`, `bv_vuln_bin` so the symbology travels with the layer.
+- **Recommended Actions Report (Markdown)** — `recommended_actions_report` (Report and QA):
+  - Turns a scored layer with optional class and dominant-hazard fields into a structured Markdown report (class distribution, top-N units table, curated intervention checklists per detected hazard family).
+  - Built-in catalogue covers heat, flood, seismic, social, air, drought, and emergency-access families plus a generic cross-cutting list.
+- Provider and dashboard module catalog updated.
+
 ## [1.19.1] - 2026-05-20
 
 Hub-scan hygiene patch (response to the 1.19.0 plugins.qgis.org security scan).

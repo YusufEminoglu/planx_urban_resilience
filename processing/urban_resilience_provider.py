@@ -31,6 +31,10 @@ from .reporting.evacuation_arrival_summary import EvacuationArrivalSummaryAlgori
 from .synthesis.scenario_sensitivity import ScenarioSensitivityAlgorithm
 from .synthesis.risk_recovery_priority import RiskRecoveryPriorityAlgorithm
 from .synthesis.join_scores_to_units import JoinScoresToPlanningUnitsAlgorithm
+from .synthesis.hotspot_analysis import HotSpotAnalysisAlgorithm
+from .synthesis.population_weighted_exposure import PopulationWeightedExposureAlgorithm
+from .reporting.bivariate_symbology import BivariateSymbologyAlgorithm
+from .reporting.recommended_actions import RecommendedActionsAlgorithm
 
 
 class PlanXUrbanResilienceProvider(QgsProcessingProvider):
@@ -62,6 +66,10 @@ class PlanXUrbanResilienceProvider(QgsProcessingProvider):
         self.addAlgorithm(ResilienceReportAlgorithm())
         self.addAlgorithm(StudioBriefAlgorithm())
         self.addAlgorithm(ApplyResilienceSymbologyAlgorithm())
+        self.addAlgorithm(HotSpotAnalysisAlgorithm())
+        self.addAlgorithm(PopulationWeightedExposureAlgorithm())
+        self.addAlgorithm(BivariateSymbologyAlgorithm())
+        self.addAlgorithm(RecommendedActionsAlgorithm())
 
     def id(self):
         return "planx_urban_resilience"

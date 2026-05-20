@@ -5,7 +5,7 @@ author=Yusuf Eminoglu
 qgisMinimumVersion=3.10
 description=PlanX urban resilience suite (28 tools): seismic, heat, flood, social, emergency access, evacuation, network criticality, air, drought, synthesis, risk-recovery matrix, time-series, scenario tools, HTML/Markdown/PDF atlas, symbology.
 about=28 Processing algorithms and a QGIS dashboard for city-scale resilience screening: synthetic QA, seismic debris, heat and flood, social vulnerability, Euclidean and network emergency access, evacuation simulation with optional timestep queue, network criticality, air and drought, multi-hazard and equity-adjusted synthesis, climate projection overlay, recovery capacity, scenario sensitivity, risk-recovery priority matrix, time-series tracking, scenario templates, HTML/Markdown/PDF atlas with map-book presets, shelter arrival summaries, and symbology. DEU City and Regional Planning educational workflows.
-version=1.19.1
+version=1.20.0
 tracker=https://github.com/YusufEminoglu/planx_urban_resilience/issues
 repository=https://github.com/YusufEminoglu/planx_urban_resilience
 
@@ -20,6 +20,12 @@ hasProcessingProvider=yes
 plugin_dependencies=
 license=GPL-3
 changelog=
+    PlanX Urban Resilience 1.20.0 - Four new algorithms pushing the suite to elite scientific + planning-actionable level.
+        - Hot-Spot Cluster Analysis (Getis-Ord Gi*): identifies statistically significant hot and cold spots in any score field. Outputs gi_zscore, gi_pvalue and a seven-class label (Hot-99/95/90, Not significant, Cold-90/95/99). Pure-Python implementation with QgsSpatialIndex neighbour lookup, supports inverse-distance and fixed-band spatial weights.
+        - Population-Weighted Exposure: translates a 0-100 hazard score into per-unit pop_exposed (= score/100 × pop). Population comes from a field on the same layer or from a separate point/polygon layer. Prints a study-area summary in the log.
+        - Bivariate Choropleth Symbology: classifies units into Low/Mid/High on a risk axis and a vulnerability axis using tertile breaks, then applies a Stevens-style 3x3 bivariate palette via a categorised renderer. Adds bv_class / bv_risk_bin / bv_vuln_bin fields so the symbology survives layer-style export.
+        - Recommended Actions Report (Markdown): turns a scored layer with optional class and dominant-hazard fields into a structured Markdown report (class distribution, top-N units table, curated intervention checklists per hazard family - heat, flood, seismic, social, air, drought, emergency).
+        - Provider and dashboard catalog updated to expose all four new modules.
     PlanX Urban Resilience 1.19.1 - Hub-scan hygiene patch.
         - Removed the build_local_zip.ps1 local-dev script from the shipped zip (flagged as suspicious file by Hub security scan in 1.19.0).
         - Hardened packaging/zip_hub.py to skip .ps1, .bat, .exe, .lnk, .dll, .pyc and similar non-plugin files by default so no future Hub upload accidentally ships executables.
