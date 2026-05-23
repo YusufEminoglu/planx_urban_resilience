@@ -1,7 +1,28 @@
 # Changelog
 
+## [1.24.0] - 2026-05-23
+
+- Beta completion release: dashboard beta control center, readiness audit, diagnostics, smoke plan, hub changelog and html export
+
 All notable changes to **PlanX: Urban Resilience** are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · versioning: [SemVer](https://semver.org/).
+
+## [Unreleased]
+
+### Added
+- Dashboard **Beta** page with release-gate snapshot (`READY` / `NOT READY`) based on loaded layers, vector/raster balance, CRS spread and module-catalog presence.
+- Dashboard **Copy Issue Template** action (Report + Beta pages) that copies a structured bug-report template with current layer list and CRS values.
+- Dashboard **Copy Diagnostics** action with timestamped runtime profile (layers, vectors/rasters, CRS spread, module count, processing-registry availability/missing list).
+- Dashboard **Copy Smoke Plan** action with a 10-step acceptance checklist for repeatable QGIS smoke testing.
+- Dashboard quick-launch buttons for core beta flow (`Synthetic Dataset`, `Urban Heat`, `Network Emergency Accessibility`).
+- Dashboard **Core module readiness** heuristics (Heat/Flood/Social/Emergency/Synthesis) with explicit `OK/WARN` evidence rows.
+- Dashboard **Copy Release Notes Draft** action for rapid publication-note preparation (runtime summary + module readiness digest).
+- Dashboard **Copy Hub Changelog Draft** action producing publication-ready changelog text from live runtime checks.
+- Dashboard **Export Beta HTML** action to persist readiness snapshots for audit/review workflows.
+
+### Changed
+- Dashboard navigation extended with a dedicated Beta tab for QA and acceptance workflow.
+- Beta snapshot now audits Processing registry coverage against the full dashboard module catalog and surfaces missing algorithm IDs.
 
 ## [1.23.0] - 2026-05-21
 

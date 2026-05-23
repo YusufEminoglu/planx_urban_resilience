@@ -249,6 +249,14 @@ The plugin adds a `PlanX Urban Resilience` toolbar/menu action. The dashboard in
 - Module cards with required and optional inputs
 - Processing launch shortcuts
 - Summary guidance and limitations
+- Beta readiness page with quick gate checks (layers, CRS, raster presence, module catalog)
+- One-click issue template copy flow for structured bug reporting
+- One-click diagnostics copy (layer/profile/algorithm-registry status) for support tickets
+- One-click smoke-test plan copy plus quick launch buttons for core tools (Synthetic, Heat, Network Access)
+- Core-module readiness heuristics (Heat/Flood/Social/Emergency/Synthesis) visible in Beta tab
+- One-click release-notes draft copy for rapid Hub/GitHub publication prep
+- One-click QGIS Hub changelog draft copy from live runtime readiness snapshot
+- Beta readiness HTML export for audit trail and team review
 
 ## Important Limitations
 

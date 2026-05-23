@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 
+from datetime import datetime
+
 import processing
 from qgis.PyQt.QtWidgets import (
+    QApplication,
     QDialog,
     QDialogButtonBox,
+    QFileDialog,
     QFrame,
     QGridLayout,
     QGroupBox,
@@ -20,7 +24,7 @@ from qgis.PyQt.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from qgis.core import QgsProject
+from qgis.core import QgsApplication, QgsProject
 
 
 MODULES = [
@@ -387,7 +391,7 @@ class UrbanResilienceDashboard(QDialog):
         shell = QHBoxLayout(self)
         self.nav = QListWidget()
         self.nav.setFixedWidth(170)
-        for label in ("Overview", "Data", "Modules", "Run", "Report", "Test"):
+        for label in ("Overview", "Data", "Modules", "Run", "Report", "Test", "Beta"):
             QListWidgetItem(label, self.nav)
         self.nav.setCurrentRow(0)
         shell.addWidget(self.nav)
@@ -408,6 +412,7 @@ class UrbanResilienceDashboard(QDialog):
             self._run_page(),
             self._report_page(),
             self._test_page(),
+            self._beta_page(),
         ]
         for i, page in enumerate(self.pages):
             page.setVisible(i == 0)
@@ -523,6 +528,14 @@ class UrbanResilienceDashboard(QDialog):
         layout = QVBoxLayout(page)
         self.summary_report = QTextBrowser()
         layout.addWidget(self.summary_report)
+        buttons = QHBoxLayout()
+        copy_issue = QPushButton("Copy Issue Template")
+        copy_issue.clicked.connect(self._copy_issue_template)
+        buttons.addWidget(copy_issue)
+        refresh = QPushButton("Refresh readiness")
+        refresh.clicked.connect(self._refresh_report)
+        buttons.addWidget(refresh)
+        layout.addLayout(buttons)
         return page
 
     def _test_page(self):
@@ -541,6 +554,52 @@ class UrbanResilienceDashboard(QDialog):
         test_layout.addWidget(button)
         layout.addWidget(test_group)
         layout.addStretch(1)
+        return page
+
+    def _beta_page(self):
+        page = QWidget()
+        layout = QVBoxLayout(page)
+        self.beta_report = QTextBrowser()
+        layout.addWidget(self.beta_report)
+        row = QHBoxLayout()
+        refresh = QPushButton("Refresh beta checks")
+        refresh.setObjectName("primaryButton")
+        refresh.clicked.connect(self._refresh_report)
+        row.addWidget(refresh)
+        copy_issue = QPushButton("Copy Issue Template")
+        copy_issue.clicked.connect(self._copy_issue_template)
+        row.addWidget(copy_issue)
+        copy_diag = QPushButton("Copy Diagnostics")
+        copy_diag.clicked.connect(self._copy_diagnostics_report)
+        row.addWidget(copy_diag)
+        copy_smoke = QPushButton("Copy Smoke Plan")
+        copy_smoke.clicked.connect(self._copy_smoke_test_plan)
+        row.addWidget(copy_smoke)
+        copy_release = QPushButton("Copy Release Notes Draft")
+        copy_release.clicked.connect(self._copy_release_notes_draft)
+        row.addWidget(copy_release)
+        copy_hub = QPushButton("Copy Hub Changelog Draft")
+        copy_hub.clicked.connect(self._copy_hub_changelog_draft)
+        row.addWidget(copy_hub)
+        export_html = QPushButton("Export Beta HTML")
+        export_html.clicked.connect(self._export_beta_html_report)
+        row.addWidget(export_html)
+        run_demo = QPushButton("Run Synthetic Dataset")
+        run_demo.clicked.connect(
+            lambda _checked=False: self._open_algorithm("planx_urban_resilience:synthetic_resilience_demo_dataset")
+        )
+        row.addWidget(run_demo)
+        open_heat = QPushButton("Open Heat Tool")
+        open_heat.clicked.connect(
+            lambda _checked=False: self._open_algorithm("planx_urban_resilience:urban_heat_comfort_risk")
+        )
+        row.addWidget(open_heat)
+        open_emergency = QPushButton("Open Network Access")
+        open_emergency.clicked.connect(
+            lambda _checked=False: self._open_algorithm("planx_urban_resilience:network_emergency_accessibility")
+        )
+        row.addWidget(open_emergency)
+        layout.addLayout(row)
         return page
 
     def _module_cards(self, with_buttons=False):
@@ -683,6 +742,221 @@ class UrbanResilienceDashboard(QDialog):
         """
         self.data_report.setHtml(html)
         self.summary_report.setHtml(html)
+        self.beta_report.setHtml(self._build_beta_html(layers, vectors, rasters, crs_values))
+
+    def _build_beta_html(self, layers, vectors, rasters, crs_values):
+        algo_total, algo_available, missing = self._algorithm_registry_status()
+        checks = []
+        checks.append(("Project has layers", "OK" if len(layers) > 0 else "WARN", f"{len(layers)} loaded"))
+        checks.append(("Vector coverage", "OK" if len(vectors) >= 3 else "WARN", f"{len(vectors)} vector layers"))
+        checks.append(("CRS consistency", "OK" if len(crs_values) <= 2 and len(crs_values) > 0 else "WARN",
+                       ", ".join(crs_values) if crs_values else "No CRS found"))
+        checks.append(("Raster availability (for flood)", "OK" if len(rasters) > 0 else "WARN", f"{len(rasters)} raster layers"))
+        checks.append(("Module catalog", "OK" if len(MODULES) >= 40 else "WARN", f"{len(MODULES)} modules listed"))
+        checks.append(("Algorithm registry", "OK" if algo_total == algo_available else "WARN", f"{algo_available}/{algo_total} available"))
+        module_rows = self._core_module_readiness(layers, vectors, rasters)
+        warn_count = len([c for c in checks if c[1] != "OK"])
+        warn_count += len([m for m in module_rows if m[1] != "OK"])
+        status = "READY" if warn_count == 0 else "NOT READY"
+        status_tr = "HAZIR" if warn_count == 0 else "HAZIR DEGIL"
+        rows = "".join(
+            f"<tr><td>{name}</td><td><b>{st}</b></td><td>{val}</td></tr>"
+            for name, st, val in checks
+        )
+        missing_html = ""
+        if missing:
+            items = "".join(f"<li>{m}</li>" for m in missing[:12])
+            missing_html = f"<h3>Missing algorithms</h3><ul>{items}</ul>"
+        module_checks_html = "".join(
+            f"<tr><td>{name}</td><td><b>{st}</b></td><td>{val}</td></tr>"
+            for name, st, val in module_rows
+        )
+        return f"""
+        <h2>Beta readiness snapshot: {status} / {status_tr}</h2>
+        <p><b>Generated:</b> {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}</p>
+        <table border="1" cellspacing="0" cellpadding="6">
+          <tr><th>Check</th><th>Status</th><th>Value</th></tr>
+          {rows}
+        </table>
+        <h3>Core module readiness (heuristic)</h3>
+        <table border="1" cellspacing="0" cellpadding="6">
+          <tr><th>Module</th><th>Status</th><th>Evidence</th></tr>
+          {module_checks_html}
+        </table>
+        {missing_html}
+        <p><b>Tip:</b> Run Synthetic Dataset first, then Heat/Air/Social/Emergency/Drought, and finally Synthesis + Reporting checks.</p>
+        """
+
+    @staticmethod
+    def _algorithm_registry_status():
+        reg = QgsApplication.processingRegistry()
+        missing = []
+        for module in MODULES:
+            alg = reg.algorithmById(module.get("algorithm", ""))
+            if alg is None:
+                missing.append(module.get("algorithm", ""))
+        return len(MODULES), len(MODULES) - len(missing), missing
+
+    def _copy_issue_template(self):
+        project = QgsProject.instance()
+        layers = list(project.mapLayers().values())
+        layer_names = [getattr(layer, "name", lambda: "unknown")() for layer in layers]
+        crs_values = sorted({layer.crs().authid() for layer in layers if hasattr(layer, "crs") and layer.crs().isValid()})
+        text = (
+            "PlanX Urban Resilience Issue Template\n"
+            "=====================================\n\n"
+            "Summary:\n-\n\n"
+            "Expected behavior:\n-\n\n"
+            "Actual behavior:\n-\n\n"
+            "Reproduction steps:\n1.\n2.\n3.\n\n"
+            f"Loaded layers ({len(layer_names)}):\n- " + "\n- ".join(layer_names[:30]) + "\n\n"
+            f"CRS values: {', '.join(crs_values) if crs_values else 'No CRS found'}\n\n"
+            "Notes:\n-\n"
+        )
+        QApplication.clipboard().setText(text)
+
+    def _copy_diagnostics_report(self):
+        project = QgsProject.instance()
+        layers = list(project.mapLayers().values())
+        vectors = [layer for layer in layers if hasattr(layer, "featureCount")]
+        rasters = [layer for layer in layers if not hasattr(layer, "featureCount")]
+        crs_values = sorted({layer.crs().authid() for layer in layers if hasattr(layer, "crs") and layer.crs().isValid()})
+        algo_total, algo_available, missing = self._algorithm_registry_status()
+        module_rows = self._core_module_readiness(layers, vectors, rasters)
+        text = (
+            "PlanX Urban Resilience Diagnostics\n"
+            "==================================\n"
+            f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+            f"Loaded layers: {len(layers)}\n"
+            f"Vector layers: {len(vectors)}\n"
+            f"Raster layers: {len(rasters)}\n"
+            f"CRS values: {', '.join(crs_values) if crs_values else 'No CRS found'}\n"
+            f"Module catalog size: {len(MODULES)}\n"
+            f"Algorithms available: {algo_available}/{algo_total}\n"
+            f"Missing algorithms: {', '.join(missing) if missing else 'None'}\n"
+            "Core module readiness:\n- " + "\n- ".join(
+                f"{name}: {status} ({evidence})" for name, status, evidence in module_rows
+            ) + "\n"
+        )
+        QApplication.clipboard().setText(text)
+
+    def _copy_smoke_test_plan(self):
+        text = (
+            "PlanX Urban Resilience Smoke Test Plan\n"
+            "======================================\n"
+            "1) Run Synthetic Resilience Demo Dataset\n"
+            "2) Run Urban Heat Comfort Risk\n"
+            "3) Run Air Quality / Urban Exposure\n"
+            "4) Run Social Vulnerability Index\n"
+            "5) Run Emergency Accessibility and Shelter Coverage\n"
+            "6) Run Network Emergency Accessibility\n"
+            "7) (Optional) Run Pluvial Flood Susceptibility if DEM is available\n"
+            "8) Join scores to planning units\n"
+            "9) Run Multi-Hazard Composite Index + Adaptation Priority\n"
+            "10) Export one reporting output (HTML/Markdown/PDF)\n"
+            "\n"
+            "Acceptance:\n"
+            "- No algorithm crash\n"
+            "- Outputs created with expected fields/classes\n"
+            "- Dashboard Beta checks return READY or explained WARNs\n"
+        )
+        QApplication.clipboard().setText(text)
+
+    def _copy_release_notes_draft(self):
+        project = QgsProject.instance()
+        layers = list(project.mapLayers().values())
+        vectors = [layer for layer in layers if hasattr(layer, "featureCount")]
+        rasters = [layer for layer in layers if not hasattr(layer, "featureCount")]
+        algo_total, algo_available, missing = self._algorithm_registry_status()
+        module_rows = self._core_module_readiness(layers, vectors, rasters)
+        ready_modules = [name for name, st, _ in module_rows if st == "OK"]
+        warn_modules = [name for name, st, _ in module_rows if st != "OK"]
+        draft = (
+            "PlanX Urban Resilience - Beta Readiness Draft\n"
+            "============================================\n"
+            f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+            f"Layers loaded: {len(layers)} (vector {len(vectors)}, raster {len(rasters)})\n"
+            f"Algorithm registry: {algo_available}/{algo_total} available\n"
+            f"Missing algorithms: {', '.join(missing) if missing else 'None'}\n"
+            f"Core modules ready: {', '.join(ready_modules) if ready_modules else 'None'}\n"
+            f"Core modules needing input: {', '.join(warn_modules) if warn_modules else 'None'}\n\n"
+            "Highlights:\n"
+            "- Dashboard beta control center active (readiness + diagnostics + smoke plan + issue template).\n"
+            "- QA flow supports reproducible smoke testing and structured reporting.\n"
+            "- Processing catalog integrity checked against dashboard module list.\n"
+        )
+        QApplication.clipboard().setText(draft)
+
+    def _copy_hub_changelog_draft(self):
+        project = QgsProject.instance()
+        layers = list(project.mapLayers().values())
+        vectors = [layer for layer in layers if hasattr(layer, "featureCount")]
+        rasters = [layer for layer in layers if not hasattr(layer, "featureCount")]
+        algo_total, algo_available, missing = self._algorithm_registry_status()
+        module_rows = self._core_module_readiness(layers, vectors, rasters)
+        ok_count = len([m for m in module_rows if m[1] == "OK"])
+        warn_count = len(module_rows) - ok_count
+        text = (
+            f"Dashboard beta control center upgrade ({datetime.now().strftime('%Y-%m-%d')}).\n"
+            "- Added registry-aware readiness snapshot (READY/NOT READY) with missing algorithm visibility.\n"
+            "- Added one-click diagnostics, issue template, smoke plan and release-notes draft copy actions.\n"
+            "- Added core module readiness heuristics for Heat/Flood/Social/Emergency/Synthesis.\n"
+            "- Added quick-launch actions for Synthetic Dataset, Urban Heat and Network Emergency Accessibility.\n"
+            f"- Runtime audit sample: {algo_available}/{algo_total} algorithms available, "
+            f"{len(layers)} loaded layers ({len(vectors)} vector, {len(rasters)} raster), "
+            f"core readiness {ok_count} OK / {warn_count} WARN.\n"
+            f"- Missing algorithms at snapshot: {', '.join(missing) if missing else 'None'}."
+        )
+        QApplication.clipboard().setText(text)
+
+    def _export_beta_html_report(self):
+        project = QgsProject.instance()
+        layers = list(project.mapLayers().values())
+        vectors = [layer for layer in layers if hasattr(layer, "featureCount")]
+        rasters = [layer for layer in layers if not hasattr(layer, "featureCount")]
+        crs_values = sorted({layer.crs().authid() for layer in layers if hasattr(layer, "crs") and layer.crs().isValid()})
+        html = self._build_beta_html(layers, vectors, rasters, crs_values)
+        path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Export Beta HTML Report",
+            "planx_beta_readiness_report.html",
+            "HTML Files (*.html)",
+        )
+        if not path:
+            return
+        try:
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(html)
+        except Exception:
+            return
+
+    @staticmethod
+    def _core_module_readiness(layers, vectors, rasters):
+        layer_names = [getattr(layer, "name", lambda: "")().lower() for layer in layers]
+        field_names = set()
+        for layer in vectors:
+            try:
+                for f in layer.fields():
+                    field_names.add(str(f.name()).lower())
+            except Exception:
+                continue
+
+        def has_name(*needles):
+            blob = " ".join(layer_names)
+            return any(n in blob for n in needles)
+
+        rows = []
+        heat_ok = len(vectors) >= 2 and has_name("build", "imperv", "green", "heat", "study")
+        rows.append(("Heat", "OK" if heat_ok else "WARN", "layer-name heuristic"))
+        flood_ok = len(rasters) >= 1 and has_name("dem", "flood", "drain", "water")
+        rows.append(("Flood", "OK" if flood_ok else "WARN", "DEM + flood/water hint"))
+        social_ok = has_name("social", "neigh", "census") or any(k in field_names for k in ("population", "elderly", "children", "income"))
+        rows.append(("Social", "OK" if social_ok else "WARN", "social layer/field hint"))
+        emergency_ok = has_name("shelter", "road", "access", "network", "evac")
+        rows.append(("Emergency", "OK" if emergency_ok else "WARN", "network/shelter hint"))
+        synthesis_ok = has_name("unit", "planning", "adapt", "composite") or any(k in field_names for k in ("adapt_score", "svi_score", "rr_priority_score"))
+        rows.append(("Synthesis", "OK" if synthesis_ok else "WARN", "planning-unit/score hint"))
+        return rows
 
     def _switch_page(self, idx):
         for i, page in enumerate(self.pages):
