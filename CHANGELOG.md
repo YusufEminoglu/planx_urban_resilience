@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.24.1] - 2026-05-23
+
+- Fix metadata changelog percent escaping for QGIS Hub parser
+
 ## [1.24.0] - 2026-05-23
 
 - Beta completion release: dashboard beta control center, readiness audit, diagnostics, smoke plan, hub changelog and html export
