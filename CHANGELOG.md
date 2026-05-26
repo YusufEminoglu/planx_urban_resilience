@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.24.6] - 2026-05-26
+
+- Maintenance release: refreshed Plugin Hub package with QGIS 4 panel-only dashboard mode.
+
 ## [1.24.5] - 2026-05-26
 
 - Keep QGIS 4 dashboard panel-only by hiding the Processing provider.
