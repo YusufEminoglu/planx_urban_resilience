@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.24.7] - 2026-05-26
+
+- Qt5/Qt6 compatibility maintenance, dashboard runtime hardening, and QGIS 4 processing-provider gate behavior.
+
 ## [1.24.6] - 2026-05-26
 
 - Maintenance release: refreshed Plugin Hub package with QGIS 4 panel-only dashboard mode.
