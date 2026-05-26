@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.24.5] - 2026-05-26
+
+- Keep QGIS 4 dashboard panel-only by hiding the Processing provider.
+
+## [1.24.4] - 2026-05-26
+
+- Fix QGIS 4 / Qt6 dashboard enum compatibility.
+
 ## [1.24.1] - 2026-05-23
 
 - Fix metadata changelog percent escaping for QGIS Hub parser

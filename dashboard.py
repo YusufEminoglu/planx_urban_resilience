@@ -17,6 +17,7 @@ from qgis.PyQt.QtWidgets import (
     QLineEdit,
     QListWidget,
     QListWidgetItem,
+    QMessageBox,
     QPushButton,
     QScrollArea,
     QSizePolicy,
@@ -24,7 +25,7 @@ from qgis.PyQt.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from qgis.core import QgsApplication, QgsProject
+from qgis.core import Qgis, QgsApplication, QgsProject
 
 
 MODULES = [
@@ -332,6 +333,10 @@ MODULES = [
 ]
 
 
+def _processing_provider_enabled() -> bool:
+    return int(getattr(Qgis, "QGIS_VERSION_INT", 0)) < 40000
+
+
 class UrbanResilienceDashboard(QDialog):
     def __init__(self, iface, parent=None):
         super().__init__(parent)
@@ -418,7 +423,7 @@ class UrbanResilienceDashboard(QDialog):
             page.setVisible(i == 0)
             content.addWidget(page, 1)
 
-        buttons = QDialogButtonBox(QDialogButtonBox.Close)
+        buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
         buttons.rejected.connect(self.reject)
         content.addWidget(buttons)
         shell.addLayout(content, 1)
@@ -441,7 +446,7 @@ class UrbanResilienceDashboard(QDialog):
         # Module cards in a scroll area so the overview never overflows the dialog.
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
-        scroll.setFrameShape(QFrame.NoFrame)
+        scroll.setFrameShape(QFrame.Shape.NoFrame)
         scroll.setWidget(self._module_cards())
         layout.addWidget(scroll, 1)
         return page
@@ -469,7 +474,7 @@ class UrbanResilienceDashboard(QDialog):
         # Scroll area wrapping grouped category cards
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
-        scroll.setFrameShape(QFrame.NoFrame)
+        scroll.setFrameShape(QFrame.Shape.NoFrame)
         cards_widget, modules_index = self._build_grouped_cards(with_buttons=True)
         scroll.setWidget(cards_widget)
         layout.addWidget(scroll, 1)
@@ -488,7 +493,7 @@ class UrbanResilienceDashboard(QDialog):
 
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
-        scroll.setFrameShape(QFrame.NoFrame)
+        scroll.setFrameShape(QFrame.Shape.NoFrame)
         run_widget, run_index = self._build_run_rows()
         scroll.setWidget(run_widget)
         layout.addWidget(scroll, 1)
@@ -642,7 +647,7 @@ class UrbanResilienceDashboard(QDialog):
             grid.setVerticalSpacing(8)
             for idx, module in enumerate(bucket[group_name]):
                 card = QGroupBox(module["title"])
-                card.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+                card.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
                 card_layout = QVBoxLayout(card)
                 body = QLabel(f"Inputs: {module['inputs']}<br>Outputs: {module['outputs']}")
                 body.setWordWrap(True)
@@ -963,4 +968,11 @@ class UrbanResilienceDashboard(QDialog):
             page.setVisible(i == idx)
 
     def _open_algorithm(self, algorithm_id):
+        if not _processing_provider_enabled():
+            QMessageBox.information(
+                self,
+                "PlanX Urban Resilience",
+                "Processing tools are hidden in QGIS 4. Use this dashboard as a panel-only overview.",
+            )
+            return
         processing.execAlgorithmDialog(algorithm_id)

@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
-from qgis.core import QgsApplication
+import os
+
+from qgis.core import Qgis, QgsApplication
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
 
 from .dashboard import UrbanResilienceDashboard
 from .processing.urban_resilience_provider import PlanXUrbanResilienceProvider
+
+
+def _processing_provider_enabled() -> bool:
+    return int(getattr(Qgis, "QGIS_VERSION_INT", 0)) < 40000
 
 
 class PlanXUrbanResiliencePlugin:
@@ -15,6 +21,11 @@ class PlanXUrbanResiliencePlugin:
         self.dialog = None
 
     def initProcessing(self):
+        if not _processing_provider_enabled():
+            self.provider = None
+            return
+        if self.provider is not None:
+            return
         self.provider = PlanXUrbanResilienceProvider()
         QgsApplication.processingRegistry().addProvider(self.provider)
 
@@ -22,7 +33,9 @@ class PlanXUrbanResiliencePlugin:
         self.initProcessing()
         if not self.iface:
             return
-        icon = self.provider.icon()
+        icon = self.provider.icon() if self.provider else QIcon(
+            os.path.join(os.path.dirname(__file__), "icons", "plugin.svg")
+        )
         self.action = QAction(icon, "PlanX Urban Resilience", self.iface.mainWindow())
         self.action.setToolTip("Open the PlanX Urban Resilience dashboard")
         self.action.triggered.connect(self.open_dashboard)
