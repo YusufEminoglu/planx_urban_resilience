@@ -27,8 +27,6 @@ Output fields:
 """
 from __future__ import annotations
 
-import math
-
 from qgis.PyQt.QtCore import QVariant
 from qgis.core import (
     QgsFeature,

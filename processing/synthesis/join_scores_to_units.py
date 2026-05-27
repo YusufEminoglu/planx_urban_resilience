@@ -16,7 +16,6 @@ from qgis.core import (
     QgsFeatureSink,
     QgsField,
     QgsFields,
-    QgsGeometry,
     QgsProcessing,
     QgsProcessingAlgorithm,
     QgsProcessingException,

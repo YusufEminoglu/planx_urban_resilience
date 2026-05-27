@@ -264,7 +264,7 @@ class CriticalInfrastructureExposureAlgorithm(QgsProcessingAlgorithm):
             feedback.pushInfo("")
             feedback.pushInfo("─── Mean combined score by facility class ───")
             for cls, scores in sorted(class_totals.items(),
-                                       key=lambda kv: -(sum(kv[1]) / max(len(kv[1]), 1))):
+                                      key=lambda kv: -(sum(kv[1]) / max(len(kv[1]), 1))):
                 mean = sum(scores) / max(len(scores), 1)
                 feedback.pushInfo(f"  {cls:<20} n={len(scores):<5} mean={mean:6.2f}")
         return {self.OUTPUT: dest_id}

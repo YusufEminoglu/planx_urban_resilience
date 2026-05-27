@@ -26,7 +26,6 @@ plain in-QGIS layer keeps the source CRS.
 from __future__ import annotations
 
 import json
-import math
 
 from qgis.PyQt.QtCore import QVariant
 from qgis.core import (
@@ -294,5 +293,5 @@ class Risk3DVolumeExportAlgorithm(QgsProcessingAlgorithm):
         with open(out_geojson, "w", encoding="utf-8", newline="\n") as fp:
             json.dump(geojson, fp, ensure_ascii=False, default=lambda x: None)
         feedback.pushInfo(f"Wrote GeoJSON: {out_geojson}")
-        feedback.pushInfo(f"Open in PlanX 3D City Viewer or any Three.js / Cesium scene.")
+        feedback.pushInfo("Open in PlanX 3D City Viewer or any Three.js / Cesium scene.")
         return {self.OUTPUT_GEOJSON: out_geojson, self.OUTPUT: dest_id}

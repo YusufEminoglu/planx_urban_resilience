@@ -28,7 +28,6 @@ from qgis.core import (
     QgsFeatureSink,
     QgsField,
     QgsFields,
-    QgsGeometry,
     QgsProcessing,
     QgsProcessingAlgorithm,
     QgsProcessingException,
@@ -284,7 +283,7 @@ class CorrelationMatrixAlgorithm(QgsProcessingAlgorithm):
             ".swatch{display:inline-block;width:16px;height:16px;border:1px solid #999;}"
             "</style></head><body>"
         )
-        rows.append(f"<h1>Multi-Hazard Correlation Matrix</h1>")
+        rows.append("<h1>Multi-Hazard Correlation Matrix</h1>")
         meta_parts = []
         if project_name:
             meta_parts.append(f"<b>Project:</b> {_html.escape(project_name)}")

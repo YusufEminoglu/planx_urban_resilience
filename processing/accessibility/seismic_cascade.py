@@ -373,8 +373,7 @@ class SeismicCascadeAlgorithm(QgsProcessingAlgorithm):
         total = sum(status_counts.values()) or 1
         feedback.pushInfo("")
         feedback.pushInfo("─── Seismic cascade summary ───")
-        for status in ("Reachable" if False else "Newly cut off",
-                        "Always cut off", "Worse", "Same", "Recovered"):
+        for status in ("Newly cut off", "Always cut off", "Worse", "Same", "Recovered"):
             count = status_counts.get(status, 0)
             pct = 100.0 * count / total
             feedback.pushInfo(f"  {status:<16} : {count:>6}  ({pct:5.1f}%)")

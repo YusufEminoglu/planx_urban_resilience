@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.24.8] - 2026-05-27
+
+- Code quality and QGIS 4 dashboard polish.
+  - Fixed 14 flake8 issues across 12 processing modules: unused imports, dead code, f-strings without placeholders, ambiguous variable name, over-indented continuation, missing EOF newline.
+  - Dashboard: QGIS 4 Qt6 responsive font/layout sizing, mojibake text normalization for special characters.
+
 ## [1.24.7] - 2026-05-26
 
 - Qt5/Qt6 compatibility maintenance, dashboard runtime hardening, and QGIS 4 processing-provider gate behavior.

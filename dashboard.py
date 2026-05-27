@@ -333,6 +333,41 @@ MODULES = [
 ]
 
 
+_MOJIBAKE_FIXES = {
+    "â€”": "-",
+    "â€“": "-",
+    "â†’": "->",
+    "Î”": "Delta",
+    "Ã—": "x",
+    "â€¦": "...",
+    "Â²": "m2",
+}
+
+
+def _normalize_ui_text(text: str) -> str:
+    value = text
+    for old, new in _MOJIBAKE_FIXES.items():
+        value = value.replace(old, new)
+    return value
+
+
+def _normalize_module_rows(rows):
+    normalized = []
+    for row in rows:
+        fixed = dict(row)
+        for key in ("title", "group", "inputs", "outputs"):
+            fixed[key] = _normalize_ui_text(str(row.get(key, "")))
+        normalized.append(fixed)
+    return normalized
+
+
+MODULES = _normalize_module_rows(MODULES)
+IS_QGIS4 = int(getattr(Qgis, "QGIS_VERSION_INT", 0)) >= 40000
+DASHBOARD_SIZE = (960, 680) if IS_QGIS4 else (980, 700)
+NAV_WIDTH = 158 if IS_QGIS4 else 170
+RUN_BUTTON_MIN_WIDTH = 90 if IS_QGIS4 else 96
+
+
 def _processing_provider_enabled() -> bool:
     return int(getattr(Qgis, "QGIS_VERSION_INT", 0)) < 40000
 
@@ -342,11 +377,14 @@ class UrbanResilienceDashboard(QDialog):
         super().__init__(parent)
         self.iface = iface
         self.setWindowTitle("PlanX Urban Resilience")
-        self.resize(980, 700)
+        self.resize(*DASHBOARD_SIZE)
         self._build_ui()
         self._refresh_report()
 
     def _build_ui(self):
+        hero_title_size = 21 if IS_QGIS4 else 22
+        nav_item_padding = 10 if IS_QGIS4 else 12
+        group_radius = 7 if IS_QGIS4 else 8
         self.setStyleSheet(
             """
             QDialog { background: #f4f7fb; color: #243044; }
@@ -358,13 +396,13 @@ class UrbanResilienceDashboard(QDialog):
                 padding: 8px;
                 font-weight: 600;
             }
-            QListWidget::item { padding: 12px 10px; border-radius: 7px; }
+            QListWidget::item { padding: %(nav_item_padding)dpx 10px; border-radius: 7px; }
             QListWidget::item:selected { background: #0f766e; color: white; }
-            QLabel#heroTitle { font-size: 22px; font-weight: 800; color: #12343b; }
+            QLabel#heroTitle { font-size: %(hero_title_size)dpx; font-weight: 800; color: #12343b; }
             QLabel#heroSub { color: #64748b; }
             QGroupBox {
                 border: 1px solid #d8e0ea;
-                border-radius: 8px;
+                border-radius: %(group_radius)dpx;
                 margin-top: 12px;
                 padding: 12px 10px 10px 10px;
                 background: white;
@@ -387,21 +425,29 @@ class UrbanResilienceDashboard(QDialog):
             }
             QTextBrowser {
                 border: 1px solid #d8e0ea;
-                border-radius: 8px;
+                border-radius: %(group_radius)dpx;
                 background: white;
                 padding: 10px;
             }
             """
+            % {
+                "hero_title_size": hero_title_size,
+                "nav_item_padding": nav_item_padding,
+                "group_radius": group_radius,
+            }
         )
         shell = QHBoxLayout(self)
+        shell.setContentsMargins(8, 8, 8, 8)
+        shell.setSpacing(10)
         self.nav = QListWidget()
-        self.nav.setFixedWidth(170)
+        self.nav.setFixedWidth(NAV_WIDTH)
         for label in ("Overview", "Data", "Modules", "Run", "Report", "Test", "Beta"):
             QListWidgetItem(label, self.nav)
         self.nav.setCurrentRow(0)
         shell.addWidget(self.nav)
 
         content = QVBoxLayout()
+        content.setSpacing(8)
         title = QLabel("PlanX Urban Resilience")
         title.setObjectName("heroTitle")
         subtitle = QLabel("Prepare resilience layers, launch screening modules and review project readiness from one QGIS panel.")
@@ -465,9 +511,9 @@ class UrbanResilienceDashboard(QDialog):
         page = QWidget()
         layout = QVBoxLayout(page)
 
-        # Search filter — narrows visible modules by title / inputs / outputs.
+        # Search filter - narrows visible modules by title / inputs / outputs.
         search_bar = QLineEdit()
-        search_bar.setPlaceholderText("Search modules (title, inputs, outputs)…")
+        search_bar.setPlaceholderText("Search modules (title, inputs, outputs)...")
         search_bar.setClearButtonEnabled(True)
         layout.addWidget(search_bar)
 
@@ -487,7 +533,7 @@ class UrbanResilienceDashboard(QDialog):
         layout = QVBoxLayout(page)
 
         search_bar = QLineEdit()
-        search_bar.setPlaceholderText("Search to open a Processing tool…")
+        search_bar.setPlaceholderText("Search to open a Processing tool...")
         search_bar.setClearButtonEnabled(True)
         layout.addWidget(search_bar)
 
@@ -707,7 +753,8 @@ class UrbanResilienceDashboard(QDialog):
                 label.setWordWrap(True)
                 button = QPushButton("Open")
                 button.setObjectName("primaryButton")
-                button.setFixedWidth(96)
+                button.setMinimumWidth(RUN_BUTTON_MIN_WIDTH)
+                button.setMaximumWidth(RUN_BUTTON_MIN_WIDTH + 24)
                 button.clicked.connect(
                     lambda _checked=False, alg=module["algorithm"]: self._open_algorithm(alg)
                 )

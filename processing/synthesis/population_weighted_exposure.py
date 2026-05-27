@@ -21,8 +21,6 @@ Used to translate "this neighbourhood scores 80/100 on flood" into
 """
 from __future__ import annotations
 
-import math
-
 from qgis.PyQt.QtCore import QVariant
 from qgis.core import (
     QgsFeature,
@@ -32,7 +30,6 @@ from qgis.core import (
     QgsProcessing,
     QgsProcessingAlgorithm,
     QgsProcessingException,
-    QgsProcessingParameterEnum,
     QgsProcessingParameterFeatureSink,
     QgsProcessingParameterFeatureSource,
     QgsProcessingParameterField,

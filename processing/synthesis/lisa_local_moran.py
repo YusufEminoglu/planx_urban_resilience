@@ -244,20 +244,20 @@ class LisaLocalMoranAlgorithm(QgsProcessingAlgorithm):
                 weights.append((nid, w))
             if not weights:
                 lag = float("nan")
-                I = float("nan")
+                moran_i = float("nan")
                 p = float("nan")
             else:
                 # Row-standardise.
                 w_sum = sum(w for _nid, w in weights)
                 lag = sum((w / w_sum) * z_values[nid] for nid, w in weights) if w_sum > 0 else 0.0
                 z_i = z_values[fid]
-                I = z_i * lag
+                moran_i = z_i * lag
                 # Approximate variance of I_i for a row-standardised matrix:
                 # Var(I_i) ≈ (n - 1 - n*m2) / (n - 1) where m2 = (Σ z²)/n.
                 m2 = sum(zv * zv for zv in z_values.values()) / n
                 var_I = max(1e-9, (n - 1 - n * m2) / max(n - 1, 1))
                 ez = -1.0 / (n - 1)  # expected I under H0
-                z_stat = (I - ez) / math.sqrt(var_I)
+                z_stat = (moran_i - ez) / math.sqrt(var_I)
                 p = _two_sided_p(z_stat)
 
             cls = _quadrant(z_values[fid], lag if not math.isnan(lag) else 0.0, p)
@@ -271,7 +271,7 @@ class LisaLocalMoranAlgorithm(QgsProcessingAlgorithm):
             new_attrs.extend([
                 z_values[fid],
                 lag if not math.isnan(lag) else None,
-                I if not math.isnan(I) else None,
+                moran_i if not math.isnan(moran_i) else None,
                 p if not math.isnan(p) else None,
                 cls,
             ])

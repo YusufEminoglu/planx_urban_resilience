@@ -37,7 +37,6 @@ from qgis.core import (
     QgsFeatureSink,
     QgsField,
     QgsGeometry,
-    QgsPointXY,
     QgsProcessing,
     QgsProcessingAlgorithm,
     QgsProcessingException,
@@ -45,8 +44,6 @@ from qgis.core import (
     QgsProcessingParameterFeatureSource,
     QgsProcessingParameterField,
     QgsProcessingParameterNumber,
-    QgsRectangle,
-    QgsSpatialIndex,
     QgsWkbTypes,
 )
 

@@ -140,7 +140,6 @@ class MultiHazardCompositeAlgorithm(QgsProcessingAlgorithm):
 
         weight_text = self.parameterAsString(parameters, self.WEIGHTS, context)
         weights = parse_weights_csv(weight_text, len(hazard_fields))
-        weight_sum = sum(weights) or 1.0
 
         out_fields = source.fields()
         for fname, ftype in (

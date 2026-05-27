@@ -18,7 +18,6 @@ from qgis.core import (
     QgsProcessing,
     QgsProcessingAlgorithm,
     QgsProcessingException,
-    QgsProcessingParameterEnum,
     QgsProcessingParameterFeatureSource,
     QgsProcessingParameterField,
     QgsProcessingParameterFileDestination,
@@ -234,7 +233,7 @@ class RecommendedActionsAlgorithm(QgsProcessingAlgorithm):
         timestamp = _dt.datetime.now().strftime("%Y-%m-%d %H:%M")
 
         lines: list[str] = []
-        lines.append(f"# Recommended Actions Report")
+        lines.append("# Recommended Actions Report")
         if project_name:
             lines.append(f"**Project:** {project_name}")
         lines.append(f"**Score field:** `{score_field}`  ")
