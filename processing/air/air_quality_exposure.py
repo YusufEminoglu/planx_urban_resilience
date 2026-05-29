@@ -141,7 +141,12 @@ class AirQualityExposureAlgorithm(QgsProcessingAlgorithm):
         source_union = _union(sources)
         green_union = _union(green)
         sensitive_features = _features(sensitive)
-        sensitive_index = QgsSpatialIndex(sensitive_features) if sensitive_features else None
+        sensitive_index = QgsSpatialIndex()
+        if sensitive_features:
+            for f in sensitive_features:
+                sensitive_index.addFeature(f)
+        else:
+            sensitive_index = None
 
         fields = QgsFields()
         for name in ("cell_id", "road_score", "source_score", "sens_count", "green_share", "air_score", "risk_class"):

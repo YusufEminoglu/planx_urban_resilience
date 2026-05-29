@@ -5,7 +5,7 @@ author=Yusuf Eminoglu
 qgisMinimumVersion=3.10
 description=PlanX urban resilience suite (28 tools): seismic, heat, flood, social, emergency access, evacuation, network criticality, air, drought, synthesis, risk-recovery matrix, time-series, scenario tools, HTML/Markdown/PDF atlas, symbology.
 about=28 Processing algorithms and a QGIS dashboard for city-scale resilience screening: synthetic QA, seismic debris, heat and flood, social vulnerability, Euclidean and network emergency access, evacuation simulation with optional timestep queue, network criticality, air and drought, multi-hazard and equity-adjusted synthesis, climate projection overlay, recovery capacity, scenario sensitivity, risk-recovery priority matrix, time-series tracking, scenario templates, HTML/Markdown/PDF atlas with map-book presets, shelter arrival summaries, and symbology. DEU City and Regional Planning educational workflows.
-version=1.24.8
+version=1.24.9
 tracker=https://github.com/YusufEminoglu/planx_urban_resilience/issues
 repository=https://github.com/YusufEminoglu/planx_urban_resilience
 
@@ -20,6 +20,10 @@ hasProcessingProvider=yes
 plugin_dependencies=
 license=GPL-3
 changelog=
+    PlanX Urban Resilience 1.24.9 - Compatibility maintenance release:
+        - Fixed spatial index constructor compatibility across QGIS 3 and QGIS 4 by using loop-based addition instead of bulk feature-list instantiation.
+        - Fixed CP1252 character audit warnings by escaping literal CP1252 patterns into unicode escapes.
+        - Aligned parameters, snapped tolerances, and memory layer objects in the smoke pipeline test suite.
     PlanX Urban Resilience 1.24.8 - Code quality and QGIS 4 dashboard polish.
         - Fixed 14 flake8 issues across 12 processing modules: unused imports (QgsGeometry, QgsPointXY, QgsRectangle, QgsSpatialIndex, QgsProcessingParameterEnum, math), unused local variable (weight_sum), dead-code conditional in seismic_cascade, f-strings without placeholders, over-indented continuation lines, ambiguous variable name 'I' -> 'moran_i', missing end-of-file newline.
         - Dashboard: QGIS 4 Qt6 compatibility with responsive font/layout sizing, mojibake text normalization for Turkish/special characters.

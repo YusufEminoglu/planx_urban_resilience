@@ -111,7 +111,12 @@ class EmergencyAccessibilityAlgorithm(QgsProcessingAlgorithm):
         study_union = _union(study)
         barrier_union = _union(barriers)
         shelter_features = _features(shelters)
-        shelter_index = QgsSpatialIndex(shelter_features) if shelter_features else None
+        shelter_index = QgsSpatialIndex()
+        if shelter_features:
+            for f in shelter_features:
+                shelter_index.addFeature(f)
+        else:
+            shelter_index = None
 
         fields = QgsFields()
         fields.append(QgsField("cell_id", QVariant.Int))

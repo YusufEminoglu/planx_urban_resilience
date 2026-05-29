@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.24.9] - 2026-05-29
+
+- Fixed spatial index instantiation compatibility, CP1252 encoding audit, and test parameters in smoke pipeline.
+
 ## [1.24.8] - 2026-05-27
 
 - Code quality and QGIS 4 dashboard polish.

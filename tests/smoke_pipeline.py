@@ -55,26 +55,26 @@ def run_all():
     syn = _run(
         "planx_urban_resilience:synthetic_resilience_demo_dataset",
         {"SCALE": 1.0, "SEED": 42,
-         "OUTPUT_STUDY": "memory:study", "OUTPUT_BUILDINGS": "memory:buildings",
-         "OUTPUT_ROADS": "memory:roads", "OUTPUT_IMPERVIOUS": "memory:impervious",
-         "OUTPUT_GREEN": "memory:green", "OUTPUT_WATER": "memory:water",
-         "OUTPUT_SHELTERS": "memory:shelters", "OUTPUT_SOCIAL": "memory:social",
-         "OUTPUT_SENSITIVE": "memory:sensitive"},
+         "STUDY_AREA": "memory:study", "BUILDINGS": "memory:buildings",
+         "ROADS": "memory:roads", "IMPERVIOUS": "memory:impervious",
+         "GREEN": "memory:green", "WATER": "memory:water",
+         "SHELTERS": "memory:shelters", "SOCIAL_UNITS": "memory:social",
+         "SENSITIVE": "memory:sensitive"},
         "synthetic dataset",
     )
     if not syn:
         print("Cannot continue — synthetic generation failed.")
         return False
 
-    study     = syn.get("OUTPUT_STUDY")
-    buildings = syn.get("OUTPUT_BUILDINGS")
-    roads     = syn.get("OUTPUT_ROADS")
-    imperv    = syn.get("OUTPUT_IMPERVIOUS")
-    green     = syn.get("OUTPUT_GREEN")
-    water     = syn.get("OUTPUT_WATER")
-    shelters  = syn.get("OUTPUT_SHELTERS")
-    social    = syn.get("OUTPUT_SOCIAL")
-    sensitive = syn.get("OUTPUT_SENSITIVE")
+    study     = syn.get("STUDY_AREA")
+    buildings = syn.get("BUILDINGS")
+    roads     = syn.get("ROADS")
+    imperv    = syn.get("IMPERVIOUS")
+    green     = syn.get("GREEN")
+    water     = syn.get("WATER")
+    shelters  = syn.get("SHELTERS")
+    social    = syn.get("SOCIAL_UNITS")
+    sensitive = syn.get("SENSITIVE")
 
     # 2) Heat
     _run(
@@ -103,7 +103,13 @@ def run_all():
     # 4) Social
     _run(
         "planx_urban_resilience:social_vulnerability_index",
-        {"INPUT": social, "OUTPUT": "memory:svi"},
+        {"AREAS": social,
+         "POPULATION_FIELD": "population",
+         "ELDERLY_FIELD": "elderly",
+         "CHILDREN_FIELD": "children",
+         "DISABILITY_FIELD": "disability",
+         "LOW_INCOME_FIELD": "low_income",
+         "OUTPUT": "memory:svi"},
         "social vulnerability index",
     )
 
@@ -120,8 +126,8 @@ def run_all():
     # 6) Network Emergency
     _run(
         "planx_urban_resilience:network_emergency_accessibility",
-        {"ROADS": roads, "ORIGINS": buildings, "SHELTERS": shelters,
-         "SPEED_KMH": 30, "MAX_DISTANCE": 2000,
+        {"ROADS": roads, "ORIGINS": buildings, "DESTINATIONS": shelters,
+         "SPEED_KMH": 30.0, "SNAP_TOLERANCE": 500.0,
          "OUTPUT_ORIGINS": "memory:net_origins",
          "OUTPUT_UNDERSERVED": "memory:net_under"},
         "network emergency accessibility",
@@ -131,7 +137,7 @@ def run_all():
     _run(
         "planx_urban_resilience:green_infrastructure_drought_stress",
         {"GREEN": green, "IMPERVIOUS": imperv, "WATER": water,
-         "OUTPUT": "memory:drought"},
+         "OUTPUT_STRESS": "memory:drought", "OUTPUT_PRIORITY": "memory:drought_priority"},
         "green infrastructure drought stress",
     )
 
@@ -142,9 +148,9 @@ def run_all():
          "SHELTERS": shelters, "CAPACITY_FIELD": "capacity",
          "ROAD_CAPACITY_FIELD": "capacity_ph", "ROAD_CLASS_FIELD": "class",
          "ROAD_DIRECTION_FIELD": "direction",
-         "SPEED_KMH": 30, "TARGET_MINUTES": 15, "CRITICAL_MINUTES": 45,
-         "TIMESTEP_MINUTES": 0, "MAX_TIMESTEPS": 48,
-         "SNAP_TOLERANCE": 2.0, "ASSIGN_ORDER": 0,
+         "SPEED_KMH": 30.0, "TARGET_MINUTES": 15.0, "CRITICAL_MINUTES": 45.0,
+         "TIMESTEP_MINUTES": 0.0, "MAX_TIMESTEPS": 48,
+         "SNAP_TOLERANCE": 500.0, "ASSIGN_ORDER": 0,
          "OUTPUT_ORIGINS": "memory:evac_origins",
          "OUTPUT_SHELTERS": "memory:evac_shelters",
          "OUTPUT_EDGES": "memory:evac_edges"},
@@ -152,23 +158,25 @@ def run_all():
     )
 
     # 9) Evacuation (timestep queue)
-    _run(
+    evac_q = _run(
         "planx_urban_resilience:evacuation_time_simulation",
         {"ROADS": roads, "ORIGINS": buildings, "POP_FIELD": "population",
          "SHELTERS": shelters, "CAPACITY_FIELD": "capacity",
          "ROAD_CLASS_FIELD": "class",
-         "SPEED_KMH": 30, "TIMESTEP_MINUTES": 5, "MAX_TIMESTEPS": 24,
-         "SNAP_TOLERANCE": 2.0, "ASSIGN_ORDER": 1,
+         "SPEED_KMH": 30.0, "TIMESTEP_MINUTES": 5.0, "MAX_TIMESTEPS": 24,
+         "SNAP_TOLERANCE": 500.0, "ASSIGN_ORDER": 1,
          "OUTPUT_ORIGINS": "memory:evac_q_origins",
          "OUTPUT_SHELTERS": "memory:evac_q_shelters",
          "OUTPUT_EDGES": "memory:evac_q_edges"},
         "evacuation (timestep queue)",
     )
 
+    evac_q_origins = evac_q.get("OUTPUT_ORIGINS") if evac_q else None
+
     # 10) Shelter arrival summary (from queue evacuation output)
     _run(
         "planx_urban_resilience:evacuation_shelter_arrival_summary",
-        {"INPUT": "memory:evac_q_origins",
+        {"INPUT": evac_q_origins,
          "SHELTER_FIELD": "evac_shelter", "POP_FIELD": "evac_pop",
          "TIMESTEP_FIELD": "evac_timestep", "MINUTES_FIELD": "evac_min",
          "MINUTE_BIN": 5,

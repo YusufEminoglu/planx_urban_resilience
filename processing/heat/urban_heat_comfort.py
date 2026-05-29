@@ -142,7 +142,12 @@ class UrbanHeatComfortRiskAlgorithm(QgsProcessingAlgorithm):
         else:
             cooling_union = green_union or water_union
         vulnerable_features = _features(vulnerable)
-        vulnerable_index = QgsSpatialIndex(vulnerable_features) if vulnerable_features else None
+        vulnerable_index = QgsSpatialIndex()
+        if vulnerable_features:
+            for f in vulnerable_features:
+                vulnerable_index.addFeature(f)
+        else:
+            vulnerable_index = None
 
         fields = QgsFields()
         for name in ("cell_id", "imperv", "build_dens", "green_share", "cool_dist", "vuln_count", "heat_score", "risk_class"):

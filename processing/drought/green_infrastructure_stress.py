@@ -133,7 +133,12 @@ class GreenInfrastructureStressAlgorithm(QgsProcessingAlgorithm):
         impervious_union = _union(impervious)
         water_union = _union(water)
         tree_features = _features(trees)
-        tree_index = QgsSpatialIndex(tree_features) if tree_features else None
+        tree_index = QgsSpatialIndex()
+        if tree_features:
+            for f in tree_features:
+                tree_index.addFeature(f)
+        else:
+            tree_index = None
         green_features = _features(green)
         areas = [max(feature.geometry().area(), 0.0) for feature in green_features]
         min_area = min(areas) if areas else 0.0
