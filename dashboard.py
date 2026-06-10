@@ -17,7 +17,6 @@ from qgis.PyQt.QtWidgets import (
     QLineEdit,
     QListWidget,
     QListWidgetItem,
-    QMessageBox,
     QPushButton,
     QScrollArea,
     QSizePolicy,
@@ -366,10 +365,6 @@ IS_QGIS4 = int(getattr(Qgis, "QGIS_VERSION_INT", 0)) >= 40000
 DASHBOARD_SIZE = (960, 680) if IS_QGIS4 else (980, 700)
 NAV_WIDTH = 158 if IS_QGIS4 else 170
 RUN_BUTTON_MIN_WIDTH = 90 if IS_QGIS4 else 96
-
-
-def _processing_provider_enabled() -> bool:
-    return int(getattr(Qgis, "QGIS_VERSION_INT", 0)) < 40000
 
 
 class UrbanResilienceDashboard(QDialog):
@@ -1015,11 +1010,4 @@ class UrbanResilienceDashboard(QDialog):
             page.setVisible(i == idx)
 
     def _open_algorithm(self, algorithm_id):
-        if not _processing_provider_enabled():
-            QMessageBox.information(
-                self,
-                "PlanX Urban Resilience",
-                "Processing tools are hidden in QGIS 4. Use this dashboard as a panel-only overview.",
-            )
-            return
         processing.execAlgorithmDialog(algorithm_id)

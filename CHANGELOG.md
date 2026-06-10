@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.25.0] - 2026-06-10
+
+- Quality release: all 43 tools e2e-verified on QGIS 3.44 and 4.0; QGIS 4 provider re-enabled; LISA variance and PDF Atlas fixes; FDR-adjusted Gi*/LISA significance; flood sampling and exposure-score fixes
+
+## [1.25.0] - 2026-06-10
+
+Quality release: every one of the 43 algorithms now verified end-to-end on real QGIS (3.44 LTR and 4.0.2) via a headless harness with numeric assertions.
+
+### Fixed
+- **QGIS 4: all 43 Processing tools re-enabled.** The v1.24.5 "panel-only" gate hid the whole provider on QGIS 4; the full suite now registers and passes end-to-end on QGIS 4.0.2.
+- **PDF Atlas crashed on modern QGIS** (`QgsGraduatedSymbolRenderer.createRenderer: not enough arguments` and `setFrameStrokeWidth` expecting `QgsLayoutMeasurement`). Classification is now pure Python (equal interval / quantile / Jenks via 1D k-means) with explicit YlOrRd graduated ranges, and the memory-layer URI uses `QgsWkbTypes.displayString` (QGIS 3.10-safe).
+- **LISA significance was broken**: the variance approximation `(n-1-n*m2)/(n-1)` is always negative for z-standardised data (m2=1), so every feature was flagged significant. Replaced with the proper Anselin (1995) randomization moments (per-feature E[I], Var[I] from row-standardised weights and sample kurtosis).
+- **Flood screening read pixels outside the DEM** at study-area edges (GDAL "Access window out of range" spam, lost edge cells); sampling is now clamped into the raster extent with a half-pixel inset.
+- **Flood exposed buildings/roads carried a constant score** (the threshold) instead of the real susceptibility; they now get the maximum intersecting cell score and its risk class.
+
+### Added
+- **FDR-adjusted significance** (Benjamini-Hochberg) for the multiple-testing problem in local spatial statistics: Gi* hot-spot gains `gi_p_fdr` + `gi_class_fdr`, LISA gains `lisa_p_fdr` + `lisa_quad_fdr`. Prefer the FDR fields when reporting.
+
+### Changed
+- Metadata and README tool count corrected from 28 to 43; README module blurb refreshed.
+- Removed stale `ROADMAP.md` and the outdated `tests/smoke_pipeline.py` duplicate (wrong parameter names); `tools/qgis_synthetic_smoke.py` remains the QGIS-console helper.
+- Added `.zipignore` so dev-only files stay out of the Hub package.
+
 ## [1.24.10] - 2026-05-30
 
 - Revised plugin icon

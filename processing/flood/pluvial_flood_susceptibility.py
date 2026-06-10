@@ -35,14 +35,27 @@ def _union(source):
     return QgsGeometry.unaryUnion(geometries).makeValid()
 
 
-def _sample(provider, point):
-    value, ok = provider.sample(point, 1)
-    if not ok or value is None:
-        return None
-    try:
-        return float(value)
-    except (TypeError, ValueError):
-        return None
+def _make_sampler(provider):
+    """Sampler that clamps points into the raster extent (half-pixel inset)
+    so cells on the study-area boundary do not read outside the DEM."""
+    ext = provider.extent()
+    half_px_x = ext.width() / max(provider.xSize(), 1) / 2.0
+    half_px_y = ext.height() / max(provider.ySize(), 1) / 2.0
+    x_min, x_max = ext.xMinimum() + half_px_x, ext.xMaximum() - half_px_x
+    y_min, y_max = ext.yMinimum() + half_px_y, ext.yMaximum() - half_px_y
+
+    def _sample(point):
+        x = min(max(point.x(), x_min), x_max)
+        y = min(max(point.y(), y_min), y_max)
+        value, ok = provider.sample(QgsPointXY(x, y), 1)
+        if not ok or value is None:
+            return None
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return None
+
+    return _sample
 
 
 class PluvialFloodSusceptibilityAlgorithm(QgsProcessingAlgorithm):
@@ -119,6 +132,7 @@ class PluvialFloodSusceptibilityAlgorithm(QgsProcessingAlgorithm):
         weight_sum = max(w_elev + w_slope + w_drain, 0.0001)
 
         provider = dem.dataProvider()
+        sample = _make_sampler(provider)
         study_union = _union(study)
         drainage_union = _union(drainage)
 
@@ -144,7 +158,7 @@ class PluvialFloodSusceptibilityAlgorithm(QgsProcessingAlgorithm):
         while x <= extent.xMaximum():
             y = extent.yMinimum()
             while y <= extent.yMaximum():
-                value = _sample(provider, QgsPointXY(x, y))
+                value = sample(QgsPointXY(x, y))
                 if value is not None:
                     xs.append(value)
                 y += sample_step
@@ -172,14 +186,14 @@ class PluvialFloodSusceptibilityAlgorithm(QgsProcessingAlgorithm):
                     continue
                 clipped = cell_geom.intersection(study_union).makeValid()
                 center = clipped.centroid().asPoint()
-                elev = _sample(provider, QgsPointXY(center.x(), center.y()))
+                elev = sample(QgsPointXY(center.x(), center.y()))
                 if elev is None:
                     y += cell_size
                     cell_id += 1
                     continue
                 neighbors = []
                 for dx, dy in ((radius, 0), (-radius, 0), (0, radius), (0, -radius)):
-                    value = _sample(provider, QgsPointXY(center.x() + dx, center.y() + dy))
+                    value = sample(QgsPointXY(center.x() + dx, center.y() + dy))
                     if value is not None:
                         neighbors.append(value)
                 local_relief = max(neighbors) - min(neighbors) if len(neighbors) > 1 else 0.0
@@ -204,22 +218,36 @@ class PluvialFloodSusceptibilityAlgorithm(QgsProcessingAlgorithm):
                 cell_id += 1
             x += cell_size
 
-        high_cells = [geom for geom, score, _risk in scored_cells if score >= threshold]
-        high_union = QgsGeometry.unaryUnion(high_cells).makeValid() if high_cells else None
+        high_cells = [(geom, score) for geom, score, _risk in scored_cells if score >= threshold]
+        high_union = QgsGeometry.unaryUnion([g for g, _s in high_cells]).makeValid() if high_cells else None
+
+        def _max_cell_score(geom):
+            best = None
+            for cell_geom, score in high_cells:
+                if geom.intersects(cell_geom):
+                    best = score if best is None else max(best, score)
+            return best
+
         if high_union and not high_union.isEmpty():
             for feature in _features(buildings):
                 if feature.geometry().intersects(high_union):
+                    score = _max_cell_score(feature.geometry())
+                    if score is None:
+                        continue
                     point = feature.geometry().centroid()
                     out = QgsFeature(asset_fields)
                     out.setGeometry(point)
-                    out.setAttributes(["building", threshold, composite_risk_class(threshold)])
+                    out.setAttributes(["building", score, composite_risk_class(score)])
                     building_sink.addFeature(out, QgsFeatureSink.FastInsert)
             for feature in _features(roads):
                 inter = feature.geometry().intersection(high_union)
                 if not inter.isEmpty():
+                    score = _max_cell_score(inter)
+                    if score is None:
+                        continue
                     out = QgsFeature(asset_fields)
                     out.setGeometry(inter)
-                    out.setAttributes(["road", threshold, composite_risk_class(threshold)])
+                    out.setAttributes(["road", score, composite_risk_class(score)])
                     road_sink.addFeature(out, QgsFeatureSink.FastInsert)
 
         return {

@@ -4,7 +4,7 @@
 
 # PlanX: Urban Resilience
 
-**City-scale resilience screening for QGIS — 28 Processing tools: seismic, flood, heat, social vulnerability, evacuation, scenarios, reports.**
+**City-scale resilience screening for QGIS — 43 Processing tools: seismic, flood, heat, social vulnerability, evacuation, spatial statistics, scenarios, reports.**
 
 [![QGIS](https://img.shields.io/badge/QGIS-3.10%2B-93b023?logo=qgis&logoColor=white)](https://plugins.qgis.org/plugins/planx_urban_resilience/)
 [![Version](https://img.shields.io/github/v/tag/YusufEminoglu/planx_urban_resilience?label=version&color=blue)](https://github.com/YusufEminoglu/planx_urban_resilience/releases)
@@ -15,7 +15,7 @@
 
 ---
 
-PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. The suite ships **28 Processing algorithms**: synthetic QA data, seismic debris, heat, flood, social vulnerability, Euclidean and network emergency access, network criticality, air and drought screening, adaptation/multi-hazard/equity/climate/recovery/sensitivity synthesis, time-series tracking, scenario templates and comparison, HTML/Markdown/PDF reporting, and QGIS style presets — plus a dashboard for module discovery and data readiness review.
+PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. The suite ships **43 Processing algorithms**: synthetic QA data, seismic debris and cascade, heat, flood, social vulnerability, Euclidean and network emergency access, evacuation simulation, optimal shelter siting, network criticality, air and drought screening, adaptation/multi-hazard/equity/climate/recovery/sensitivity synthesis, hot-spot (Getis-Ord Gi*) and LISA cluster statistics with FDR-adjusted significance, correlation matrix, IDW vulnerability surfaces, Pareto and cost-benefit economics, lifecycle NPV, time-series tracking, scenario templates and comparison, HTML/Markdown/PDF reporting, 3D risk export, and QGIS style presets — plus a dashboard for module discovery and data readiness review. All 43 algorithms run on both QGIS 3.10+ and QGIS 4.
 
 ## Modules
 

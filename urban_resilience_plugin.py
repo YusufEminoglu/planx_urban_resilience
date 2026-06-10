@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
 
-from qgis.core import Qgis, QgsApplication
+from qgis.core import QgsApplication
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
 
 from .dashboard import UrbanResilienceDashboard
 from .processing.urban_resilience_provider import PlanXUrbanResilienceProvider
-
-
-def _processing_provider_enabled() -> bool:
-    return int(getattr(Qgis, "QGIS_VERSION_INT", 0)) < 40000
 
 
 class PlanXUrbanResiliencePlugin:
@@ -21,9 +17,6 @@ class PlanXUrbanResiliencePlugin:
         self.dialog = None
 
     def initProcessing(self):
-        if not _processing_provider_enabled():
-            self.provider = None
-            return
         if self.provider is not None:
             return
         self.provider = PlanXUrbanResilienceProvider()

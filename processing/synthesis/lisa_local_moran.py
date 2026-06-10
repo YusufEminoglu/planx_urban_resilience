@@ -12,10 +12,12 @@ For each feature i:
     lag  = Σ_j w_ij * z_j     (row-standardised neighbours, j ≠ i)
     I_i  = z_i * lag
 
-Significance: a permutation test (Anselin 1995) is the gold standard but
-costs O(features × permutations). For an offline-first screening tool we
-use the standard-normal z-score approximation, which matches GeoDa's
-conditional-randomization quadrants well enough for planning use.
+Significance: analytic moments under the randomization (conditional
+permutation) null hypothesis — Anselin (1995), eq. 13-14 — give
+E[I_i] and Var[I_i] per feature from the row-standardised weights and
+the sample kurtosis; the z-score is referred to the standard normal.
+A Benjamini-Hochberg FDR-adjusted p-value is also reported to control
+the multiple-testing problem inherent in n simultaneous local tests.
 
 Quadrant labels:
     HH = high-high cluster      (z_i > 0, lag > 0, I_i > 0, p < 0.05)
@@ -59,6 +61,22 @@ def _two_sided_p(z: float) -> float:
     return 2.0 * (1.0 - _norm_cdf(abs(z)))
 
 
+def _bh_fdr(pvalues: list[float]) -> list[float]:
+    """Benjamini-Hochberg adjusted p-values; NaN entries stay NaN."""
+    indexed = [(p, i) for i, p in enumerate(pvalues) if not math.isnan(p)]
+    adjusted = [float("nan")] * len(pvalues)
+    m = len(indexed)
+    if m == 0:
+        return adjusted
+    indexed.sort()
+    running_min = 1.0
+    for rank in range(m, 0, -1):
+        p, orig_idx = indexed[rank - 1]
+        running_min = min(running_min, p * m / rank)
+        adjusted[orig_idx] = min(running_min, 1.0)
+    return adjusted
+
+
 def _quadrant(z_i: float, lag: float, p: float) -> str:
     if math.isnan(z_i) or math.isnan(lag) or math.isnan(p):
         return "Not significant"
@@ -86,7 +104,9 @@ class LisaLocalMoranAlgorithm(QgsProcessingAlgorithm):
     OUT_LAG = "lisa_lag"
     OUT_I = "lisa_I"
     OUT_P = "lisa_pvalue"
+    OUT_P_FDR = "lisa_p_fdr"
     OUT_QUADRANT = "lisa_quadrant"
+    OUT_QUADRANT_FDR = "lisa_quad_fdr"
 
     def tr(self, string):
         return string
@@ -119,10 +139,13 @@ class LisaLocalMoranAlgorithm(QgsProcessingAlgorithm):
               <li><b>LH</b> — low value surrounded by high neighbours (outlier).</li>
               <li><b>Not significant</b> at the 95 % level.</li>
             </ul>
-            <p>Significance uses the standard-normal z-score approximation
-            (faster than full permutation; matches GeoDa quadrants well for
-            screening). For peer-review-grade significance run GeoDa or PySAL
-            separately on the same field.</p>
+            <p>Significance uses the analytic randomization moments of
+            Anselin (1995) — per-feature E[I] and Var[I] from the
+            row-standardised weights and sample kurtosis. Because n local
+            tests run simultaneously, a Benjamini-Hochberg FDR-adjusted
+            p-value (<code>lisa_p_fdr</code>) and the corresponding
+            conservative quadrant label (<code>lisa_quad_fdr</code>) are
+            also written — prefer those when reporting results.</p>
             """
         )
 
@@ -211,7 +234,9 @@ class LisaLocalMoranAlgorithm(QgsProcessingAlgorithm):
             (self.OUT_LAG, QVariant.Double),
             (self.OUT_I, QVariant.Double),
             (self.OUT_P, QVariant.Double),
+            (self.OUT_P_FDR, QVariant.Double),
             (self.OUT_QUADRANT, QVariant.String),
+            (self.OUT_QUADRANT_FDR, QVariant.String),
         ):
             if out_fields.indexOf(fname) < 0:
                 out_fields.append(QgsField(fname, ftype))
@@ -222,8 +247,14 @@ class LisaLocalMoranAlgorithm(QgsProcessingAlgorithm):
         )
 
         feedback.pushInfo(f"Computing local Moran's I over {n} features…")
-        quadrant_counts: dict = {}
 
+        # Sample kurtosis of the standardised variable (m2 == 1 by
+        # construction, so b2 reduces to the fourth moment of z).
+        b2 = sum(zv ** 4 for zv in z_values.values()) / n
+        e_i = -1.0 / (n - 1)  # E[I_i] for row-standardised weights
+
+        # Pass 1 — statistics per feature (Anselin 1995 randomization moments).
+        results: list[tuple[int, float, float, float]] = []  # fid, lag, I, p
         for idx, fid in enumerate(fids):
             if feedback.isCanceled():
                 break
@@ -249,40 +280,58 @@ class LisaLocalMoranAlgorithm(QgsProcessingAlgorithm):
             else:
                 # Row-standardise.
                 w_sum = sum(w for _nid, w in weights)
-                lag = sum((w / w_sum) * z_values[nid] for nid, w in weights) if w_sum > 0 else 0.0
+                std_weights = [(nid, w / w_sum) for nid, w in weights]
+                lag = sum(w * z_values[nid] for nid, w in std_weights)
                 z_i = z_values[fid]
                 moran_i = z_i * lag
-                # Approximate variance of I_i for a row-standardised matrix:
-                # Var(I_i) ≈ (n - 1 - n*m2) / (n - 1) where m2 = (Σ z²)/n.
-                m2 = sum(zv * zv for zv in z_values.values()) / n
-                var_I = max(1e-9, (n - 1 - n * m2) / max(n - 1, 1))
-                ez = -1.0 / (n - 1)  # expected I under H0
-                z_stat = (moran_i - ez) / math.sqrt(var_I)
+                # Var[I_i] under randomization (Anselin 1995):
+                #   E[I²] = w2 (n − b2)/(n − 1)
+                #         + (wi.² − w2)(2 b2 − n)/((n − 1)(n − 2))
+                # with wi. = 1 (row-standardised) and w2 = Σ wij².
+                w2 = sum(w * w for _nid, w in std_weights)
+                e_i2 = (w2 * (n - b2) / (n - 1)
+                        + (1.0 - w2) * (2.0 * b2 - n) / ((n - 1) * (n - 2)))
+                var_i = max(e_i2 - e_i * e_i, 1e-12)
+                z_stat = (moran_i - e_i) / math.sqrt(var_i)
                 p = _two_sided_p(z_stat)
+            results.append((fid, lag, moran_i, p))
+            if idx % 100 == 0:
+                feedback.setProgress(int(50 * (idx + 1) / n))
 
-            cls = _quadrant(z_values[fid], lag if not math.isnan(lag) else 0.0, p)
+        # Pass 2 — FDR adjustment across all n simultaneous tests, then write.
+        p_adjusted = _bh_fdr([r[3] for r in results])
+        quadrant_counts: dict = {}
+        fdr_counts: dict = {}
+        for idx, ((fid, lag, moran_i, p), p_fdr) in enumerate(zip(results, p_adjusted)):
+            lag_safe = lag if not math.isnan(lag) else 0.0
+            cls = _quadrant(z_values[fid], lag_safe, p)
+            cls_fdr = _quadrant(z_values[fid], lag_safe, p_fdr)
             quadrant_counts[cls] = quadrant_counts.get(cls, 0) + 1
+            fdr_counts[cls_fdr] = fdr_counts.get(cls_fdr, 0) + 1
 
             new_feat = QgsFeature(out_fields)
             new_feat.setGeometry(geometries[fid])
             new_attrs = list(attributes[fid])
-            while len(new_attrs) < out_fields.size() - 5:
+            while len(new_attrs) < out_fields.size() - 7:
                 new_attrs.append(None)
             new_attrs.extend([
                 z_values[fid],
                 lag if not math.isnan(lag) else None,
                 moran_i if not math.isnan(moran_i) else None,
                 p if not math.isnan(p) else None,
+                p_fdr if not math.isnan(p_fdr) else None,
                 cls,
+                cls_fdr,
             ])
             new_feat.setAttributes(new_attrs)
             sink.addFeature(new_feat, QgsFeatureSink.FastInsert)
-
-            if idx % 50 == 0:
-                feedback.setProgress(int(100 * (idx + 1) / n))
+            if idx % 100 == 0:
+                feedback.setProgress(50 + int(50 * (idx + 1) / n))
 
         feedback.pushInfo("")
-        feedback.pushInfo("─── LISA summary (95 % significance) ───")
+        feedback.pushInfo("─── LISA summary (95 % significance / FDR-adjusted) ───")
         for q in ("HH", "LL", "HL", "LH", "Not significant"):
-            feedback.pushInfo(f"  {q:<17} : {quadrant_counts.get(q, 0)}")
+            feedback.pushInfo(
+                f"  {q:<17} : {quadrant_counts.get(q, 0)} / {fdr_counts.get(q, 0)}"
+            )
         return {self.OUTPUT: dest_id}

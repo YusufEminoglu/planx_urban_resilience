@@ -1,0 +1,2 @@
+# Dev-only files excluded from the QGIS Hub zip
+setup.cfg

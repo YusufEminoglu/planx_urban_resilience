@@ -26,10 +26,6 @@ import datetime as _dt
 
 from qgis.PyQt.QtGui import QColor, QFont
 from qgis.core import (
-    Qgis,
-    QgsClassificationEqualInterval,
-    QgsClassificationJenks,
-    QgsClassificationQuantile,
     QgsFillSymbol,
     QgsGraduatedSymbolRenderer,
     QgsLayout,
@@ -39,6 +35,7 @@ from qgis.core import (
     QgsLayoutItemMap,
     QgsLayoutItemPage,
     QgsLayoutItemScaleBar,
+    QgsLayoutMeasurement,
     QgsLayoutPoint,
     QgsLayoutSize,
     QgsProcessing,
@@ -51,8 +48,10 @@ from qgis.core import (
     QgsProcessingParameterString,
     QgsProject,
     QgsRectangle,
+    QgsRendererRange,
     QgsUnitTypes,
     QgsVectorLayer,
+    QgsWkbTypes,
 )
 
 
@@ -91,31 +90,73 @@ def _statistics(values: list[float]) -> dict:
     }
 
 
-def _apply_classified_renderer(layer: QgsVectorLayer, field: str, method_idx: int):
-    base = QgsFillSymbol.createSimple({"color": "230,236,242,180", "outline_color": "30,40,60,200"})
-    method_map = {
-        0: QgsClassificationEqualInterval(),
-        1: QgsClassificationQuantile(),
-        2: QgsClassificationJenks(),
-    }
-    classifier = method_map.get(method_idx, QgsClassificationEqualInterval())
-    renderer = QgsGraduatedSymbolRenderer.createRenderer(
-        layer, field, 5, QgsGraduatedSymbolRenderer.Custom, base
-    )
-    if renderer is None:
-        # Fallback — create empty renderer; QGIS will still render geometry.
-        renderer = QgsGraduatedSymbolRenderer(field, [])
-    try:
-        renderer.setClassificationMethod(classifier)
-        renderer.updateClasses(layer, 5)
-        # Color ramp: yellow -> orange -> red (resilience risk convention)
-        from qgis.core import QgsStyle
-        ramp = QgsStyle.defaultStyle().colorRamp("Reds")
-        if ramp is not None:
-            renderer.updateColorRamp(ramp)
-    except Exception:
-        pass
-    layer.setRenderer(renderer)
+def _class_breaks(values: list[float], k: int, method_idx: int) -> list[tuple[float, float]]:
+    """Pure-Python class breaks: 0 equal interval, 1 quantile, 2 Jenks (1D k-means)."""
+    sv = sorted(values)
+    vmin, vmax = sv[0], sv[-1]
+    if vmin == vmax:
+        return [(vmin, vmax)]
+    k = min(k, len(set(sv)))
+
+    if method_idx == 0:  # equal interval
+        step = (vmax - vmin) / k
+        edges = [vmin + step * i for i in range(k + 1)]
+    elif method_idx == 1:  # quantile
+        n = len(sv)
+        edges = [sv[min(int(round(i * (n - 1) / k)), n - 1)] for i in range(k + 1)]
+    else:  # Jenks natural breaks ≈ 1D k-means seeded by quantiles
+        n = len(sv)
+        centroids = [sv[min(int((i + 0.5) * n / k), n - 1)] for i in range(k)]
+        for _ in range(30):
+            clusters: list[list[float]] = [[] for _ in range(k)]
+            for v in sv:
+                nearest = min(range(k), key=lambda c: abs(v - centroids[c]))
+                clusters[nearest].append(v)
+            new_centroids = [
+                (sum(c) / len(c)) if c else centroids[i]
+                for i, c in enumerate(clusters)
+            ]
+            if all(abs(a - b) < 1e-9 for a, b in zip(centroids, new_centroids)):
+                break
+            centroids = new_centroids
+        edges = [vmin]
+        for i in range(k - 1):
+            edges.append((centroids[i] + centroids[i + 1]) / 2.0)
+        edges.append(vmax)
+
+    # de-duplicate edges while preserving order
+    uniq = [edges[0]]
+    for e in edges[1:]:
+        if e > uniq[-1]:
+            uniq.append(e)
+    if len(uniq) < 2:
+        uniq = [vmin, vmax]
+    return [(uniq[i], uniq[i + 1]) for i in range(len(uniq) - 1)]
+
+
+def _apply_classified_renderer(layer: QgsVectorLayer, field: str, method_idx: int,
+                               values: list[float]):
+    """Graduated YlOrRd renderer built from explicit ranges — no deprecated
+    QgsGraduatedSymbolRenderer.createRenderer (signature differs across
+    QGIS 3.x/4.x builds)."""
+    if not values:
+        return
+    breaks = _class_breaks(values, 5, method_idx)
+    # YlOrRd ramp endpoints (resilience risk convention)
+    c0 = (255, 255, 178)
+    c1 = (189, 0, 38)
+    ranges = []
+    m = max(len(breaks) - 1, 1)
+    for i, (lo, hi) in enumerate(breaks):
+        t = i / m
+        rgb = tuple(round(a + (b - a) * t) for a, b in zip(c0, c1))
+        sym = QgsFillSymbol.createSimple({
+            "color": f"{rgb[0]},{rgb[1]},{rgb[2]},200",
+            "outline_color": "30,40,60,200",
+            "outline_width": "0.15",
+        })
+        ranges.append(QgsRendererRange(lo, hi, sym, f"{lo:.1f} – {hi:.1f}"))
+    layer.setRenderer(QgsGraduatedSymbolRenderer(field, ranges))
 
 
 class ResiliencePdfAtlasAlgorithm(QgsProcessingAlgorithm):
@@ -229,7 +270,7 @@ class ResiliencePdfAtlasAlgorithm(QgsProcessingAlgorithm):
         # Materialise the input as a temporary in-memory layer so that
         # renderer + classification settings stick.
         wkb = source.wkbType()
-        layer = QgsVectorLayer(f"{Qgis.WkbType(wkb).name}?crs={source.sourceCrs().authid()}", "atlas_input", "memory")
+        layer = QgsVectorLayer(f"{QgsWkbTypes.displayString(wkb)}?crs={source.sourceCrs().authid()}", "atlas_input", "memory")
         layer.dataProvider().addAttributes(source.fields())
         layer.updateFields()
         layer.startEditing()
@@ -243,7 +284,7 @@ class ResiliencePdfAtlasAlgorithm(QgsProcessingAlgorithm):
                 pass
         layer.commitChanges()
 
-        _apply_classified_renderer(layer, score_field, method_idx)
+        _apply_classified_renderer(layer, score_field, method_idx, values)
         stats = _statistics(values)
 
         # ── Build layout ────────────────────────────────────────────────
@@ -375,7 +416,7 @@ class ResiliencePdfAtlasAlgorithm(QgsProcessingAlgorithm):
         map_item.attemptResize(QgsLayoutSize(map_w, map_h, QgsUnitTypes.LayoutMillimeters))
         map_item.setExtent(extent)
         map_item.setFrameEnabled(True)
-        map_item.setFrameStrokeWidth(QgsLayoutSize(0.3, 0, QgsUnitTypes.LayoutMillimeters))
+        map_item.setFrameStrokeWidth(QgsLayoutMeasurement(0.3, QgsUnitTypes.LayoutMillimeters))
         layout.addItem(map_item)
 
         legend = QgsLayoutItemLegend(layout)

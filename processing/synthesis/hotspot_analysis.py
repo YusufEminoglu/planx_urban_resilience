@@ -53,6 +53,22 @@ def _two_sided_p(z: float) -> float:
     return 2.0 * (1.0 - _norm_cdf(abs(z)))
 
 
+def _bh_fdr(pvalues: list[float]) -> list[float]:
+    """Benjamini-Hochberg adjusted p-values; NaN entries stay NaN."""
+    indexed = [(p, i) for i, p in enumerate(pvalues) if not math.isnan(p)]
+    adjusted = [float("nan")] * len(pvalues)
+    m = len(indexed)
+    if m == 0:
+        return adjusted
+    indexed.sort()
+    running_min = 1.0
+    for rank in range(m, 0, -1):
+        p, orig_idx = indexed[rank - 1]
+        running_min = min(running_min, p * m / rank)
+        adjusted[orig_idx] = min(running_min, 1.0)
+    return adjusted
+
+
 def _gi_class(z: float, p: float) -> str:
     if math.isnan(z) or math.isnan(p):
         return "Not significant"
@@ -82,7 +98,9 @@ class HotSpotAnalysisAlgorithm(QgsProcessingAlgorithm):
 
     OUT_Z = "gi_zscore"
     OUT_P = "gi_pvalue"
+    OUT_P_FDR = "gi_p_fdr"
     OUT_CLASS = "gi_class"
+    OUT_CLASS_FDR = "gi_class_fdr"
 
     def tr(self, string):
         return string
@@ -115,7 +133,9 @@ class HotSpotAnalysisAlgorithm(QgsProcessingAlgorithm):
             <ul>
               <li><code>gi_zscore</code> — standardised statistic; |z| > 1.65 ≈ 90% confidence.</li>
               <li><code>gi_pvalue</code> — two-sided p-value derived from z.</li>
+              <li><code>gi_p_fdr</code> — Benjamini-Hochberg FDR-adjusted p-value (controls false discoveries across the n simultaneous local tests).</li>
               <li><code>gi_class</code> — Hot-99 / Hot-95 / Hot-90 / Not significant / Cold-90 / Cold-95 / Cold-99.</li>
+              <li><code>gi_class_fdr</code> — same labels from the FDR-adjusted p-value; prefer this when reporting.</li>
             </ul>
             <p>Spatial weights are either <b>inverse distance</b> (row-standardised) or a <b>fixed-distance band</b> (1 if within distance, else 0). Self is always included (Gi*, not Gi).</p>
             """
@@ -204,7 +224,9 @@ class HotSpotAnalysisAlgorithm(QgsProcessingAlgorithm):
         for fname, ftype in (
             (self.OUT_Z, QVariant.Double),
             (self.OUT_P, QVariant.Double),
+            (self.OUT_P_FDR, QVariant.Double),
             (self.OUT_CLASS, QVariant.String),
+            (self.OUT_CLASS_FDR, QVariant.String),
         ):
             if out_fields.indexOf(fname) < 0:
                 out_fields.append(QgsField(fname, ftype))
@@ -217,6 +239,8 @@ class HotSpotAnalysisAlgorithm(QgsProcessingAlgorithm):
         feedback.pushInfo(f"Computing Gi* over {n} features…")
         from qgis.core import QgsRectangle
 
+        # Pass 1 — z and p per feature.
+        results: list[tuple[int, float, float]] = []  # fid, z, p
         for idx, fid in enumerate(fids):
             if feedback.isCanceled():
                 break
@@ -254,21 +278,31 @@ class HotSpotAnalysisAlgorithm(QgsProcessingAlgorithm):
             except (ZeroDivisionError, ValueError):
                 z = float("nan")
             p = _two_sided_p(z) if not math.isnan(z) else float("nan")
+            results.append((fid, z, p))
+            if idx % 100 == 0:
+                feedback.setProgress(int(50 * (idx + 1) / n))
+
+        # Pass 2 — Benjamini-Hochberg FDR across the n simultaneous tests.
+        p_adjusted = _bh_fdr([r[2] for r in results])
+        for idx, ((fid, z, p), p_fdr) in enumerate(zip(results, p_adjusted)):
             cls = _gi_class(z, p)
+            cls_fdr = _gi_class(z, p_fdr)
 
             new_feat = QgsFeature(out_fields)
             new_feat.setGeometry(geometries[fid])
             new_attrs = list(attributes[fid])
-            while len(new_attrs) < out_fields.size() - 3:
+            while len(new_attrs) < out_fields.size() - 5:
                 new_attrs.append(None)
             new_attrs.extend([z if not math.isnan(z) else None,
                               p if not math.isnan(p) else None,
-                              cls])
+                              p_fdr if not math.isnan(p_fdr) else None,
+                              cls,
+                              cls_fdr])
             new_feat.setAttributes(new_attrs)
             sink.addFeature(new_feat, QgsFeatureSink.FastInsert)
 
-            if idx % 50 == 0:
-                feedback.setProgress(int(100 * (idx + 1) / n))
+            if idx % 100 == 0:
+                feedback.setProgress(50 + int(50 * (idx + 1) / n))
 
         return {self.OUTPUT: dest_id}
 
