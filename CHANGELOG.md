@@ -2,10 +2,6 @@
 
 ## [1.25.0] - 2026-06-10
 
-- Quality release: all 43 tools e2e-verified on QGIS 3.44 and 4.0; QGIS 4 provider re-enabled; LISA variance and PDF Atlas fixes; FDR-adjusted Gi*/LISA significance; flood sampling and exposure-score fixes
-
-## [1.25.0] - 2026-06-10
-
 Quality release: every one of the 43 algorithms now verified end-to-end on real QGIS (3.44 LTR and 4.0.2) via a headless harness with numeric assertions.
 
 ### Fixed
