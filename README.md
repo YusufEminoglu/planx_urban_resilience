@@ -1,8 +1,21 @@
+<div align="center">
+
+<img src="icons/plugin.svg" width="96" alt="PlanX Urban Resilience icon"/>
+
 # PlanX: Urban Resilience
 
-QGIS **3.10-3.99** - Processing - **GPL-3**
+**City-scale resilience screening for QGIS — 28 Processing tools: seismic, flood, heat, social vulnerability, evacuation, scenarios, reports.**
 
-PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. Version **1.19.0** ships **28 Processing algorithms**: synthetic QA data, seismic debris, heat, flood, social vulnerability, Euclidean and network emergency access, network criticality, air and drought screening, adaptation/multi-hazard/equity/climate/recovery/sensitivity synthesis, time-series tracking, scenario templates and comparison, HTML/Markdown/PDF reporting, and QGIS style presets — plus a dashboard for module discovery and data readiness review.
+[![QGIS](https://img.shields.io/badge/QGIS-3.10%2B-93b023?logo=qgis&logoColor=white)](https://plugins.qgis.org/plugins/planx_urban_resilience/)
+[![Version](https://img.shields.io/github/v/tag/YusufEminoglu/planx_urban_resilience?label=version&color=blue)](https://github.com/YusufEminoglu/planx_urban_resilience/releases)
+[![License](https://img.shields.io/badge/license-GPL--3.0-orange)](LICENSE)
+[![QGIS Plugin Hub](https://img.shields.io/badge/QGIS%20Hub-install-589632?logo=qgis&logoColor=white)](https://plugins.qgis.org/plugins/planx_urban_resilience/)
+
+</div>
+
+---
+
+PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. The suite ships **28 Processing algorithms**: synthetic QA data, seismic debris, heat, flood, social vulnerability, Euclidean and network emergency access, network criticality, air and drought screening, adaptation/multi-hazard/equity/climate/recovery/sensitivity synthesis, time-series tracking, scenario templates and comparison, HTML/Markdown/PDF reporting, and QGIS style presets — plus a dashboard for module discovery and data readiness review.
 
 ## Modules
 
@@ -273,6 +286,18 @@ See [ROADMAP.md](ROADMAP.md) for the full candidate list and release history.
 
 Use QGIS Plugin Manager or install the release ZIP from QGIS Plugin Hub / GitHub Releases. For development, add the parent directory of this plugin folder to `QGIS_PLUGINPATH`.
 
-## License
+## 🧩 Part of the PlanX ecosystem
 
-See [LICENSE](LICENSE).
+This plugin is one of 15 open-source QGIS plugins for urban planning by the same author:
+
+| Planning & analysis | CAD & production | 3D & visualization |
+|---|---|---|
+| [PlanX](https://github.com/YusufEminoglu/PlanX) — spatial-planning suite | [PlanX CAD Toolset](https://github.com/YusufEminoglu/PlanX-CAD) — drafting-grade CAD | [PlanX 3D City](https://github.com/YusufEminoglu/planx_3d_city) — Three.js city viewer |
+| [GeoStats Lab](https://github.com/YusufEminoglu/planx_geostats) — spatial statistics | [EasyFillet](https://github.com/YusufEminoglu/EasyFillet) — tangent-arc fillet | [3D OSM Model](https://github.com/YusufEminoglu/osm_3d_model) — OSM → 3D city in browser |
+| [Suitability Lab](https://github.com/YusufEminoglu/planx_suitability_lab) — raster MCDA | [Settlement Toolset](https://github.com/YusufEminoglu/PlanX-Settlement) — 9-stage settlement plans | [OSM Quick 3D](https://github.com/YusufEminoglu/osm_quick_3d) — OSM → native QGIS 3D |
+| [DataCube Lab](https://github.com/YusufEminoglu/planx_datacube) — spatiotemporal cubes | [UIP Toolset](https://github.com/YusufEminoglu/PlanX-UIP) — Turkish master-plan automation | [Urban Procedural 3D](https://github.com/YusufEminoglu/planx_urban_procedural_3d) — parametric zoning lab |
+| [Urban Resilience](https://github.com/YusufEminoglu/planx_urban_resilience) — 28 resilience tools | [ParcelFlux](https://github.com/YusufEminoglu/parcelflux) — parcel subdivision | [CartoLab](https://github.com/YusufEminoglu/planx_cartolab) — publication cartography |
+
+## 📜 License & author
+
+GPL-3.0 © [Yusuf Eminoğlu](https://github.com/YusufEminoglu) — bug reports and feature requests welcome in [Issues](https://github.com/YusufEminoglu/planx_urban_resilience/issues). See [LICENSE](LICENSE).
