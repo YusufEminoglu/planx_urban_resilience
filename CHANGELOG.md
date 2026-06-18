@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.25.1] - 2026-06-18
+
+- docs: add CITATION.cff for Zenodo DOI integration
+
 ## [1.25.0] - 2026-06-10
 
 Quality release: every one of the 43 algorithms now verified end-to-end on real QGIS (3.44 LTR and 4.0.2) via a headless harness with numeric assertions.
