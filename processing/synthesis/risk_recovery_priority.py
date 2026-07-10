@@ -39,8 +39,6 @@ def _score(feature, field_name):
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class RiskRecoveryPriorityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     HAZARD_FIELD = "HAZARD_FIELD"

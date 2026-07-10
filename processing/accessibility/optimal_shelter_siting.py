@@ -71,8 +71,6 @@ def _centroid_xy(geom: QgsGeometry):
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class OptimalShelterSitingAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     CANDIDATES = "CANDIDATES"
     DEMAND = "DEMAND"

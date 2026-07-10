@@ -57,8 +57,6 @@ def _shannon_index(weighted_scores: list[float]) -> float:
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class MultiHazardCompositeAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     HAZARD_FIELDS = "HAZARD_FIELDS"

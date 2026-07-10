@@ -58,8 +58,6 @@ def _source_fields(source):
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class UrbanHeatComfortRiskAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     STUDY_AREA = "STUDY_AREA"
     BUILDINGS = "BUILDINGS"

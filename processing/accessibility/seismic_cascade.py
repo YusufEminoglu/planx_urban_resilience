@@ -156,8 +156,6 @@ def _nearest_graph_node(point: QgsPointXY, nodes: dict, tolerance: float):
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class SeismicCascadeAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     ROADS = "ROADS"
     DEBRIS = "DEBRIS"

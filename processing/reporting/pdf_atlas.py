@@ -162,8 +162,6 @@ def _apply_classified_renderer(layer: QgsVectorLayer, field: str, method_idx: in
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class ResiliencePdfAtlasAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     SCORE_FIELD = "SCORE_FIELD"

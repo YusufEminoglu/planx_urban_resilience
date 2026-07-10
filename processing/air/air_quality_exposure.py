@@ -65,8 +65,6 @@ def _point_count(cell_geom, features, index):
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class AirQualityExposureAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     STUDY_AREA = "STUDY_AREA"
     ROADS = "ROADS"

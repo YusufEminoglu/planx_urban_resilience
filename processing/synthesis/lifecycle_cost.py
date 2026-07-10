@@ -62,8 +62,6 @@ def _safe_float(v, default=0.0):
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class LifecycleCostAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     CAPEX_FIELD = "CAPEX_FIELD"

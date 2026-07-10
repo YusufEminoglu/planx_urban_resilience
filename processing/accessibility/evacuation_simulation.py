@@ -89,8 +89,6 @@ def _add_path_load(path_edges, step_load, pop):
 
 
 @dataclass
-
-
 class ShelterSlot:
     feature: QgsFeature
     name: str
@@ -101,8 +99,6 @@ class ShelterSlot:
 
 
 @dataclass
-
-
 class OriginJob:
     feature: QgsFeature
     population: float
@@ -120,8 +116,6 @@ class OriginJob:
 
 
 from .._mixins import HelpUrlMixin  # noqa: E402
-
-
 
 
 class EvacuationTimeSimulationAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):

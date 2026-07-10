@@ -98,8 +98,6 @@ def _quadrant(z_i: float, lag: float, p: float) -> str:
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class LisaLocalMoranAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     VALUE_FIELD = "VALUE_FIELD"

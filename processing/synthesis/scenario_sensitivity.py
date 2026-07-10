@@ -91,8 +91,6 @@ def _stability(std: float) -> float:
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class ScenarioSensitivityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     COMPONENT_FIELDS = "COMPONENT_FIELDS"

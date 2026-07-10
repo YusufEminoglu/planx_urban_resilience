@@ -30,8 +30,6 @@ import random
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class UrbanResilienceSeismicAnalystV2(HelpUrlMixin, QgsProcessingAlgorithm):
 
     INPUT_BUILDINGS = 'INPUT_BUILDINGS'

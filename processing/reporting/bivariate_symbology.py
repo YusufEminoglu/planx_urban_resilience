@@ -79,8 +79,6 @@ def _percentiles(values: list[float], pct: list[int]) -> list[float]:
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class BivariateSymbologyAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     RISK_FIELD = "RISK_FIELD"

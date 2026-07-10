@@ -54,8 +54,6 @@ def _safe_float(value, default=None):
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class CostBenefitAnalyzerAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     SCORE_FIELD = "SCORE_FIELD"

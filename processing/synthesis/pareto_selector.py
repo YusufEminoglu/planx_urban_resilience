@@ -63,8 +63,6 @@ def _dominates(a, b) -> bool:
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class ParetoSelectorAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     COST_FIELD = "COST_FIELD"

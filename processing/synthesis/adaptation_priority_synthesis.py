@@ -34,8 +34,6 @@ def _numeric(feature, field_name):
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class AdaptationPrioritySynthesisAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     UNITS = "UNITS"
     HEAT_FIELD = "HEAT_FIELD"

@@ -54,8 +54,6 @@ def _add(sink, fields, geometry, attrs):
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class SyntheticResilienceDatasetAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     SCALE = "SCALE"
     STUDY_AREA = "STUDY_AREA"

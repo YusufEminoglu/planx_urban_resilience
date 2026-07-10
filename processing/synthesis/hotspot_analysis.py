@@ -92,8 +92,6 @@ def _gi_class(z: float, p: float) -> str:
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class HotSpotAnalysisAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     VALUE_FIELD = "VALUE_FIELD"

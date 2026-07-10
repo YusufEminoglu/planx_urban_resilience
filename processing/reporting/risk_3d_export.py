@@ -120,8 +120,6 @@ def _xform_pt(point, transform):
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class Risk3DVolumeExportAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     SCORE_FIELD = "SCORE_FIELD"

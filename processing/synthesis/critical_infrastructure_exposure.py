@@ -68,8 +68,6 @@ def _safe_float(value, default=None):
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class CriticalInfrastructureExposureAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     HAZARD = "HAZARD"
     HAZARD_FIELD = "HAZARD_FIELD"

@@ -47,8 +47,6 @@ def _max_intersect_score(unit_geom, source, field_name):
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class JoinScoresToPlanningUnitsAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     UNITS = "UNITS"
     SOURCE1 = "SOURCE1"

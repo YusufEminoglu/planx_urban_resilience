@@ -56,8 +56,6 @@ def _text(feature, field_name, default=""):
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class EvacuationArrivalSummaryAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     SHELTER_FIELD = "SHELTER_FIELD"

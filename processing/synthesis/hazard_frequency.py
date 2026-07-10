@@ -74,8 +74,6 @@ def _risk_class(score: float) -> str:
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class HazardFrequencyAggregationAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     UNITS = "UNITS"
     SOURCES = "SOURCES"

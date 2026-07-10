@@ -124,8 +124,6 @@ def _interpret(r: float | None) -> str:
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class CorrelationMatrixAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     FIELDS = "FIELDS"

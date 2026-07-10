@@ -36,8 +36,6 @@ def _nearest_node(point_geom, node_features, node_index):
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class NetworkEmergencyAccessibilityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     ROADS = "ROADS"
     ORIGINS = "ORIGINS"

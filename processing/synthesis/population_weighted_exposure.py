@@ -50,8 +50,6 @@ def _risk_class(score: float) -> str:
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class PopulationWeightedExposureAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     SCORE_FIELD = "SCORE_FIELD"

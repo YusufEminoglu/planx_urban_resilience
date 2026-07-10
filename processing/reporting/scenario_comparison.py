@@ -39,8 +39,6 @@ def _change_class(delta, threshold):
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class ScenarioComparisonAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     BASELINE_FIELD = "BASELINE_FIELD"

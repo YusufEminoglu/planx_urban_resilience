@@ -39,8 +39,6 @@ def _text(feature, field_name):
 from .._mixins import HelpUrlMixin  # noqa: E402
 
 
-
-
 class StudioBriefAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     SCORE_FIELD = "SCORE_FIELD"
