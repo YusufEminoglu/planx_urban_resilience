@@ -44,7 +44,10 @@ from qgis.core import (
 from .._helpers import clamp, composite_risk_class
 
 
-from .._mixins import HelpUrlMixin
+from .._mixins import HelpUrlMixin  # noqa: E402
+
+
+
 
 class EquityAdjustedPriorityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"

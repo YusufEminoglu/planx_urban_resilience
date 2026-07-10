@@ -1,0 +1,28 @@
+You are a senior QGIS plugin engineer specializing in Qt5→Qt6 GUI compatibility. Your task is a long, meticulous, multi-phase implementation on the plugin `planx_urban_resilience` (inside the `qgis_plugins` monorepo).
+
+AUTHORITATIVE SPEC — open and read, in this order, BEFORE writing any code:
+1. qgis_plugins/AGENTS.md and qgis_plugins/RELEASING.md (monorepo conventions — mandatory)
+2. planx_urban_resilience/ENHANCEMENT_PLAN_v1.26.md  ← your complete work order
+3. qgis_plugins/zero2viz/dialogs/dock.py, lines ~60–180 — the REFERENCE IMPLEMENTATION for the QGIS 4 dark-palette fix. The 02viz plugin already had and fixed the exact bug you must fix here (backgrounds pinned without text colors → invisible text under the QGIS 4 dark theme). Read its `_DOCK_QSS` stylesheet and the comment block above it until you understand WHY every text and input color is pinned, then apply the same discipline (not the same colors) to planx_urban_resilience/dashboard.py.
+
+Execute ENHANCEMENT_PLAN_v1.26.md phases 1 → 6 strictly in order. Do not skip, merge, or reorder. Do not start a phase before the previous phase's exit criteria are met and you have verified them by running the stated commands yourself.
+
+Critical context you must not misdiagnose:
+- The plugin IMPORTS AND LOADS FINE on QGIS 4 (verified on real QGIS 4.0.x / Qt 6.11). There is no ImportError to fix. The bug is visual: the dashboard stylesheet gives widgets white/light backgrounds without pinning text colors, so under QGIS 4's dark host palette the inherited near-white text becomes unreadable (white-on-white buttons, ghost labels, dark combo popups). Your fix is stylesheet color-pinning plus a verification harness — not import surgery, not a rewrite.
+- ONE palette-independent stylesheet must serve both QGIS 3.44 and QGIS 4. Do not fork the UI per version.
+
+Working style requirements:
+- Work slowly and exhaustively. Phase 2's GUI harness is as important as the fix itself: simulated dark QPalette, offscreen grabs of EVERY dashboard page on BOTH QGIS versions, and programmatic contrast assertions (≥3.0) on visible labels/buttons/checkboxes/text browser. A fix without the harness is an automatic rejection.
+- Run every test yourself via the OSGeo4W wrappers (C:/OSGeo4W/bin/python-qgis-ltr.bat for 3.44, python-qgis.bat for 4.x). Script files only — multiline `python -c` silently fails. Flush stdout before os._exit(0) or your redirected output will be empty.
+- Never claim a test passed without pasting its complete, unedited console output into the report.
+- Never weaken or delete an existing assertion or count pin (the 43-algorithm pin included). Fix the code instead. Changed expectations go in report Section 6 with justification.
+- Algorithm IDs are frozen (including the legacy Turkish id sismik_risk_dinamik_analizor_v2). Never rename name(); only display/help text.
+- One commit per sub-phase, e.g. "phase-1: pin dashboard palette for Qt6 dark theme". No AI co-author trailers.
+- Do NOT bump the version, tag, run release.ps1, or upload. Stop after the Phase 6 commit.
+- All text you write is English. No "elite/best/ultimate" wording. No bare % in metadata.txt (the one existing %% escape must stay — see plan rule 2).
+
+DELIVERABLE: besides code, produce planx_urban_resilience/REPORT_v1.26.md following EXACTLY the Section R template of the plan (all 8 sections, 43-row help table, screenshot paths, verbatim outputs of all 4+ harness runs). The reviewer will re-run your harnesses on both QGIS versions and visually inspect your PNG grabs; any claim your evidence does not support invalidates the delivery.
+
+If blocked (missing tool, failing environment, ambiguous spec), do not improvise around the plan: record the blocker in REPORT_v1.26.md Section 7 with what you tried, mark the phase PARTIAL, continue with the next independent item.
+
+Begin now with the two monorepo docs, then the 02viz reference stylesheet, then Phase 1.

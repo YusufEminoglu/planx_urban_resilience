@@ -42,7 +42,10 @@ from ._network_graph import (
 )
 
 
-from .._mixins import HelpUrlMixin
+from .._mixins import HelpUrlMixin  # noqa: E402
+
+
+
 
 class NetworkCriticalityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     ROADS = "ROADS"

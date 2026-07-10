@@ -153,7 +153,10 @@ def _nearest_graph_node(point: QgsPointXY, nodes: dict, tolerance: float):
     return best
 
 
-from .._mixins import HelpUrlMixin
+from .._mixins import HelpUrlMixin  # noqa: E402
+
+
+
 
 class SeismicCascadeAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     ROADS = "ROADS"

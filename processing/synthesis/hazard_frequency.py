@@ -71,7 +71,10 @@ def _risk_class(score: float) -> str:
     return "Low"
 
 
-from .._mixins import HelpUrlMixin
+from .._mixins import HelpUrlMixin  # noqa: E402
+
+
+
 
 class HazardFrequencyAggregationAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     UNITS = "UNITS"

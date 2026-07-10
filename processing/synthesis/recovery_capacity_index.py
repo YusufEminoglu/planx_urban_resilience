@@ -67,7 +67,10 @@ def _shares_to_diversity(shares: list[float]) -> float:
     return max(0.0, min(100.0, diversity))
 
 
-from .._mixins import HelpUrlMixin
+from .._mixins import HelpUrlMixin  # noqa: E402
+
+
+
 
 class RecoveryCapacityIndexAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"

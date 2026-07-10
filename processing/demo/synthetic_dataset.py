@@ -51,7 +51,10 @@ def _add(sink, fields, geometry, attrs):
     sink.addFeature(feature, QgsFeatureSink.FastInsert)
 
 
-from .._mixins import HelpUrlMixin
+from .._mixins import HelpUrlMixin  # noqa: E402
+
+
+
 
 class SyntheticResilienceDatasetAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     SCALE = "SCALE"

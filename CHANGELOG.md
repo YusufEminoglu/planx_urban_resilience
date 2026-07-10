@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.26.0] - 2026-07-10
+
+### Fixed
+- **Dashboard palette fixed for QGIS 4 dark theme.** The stylesheet gave widgets white backgrounds without pinning text colours, so under QGIS 4's dark host palette the inherited near-white text was unreadable (white-on-white buttons, ghost labels, dark dropdown popups). Following the 02viz reference pattern, every text and input colour is now explicitly pinned — QLabel, QPushButton (+`:hover`, `:disabled`, `#primaryButton`), QGroupBox + `::title`, QCheckBox, QLineEdit, QComboBox + `QAbstractItemView`, QSpinBox/QDoubleSpinBox, QListWidget items, QTextBrowser, QScrollArea, QToolTip. One palette-independent stylesheet serves both QGIS 3 and QGIS 4.
+- **QAction import normalised** to the ecosystem-standard dual `QtWidgets`/`QtGui` try/except (02viz pattern).
+
+### Added
+- **GUI verification harness** (`tests/gui_smoke_qgis.py`): simulated QGIS 4 dark QPalette, offscreen grabs of every dashboard page, programmatic WCAG contrast assertions (≥3.0) on all visible labels, buttons, checkboxes and text browsers. Verified 472 checks, 0 failures on both 3.44 LTR and 4.0.2.
+- **helpUrl() for all 43 algorithms** via `HelpUrlMixin`, returning the plugin's GitHub repository URL.
+- **In-repo test suite**: `tests/e2e_qgis_full.py` (ported from `scratch/urbres_e2e_qgis.py`), `tests/test_stats_logic.py` (19 pure-logic unit tests for BH-FDR, LISA moments, min-max scoring, WCAG contrast), `tests/README.md`.
+
+### Changed
+- **qgisMinimumVersion** raised from 3.10 to 3.28 (oldest version actually exercised).
+- **README** updated with QGIS 4 support section, badge, compatibility text, ecosystem table count (28→43).
+
 ## [1.25.1] - 2026-06-18
 
 - docs: add CITATION.cff for Zenodo DOI integration

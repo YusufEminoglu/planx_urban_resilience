@@ -32,7 +32,10 @@ def _numeric(feature, field_name, fallback):
         return fallback
 
 
-from .._mixins import HelpUrlMixin
+from .._mixins import HelpUrlMixin  # noqa: E402
+
+
+
 
 class ScenarioTemplateAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"

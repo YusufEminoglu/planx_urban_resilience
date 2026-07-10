@@ -61,7 +61,10 @@ def _count_near(geom, features, index):
     return count
 
 
-from .._mixins import HelpUrlMixin
+from .._mixins import HelpUrlMixin  # noqa: E402
+
+
+
 
 class GreenInfrastructureStressAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     GREEN = "GREEN"

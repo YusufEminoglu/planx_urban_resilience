@@ -36,7 +36,10 @@ def _score(feature, field_name):
     return clamp(feature.attribute(field_name)) if field_name else None
 
 
-from .._mixins import HelpUrlMixin
+from .._mixins import HelpUrlMixin  # noqa: E402
+
+
+
 
 class RiskRecoveryPriorityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"

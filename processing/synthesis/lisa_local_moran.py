@@ -4,6 +4,8 @@
 The Hot-Spot Gi* module (v1.20.0) flags clusters; LISA goes one step further
 and ALSO labels outliers — a high-value feature surrounded by low values
 (HL) or a low-value feature surrounded by high values (LH). That second
+
+
 class is exactly what planners hunt for when they ask "where are the
 under-served pockets next to thriving neighbourhoods?".
 
@@ -93,7 +95,10 @@ def _quadrant(z_i: float, lag: float, p: float) -> str:
     return "Not significant"
 
 
-from .._mixins import HelpUrlMixin
+from .._mixins import HelpUrlMixin  # noqa: E402
+
+
+
 
 class LisaLocalMoranAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"

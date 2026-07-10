@@ -33,7 +33,10 @@ def _nearest_node(point_geom, node_features, node_index):
     return node["key"], distance
 
 
-from .._mixins import HelpUrlMixin
+from .._mixins import HelpUrlMixin  # noqa: E402
+
+
+
 
 class NetworkEmergencyAccessibilityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     ROADS = "ROADS"

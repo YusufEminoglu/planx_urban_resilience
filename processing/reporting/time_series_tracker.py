@@ -45,7 +45,10 @@ def _trend(delta: float, tol: float = 1.0) -> str:
     return "Stable"
 
 
-from .._mixins import HelpUrlMixin
+from .._mixins import HelpUrlMixin  # noqa: E402
+
+
+
 
 class ResilienceTimeSeriesAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     EARLIER = "EARLIER"

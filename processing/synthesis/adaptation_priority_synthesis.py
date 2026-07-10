@@ -31,7 +31,10 @@ def _numeric(feature, field_name):
         return 0.0
 
 
-from .._mixins import HelpUrlMixin
+from .._mixins import HelpUrlMixin  # noqa: E402
+
+
+
 
 class AdaptationPrioritySynthesisAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     UNITS = "UNITS"

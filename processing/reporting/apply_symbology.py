@@ -70,7 +70,10 @@ def _graduated_renderer(layer, field_name):
     return renderer
 
 
-from .._mixins import HelpUrlMixin
+from .._mixins import HelpUrlMixin  # noqa: E402
+
+
+
 
 class ApplyResilienceSymbologyAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     LAYER = "LAYER"

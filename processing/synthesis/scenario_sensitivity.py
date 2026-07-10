@@ -88,7 +88,10 @@ def _stability(std: float) -> float:
     return clamp(100.0 * (1.0 - std / 25.0)) or 0.0
 
 
-from .._mixins import HelpUrlMixin
+from .._mixins import HelpUrlMixin  # noqa: E402
+
+
+
 
 class ScenarioSensitivityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"

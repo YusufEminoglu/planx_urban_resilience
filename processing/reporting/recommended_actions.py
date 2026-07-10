@@ -105,7 +105,10 @@ def _class_emoji(cls: str) -> str:
     return "⬜"
 
 
-from .._mixins import HelpUrlMixin
+from .._mixins import HelpUrlMixin  # noqa: E402
+
+
+
 
 class RecommendedActionsAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"

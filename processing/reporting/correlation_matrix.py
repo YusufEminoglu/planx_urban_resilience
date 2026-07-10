@@ -121,7 +121,10 @@ def _interpret(r: float | None) -> str:
     return f"{sign} {strength}"
 
 
-from .._mixins import HelpUrlMixin
+from .._mixins import HelpUrlMixin  # noqa: E402
+
+
+
 
 class CorrelationMatrixAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"

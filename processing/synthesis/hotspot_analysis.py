@@ -89,7 +89,10 @@ def _gi_class(z: float, p: float) -> str:
     return "Not significant"
 
 
-from .._mixins import HelpUrlMixin
+from .._mixins import HelpUrlMixin  # noqa: E402
+
+
+
 
 class HotSpotAnalysisAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"

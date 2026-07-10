@@ -58,7 +58,10 @@ def _make_sampler(provider):
     return _sample
 
 
-from .._mixins import HelpUrlMixin
+from .._mixins import HelpUrlMixin  # noqa: E402
+
+
+
 
 class PluvialFloodSusceptibilityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     DEM = "DEM"

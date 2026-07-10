@@ -95,7 +95,10 @@ def _label(gi_z: float, sig: int, delta: float | None, delta_tol: float) -> str:
     return "Not significant"
 
 
-from .._mixins import HelpUrlMixin
+from .._mixins import HelpUrlMixin  # noqa: E402
+
+
+
 
 class RiskTrendHotspotAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"

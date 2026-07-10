@@ -55,7 +55,10 @@ def _source_fields(source):
     return source.fields() if source is not None else QgsFields()
 
 
-from .._mixins import HelpUrlMixin
+from .._mixins import HelpUrlMixin  # noqa: E402
+
+
+
 
 class UrbanHeatComfortRiskAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     STUDY_AREA = "STUDY_AREA"
