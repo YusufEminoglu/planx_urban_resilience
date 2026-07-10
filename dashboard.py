@@ -380,9 +380,19 @@ class UrbanResilienceDashboard(QDialog):
         hero_title_size = 21 if IS_QGIS4 else 22
         nav_item_padding = 10 if IS_QGIS4 else 12
         group_radius = 7 if IS_QGIS4 else 8
+        # The dashboard has a light visual identity (light shell, white cards).
+        # On QGIS 3 (Qt5) the host palette is light too, so unstyled child
+        # widgets looked fine by accident. On QGIS 4 (Qt6) the host palette
+        # is often dark: every colour we DON'T pin is inherited from it, so
+        # buttons render white-on-white, labels are ghosted, and combo popups
+        # paint near-black. The remedy is to pin every text and input colour
+        # here, so the panel reads identically under any host theme.
         self.setStyleSheet(
             """
+            /* ── shell ── */
             QDialog { background: #f4f7fb; color: #243044; }
+
+            /* ── navigation ── */
             QListWidget {
                 background: #102027;
                 color: #dce9ed;
@@ -391,10 +401,52 @@ class UrbanResilienceDashboard(QDialog):
                 padding: 8px;
                 font-weight: 600;
             }
-            QListWidget::item { padding: %(nav_item_padding)dpx 10px; border-radius: 7px; }
+            QListWidget::item {
+                padding: %(nav_item_padding)dpx 10px;
+                border-radius: 7px;
+                color: #dce9ed;
+            }
             QListWidget::item:selected { background: #0f766e; color: white; }
+
+            /* ── labels: pinned dark so they never inherit a light palette
+                  text colour and vanish on the white cards ── */
+            QLabel { color: #243044; background: transparent; }
             QLabel#heroTitle { font-size: %(hero_title_size)dpx; font-weight: 800; color: #12343b; }
             QLabel#heroSub { color: #64748b; }
+            QCheckBox { color: #243044; background: transparent; spacing: 6px; }
+            QCheckBox:disabled { color: #94a3b8; }
+
+            /* ── inputs: white field, dark text, teal selection — independent
+                  of the host palette so the dropdown popup is never dark ── */
+            QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox {
+                background: #ffffff;
+                color: #243044;
+                border: 1px solid #cbd5e1;
+                border-radius: 6px;
+                padding: 4px 8px;
+                selection-background-color: #0f766e;
+                selection-color: #ffffff;
+            }
+            QLineEdit:focus, QComboBox:focus, QSpinBox:focus,
+            QDoubleSpinBox:focus {
+                border: 1px solid #0f766e;
+            }
+            QLineEdit:disabled, QComboBox:disabled, QSpinBox:disabled,
+            QDoubleSpinBox:disabled {
+                background: #eef1f3; color: #94a3b8; border-color: #dde2e6;
+            }
+            /* the drop-down list itself — the surface that was dark on QGIS 4 */
+            QComboBox QAbstractItemView {
+                background: #ffffff;
+                color: #243044;
+                border: 1px solid #cbd5e1;
+                selection-background-color: #0f766e;
+                selection-color: #ffffff;
+                outline: 0;
+            }
+            QComboBox QAbstractItemView::item { min-height: 22px; padding: 2px 4px; }
+
+            /* ── group boxes: white card, pinned title colour ── */
             QGroupBox {
                 border: 1px solid #d8e0ea;
                 border-radius: %(group_radius)dpx;
@@ -402,27 +454,59 @@ class UrbanResilienceDashboard(QDialog):
                 padding: 12px 10px 10px 10px;
                 background: white;
                 font-weight: 700;
+                color: #243044;
             }
-            QGroupBox::title { subcontrol-origin: margin; left: 12px; padding: 0 6px; }
+            QGroupBox::title {
+                subcontrol-origin: margin;
+                left: 12px;
+                padding: 0 6px;
+                color: #243044;
+            }
+
+            /* ── buttons ── */
             QPushButton {
                 min-height: 32px;
                 border-radius: 7px;
                 padding: 6px 12px;
                 background: white;
+                color: #243044;
                 border: 1px solid #cbd5e1;
             }
-            QPushButton:hover { background: #eef6f4; border-color: #0f766e; }
+            QPushButton:hover {
+                background: #eef6f4; border-color: #0f766e; color: #243044;
+            }
+            QPushButton:disabled {
+                background: #f2f4f6; color: #94a3b8; border-color: #e2e6ea;
+            }
             QPushButton#primaryButton {
                 color: white;
                 background: #0f766e;
                 border: 1px solid #0f766e;
                 font-weight: 700;
             }
+            QPushButton#primaryButton:hover {
+                background: #12877d; border-color: #12877d;
+            }
+            QPushButton#primaryButton:disabled {
+                background: #94a3b8; border-color: #94a3b8;
+            }
+
+            /* ── text browser: pinned white bg + dark text ── */
             QTextBrowser {
                 border: 1px solid #d8e0ea;
                 border-radius: %(group_radius)dpx;
                 background: white;
+                color: #243044;
                 padding: 10px;
+            }
+
+            /* ── scroll area: transparent so the shell colour shows through ── */
+            QScrollArea { background: transparent; border: none; }
+
+            /* ── tooltips: dark bubble, light text ── */
+            QToolTip {
+                background: #102027; color: #ffffff;
+                border: 1px solid #102027; padding: 4px 6px;
             }
             """
             % {

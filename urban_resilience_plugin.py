@@ -3,7 +3,11 @@ import os
 
 from qgis.core import QgsApplication
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction
+
+try:  # Qt5: QtWidgets / Qt6: QtGui
+    from qgis.PyQt.QtWidgets import QAction
+except ImportError:  # QGIS 4 / Qt6 without shim
+    from qgis.PyQt.QtGui import QAction
 
 from .dashboard import UrbanResilienceDashboard
 from .processing.urban_resilience_provider import PlanXUrbanResilienceProvider
