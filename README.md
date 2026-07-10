@@ -6,7 +6,7 @@
 
 **City-scale resilience screening for QGIS — 43 Processing tools: seismic, flood, heat, social vulnerability, evacuation, spatial statistics, scenarios, reports.**
 
-[![QGIS](https://img.shields.io/badge/QGIS-3.10%2B-93b023?logo=qgis&logoColor=white)](https://plugins.qgis.org/plugins/planx_urban_resilience/)
+[![QGIS](https://img.shields.io/badge/QGIS-3.28%2B-93b023?logo=qgis&logoColor=white)](https://plugins.qgis.org/plugins/planx_urban_resilience/)
 [![Version](https://img.shields.io/github/v/tag/YusufEminoglu/planx_urban_resilience?label=version&color=blue)](https://github.com/YusufEminoglu/planx_urban_resilience/releases)
 [![License](https://img.shields.io/badge/license-GPL--3.0-orange)](LICENSE)
 [![QGIS Plugin Hub](https://img.shields.io/badge/QGIS%20Hub-install-589632?logo=qgis&logoColor=white)](https://plugins.qgis.org/plugins/planx_urban_resilience/)
@@ -15,7 +15,7 @@
 
 ---
 
-PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. The suite ships **43 Processing algorithms**: synthetic QA data, seismic debris and cascade, heat, flood, social vulnerability, Euclidean and network emergency access, evacuation simulation, optimal shelter siting, network criticality, air and drought screening, adaptation/multi-hazard/equity/climate/recovery/sensitivity synthesis, hot-spot (Getis-Ord Gi*) and LISA cluster statistics with FDR-adjusted significance, correlation matrix, IDW vulnerability surfaces, Pareto and cost-benefit economics, lifecycle NPV, time-series tracking, scenario templates and comparison, HTML/Markdown/PDF reporting, 3D risk export, and QGIS style presets — plus a dashboard for module discovery and data readiness review. All 43 algorithms run on both QGIS 3.10+ and QGIS 4.
+PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. The suite ships **43 Processing algorithms**: synthetic QA data, seismic debris and cascade, heat, flood, social vulnerability, Euclidean and network emergency access, evacuation simulation, optimal shelter siting, network criticality, air and drought screening, adaptation/multi-hazard/equity/climate/recovery/sensitivity synthesis, hot-spot (Getis-Ord Gi*) and LISA cluster statistics with FDR-adjusted significance, correlation matrix, IDW vulnerability surfaces, Pareto and cost-benefit economics, lifecycle NPV, time-series tracking, scenario templates and comparison, HTML/Markdown/PDF reporting, 3D risk export, and QGIS style presets — plus a dashboard for module discovery and data readiness review. All 43 algorithms run on both QGIS 3.44 LTR and QGIS 4.0 — verified via headless e2e harness.
 
 ## Modules
 
@@ -253,6 +253,10 @@ Outputs:
 
 - Multi-page PDF (cover, overview map + statistics, optional per-class map pages)
 
+## QGIS 4 support
+
+The dashboard is dark-theme-safe: all text, button, input and tooltip colours are explicitly pinned so the panel reads identically under the light host palette of QGIS 3 and the dark host palette of QGIS 4. Verified via an automated GUI smoke test that simulates the QGIS 4 dark theme, offscreen-grabs every page, and asserts WCAG contrast ≥ 3.0 on every visible widget (472 checks, 0 failures on both 3.44 LTR and 4.0.2).
+
 ## Dashboard
 
 The plugin adds a `PlanX Urban Resilience` toolbar/menu action. The dashboard includes:
@@ -296,7 +300,7 @@ This plugin is one of 15 open-source QGIS plugins for urban planning by the same
 | [GeoStats Lab](https://github.com/YusufEminoglu/planx_geostats) — spatial statistics | [EasyFillet](https://github.com/YusufEminoglu/EasyFillet) — tangent-arc fillet | [3D OSM Model](https://github.com/YusufEminoglu/osm_3d_model) — OSM → 3D city in browser |
 | [Suitability Lab](https://github.com/YusufEminoglu/planx_suitability_lab) — raster MCDA | [Settlement Toolset](https://github.com/YusufEminoglu/PlanX-Settlement) — 9-stage settlement plans | [OSM Quick 3D](https://github.com/YusufEminoglu/osm_quick_3d) — OSM → native QGIS 3D |
 | [DataCube Lab](https://github.com/YusufEminoglu/planx_datacube) — spatiotemporal cubes | [UIP Toolset](https://github.com/YusufEminoglu/PlanX-UIP) — Turkish master-plan automation | [Urban Procedural 3D](https://github.com/YusufEminoglu/planx_urban_procedural_3d) — parametric zoning lab |
-| [Urban Resilience](https://github.com/YusufEminoglu/planx_urban_resilience) — 28 resilience tools | [ParcelFlux](https://github.com/YusufEminoglu/parcelflux) — parcel subdivision | [CartoLab](https://github.com/YusufEminoglu/planx_cartolab) — publication cartography |
+| [Urban Resilience](https://github.com/YusufEminoglu/planx_urban_resilience) — 43 resilience tools | [ParcelFlux](https://github.com/YusufEminoglu/parcelflux) — parcel subdivision | [CartoLab](https://github.com/YusufEminoglu/planx_cartolab) — publication cartography |
 
 ## 📜 License & author
 
