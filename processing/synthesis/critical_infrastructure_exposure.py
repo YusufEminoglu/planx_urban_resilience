@@ -65,7 +65,9 @@ def _safe_float(value, default=None):
         return default
 
 
-class CriticalInfrastructureExposureAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class CriticalInfrastructureExposureAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     HAZARD = "HAZARD"
     HAZARD_FIELD = "HAZARD_FIELD"
     FACILITIES = "FACILITIES"

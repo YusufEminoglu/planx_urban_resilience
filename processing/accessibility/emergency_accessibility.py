@@ -47,7 +47,9 @@ def _nearest_distance(point_geom, features, index):
     return point_geom.distance(nearest.geometry())
 
 
-class EmergencyAccessibilityAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class EmergencyAccessibilityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     STUDY_AREA = "STUDY_AREA"
     SHELTERS = "SHELTERS"
     POPULATION_ASSETS = "POPULATION_ASSETS"

@@ -36,7 +36,9 @@ def _change_class(delta, threshold):
     return "Stable"
 
 
-class ScenarioComparisonAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class ScenarioComparisonAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     BASELINE_FIELD = "BASELINE_FIELD"
     SCENARIO_FIELD = "SCENARIO_FIELD"

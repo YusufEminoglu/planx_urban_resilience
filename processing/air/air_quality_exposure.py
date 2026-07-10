@@ -62,7 +62,9 @@ def _point_count(cell_geom, features, index):
     return count
 
 
-class AirQualityExposureAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class AirQualityExposureAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     STUDY_AREA = "STUDY_AREA"
     ROADS = "ROADS"
     EMISSION_SOURCES = "EMISSION_SOURCES"

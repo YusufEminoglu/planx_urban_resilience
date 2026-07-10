@@ -51,7 +51,9 @@ def _add(sink, fields, geometry, attrs):
     sink.addFeature(feature, QgsFeatureSink.FastInsert)
 
 
-class SyntheticResilienceDatasetAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class SyntheticResilienceDatasetAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     SCALE = "SCALE"
     STUDY_AREA = "STUDY_AREA"
     BUILDINGS = "BUILDINGS"

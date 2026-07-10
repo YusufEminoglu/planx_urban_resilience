@@ -61,7 +61,9 @@ def _count_near(geom, features, index):
     return count
 
 
-class GreenInfrastructureStressAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class GreenInfrastructureStressAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     GREEN = "GREEN"
     STUDY_AREA = "STUDY_AREA"
     IMPERVIOUS = "IMPERVIOUS"

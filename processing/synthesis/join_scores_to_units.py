@@ -44,7 +44,9 @@ def _max_intersect_score(unit_geom, source, field_name):
     return best
 
 
-class JoinScoresToPlanningUnitsAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class JoinScoresToPlanningUnitsAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     UNITS = "UNITS"
     SOURCE1 = "SOURCE1"
     FIELD1 = "FIELD1"

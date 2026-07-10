@@ -32,7 +32,9 @@ def _numeric(feature, field_name, fallback):
         return fallback
 
 
-class ScenarioTemplateAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class ScenarioTemplateAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     BASE_SCORE_FIELD = "BASE_SCORE_FIELD"
     DEFAULT_BASE_SCORE = "DEFAULT_BASE_SCORE"

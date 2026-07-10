@@ -65,7 +65,9 @@ def _delta_class(delta: float) -> str:
     return "Major increase"
 
 
-class ClimateProjectionOverlayAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class ClimateProjectionOverlayAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     SCORE_FIELD = "SCORE_FIELD"
     SCENARIO = "SCENARIO"

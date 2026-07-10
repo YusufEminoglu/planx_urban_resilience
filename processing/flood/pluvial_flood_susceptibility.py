@@ -58,7 +58,9 @@ def _make_sampler(provider):
     return _sample
 
 
-class PluvialFloodSusceptibilityAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class PluvialFloodSusceptibilityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     DEM = "DEM"
     STUDY_AREA = "STUDY_AREA"
     BUILDINGS = "BUILDINGS"

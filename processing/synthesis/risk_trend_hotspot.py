@@ -95,7 +95,9 @@ def _label(gi_z: float, sig: int, delta: float | None, delta_tol: float) -> str:
     return "Not significant"
 
 
-class RiskTrendHotspotAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class RiskTrendHotspotAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     LATER_SCORE = "LATER_SCORE"
     DELTA_FIELD = "DELTA_FIELD"

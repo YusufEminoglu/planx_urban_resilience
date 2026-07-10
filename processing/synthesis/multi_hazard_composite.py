@@ -54,7 +54,9 @@ def _shannon_index(weighted_scores: list[float]) -> float:
     return clamp(100.0 * entropy / max_entropy) or 0.0
 
 
-class MultiHazardCompositeAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class MultiHazardCompositeAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     HAZARD_FIELDS = "HAZARD_FIELDS"
     WEIGHTS = "WEIGHTS"

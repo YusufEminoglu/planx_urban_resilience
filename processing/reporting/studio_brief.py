@@ -36,7 +36,9 @@ def _text(feature, field_name):
         return ""
 
 
-class StudioBriefAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class StudioBriefAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     SCORE_FIELD = "SCORE_FIELD"
     CLASS_FIELD = "CLASS_FIELD"

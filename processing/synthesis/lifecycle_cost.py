@@ -59,7 +59,9 @@ def _safe_float(v, default=0.0):
         return default
 
 
-class LifecycleCostAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class LifecycleCostAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     CAPEX_FIELD = "CAPEX_FIELD"
     OPEX_FIELD = "OPEX_FIELD"

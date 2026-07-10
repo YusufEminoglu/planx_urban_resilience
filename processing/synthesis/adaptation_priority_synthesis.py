@@ -31,7 +31,9 @@ def _numeric(feature, field_name):
         return 0.0
 
 
-class AdaptationPrioritySynthesisAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class AdaptationPrioritySynthesisAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     UNITS = "UNITS"
     HEAT_FIELD = "HEAT_FIELD"
     FLOOD_FIELD = "FLOOD_FIELD"

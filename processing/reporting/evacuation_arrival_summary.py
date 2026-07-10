@@ -53,7 +53,9 @@ def _text(feature, field_name, default=""):
         return default
 
 
-class EvacuationArrivalSummaryAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class EvacuationArrivalSummaryAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     SHELTER_FIELD = "SHELTER_FIELD"
     POP_FIELD = "POP_FIELD"

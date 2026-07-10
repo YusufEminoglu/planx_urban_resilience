@@ -67,7 +67,9 @@ def _shares_to_diversity(shares: list[float]) -> float:
     return max(0.0, min(100.0, diversity))
 
 
-class RecoveryCapacityIndexAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class RecoveryCapacityIndexAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     DIVERSITY_FIELDS = "DIVERSITY_FIELDS"
     REDUNDANCY_FIELD = "REDUNDANCY_FIELD"

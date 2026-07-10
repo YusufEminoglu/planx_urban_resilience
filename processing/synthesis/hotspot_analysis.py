@@ -89,7 +89,9 @@ def _gi_class(z: float, p: float) -> str:
     return "Not significant"
 
 
-class HotSpotAnalysisAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class HotSpotAnalysisAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     VALUE_FIELD = "VALUE_FIELD"
     DISTANCE = "DISTANCE"

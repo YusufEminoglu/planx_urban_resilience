@@ -68,7 +68,9 @@ def _centroid_xy(geom: QgsGeometry):
     return (c.x(), c.y())
 
 
-class OptimalShelterSitingAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class OptimalShelterSitingAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     CANDIDATES = "CANDIDATES"
     DEMAND = "DEMAND"
     POP_FIELD = "POP_FIELD"

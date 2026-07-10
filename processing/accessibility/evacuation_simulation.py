@@ -115,7 +115,9 @@ class OriginJob:
     path_edges: list[int] = field(default_factory=list)
 
 
-class EvacuationTimeSimulationAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class EvacuationTimeSimulationAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     ROADS = "ROADS"
     ORIGINS = "ORIGINS"
     POP_FIELD = "POP_FIELD"

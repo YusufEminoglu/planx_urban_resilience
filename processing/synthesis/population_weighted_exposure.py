@@ -47,7 +47,9 @@ def _risk_class(score: float) -> str:
     return "Low"
 
 
-class PopulationWeightedExposureAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class PopulationWeightedExposureAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     SCORE_FIELD = "SCORE_FIELD"
     POP_FIELD = "POP_FIELD"

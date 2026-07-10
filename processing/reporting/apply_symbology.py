@@ -70,7 +70,9 @@ def _graduated_renderer(layer, field_name):
     return renderer
 
 
-class ApplyResilienceSymbologyAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class ApplyResilienceSymbologyAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     LAYER = "LAYER"
     FIELD = "FIELD"
     PRESET = "PRESET"

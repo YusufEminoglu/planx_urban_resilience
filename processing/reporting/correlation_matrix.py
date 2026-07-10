@@ -121,7 +121,9 @@ def _interpret(r: float | None) -> str:
     return f"{sign} {strength}"
 
 
-class CorrelationMatrixAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class CorrelationMatrixAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     FIELDS = "FIELDS"
     PROJECT = "PROJECT"

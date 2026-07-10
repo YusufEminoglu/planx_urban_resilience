@@ -27,7 +27,9 @@ import math
 import random
 
 
-class UrbanResilienceSeismicAnalystV2(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class UrbanResilienceSeismicAnalystV2(HelpUrlMixin, QgsProcessingAlgorithm):
 
     INPUT_BUILDINGS = 'INPUT_BUILDINGS'
     FIELD_FLOORS = 'FIELD_FLOORS'

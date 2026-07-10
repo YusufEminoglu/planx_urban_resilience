@@ -159,7 +159,9 @@ def _apply_classified_renderer(layer: QgsVectorLayer, field: str, method_idx: in
     layer.setRenderer(QgsGraduatedSymbolRenderer(field, ranges))
 
 
-class ResiliencePdfAtlasAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class ResiliencePdfAtlasAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     SCORE_FIELD = "SCORE_FIELD"
     CLASS_FIELD = "CLASS_FIELD"

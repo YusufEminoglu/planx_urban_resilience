@@ -45,7 +45,9 @@ def _trend(delta: float, tol: float = 1.0) -> str:
     return "Stable"
 
 
-class ResilienceTimeSeriesAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class ResilienceTimeSeriesAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     EARLIER = "EARLIER"
     LATER = "LATER"
     EARLIER_ID = "EARLIER_ID"

@@ -105,7 +105,9 @@ def _class_emoji(cls: str) -> str:
     return "⬜"
 
 
-class RecommendedActionsAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class RecommendedActionsAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     SCORE_FIELD = "SCORE_FIELD"
     CLASS_FIELD = "CLASS_FIELD"

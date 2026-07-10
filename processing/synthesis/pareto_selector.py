@@ -60,7 +60,9 @@ def _dominates(a, b) -> bool:
     return (ac <= bc and ab >= bb) and (ac < bc or ab > bb)
 
 
-class ParetoSelectorAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class ParetoSelectorAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     COST_FIELD = "COST_FIELD"
     BENEFIT_FIELD = "BENEFIT_FIELD"

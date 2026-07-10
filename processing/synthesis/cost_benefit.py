@@ -51,7 +51,9 @@ def _safe_float(value, default=None):
         return default
 
 
-class CostBenefitAnalyzerAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class CostBenefitAnalyzerAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     SCORE_FIELD = "SCORE_FIELD"
     UNIT_COST = "UNIT_COST"

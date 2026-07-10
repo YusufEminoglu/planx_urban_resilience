@@ -37,7 +37,9 @@ def _value(feature, field_name):
         return ""
 
 
-class ResilienceReportAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class ResilienceReportAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     SCORE_FIELD = "SCORE_FIELD"
     CLASS_FIELD = "CLASS_FIELD"

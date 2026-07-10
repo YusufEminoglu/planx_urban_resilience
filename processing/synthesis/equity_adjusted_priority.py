@@ -44,7 +44,9 @@ from qgis.core import (
 from .._helpers import clamp, composite_risk_class
 
 
-class EquityAdjustedPriorityAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class EquityAdjustedPriorityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     HAZARD_FIELD = "HAZARD_FIELD"
     SVI_FIELD = "SVI_FIELD"

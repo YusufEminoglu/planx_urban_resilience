@@ -36,7 +36,9 @@ def _score(feature, field_name):
     return clamp(feature.attribute(field_name)) if field_name else None
 
 
-class RiskRecoveryPriorityAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class RiskRecoveryPriorityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     HAZARD_FIELD = "HAZARD_FIELD"
     RECOVERY_FIELD = "RECOVERY_FIELD"

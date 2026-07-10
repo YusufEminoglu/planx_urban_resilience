@@ -33,7 +33,9 @@ def _nearest_node(point_geom, node_features, node_index):
     return node["key"], distance
 
 
-class NetworkEmergencyAccessibilityAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class NetworkEmergencyAccessibilityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     ROADS = "ROADS"
     ORIGINS = "ORIGINS"
     DESTINATIONS = "DESTINATIONS"

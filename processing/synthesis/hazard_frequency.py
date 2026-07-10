@@ -71,7 +71,9 @@ def _risk_class(score: float) -> str:
     return "Low"
 
 
-class HazardFrequencyAggregationAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class HazardFrequencyAggregationAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     UNITS = "UNITS"
     SOURCES = "SOURCES"
     SCORE_FIELD = "SCORE_FIELD"

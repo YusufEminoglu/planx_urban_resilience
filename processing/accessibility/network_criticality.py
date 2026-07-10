@@ -42,7 +42,9 @@ from ._network_graph import (
 )
 
 
-class NetworkCriticalityAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class NetworkCriticalityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     ROADS = "ROADS"
     ORIGINS = "ORIGINS"
     DESTINATIONS = "DESTINATIONS"

@@ -117,7 +117,9 @@ def _xform_pt(point, transform):
     return [round(point.x(), 7), round(point.y(), 7)]
 
 
-class Risk3DVolumeExportAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class Risk3DVolumeExportAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     SCORE_FIELD = "SCORE_FIELD"
     MAX_HEIGHT = "MAX_HEIGHT"

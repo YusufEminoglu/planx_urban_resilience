@@ -93,7 +93,9 @@ def _quadrant(z_i: float, lag: float, p: float) -> str:
     return "Not significant"
 
 
-class LisaLocalMoranAlgorithm(QgsProcessingAlgorithm):
+from .._mixins import HelpUrlMixin
+
+class LisaLocalMoranAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
     INPUT = "INPUT"
     VALUE_FIELD = "VALUE_FIELD"
     DISTANCE = "DISTANCE"
