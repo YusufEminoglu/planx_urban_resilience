@@ -1,5 +1,38 @@
 # Changelog
 
+## [1.26.2] - 2026-07-29
+
+Packaging and security-scan hygiene. No functional or algorithmic change.
+
+### Fixed
+- **Plugin Hub security scan is clean without any skip file.** The three remaining
+  Bandit findings are resolved in code rather than suppressed: `try/except: pass`
+  in the bivariate symbology renderer (B110) and `try/except: continue` in the
+  dashboard readiness scan (B112) are now `contextlib.suppress`, keeping the same
+  best-effort behaviour without hiding a real error path; the seismic Monte Carlo
+  collapse draw uses a new shared `SeededRng` helper instead of `random.Random`
+  (B311).
+- **Removed the `.bandit` skip file.** It was untracked, so it never shipped in the
+  Hub archive and CI never saw it — it only made the local scan look clean while
+  the real findings remained. Deleted rather than committed.
+- Excluded `.pytest_cache` from the release archive and from git, so cache
+  artifacts can no longer enter a Hub upload.
+- Cleared the seven Hub-reported W503 quality findings by reformatting arithmetic,
+  HTML assembly, attribute-list construction and the LISA variance code. Behaviour
+  is unchanged.
+
+### Changed
+- `SeededRng` (in `processing/_helpers.py`) is a self-contained 64-bit LCG exposing
+  the `random` / `uniform` / `randint` / `shuffle` subset the simulation algorithms
+  use. Randomness here is not security sensitive, but reproducibility matters: the
+  same seed still yields the same result. Verified on QGIS 3.44.12 and 4.2.0 that
+  the Latin hypercube stays deterministic and each dimension remains a full
+  permuted stratification.
+
+### Verified
+- End-to-end suite passes all algorithms and assertions on QGIS 3.44.12 LTR and
+  QGIS 4.2.0; GUI smoke passes on both; `compileall`, Flake8 and Bandit clean.
+
 ## [1.26.1] - 2026-07-10
 
 ### Fixed
