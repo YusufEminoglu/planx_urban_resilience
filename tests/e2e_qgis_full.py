@@ -225,8 +225,8 @@ if not all([study, buildings, roads, imperv, green, water, shelters, social, sen
     sys.exit(1)
 
 print("=== 2 seismic monte carlo ===")
-seis = run("sismik_risk_dinamik_analizor_v2", {
-    "INPUT_BUILDINGS": buildings, "FIELD_FLOORS": "katadedi",
+seis = run("seismic_debris_monte_carlo", {
+    "INPUT_BUILDINGS": buildings, "FIELD_FLOORS": "floor_count",
     "FIELD_YEAR": "year", "MAGNITUDE": 7.2,
     "INPUT_PARCELS": social, "INPUT_STUDY_AREA": study,
     "OUTPUT_NET_ROAD": "TEMPORARY_OUTPUT", "OUTPUT_MORPHOLOGY": "TEMPORARY_OUTPUT",

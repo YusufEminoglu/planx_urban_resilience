@@ -5,7 +5,7 @@ author=Yusuf Eminoglu
 qgisMinimumVersion=3.28
 description=PlanX urban resilience suite (43 tools): seismic, heat, flood, social, emergency access, evacuation, network criticality, air, drought, synthesis, hot-spot/LISA statistics, risk-recovery matrix, time-series, scenario tools, HTML/Markdown/PDF atlas, symbology.
 about=43 Processing algorithms and a QGIS dashboard for city-scale resilience screening: synthetic QA, seismic debris, heat and flood, social vulnerability, Euclidean and network emergency access, evacuation simulation with optional timestep queue, network criticality, air and drought, multi-hazard and equity-adjusted synthesis, climate projection overlay, recovery capacity, scenario sensitivity, risk-recovery priority matrix, time-series tracking, scenario templates, HTML/Markdown/PDF atlas with map-book presets, shelter arrival summaries, and symbology. DEU City and Regional Planning educational workflows.
-version=1.26.0
+version=1.26.1
 tracker=https://github.com/YusufEminoglu/planx_urban_resilience/issues
 repository=https://github.com/YusufEminoglu/planx_urban_resilience
 
@@ -20,6 +20,14 @@ hasProcessingProvider=yes
 plugin_dependencies=
 license=GPL-3
 changelog=
+    PlanX Urban Resilience 1.26.2 - Security packaging hotfix: excluded pytest cache artifacts from the QGIS Hub archive and cleaned all seven Hub-reported W503 quality findings.
+        - Added plugin-level and shared packaging exclusions for .pytest_cache so CACHEDIR.TAG and test cache data cannot enter release archives.
+        - Reformatted arithmetic, HTML assembly, attribute-list construction, and LISA variance code without changing behavior.
+    PlanX Urban Resilience 1.26.1 - English-only fix: translated the Seismic Debris & Logistics module and synthetic demo dataset fields from Turkish, added a reproducible random seed to the Monte Carlo collapse draw.
+        - Seismic Collapse module (algorithm id seismic_debris_monte_carlo, was sismik_risk_dinamik_analizor_v2) fully translated: display name, group, help text, parameter labels, output field names and log message.
+        - Synthetic demo dataset fields translated: katadedi -> floor_count, uipfonksiyon -> land_use.
+        - Bivariate Choropleth Symbology: removed a leftover Turkish sentence fragment from the help text.
+        - New SEED parameter (default 42) makes the seismic Monte Carlo draw exactly reproducible.
     PlanX Urban Resilience 1.25.0 - Quality release: all 43 algorithms verified end-to-end on real QGIS 3.44 LTR and QGIS 4.0.2 via a headless test harness with numeric assertions.
         - QGIS 4: all 43 Processing tools re-enabled (the former panel-only gate hid the whole provider on QGIS 4).
         - Fixed PDF Atlas crash on modern QGIS (renderer factory signature and frame stroke width type); classification now pure Python (equal interval / quantile / Jenks) with explicit YlOrRd ranges.

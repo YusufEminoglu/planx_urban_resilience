@@ -203,12 +203,13 @@ class UrbanHeatComfortRiskAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
                         if feature and feature.geometry().intersects(clipped):
                             vuln_count += 1
                 vuln_score = clamp(vuln_count * 20.0)
-                heat_score = (
-                    imperv_share * 100.0 * w_imperv
-                    + building_share * 100.0 * w_build
-                    + ((green_deficit + cooling_score) * 0.5) * w_green
-                    + vuln_score * w_vuln
-                ) / weight_sum
+                weighted_heat_total = sum((
+                    imperv_share * 100.0 * w_imperv,
+                    building_share * 100.0 * w_build,
+                    ((green_deficit + cooling_score) * 0.5) * w_green,
+                    vuln_score * w_vuln,
+                ))
+                heat_score = weighted_heat_total / weight_sum
                 heat_score = clamp(heat_score)
                 risk = composite_risk_class(heat_score)
                 attrs = [cell_id, imperv_share, building_share, green_share, cooling_score, vuln_count, heat_score, risk]

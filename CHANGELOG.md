@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.26.1] - 2026-07-10
+
+### Fixed
+- **Seismic Debris & Logistics module fully translated to English.** `seismic_debris_monte_carlo` (was `sismik_risk_dinamik_analizor_v2`) had a Turkish `displayName`, `group`, `shortHelpString`, parameter labels, output field names (`Yukseklik_m` etc. → `height_m`, `setback_dist_m`, `collapse_prob`, `collapsed`, `debris_radius_m`, `debris_vol_m3`, `blocked_area_m2`) and log message — all converted to English. Group renamed `"1 — Deprem: enkaz ve lojistik"` → `"1 — Seismic: Debris & Logistics"`. Algorithm id, dashboard entry, and e2e reference updated in lockstep.
+- **Synthetic demo dataset field names translated**: `katadedi` → `floor_count`, `uipfonksiyon` → `land_use` (`processing/demo/synthetic_dataset.py`), with the e2e harness updated to match.
+- **Bivariate Choropleth Symbology help text**: removed a stray Turkish sentence fragment ("kartografya için manuel olarak yerleştirin") left in an otherwise-English `shortHelpString`.
+
+### Added
+- **Seismic debris Monte Carlo is now reproducible**: new `SEED` parameter (default 42) drives a per-run `random.Random(seed)` instance instead of the shared global `random` module, so a given scenario (inputs + seed) always produces an identical collapse draw; changing the seed samples a different stochastic realization.
+
 ## [1.26.0] - 2026-07-10
 
 ### Fixed

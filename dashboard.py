@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 
+import contextlib
 from datetime import datetime
 
 import processing
@@ -37,7 +38,7 @@ MODULES = [
     },
     {
         "title": "Seismic Debris and Logistics",
-        "algorithm": "planx_urban_resilience:sismik_risk_dinamik_analizor_v2",
+        "algorithm": "planx_urban_resilience:seismic_debris_monte_carlo",
         "group": "1 - Seismic",
         "inputs": "Buildings, parcels, study/road area, floor and construction year fields.",
         "outputs": "Collapse probability, debris envelope, road blockage and clearance corridors.",
@@ -1066,11 +1067,11 @@ class UrbanResilienceDashboard(QDialog):
         layer_names = [getattr(layer, "name", lambda: "")().lower() for layer in layers]
         field_names = set()
         for layer in vectors:
-            try:
+            # A layer with an unreadable schema must not abort the readiness
+            # scan; skip it and keep inspecting the rest.
+            with contextlib.suppress(Exception):
                 for f in layer.fields():
                     field_names.add(str(f.name()).lower())
-            except Exception:
-                continue
 
         def has_name(*needles):
             blob = " ".join(layer_names)

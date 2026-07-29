@@ -113,8 +113,8 @@ class SyntheticResilienceDatasetAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
         area_fields = _fields([("name", QVariant.String), ("scenario", QVariant.String)])
         building_fields = _fields([
             ("name", QVariant.String),
-            ("katadedi", QVariant.Int),
-            ("uipfonksiyon", QVariant.String),
+            ("floor_count", QVariant.Int),
+            ("land_use", QVariant.String),
             ("year", QVariant.Int),
             ("population", QVariant.Int),
         ])

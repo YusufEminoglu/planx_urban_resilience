@@ -17,6 +17,7 @@ symbology survives layer-style export.
 """
 from __future__ import annotations
 
+import contextlib
 import math
 
 from qgis.PyQt.QtCore import QVariant
@@ -119,8 +120,8 @@ class BivariateSymbologyAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
             <code>bv_risk_bin</code> and <code>bv_vuln_bin</code> fields and
             comes with a categorised renderer already applied.</p>
             <p>Reads beautifully alongside a 3×3 legend grid placed in the
-            print layout (no built-in legend item is generated — kartografya
-            için manuel olarak yerleştirin).</p>
+            print layout (no built-in legend item is generated — place it
+            manually as a cartographic element).</p>
             """
         )
 
@@ -220,7 +221,8 @@ class BivariateSymbologyAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     @staticmethod
     def _apply_renderer(context: QgsProcessingContext, dest_id: str) -> None:
-        try:
+        # Symbology is a nice-to-have; never let it block output writing.
+        with contextlib.suppress(Exception):
             layer = context.getMapLayer(dest_id)
             if layer is None or not hasattr(layer, "setRenderer"):
                 return
@@ -238,6 +240,3 @@ class BivariateSymbologyAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
             renderer = QgsCategorizedSymbolRenderer("bv_class", categories)
             layer.setRenderer(renderer)
             layer.triggerRepaint()
-        except Exception:
-            # Symbology is a nice-to-have; never let it block output writing.
-            pass

@@ -294,8 +294,7 @@ class LisaLocalMoranAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
                 #         + (wi.² − w2)(2 b2 − n)/((n − 1)(n − 2))
                 # with wi. = 1 (row-standardised) and w2 = Σ wij².
                 w2 = sum(w * w for _nid, w in std_weights)
-                e_i2 = (w2 * (n - b2) / (n - 1)
-                        + (1.0 - w2) * (2.0 * b2 - n) / ((n - 1) * (n - 2)))
+                e_i2 = w2 * (n - b2) / (n - 1) + (1.0 - w2) * (2.0 * b2 - n) / ((n - 1) * (n - 2))
                 var_i = max(e_i2 - e_i * e_i, 1e-12)
                 z_stat = (moran_i - e_i) / math.sqrt(var_i)
                 p = _two_sided_p(z_stat)

@@ -2,7 +2,7 @@
 """Seismic Cascade: Debris → Network Degradation → Accessibility Loss.
 
 The most "wow" cross-domain analysis in the suite: takes the seismic-
-debris polygon output from `sismik_risk_dinamik_analizor_v2`, removes the
+debris polygon output from `seismic_debris_monte_carlo`, removes the
 blocked road segments from the network, then re-runs shortest-path
 accessibility on the degraded network and compares it to the pre-hazard
 baseline.

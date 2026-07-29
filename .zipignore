@@ -1,2 +1,6 @@
 # Dev-only files excluded from the QGIS Hub zip
 setup.cfg
+.pytest_cache
+ENHANCEMENT_PLAN_v1.26.md
+DEEPSEEK_PROMPT_v1.26.txt
+REPORT_v1.26.md

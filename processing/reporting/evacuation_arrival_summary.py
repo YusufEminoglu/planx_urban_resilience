@@ -214,12 +214,13 @@ class EvacuationArrivalSummaryAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
                     f"<tr><td>{escape(label)}</td><td>{arr:.0f}</td>"
                     f"<td>{cumulative:.0f}</td><td>{pct:.1f}%</td></tr>"
                 )
+            section_rows_html = "".join(section_rows)
             html_sections.append(
                 f"<h3>{escape(shelter)}</h3>"
                 f"<table border='1' cellpadding='4'>"
                 f"<tr><th>Step</th><th>Arrivals</th><th>Cumulative</th><th>% of all assigned</th></tr>"
-                + "".join(section_rows)
-                + "</table>"
+                f"{section_rows_html}"
+                "</table>"
             )
 
         out_html = self.parameterAsFileOutput(parameters, self.OUTPUT_HTML, context)

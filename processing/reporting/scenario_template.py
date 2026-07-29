@@ -121,8 +121,8 @@ class ScenarioTemplateAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
             out = QgsFeature(fields)
             out.setGeometry(feature.geometry())
             out.setAttributes(
-                feature.attributes()
-                + [
+                [
+                    *feature.attributes(),
                     scenario_name,
                     intervention,
                     base_score,
