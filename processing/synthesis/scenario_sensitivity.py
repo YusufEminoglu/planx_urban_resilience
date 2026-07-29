@@ -25,7 +25,6 @@ Outputs per feature:
 from __future__ import annotations
 
 import math
-import random
 
 from qgis.PyQt.QtCore import QVariant
 from qgis.core import (
@@ -42,10 +41,10 @@ from qgis.core import (
     QgsProcessingParameterString,
 )
 
-from .._helpers import clamp, parse_weights_csv
+from .._helpers import SeededRng, clamp, parse_weights_csv
 
 
-def _latin_hypercube(n_samples: int, n_dims: int, rng: random.Random) -> list[list[float]]:
+def _latin_hypercube(n_samples: int, n_dims: int, rng: SeededRng) -> list[list[float]]:
     """Vectors in [0, 1]^n_dims via Latin Hypercube."""
     grid = [[0.0] * n_dims for _ in range(n_samples)]
     for dim in range(n_dims):
@@ -200,7 +199,7 @@ class ScenarioSensitivityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
         perturb = self.parameterAsDouble(parameters, self.PERTURB, context)
         n_samples = int(self.parameterAsInt(parameters, self.SAMPLES, context))
         seed = self.parameterAsInt(parameters, self.SEED, context)
-        rng = random.Random(seed if seed is not None else 42)
+        rng = SeededRng(seed if seed is not None else 42)
 
         lhs = _latin_hypercube(n_samples, len(component_fields), rng)
         weight_vectors: list[list[float]] = []
