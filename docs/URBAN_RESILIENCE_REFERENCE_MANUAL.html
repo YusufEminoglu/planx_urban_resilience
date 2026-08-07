@@ -866,12 +866,57 @@ $$\text{candidate}^* = \arg\max_{c \in C \setminus S} \sum_{d \in D : \text{dist
 
 <h3>Evacuation Shelter Arrival Summary</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:evacuation_arrival_summary</code></p>
+
 <h4>1. Overview</h4>
-<p>Post-processes the Evacuation Time Simulation origin outputs into a per-shelter arrival table, with optional per-timestep/minute breakdown and an HTML report. Useful for operational planning: "Shelter A receives 80% of its arrivals in the first 12 minutes; Shelter B is still receiving arrivals at minute 40."</p>
-<h4>4. Input / 5. Parameters / 6. Outputs</h4>
-<p>Takes the Evacuation Time Simulation origin layer as input. Parameters: timestep interval (minutes), output HTML path. Outputs: per-shelter summary table with arrival counts per timestep bin, and an optional standalone HTML report with a timeline visualisation.</p>
-<h4>7. Symbolization / 8. Interpretation</h4>
-<p>Use the HTML report in a planning studio: shelters with long arrival tails (&gt;30 minutes) indicate either distant catchment or congestion — cross-reference with the edge-load layer from Evacuation Simulation. Shelters reaching capacity early (&lt;10 minutes) are prime candidates for capacity expansion.</p>
+<p>Post-processes the Evacuation Time Simulation origin outputs into a per-shelter arrival table with optional per-timestep/minute breakdown and a standalone HTML report. The core operational question it answers: <i>"Which shelters fill first, and which receive arrivals late into the evacuation window?"</i> The algorithm bins each origin's <code>evac_min</code> (total evacuation time, including queue delay when timestep mode is active) into timestep-width intervals and aggregates arrival counts per shelter per bin. The output HTML report includes a stacked-bar timeline visualisation showing the arrival profile of each shelter.</p>
+
+<h4>2. Theoretical Background</h4>
+<p>Cumulative arrival curve analysis is a standard tool in emergency operations planning (FEMA, 2019; NIST, 2015). The key metrics — P50 arrival time, P95 arrival time, and time-to-50%-capacity — operationalise the concepts of <b>shelter service speed</b> and <b>catchment balance</b>. A shelter that reaches 90% capacity within the first 10 minutes of an evacuation has a <i>compressed arrival profile</i>: its catchment population is both nearby and unimpeded. A shelter that reaches only 30% capacity after 40 minutes has either a distant catchment, severe congestion on access routes, or both. The arrival-curve shape — steep initial ramp, long tail, bimodal — carries diagnostic information about the road network topology and shelter distribution that a single average access-time figure cannot capture. The engine is in <code>processing/reporting/evacuation_arrival_summary.py</code>.</p>
+
+<h4>3. Mathematical Formulation</h4>
+$$\text{bin}(t) = \left\lfloor \frac{\text{evac\_min}}{\Delta} \right\rfloor \tag{1}$$
+$$\text{arrivals}(s, b) = \sum_{o \in \text{origins}} [\text{shelter}(o) = s \land \text{bin}(t_o) = b] \tag{2}$$
+$$\text{cumulative\_pct}(s, t) = 100 \cdot \frac{\sum_{b=0}^{t} \text{arrivals}(s, b)}{\sum_{b=0}^{B} \text{arrivals}(s, b)} \tag{3}$$
+<p>where \(\Delta\) is the timestep interval in minutes, \(t_o =\) <code>evac_min</code> for origin \(o\), \(s\) is the assigned shelter, and \(B\) is the maximum timestep bin. The summary log also prints P50 and P95 cumulative-percentage arrival times per shelter — the evacuation-operations equivalents of the P50/P95 metrics from the parent simulation.</p>
+$$\text{P50}(s) = \min \left\{ t : \text{cumulative\_pct}(s, t) \ge 50 \right\} \tag{4}$$
+
+<h4>4. Input Data Requirements</h4>
+<table><tr><th>Input</th><th>Type</th><th>Required</th><th>Notes</th></tr>
+<tr><td>Evacuation origins</td><td>Vector (Point)</td><td>Yes</td><td>Output of Evacuation Time Simulation. Must have <code>evac_shelter</code>, <code>evac_min</code>, <code>evac_pop</code> fields.</td></tr></table>
+
+<h4>5. Parameters</h4>
+<table><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
+<tr><td><code>EVAC_ORIGINS</code></td><td>Vector (Point)</td><td>—</td><td>Evacuation Time Simulation origin output layer.</td></tr>
+<tr><td><code>SHELTER_FIELD</code></td><td>Field (String/ID)</td><td>evac_shelter</td><td>Field identifying the assigned shelter per origin.</td></tr>
+<tr><td><code>TIME_FIELD</code></td><td>Field (Numeric)</td><td>evac_min</td><td>Total evacuation time per origin (minutes).</td></tr>
+<tr><td><code>POP_FIELD</code></td><td>Field (Numeric)</td><td>evac_pop</td><td>Population assigned to each origin.</td></tr>
+<tr><td><code>TIMESTEP_MINUTES</code></td><td>Double</td><td>5.0</td><td>Bin width for arrival-count aggregation. Should match the timestep used in Evacuation Time Simulation.</td></tr>
+<tr><td><code>OUTPUT_HTML</code></td><td>File</td><td>—</td><td>Path for the HTML arrival-curve report.</td></tr>
+<tr><td><code>OUTPUT_TABLE</code></td><td>Vector (NoGeometry)</td><td>—</td><td>Per-shelter per-timestep long-format table for further analysis.</td></tr></table>
+
+<h4>6. Output Description</h4>
+<table><tr><th>Output</th><th>Key Fields</th><th>Description</th></tr>
+<tr><td><b>Arrival table (QGIS sink)</b></td><td><code>shelter_id</code>, <code>timestep_bin</code>, <code>arrival_count</code>, <code>arrival_pop</code>, <code>cumulative_pct</code></td><td>Long-format: one row per shelter per timestep bin. <code>cumulative_pct</code> is the percentage of that shelter's total assigned population that has arrived by the end of this bin.</td></tr>
+<tr><td><b>HTML report</b></td><td>—</td><td>Standalone HTML with arrival-curve chart per shelter and summary statistics table.</td></tr></table>
+
+<h4>7. Symbolic Representation</h4>
+<p>The HTML report uses a stacked-bar chart where each shelter is one bar subdivided by timestep-bin colour (early bins = dark green, late bins = orange/red). Shelters with long red tails are the congestion-affected ones needing either capacity expansion or road-network improvements. In the QGIS table, graduate by <code>cumulative_pct</code> at the critical timestep (e.g., 30 minutes) with a RdYlGn (reversed) ramp.</p>
+
+<h4>8. Interpretation Guide</h4>
+<p><b>Time-to-50%-capacity &lt; 5 minutes:</b> the shelter's catchment is highly localised and uncongested — an efficient assignment. <b>Time-to-90%-capacity &gt; 40 minutes:</b> the shelter's assigned population is taking too long to arrive — either the catchment is too large (geographically distant origins), too congested (bottleneck edges), or both. Cross-reference with the edge-load output from Evacuation Time Simulation: are the edges leading to this shelter at &gt;100% congestion? <b>Shelters with final cumulative_pct &lt; 100%:</b> some assigned origins have <code>evac_min = &#x221E;</code> (unassigned or stalled in the queue) — check the parent simulation's <code>qa_flag</code> field. <b>Bimodal arrival curves:</b> two distinct peaks suggest two distinct catchment sub-populations — one nearby (first peak) and one distant (second peak); consider splitting the distant catchment to a closer shelter. Use the arrival-summary table to feed the per-shelter P95 arrival time into <b>Optimal Shelter Siting</b> as a coverage-gap diagnostic: shelters with high P95 times are candidates for additional nearby sites.</p>
+<div class="callout info"><b>Workflow integration.</b> Run Evacuation Time Simulation first. Feed its origin output here. Use the HTML report in a planning workshop to identify the 2–3 worst-performing shelters. Then return to the simulation: adjust <code>ASSIGN_ORDER</code> or add candidate shelters via Optimal Shelter Siting, re-run, and compare arrival profiles.</div>
+
+<h4>Academic References</h4>
+<p class="ref">FEMA. (2019). <i>CPG 101: Developing and Maintaining Emergency Operations Plans, Version 3.0.</i> Federal Emergency Management Agency, Washington, DC. DOI: <a href="https://doi.org/10.1007/978-3-030-04624-8_5">10.1007/978-3-030-04624-8_5</a></p>
+<p class="ref">NIST. (2015). <i>Community Resilience Planning Guide for Buildings and Infrastructure Systems.</i> NIST Special Publication 1190. DOI: <a href="https://doi.org/10.6028/NIST.SP.1190">10.6028/NIST.SP.1190</a></p>
+<p class="ref">Yperman, I. (2007). <i>The Link Transmission Model for Dynamic Network Loading.</i> PhD thesis, KU Leuven.</p>
+<p class="ref">Daganzo, C.F. (1994). "The cell transmission model: a dynamic representation of highway traffic consistent with the hydrodynamic theory." <i>Transportation Research Part B</i>, 28(4), 269–287. DOI: <a href="https://doi.org/10.1016/0191-2615(94)90002-7">10.1016/0191-2615(94)90002-7</a></p>
+<p class="ref">Church, R.L. &amp; ReVelle, C.S. (1974). "The maximal covering location problem." <i>Papers of the Regional Science Association</i>, 32, 101–118. DOI: <a href="https://doi.org/10.1007/BF01942293">10.1007/BF01942293</a></p>
+<p class="ref">Daskin, M.S. (2013). <i>Network and Discrete Location: Models, Algorithms, and Applications.</i> 2nd ed., Wiley. DOI: <a href="https://doi.org/10.1002/9781118033883">10.1002/9781118033883</a></p>
+<p class="ref">Cova, T.J. &amp; Johnson, J.P. (2003). "A network flow model for lane-based evacuation routing." <i>Transportation Research Part A</i>, 37(7), 579–604. DOI: <a href="https://doi.org/10.1016/S0965-8564(03)00007-7">10.1016/S0965-8564(03)00007-7</a></p>
+<p class="ref">Southworth, F. (1991). "Regional evacuation modeling: a state-of-the-art review." Oak Ridge National Laboratory, ORNL/TM-11740.</p>
+<p class="ref">Murray-Tuite, P. &amp; Wolshon, B. (2013). "Evacuation transportation modeling: an overview of research, development, and practice." <i>Transportation Research Part C</i>, 27, 25–45. DOI: <a href="https://doi.org/10.1016/j.trc.2012.11.005">10.1016/j.trc.2012.11.005</a></p>
+<p class="ref">Stepanov, A. &amp; Smith, J.M. (2009). "Multi-objective evacuation routing in transportation networks." <i>European Journal of Operational Research</i>, 198(2), 435–446. DOI: <a href="https://doi.org/10.1016/j.ejor.2008.09.025">10.1016/j.ejor.2008.09.025</a></p>
 
 <!-- ================================================================================================= -->
 <!-- GROUP 6: AIR -->
@@ -977,18 +1022,50 @@ $$T = \text{clamp}(100 - \text{tree\_count} \times 10) \quad \text{(low-tree-den
 
 <h3>Join Hazard Scores to Planning Units</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:join_scores_to_planning_units</code></p>
+
 <h4>1. Overview</h4>
-<p>Spatially joins up to five hazard/score layers onto planning-unit polygons by taking the <b>maximum</b> score among intersecting features. This is the standard "collect and align" step after running hazard modules: join the Heat, Flood, Social, Air, and Drought score fields onto a common neighbourhood or grid-cell layer, then feed the result into Multi-Hazard Composite or Adaptation Priority Synthesis.</p>
+<p>Spatially joins up to five hazard/score layers onto planning-unit polygons by taking the <b>maximum</b> score among intersecting features. This is the standard "collect and align" step after running hazard modules: join the Heat, Flood, Social, Air, and Drought score fields onto a common neighbourhood or grid-cell layer, then feed the result into Multi-Hazard Composite or Adaptation Priority Synthesis. The output planning units preserve all original attributes and accumulate new numeric score columns ready for composite-index construction.</p>
+
 <h4>2. Theoretical Background</h4>
-<p>The max-intersection join is a conservative choice for hazard screening: if any part of a planning unit is exposed to a high score, the whole unit inherits that score. This avoids the dilution problem of areal-weighted averaging (where a small high-hazard sliver is averaged away by a large low-hazard polygon). The approach follows the precautionary principle in environmental risk assessment (Kriebel et al., 2001).</p>
-<h4>4. Input / 5. Parameters</h4>
+<p>The max-intersection spatial join is a conservative aggregation strategy grounded in the <b>precautionary principle</b> of environmental risk assessment (Kriebel et al., 2001; Stirling, 2007). When a planning unit intersects multiple source features with different scores, the maximum is taken — if any part of the unit is exposed to a high score, the whole unit inherits that score. This avoids the <b>dilution problem</b> of areal-weighted averaging, where a small high-hazard sliver (e.g., a flood-prone stream corridor crossing a large census tract) is averaged away by the tract's predominantly low-hazard area (Gotway &amp; Young, 2002). The cost is potential overestimation: a unit with 90% low-risk area and 10% high-risk area is classified entirely at the high-risk level. Users who require areal-weighted joins should pre-process with zonal statistics in QGIS or GRASS. The engine is in <code>processing/synthesis/join_scores_to_units.py</code>.</p>
+
+<h4>3. Mathematical Formulation</h4>
+$$\text{score}(u) = \max\left(\left\{\text{clamp}(f_s) \mid f \in S, \text{geom}(f) \cap \text{geom}(u) \neq \emptyset \right\} \cup \{0\}\right) \tag{1}$$
+<p>where \(u\) is a planning unit, \(S\) is the joined score source layer, \(f_s\) is the numeric score field value on feature \(f\), and \(\text{clamp}\) bounds the result to \([0, 100]\). If no source feature intersects the unit (or all intersecting features have NULL scores), the output field is NULL for that unit. The max operator is applied independently per source layer; no cross-layer normalisation is performed.</p>
+
+<h4>4. Input Data Requirements</h4>
+<table><tr><th>Input</th><th>Type</th><th>Required</th><th>Notes</th></tr>
+<tr><td>Planning units</td><td>Vector (Polygon)</td><td>Yes</td><td>Target layer for joins. All original attributes preserved.</td></tr>
+<tr><td>Score source layers (1–5)</td><td>Vector (Point/Polygon/Line)</td><td>At least 1</td><td>Layers with a numeric 0–100 score field. Lines and points are supported; intersection is tested against the full geometry.</td></tr></table>
+<div class="callout info"><b>Performance note.</b> The join iterates every source feature for every planning unit — complexity is O(units × features). For large datasets (&gt;10,000 features per source), pre-process source layers to clip to the planning-unit extent, or use a spatial index layer join in the QGIS toolbox.</div>
+
+<h4>5. Parameters</h4>
 <table><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
 <tr><td><code>UNITS</code></td><td>Vector (Polygon)</td><td>—</td><td>Planning-unit polygons.</td></tr>
-<tr><td><code>SOURCE1</code>–<code>SOURCE5</code></td><td>Vector</td><td>(optional)</td><td>Up to 5 score layers to join.</td></tr>
+<tr><td><code>SOURCE1</code>–<code>SOURCE5</code></td><td>Vector (Point/Polygon/Line)</td><td>(optional)</td><td>Up to 5 score layers to join.</td></tr>
 <tr><td><code>FIELD1</code>–<code>FIELD5</code></td><td>Field (Numeric)</td><td>(optional)</td><td>Score field on each source layer.</td></tr>
-<tr><td><code>OUT1</code>–<code>OUT5</code></td><td>String</td><td>score_1…5</td><td>Output field name (e.g. heat_score).</td></tr></table>
+<tr><td><code>OUT1</code>–<code>OUT5</code></td><td>String</td><td>score_N</td><td>Output field name (e.g. heat_score). Defaults to score_1, score_2, etc.</td></tr></table>
+
 <h4>6. Output Description</h4>
-<p>Planning-unit polygons with original attributes plus the joined score fields. NULL where no source feature intersected the unit.</p>
+<table><tr><th>Field</th><th>Type</th><th>Description</th></tr>
+<tr><td><code>{OUT1}</code>–<code>{OUT5}</code></td><td>Double</td><td>Maximum intersecting score per source layer. NULL if no feature intersects or all scores are NULL.</td></tr>
+<tr><td>(all original fields)</td><td>(preserved)</td><td>Planning-unit attributes are passed through unchanged.</td></tr></table>
+
+<h4>7. Symbolic Representation</h4>
+<p>After joining, the planning-unit layer carries multiple score columns. Visualise each score independently with a graduated renderer before building composites — this reveals spatial concordance/discordance between hazard dimensions. Recommended: <b>Apply Resilience Symbology</b> with preset "Risk score 0–100" for each joined column.</p>
+
+<h4>8. Interpretation Guide</h4>
+<p><b>NULL score fields:</b> the planning unit's geometry does not intersect any feature in that source layer. For grid-based source layers (e.g., Heat Risk Grid), this typically means the unit lies outside the study-area extent used when generating the grid. For vector-based sources, check that both layers share the same CRS and that source features cover the full extent of the planning units. <b>All scores = 0 on the same feature:</b> the source layers may be using a neutral default for missing data — verify the source field names are correct. <b>Cross-score consistency check:</b> sort planning units by each joined score and compare the top-10 lists. If the same units dominate all hazards, the study area has a concentrated multi-hazard problem; if the lists are disjoint, the hazards are spatially independent and the composite must respect that separation.</p>
+
+<h4>Academic References</h4>
+<p class="ref">Kriebel, D., Tickner, J., Epstein, P., Lemons, J., Levins, R., Loechler, E.L., Quinn, M., Rudel, R., Schettler, T. &amp; Stoto, M. (2001). "The precautionary principle in environmental science." <i>Environmental Health Perspectives</i>, 109(9), 871–876. DOI: <a href="https://doi.org/10.1289/ehp.01109871">10.1289/ehp.01109871</a></p>
+<p class="ref">Gotway, C.A. &amp; Young, L.J. (2002). "Combining incompatible spatial data." <i>Journal of the American Statistical Association</i>, 97(458), 632–648. DOI: <a href="https://doi.org/10.1198/016214502760047140">10.1198/016214502760047140</a></p>
+<p class="ref">Stirling, A. (2007). "Risk, precaution and science: towards a more constructive policy debate." <i>EMBO Reports</i>, 8(4), 309–315. DOI: <a href="https://doi.org/10.1038/sj.embor.7400953">10.1038/sj.embor.7400953</a></p>
+<p class="ref">Goodchild, M.F. (2011). "Scale in GIS: an overview." <i>Geomorphology</i>, 130(1–2), 5–9. DOI: <a href="https://doi.org/10.1016/j.geomorph.2010.10.004">10.1016/j.geomorph.2010.10.004</a></p>
+<p class="ref">Openshaw, S. (1984). "The modifiable areal unit problem." <i>Concepts and Techniques in Modern Geography</i>, 38. Geo Books, Norwich.</p>
+<p class="ref">Fotheringham, A.S. &amp; Wong, D.W.S. (1991). "The modifiable areal unit problem in multivariate statistical analysis." <i>Environment and Planning A</i>, 23(7), 1025–1044. DOI: <a href="https://doi.org/10.1068/a231025">10.1068/a231025</a></p>
+<p class="ref">Flowerdew, R. &amp; Green, M. (1992). "Developments in areal interpolation methods and GIS." <i>The Annals of Regional Science</i>, 26(1), 67–78. DOI: <a href="https://doi.org/10.1007/BF01581481">10.1007/BF01581481</a></p>
+<p class="ref">Cutter, S.L., Boruff, B.J. &amp; Shirley, W.L. (2003). "Social vulnerability to environmental hazards." <i>Social Science Quarterly</i>, 84(2), 242–261. DOI: <a href="https://doi.org/10.1111/1540-6237.8402002">10.1111/1540-6237.8402002</a></p>
 
 <h3>Climate Adaptation Priority Synthesis</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:climate_adaptation_priority_synthesis</code></p>
@@ -1260,25 +1337,57 @@ $$\text{pop\_exposed} = \frac{\text{score}}{100} \times \text{pop\_total} \tag{1
 
 <h3>Multi-Period Hazard Frequency Aggregation</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:hazard_frequency_aggregation</code></p>
+
 <h4>1. Overview</h4>
-<p>Collapses 2–8 temporal hazard snapshots (e.g. flood model runs for 2020/2030/2050, or seismic Monte Carlo across multiple magnitudes) into one composite per planning unit. Captures both <b>frequency</b> (how many periods scored above threshold) and <b>intensity</b> (mean/max/min across periods). Three aggregation modes: Mean of all periods, Maximum, or Frequency-weighted mean (mean × freq/N — units high in both many periods AND high intensity rise to the top).</p>
+<p>Collapses 2–8 temporal hazard snapshots (e.g., flood model runs for 2020/2030/2050, or seismic Monte Carlo across multiple magnitudes) into one composite score per planning unit. Captures both <b>frequency</b> (how many periods scored above threshold) and <b>intensity</b> (mean/max/min across periods). Three aggregation modes: Mean of all periods, Maximum, or Frequency-weighted mean (mean × freq/N — units high in both many periods AND high intensity rise to the top).</p>
+
+<h4>2. Theoretical Background</h4>
+<p>Multi-period hazard aggregation addresses the temporal compounding problem in risk assessment (IPCC, 2012; Zscheischler et al., 2018). A single hazard snapshot (e.g., a 100-year flood map at current sea level) captures spatial variation at one point in time but misses the <b>temporal persistence</b> dimension: a unit that scores 80 in every period represents a fundamentally different risk profile from one that scores 95 in one period and 30 in all others, even if their mean scores are identical. The frequency-weighted mean aggregation mode operationalises the IPCC AR5 "Reasons for Concern" framework (IPCC, 2014), where both the magnitude and the frequency of climate impacts determine the risk level. The default threshold of 50 corresponds to the Moderate/High breakpoint in the suite's standard classification, ensuring that "above-threshold" represents at least a "High" classification. The max-intersection spatial join (same conservative convention as Join Scores to Planning Units) ensures that the unit inherits the highest score from each source layer. The engine is in <code>processing/synthesis/hazard_frequency.py</code>.</p>
+
+<h4>3. Mathematical Formulation</h4>
+$$\text{freq}(u) = \sum_{k=1}^{N} \left[ s_k(u) \ge \tau \right] \tag{1}$$
+$$\bar{s}(u) = \frac{1}{N} \sum_{k=1}^{N} s_k(u) \tag{2}$$
+$$s_{\text{composite}}(u) = \begin{cases} \bar{s}(u) & \text{Mean mode} \\ \max_k s_k(u) & \text{Max mode} \\ \bar{s}(u) \cdot \dfrac{\text{freq}(u)}{N} & \text{Frequency-weighted mean} \end{cases} \tag{3}$$
+<p>where \(N\) is the number of source layers (2–8), \(s_k(u)\) is the maximum intersecting score from source layer \(k\) at planning unit \(u\), \(\tau\) is the frequency threshold (default 50), and \([\cdot]\) is the Iverson bracket. All scores are clamped to \([0, 100]\). The frequency-weighted mean penalises units that are high in only a few periods: a unit with mean 80 and freq = 1/5 gets a composite of 16, while a unit with mean 80 and freq = 5/5 keeps 80.</p>
+
+<h4>4. Input Data Requirements</h4>
+<table><tr><th>Input</th><th>Type</th><th>Required</th><th>Notes</th></tr>
+<tr><td>Planning units</td><td>Vector (Polygon)</td><td>Yes</td><td>Target polygons for aggregation.</td></tr>
+<tr><td>Source hazard layers</td><td>Vector (Polygon), 2–8 layers</td><td>Yes</td><td>Each layer must have the same score field name. Score values clamped to 0–100.</td></tr></table>
+
 <h4>5. Parameters</h4>
 <table><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
 <tr><td><code>UNITS</code></td><td>Vector (Polygon)</td><td>—</td><td>Planning units.</td></tr>
-<tr><td><code>SOURCES</code></td><td>Multiple layers</td><td>—</td><td>2–8 polygon score layers.</td></tr>
+<tr><td><code>SOURCES</code></td><td>Multiple layers</td><td>—</td><td>2–8 polygon score layers (e.g., flood_2020, flood_2030, flood_2050).</td></tr>
 <tr><td><code>SCORE_FIELD</code></td><td>String</td><td>"score"</td><td>Score field name (same on all sources).</td></tr>
-<tr><td><code>THRESHOLD</code></td><td>Double</td><td>50.0</td><td>Frequency threshold.</td></tr>
+<tr><td><code>THRESHOLD</code></td><td>Double</td><td>50.0</td><td>Frequency threshold (0–100). A source layer "counts" when its score at this unit ≥ threshold.</td></tr>
 <tr><td><code>AGG_MODE</code></td><td>Enum</td><td>Frequency-weighted</td><td>Mean / Max / Frequency-weighted mean.</td></tr></table>
+
 <h4>6. Output Description</h4>
 <table><tr><th>Field</th><th>Type</th><th>Description</th></tr>
-<tr><td><code>hf_frequency</code></td><td>Integer</td><td>Count of source layers exceeding threshold at this unit.</td></tr>
-<tr><td><code>hf_mean</code></td><td>Double</td><td>Mean score across sources.</td></tr>
+<tr><td><code>hf_frequency</code></td><td>Integer</td><td>Count of source layers with score ≥ threshold at this unit.</td></tr>
+<tr><td><code>hf_mean</code></td><td>Double</td><td>Mean score across all N sources.</td></tr>
 <tr><td><code>hf_max</code></td><td>Double</td><td>Maximum score across sources.</td></tr>
 <tr><td><code>hf_min</code></td><td>Double</td><td>Minimum score across sources.</td></tr>
-<tr><td><code>hf_composite</code></td><td>Double</td><td>Aggregated composite per the chosen mode.</td></tr>
-<tr><td><code>hf_class</code></td><td>String</td><td>Very High / High / Moderate / Low.</td></tr></table>
+<tr><td><code>hf_composite</code></td><td>Double</td><td>Aggregated composite per chosen mode (0–100).</td></tr>
+<tr><td><code>hf_class</code></td><td>String</td><td>Very High (≥75) / High (55–74) / Moderate (35–54) / Low (&lt;35).</td></tr></table>
+
+<h4>7. Symbolic Representation</h4>
+<p>Graduated by <code>hf_composite</code>, YlOrRd ramp, 5-class natural breaks. For temporal analysis, create a small-multiples layout: one map per source period in a row, with the composite map below. Use labels on <code>hf_frequency</code> to annotate composite values so the viewer sees both "how bad" and "how persistent".</p>
+
 <h4>8. Interpretation Guide</h4>
-<p><b>hf_frequency = N:</b> the unit scores above threshold in every period — persistent exposure. <b>hf_frequency = 1, hf_max ≥ 75:</b> a single-period spike — check whether it's a real trend or a model artefact. Frequency-weighted mean (default) rewards persistent + intense exposure: a unit that scores 80 in all 5 periods scores higher than one that scores 95 in one period and 30 in the rest.</p>
+<p><b>hf_frequency = N (all periods above threshold):</b> persistent, chronic exposure — these units need structural, long-term adaptation, not just emergency response. <b>hf_frequency = 1, hf_max ≥ 75:</b> a single-period spike — investigate whether this is a real trend driven by a specific scenario assumption or a model artefact. Compare the mean and max: if max ≫ mean, the unit has high inter-period variability (one bad year, several mild years). If max ≈ mean, the exposure is stable across periods. <b>Frequency-weighted mean (default):</b> use this for prioritisation when both persistence and intensity matter — it is the most conservative composite for identifying units that are chronically exposed. <b>Mean mode:</b> use when you want to compare average exposure independent of persistence. <b>Max mode:</b> useful for worst-case preparedness planning.</p>
+<div class="callout info"><b>Workflow integration.</b> Feed the output into <b>Climate Projection Overlay</b> for a second dimension of temporal stress-testing, or into <b>Scenario Sensitivity Analysis</b> to test whether the rank ordering is stable when you vary the threshold τ.</div>
+
+<h4>Academic References</h4>
+<p class="ref">IPCC. (2012). <i>Managing the Risks of Extreme Events and Disasters to Advance Climate Change Adaptation (SREX).</i> Cambridge University Press. DOI: <a href="https://doi.org/10.1017/CBO9781139177245">10.1017/CBO9781139177245</a></p>
+<p class="ref">IPCC. (2014). <i>Climate Change 2014: Impacts, Adaptation, and Vulnerability. Part A: Global and Sectoral Aspects.</i> Cambridge University Press.</p>
+<p class="ref">Zscheischler, J., Westra, S., van den Hurk, B.J.J.M., Seneviratne, S.I., Ward, P.J., Pitman, A., AghaKouchak, A., Bresch, D.N., Leonard, M., Wahl, T. &amp; Zhang, X. (2018). "Future climate risk from compound events." <i>Nature Climate Change</i>, 8(6), 469–477. DOI: <a href="https://doi.org/10.1038/s41558-018-0156-3">10.1038/s41558-018-0156-3</a></p>
+<p class="ref">AghaKouchak, A., Chiang, F., Huning, L.S., Love, C.A., Mallakpour, I., Mazdiyasni, O., Moftakhari, H., Papalexiou, S.M., Ragno, E. &amp; Sadegh, M. (2020). "Climate extremes and compound hazards in a changing world." <i>Annual Review of Earth and Planetary Sciences</i>, 48, 519–548. DOI: <a href="https://doi.org/10.1146/annurev-earth-071719-055228">10.1146/annurev-earth-071719-055228</a></p>
+<p class="ref">Ward, P.J., Jongman, B., Aerts, J.C.J.H., Bates, P.D., Botzen, W.J.W., Diaz Loaiza, A., Hallegatte, S., Kind, J., Kwadijk, J., Scussolini, P. &amp; Winsemius, H.C. (2017). "A global framework for future costs and benefits of river-flood protection in urban areas." <i>Nature Climate Change</i>, 7(9), 642–646. DOI: <a href="https://doi.org/10.1038/nclimate3350">10.1038/nclimate3350</a></p>
+<p class="ref">Hallegatte, S., Green, C., Nicholls, R.J. &amp; Corfee-Morlot, J. (2013). "Future flood losses in major coastal cities." <i>Nature Climate Change</i>, 3(9), 802–806. DOI: <a href="https://doi.org/10.1038/nclimate1979">10.1038/nclimate1979</a></p>
+<p class="ref">UNDRR. (2019). <i>Global Assessment Report on Disaster Risk Reduction.</i> United Nations Office for Disaster Risk Reduction, Geneva.</p>
+<p class="ref">Kreibich, H., Di Baldassarre, G., Vorogushyn, S., Aerts, J.C.J.H., Apel, H., Aronica, G.T., Arnbjerg-Nielsen, K., Bouwer, L.M., Bubeck, P., Caloiero, T. et al. (2017). "Adaptation to flood risk: results of international paired flood event studies." <i>Earth's Future</i>, 5(10), 953–965. DOI: <a href="https://doi.org/10.1002/2017EF000606">10.1002/2017EF000606</a></p>
 
 <h3>Vulnerability Surface (IDW interpolation)</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:vulnerability_surface_idw</code></p>
@@ -1310,25 +1419,63 @@ $$\hat{z}(x) = \frac{\sum_i w_i z_i}{\sum_i w_i}, \quad w_i = \frac{1}{d(x, x_i)
 
 <h3>Critical Infrastructure Exposure</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:critical_infrastructure_exposure</code></p>
+
 <h4>1. Overview</h4>
-<p>Crosses a hazard score layer with a critical-facility layer (schools, hospitals, fire stations, power/water assets) to produce a combined exposure score. Each facility's hazard score is sampled at its centroid; a criticality field (user-supplied, any scale) is min-max normalised to 0–100. The combined score = (hazard/100) × criticality_norm × 100. The Processing log prints the top 10 most exposed facilities and the mean combined score by facility class.</p>
+<p>Crosses a hazard score layer with a critical-facility layer (schools, hospitals, fire stations, power/water assets) to produce a combined exposure score. Each facility's hazard score is sampled at its centroid using spatial containment against hazard polygons. A user-supplied criticality field (numeric, any scale) is min-max normalised to 0–100 across all facilities. The combined score = (hazard/100) × criticality_norm × 100, producing a joint measure that elevates facilities that are both highly exposed AND highly critical — the right shortlist for retrofit and hardening programmes. The Processing log prints the top 10 most exposed facilities and the mean combined score by facility class.</p>
+
+<h4>2. Theoretical Background</h4>
+<p>Critical infrastructure exposure analysis bridges two parallel literatures: <b>natural hazard risk assessment</b> (where exposure is "what is in harm's way") and <b>infrastructure systems engineering</b> (where criticality is "what function is lost if this asset fails"). The multiplicative form — hazard × criticality — follows the standard risk equation \(R = H \times V \times E\) codified in the UNDRR Global Risk Assessment Framework (UNDRR, 2019) and the IPCC AR5 risk framework (IPCC, 2014). The min-max normalisation of the criticality field is a pragmatic choice: it makes the algorithm usable with any user-supplied criticality scale (1–5, 1–100, monetary replacement value, population served, etc.) without prior knowledge of the scale bounds. The centroid-based hazard sampling is conservative: a facility is considered exposed if its geographic centre lies inside a hazard polygon — this avoids the complexity of partial-overlap weighting while ensuring that polygon facilities (e.g., a hospital campus spanning multiple blocks) are assessed at a representative location. The engine is in <code>processing/synthesis/critical_infrastructure_exposure.py</code>.</p>
+
+<h4>3. Mathematical Formulation</h4>
+$$H_i = \text{score}(\text{polygon containing centroid}(f_i)) \quad \text{or } 0 \text{ if no polygon contains centroid} \tag{1}$$
+$$c_{\text{range}} = \max(c_i) - \min(c_i) \quad \text{(or 1.0 if all equal)} \tag{2}$$
+$$c_{\text{norm}, i} = 100 \cdot \frac{c_i - \min(c_i)}{c_{\text{range}}} \tag{3}$$
+$$E_i = \frac{H_i}{100} \cdot c_{\text{norm}, i} \cdot 100 = H_i \cdot \frac{c_{\text{norm}, i}}{100} \tag{4}$$
+<p>where \(H_i\) is the hazard score (0–100) at facility \(i\)'s centroid, \(c_i\) is the raw criticality value, and \(E_i\) is the combined exposure score (0–100). If no hazard polygon contains the facility centroid (e.g., the facility lies outside the hazard model extent), \(H_i = 0\).</p>
+
+<h4>4. Input Data Requirements</h4>
+<table><tr><th>Input</th><th>Type</th><th>Required</th><th>Notes</th></tr>
+<tr><td>Hazard score layer</td><td>Vector (Polygon)</td><td>Yes</td><td>Must have a numeric 0–100 score field. Polygons form a continuous coverage of the study area for accurate point-in-polygon containment.</td></tr>
+<tr><td>Critical facilities</td><td>Vector (Point/Polygon)</td><td>Yes</td><td>Facilities to evaluate. Points: centroid is the point itself. Polygons: centroid of the polygon geometry.</td></tr>
+<tr><td>Criticality field</td><td>Field (Numeric)</td><td>Optional</td><td>Any numeric scale. If omitted, all facilities get the default criticality.</td></tr>
+<tr><td>Name/label field</td><td>Field</td><td>Optional</td><td>Used in the log's "Top 10 most exposed facilities" table.</td></tr>
+<tr><td>Class field</td><td>Field (String)</td><td>Optional</td><td>Used for grouped mean-exposure statistics by class (e.g., "schools average 65, hospitals 40").</td></tr></table>
+
 <h4>5. Parameters</h4>
 <table><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
 <tr><td><code>HAZARD</code></td><td>Vector (Polygon)</td><td>—</td><td>Hazard score layer.</td></tr>
 <tr><td><code>HAZARD_FIELD</code></td><td>Field (Numeric)</td><td>—</td><td>Score field 0–100.</td></tr>
 <tr><td><code>FACILITIES</code></td><td>Vector (Point/Polygon)</td><td>—</td><td>Critical facility layer.</td></tr>
-<tr><td><code>CRITICALITY_FIELD</code></td><td>Field (Numeric)</td><td>(optional)</td><td>Facility criticality. If omitted, uses default.</td></tr>
-<tr><td><code>CRITICALITY_DEFAULT</code></td><td>Double</td><td>1.0</td><td>Default criticality.</td></tr>
-<tr><td><code>NAME_FIELD</code></td><td>Field</td><td>(optional)</td><td>Facility name for the log.</td></tr>
-<tr><td><code>CLASS_FIELD</code></td><td>Field (String)</td><td>(optional)</td><td>Facility class for grouped statistics.</td></tr></table>
+<tr><td><code>CRITICALITY_FIELD</code></td><td>Field (Numeric)</td><td>(optional)</td><td>Facility criticality field. Any scale — normalised to 0–100 using min/max across all facilities.</td></tr>
+<tr><td><code>CRITICALITY_DEFAULT</code></td><td>Double</td><td>1.0</td><td>Default criticality when no field or no per-feature value is supplied.</td></tr>
+<tr><td><code>NAME_FIELD</code></td><td>Field</td><td>(optional)</td><td>Facility name/label for the log's top-10 table.</td></tr>
+<tr><td><code>CLASS_FIELD</code></td><td>Field (String)</td><td>(optional)</td><td>Facility class (e.g., school, hospital, fire_station) for grouped statistics.</td></tr></table>
+
 <h4>6. Output Description</h4>
 <table><tr><th>Field</th><th>Type</th><th>Description</th></tr>
-<tr><td><code>ci_hazard</code></td><td>Double</td><td>Hazard score at the facility centroid.</td></tr>
-<tr><td><code>ci_criticality</code></td><td>Double</td><td>Raw criticality value.</td></tr>
-<tr><td><code>ci_combined</code></td><td>Double</td><td>(hazard/100) × criticality_norm × 100. 0–100.</td></tr>
-<tr><td><code>ci_exposure_class</code></td><td>String</td><td>Critical (≥75) / High / Moderate / Low.</td></tr></table>
+<tr><td><code>ci_hazard</code></td><td>Double</td><td>Hazard score at the facility centroid (0–100).</td></tr>
+<tr><td><code>ci_criticality</code></td><td>Double</td><td>Raw criticality value from the facility's field.</td></tr>
+<tr><td><code>ci_combined</code></td><td>Double</td><td>Combined exposure score = (hazard/100) × criticality_norm × 100. Range 0–100.</td></tr>
+<tr><td><code>ci_exposure_class</code></td><td>String</td><td>Critical (≥75) / High (55–74) / Moderate (35–54) / Low (&lt;35).</td></tr></table>
+
+<h4>7. Symbolic Representation</h4>
+<p>Graduated by <code>ci_combined</code>, OrRd ramp, 5-class natural breaks. For facilities, use circles scaled by <code>ci_combined</code> (2–8 mm) with dark stroke. Label the top 5 facilities by name from the log. Overlay with the hazard layer at 30% opacity for context. The log's "Mean combined score by facility class" table is suitable for direct inclusion in a report.</p>
+
 <h4>8. Interpretation Guide</h4>
-<p>The log's "Top 10 most exposed facilities" table is the deliverable: a ranked shortlist for retrofit/hardening programmes. The "Mean combined score by facility class" breakdown reveals systematic vulnerabilities — e.g. if schools average 65 and hospitals 40, school retrofit should be the priority.</p>
+<p><b>ci_exposure_class = Critical (≥75):</b> a facility that is both in a high-hazard zone AND highly critical — the top retrofit/hardening priority. <b>ci_hazard high but ci_combined moderate:</b> a critical facility in a low-hazard area — its criticality is normalised but its location is favourable. This is a resilience asset, not a priority target. <b>ci_hazard and ci_criticality both are uniformly distributed:</b> all facilities get similar combined scores; the min-max normalisation compresses diversity. In this case, try using a wider criticality scale (e.g., 1–100 instead of 1–5) to spread the distribution. <b>Cross-reference with Social Vulnerability Index:</b> facilities serving high-SVI populations that score Critical on exposure are the equity+exposure double priority. Feed the top-N facilities into <b>Cost-Benefit Analyzer</b> to rank retrofit options by cost-effectiveness.</p>
+<div class="callout warn"><b>Containment vs. intersection.</b> Hazard score is sampled by <b>polygon containment</b> of the facility centroid, not by intersection. If facilities span multiple hazard zones (e.g., a large hospital campus crossing a flood score = 90 and a flood score = 30 polygon), only the centroid's containing polygon determines the score. For multi-polygon facilities, consider converting to points at each building footprint centroid before running this algorithm.</div>
+
+<h4>Academic References</h4>
+<p class="ref">UNDRR. (2019). <i>Global Assessment Report on Disaster Risk Reduction.</i> United Nations Office for Disaster Risk Reduction, Geneva.</p>
+<p class="ref">IPCC. (2014). <i>Climate Change 2014: Impacts, Adaptation, and Vulnerability. Part A: Global and Sectoral Aspects.</i> Cambridge University Press.</p>
+<p class="ref">NIST. (2015). <i>Community Resilience Planning Guide for Buildings and Infrastructure Systems.</i> NIST Special Publication 1190. DOI: <a href="https://doi.org/10.6028/NIST.SP.1190">10.6028/NIST.SP.1190</a></p>
+<p class="ref">Rinaldi, S.M., Peerenboom, J.P. &amp; Kelly, T.K. (2001). "Identifying, understanding, and analyzing critical infrastructure interdependencies." <i>IEEE Control Systems Magazine</i>, 21(6), 11–25. DOI: <a href="https://doi.org/10.1109/37.969131">10.1109/37.969131</a></p>
+<p class="ref">Ouyang, M. (2014). "Review on modeling and simulation of interdependent critical infrastructure systems." <i>Reliability Engineering &amp; System Safety</i>, 121, 43–60. DOI: <a href="https://doi.org/10.1016/j.ress.2013.06.040">10.1016/j.ress.2013.06.040</a></p>
+<p class="ref">FEMA. (2018). <i>Seismic Performance Assessment of Buildings, Volume 1 — Methodology (FEMA P-58-1), Second Edition.</i> Washington, DC.</p>
+<p class="ref">Pederson, P., Dudenhoeffer, D., Hartley, S. &amp; Permann, M. (2006). <i>Critical Infrastructure Interdependency Modeling: A Survey of U.S. and International Research.</i> Idaho National Laboratory, INL/EXT-06-11464.</p>
+<p class="ref">Cutter, S.L., Ash, K.D. &amp; Emrich, C.T. (2014). "The geographies of community disaster resilience." <i>Global Environmental Change</i>, 29, 65–77. DOI: <a href="https://doi.org/10.1016/j.gloenvcha.2014.08.005">10.1016/j.gloenvcha.2014.08.005</a></p>
+<p class="ref">Buldyrev, S.V., Parshani, R., Paul, G., Stanley, H.E. &amp; Havlin, S. (2010). "Catastrophic cascade of failures in interdependent networks." <i>Nature</i>, 464, 1025–1028. DOI: <a href="https://doi.org/10.1038/nature08932">10.1038/nature08932</a></p>
+<p class="ref">FEMA. (2003). <i>HAZUS-MH MR4 Technical Manual.</i> Federal Emergency Management Agency, Washington, DC.</p>
 
 <h3>Scenario Sensitivity Analysis</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:scenario_sensitivity</code></p>
@@ -1359,25 +1506,63 @@ $$\hat{z}(x) = \frac{\sum_i w_i z_i}{\sum_i w_i}, \quad w_i = \frac{1}{d(x, x_i)
 <p class="ref">McKay, M.D., Beckman, R.J. &amp; Conover, W.J. (1979). "A comparison of three methods for selecting values of input variables." <i>Technometrics</i>, 21(2), 239–245.</p>
 <p class="ref">Saltelli, A. et al. (2004). <i>Sensitivity Analysis in Practice.</i> Wiley.</p>
 
-<h3>Risk Trend Hot-Spot (Gi* × Δ score)</h3>
+<h3>Risk Trend Hot-Spot (Gi* x Delta score)</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:risk_trend_hotspot</code></p>
+
 <h4>1. Overview</h4>
-<p>Fuses temporal trend (Δ score between two snapshots) with spatial clustering (Getis-Ord Gi* on the later snapshot) into a single label per unit. The nine-class typology: Rising / Stable / Cooling hot spot, Rising / Stable / Cooling cold spot, Hot/Cold no cluster, Not significant. Answers "which neighbourhoods are both rising in risk AND clustered with other high-risk areas?"</p>
+<p>Fuses temporal trend (delta score between two snapshots) with spatial clustering (Getis-Ord Gi* on the later snapshot) into a single label per unit. The nine-class typology — Rising / Stable / Cooling hot spot, Rising / Stable / Cooling cold spot, Hot/Cold no cluster, Not significant — answers the planner question: <i>"which neighbourhoods are both rising in risk AND clustered with other high-risk areas?"</i>. This is the suite's early-warning algorithm: a "Rising hot spot" label means the unit is in a spatially concentrated high-value cluster AND its score is increasing.</p>
+
+<h4>2. Theoretical Background</h4>
+<p>The algorithm operates at the intersection of two distinct analytical traditions: <b>temporal trend analysis</b> (longitudinal studies using paired snapshots; Diggle, 2014) and <b>local spatial autocorrelation</b> (Getis &amp; Ord, 1992). The fusion approach follows the space-time scan statistic literature (Kulldorff, 1997) but uses a simpler two-stage method: first compute the hot-spot significance on the most recent data, then annotate with the temporal trajectory. This avoids the computational complexity of full space-time scan statistics while preserving the key operational insight: a hot spot that is <i>rising</i> represents an emerging threat; a hot spot that is <i>cooling</i> represents a successful intervention or natural hazard decline. The 1-point delta tolerance (adjustable) distinguishes genuine change from rounding noise. The significance threshold used is |z| \(\ge\) 1.96, corresponding to a two-sided p < 0.05 under the standard normal approximation. The engine is in <code>processing/synthesis/risk_trend_hotspot.py</code>.</p>
+
+<h4>3. Mathematical Formulation</h4>
+$$G_i^* = \frac{\sum_j w_{ij} x_j - \bar{x} \sum_j w_{ij}}{s \sqrt{\frac{n \sum_j w_{ij}^2 - (\sum_j w_{ij})^2}{n-1}}} \tag{1}$$
+$$w_{ij} = \begin{cases} 1 & i = j \\ d_{ij}^{-1} & i \neq j, d_{ij} \le r \end{cases} \tag{2}$$
+$$\text{sig}_i = [|G_i^*| \ge 1.96] \tag{3}$$
+$$\text{rising}_i = [\Delta_i > \varepsilon], \quad \text{falling}_i = [\Delta_i < -\varepsilon] \tag{4}$$
+$$\text{label}_i = f(G_i^*, \text{sig}_i, \text{rising}_i, \text{falling}_i) \tag{5}$$
+<p>where \(x_j\) is the later-snapshot score, \(\bar{x}\) is the global mean, \(s\) is the global standard deviation, \(r\) is the distance band, \(\Delta_i\) is the per-unit delta (later − earlier), and \(\varepsilon\) is the delta tolerance (default 1.0). The labeling function \(f\) maps the (z-score sign, significance, trend) tuple to one of 9 classes.</p>
+
+<h4>4. Input Data Requirements</h4>
+<table><tr><th>Input</th><th>Type</th><th>Required</th><th>Notes</th></tr>
+<tr><td>Input layer</td><td>Vector (Polygon/Point)</td><td>Yes</td><td>Must have both a later-snapshot score field and a delta field.</td></tr>
+<tr><td>Later-snapshot score field</td><td>Field (Numeric)</td><td>Yes</td><td>The current-period score (0–100). Drives the Gi* hot-spot computation.</td></tr>
+<tr><td>Delta field</td><td>Field (Numeric)</td><td>Yes</td><td>Later score − earlier score (any numeric range).</td></tr></table>
+<div class="callout info"><b>Pairing note.</b> The ideal input is the output of <b>Resilience Time-Series Tracker</b> with <code>ts_later_score</code> as the later-score field and <code>ts_delta</code> as the delta field.</div>
+
 <h4>5. Parameters</h4>
 <table><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
-<tr><td><code>INPUT</code></td><td>Vector</td><td>—</td><td>Layer with later-score and delta fields.</td></tr>
-<tr><td><code>LATER_SCORE</code></td><td>Field (Numeric)</td><td>—</td><td>Later-snapshot score.</td></tr>
-<tr><td><code>DELTA_FIELD</code></td><td>Field (Numeric)</td><td>—</td><td>Delta (later − earlier).</td></tr>
-<tr><td><code>DISTANCE</code></td><td>Double</td><td>500.0</td><td>Distance band.</td></tr>
-<tr><td><code>DELTA_TOL</code></td><td>Double</td><td>1.0</td><td>Delta tolerance below which trend = stable.</td></tr></table>
+<tr><td><code>INPUT</code></td><td>Vector (Polygon/Point)</td><td>—</td><td>Layer with later-score and delta fields.</td></tr>
+<tr><td><code>LATER_SCORE</code></td><td>Field (Numeric)</td><td>—</td><td>Later-snapshot score (0–100).</td></tr>
+<tr><td><code>DELTA_FIELD</code></td><td>Field (Numeric)</td><td>—</td><td>Delta field (later − earlier).</td></tr>
+<tr><td><code>DISTANCE</code></td><td>Double</td><td>500.0</td><td>Distance band for Gi* neighbourhood (map units).</td></tr>
+<tr><td><code>DELTA_TOL</code></td><td>Double</td><td>1.0</td><td>Delta tolerance — units with |delta| ≤ this are considered "Stable".</td></tr></table>
+
 <h4>6. Output Description</h4>
 <table><tr><th>Field</th><th>Type</th><th>Description</th></tr>
-<tr><td><code>trh_gi_z</code></td><td>Double</td><td>Gi* z-score.</td></tr>
-<tr><td><code>trh_gi_significant</code></td><td>Integer</td><td>1 if |z| ≥ 1.96.</td></tr>
-<tr><td><code>trh_delta</code></td><td>Double</td><td>Copied delta.</td></tr>
-<tr><td><code>trh_label</code></td><td>String</td><td>9-class fused label.</td></tr></table>
+<tr><td><code>trh_gi_z</code></td><td>Double</td><td>Getis-Ord Gi* z-score. |z| ≥ 1.96 = significant at p &lt; 0.05.</td></tr>
+<tr><td><code>trh_gi_significant</code></td><td>Integer</td><td>1 if |z| ≥ 1.96, else 0.</td></tr>
+<tr><td><code>trh_delta</code></td><td>Double</td><td>Input delta value (copied for convenience).</td></tr>
+<tr><td><code>trh_label</code></td><td>String</td><td>9-class label: Rising hot spot / Stable hot spot / Cooling hot spot / Rising cold spot / Stable cold spot / Cooling cold spot / Hot, no cluster / Cold, no cluster / Not significant.</td></tr></table>
+
+<h4>7. Symbolic Representation</h4>
+<p>Categorised by <code>trh_label</code>: Rising hot spot = dark red (#b30000), Stable hot spot = red (#e34a33), Cooling hot spot = orange (#fc8d59), Rising cold spot = dark blue (#313695), Stable cold spot = blue (#4575b4), Cooling cold spot = light blue (#91bfdb), Hot no cluster = light red, Cold no cluster = light blue, Not significant = light grey (#cccccc). The Log prints a summary table of label counts for direct report inclusion.</p>
+
 <h4>8. Interpretation Guide</h4>
-<p><b>Rising hot spot:</b> spatially clustered AND increasing — the strongest early-warning signal. <b>Cooling cold spot:</b> clustered low values AND still declining — possibly abandonment or disinvestment. Pair with <b>Resilience Time-Series Tracker</b> which produces the input <code>ts_later_score</code> and <code>ts_delta</code> fields.</p>
+<p><b>Rising hot spot:</b> the strongest early-warning signal — the unit is in a statistically significant high-value cluster AND its score is increasing. These are the immediate-intervention priority units. <b>Cooling hot spot:</b> a clustered high-value unit with a declining score — evidence that an intervention or natural hazard cycle is reducing risk. Document these as success cases. <b>Rising cold spot:</b> a clustered low-value unit with an increasing score — the early stage of what could become a hot spot if the trend continues. Flag for monitoring. <b>Cooling cold spot:</b> clustered low value, still declining — possibly abandonment or disinvestment. Cross-reference with <b>Social Vulnerability Index</b> to check whether declining risk reflects genuine improvement or population displacement. <b>Not significant:</b> the spatial clustering evidence is weak at the 95% level — this unit's score is not spatially structured; its trend is an independent local phenomenon. Run with different distance bands (250 m, 500 m, 1000 m) to test the scale sensitivity of the cluster labels.</p>
+<div class="callout info"><b>Workflow integration.</b> Feed the "Rising hot spot" units into <b>Cost-Benefit Analyzer</b> for cost-effective intervention ranking. Pair with <b>Scenario Comparison / Delta Map</b> for a side-by-side before/after visualisation of the units that changed most.</div>
+
+<h4>Academic References</h4>
+<p class="ref">Getis, A. &amp; Ord, J.K. (1992). "The analysis of spatial association by use of distance statistics." <i>Geographical Analysis</i>, 24(3), 189–206. DOI: <a href="https://doi.org/10.1111/j.1538-4632.1992.tb00261.x">10.1111/j.1538-4632.1992.tb00261.x</a></p>
+<p class="ref">Kulldorff, M. (1997). "A spatial scan statistic." <i>Communications in Statistics — Theory and Methods</i>, 26(6), 1481–1496. DOI: <a href="https://doi.org/10.1080/03610929708831995">10.1080/03610929708831995</a></p>
+<p class="ref">Diggle, P.J. (2014). <i>Statistical Analysis of Spatial and Spatio-Temporal Point Patterns.</i> 3rd ed., CRC Press. DOI: <a href="https://doi.org/10.1201/b15326">10.1201/b15326</a></p>
+<p class="ref">Ord, J.K. &amp; Getis, A. (1995). "Local spatial autocorrelation statistics: distributional issues and an application." <i>Geographical Analysis</i>, 27(4), 286–306. DOI: <a href="https://doi.org/10.1111/j.1538-4632.1995.tb00912.x">10.1111/j.1538-4632.1995.tb00912.x</a></p>
+<p class="ref">Anselin, L. (1995). "Local indicators of spatial association — LISA." <i>Geographical Analysis</i>, 27(2), 93–115. DOI: <a href="https://doi.org/10.1111/j.1538-4632.1995.tb00338.x">10.1111/j.1538-4632.1995.tb00338.x</a></p>
+<p class="ref">Rey, S.J. &amp; Anselin, L. (2010). "PySAL: a Python library of spatial analytical methods." In M.M. Fischer &amp; A. Getis (eds.), <i>Handbook of Applied Spatial Analysis</i>, Springer, pp. 175–193. DOI: <a href="https://doi.org/10.1007/978-3-642-03647-7_11">10.1007/978-3-642-03647-7_11</a></p>
+<p class="ref">Cressie, N. (1993). <i>Statistics for Spatial Data.</i> Revised ed., Wiley. DOI: <a href="https://doi.org/10.1002/9781119115151">10.1002/9781119115151</a></p>
+<p class="ref">IPCC. (2021). <i>Climate Change 2021: The Physical Science Basis.</i> Cambridge University Press.</p>
+<p class="ref">Cutter, S.L. &amp; Finch, C. (2008). "Temporal and spatial changes in social vulnerability to natural hazards." <i>Proceedings of the National Academy of Sciences</i>, 105(7), 2301–2306. DOI: <a href="https://doi.org/10.1073/pnas.0710375105">10.1073/pnas.0710375105</a></p>
+<p class="ref">Benjamini, Y. &amp; Hochberg, Y. (1995). "Controlling the false discovery rate." <i>Journal of the Royal Statistical Society: Series B</i>, 57(1), 289–300. DOI: <a href="https://doi.org/10.1111/j.2517-6161.1995.tb02031.x">10.1111/j.2517-6161.1995.tb02031.x</a></p>
 
 <!-- ================================================================================================= -->
 <!-- GROUP 10: ECONOMICS -->
@@ -1415,32 +1600,61 @@ $$\text{ratio} = \frac{\text{benefit}}{\text{cost}} \quad (\text{cost} = 0, \tex
 
 <h3>Pareto-Optimal Intervention Selector</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:pareto_optimal_selector</code></p>
+
 <h4>1. Overview</h4>
-<p>Identifies the Pareto frontier of a (cost, benefit) trade-off via non-dominated sorting (NSGA-II style). Each feature receives: <code>pareto_rank</code> (1 = first frontier), <code>pareto_dominated</code> (count of features that strictly dominate it), <code>pareto_dominates</code> (count it dominates). Picking everything with rank = 1 guarantees no objectively better alternative exists.</p>
+<p>Identifies the Pareto frontier of a (cost, benefit) trade-off via non-dominated sorting (NSGA-II style). Each feature receives: <code>pareto_rank</code> (1 = first frontier), <code>pareto_dominated</code> (count of features that strictly dominate it), <code>pareto_dominates</code> (count it dominates). Picking everything with rank = 1 guarantees no objectively better alternative exists — no other feature is both cheaper AND more beneficial. The algorithm is O(N^2) in the number of features; for typical planning-unit layers of 100–2,000 features it completes in under a second.</p>
+
+<h4>2. Theoretical Background</h4>
+<p>Pareto optimality, named after the Italian economist Vilfredo Pareto (1848–1923), is the cornerstone of multi-objective optimisation. The non-dominated sorting algorithm follows the NSGA-II framework of Deb et al. (2002), applied deterministically to an existing feature set. The domination relation is strict: \(a\) dominates \(b\) iff \(a\) is no worse on both objectives AND strictly better on at least one. The frontier-peeling after dominance counting is equivalent to the recursive non-dominated sorting of Kung et al. (1975). The engine is in <code>processing/synthesis/pareto_selector.py</code>.</p>
+
+<h4>3. Mathematical Formulation</h4>
+$$a \succ b \iff (c_a \le c_b \land b_a \ge b_b) \land (c_a < c_b \lor b_a > b_b) \tag{1}$$
+$$D_i = |\{j \neq i : j \succ i\}| \tag{2}$$
+<p>where \(c\) is cost (lower better), \(b\) is benefit (higher better), and \(D_i\) is the count of features that strictly dominate feature \(i\). Frontier rank \(R_i\) is computed by iteratively peeling the current Pareto frontier (features with no remaining dominator) from the set, assigning rank = 1, 2, 3, ... to successive peels.</p>
+
 <h4>5. Parameters</h4>
 <table><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
-<tr><td><code>INPUT</code></td><td>Vector</td><td>—</td><td>Layer with cost and benefit fields.</td></tr>
+<tr><td><code>INPUT</code></td><td>Vector (Point/Polygon)</td><td>—</td><td>Layer with cost and benefit fields.</td></tr>
 <tr><td><code>COST_FIELD</code></td><td>Field (Numeric)</td><td>—</td><td>Cost field (lower = better).</td></tr>
 <tr><td><code>BENEFIT_FIELD</code></td><td>Field (Numeric)</td><td>—</td><td>Benefit field (higher = better).</td></tr></table>
+
 <h4>6. Output Description</h4>
 <table><tr><th>Field</th><th>Type</th><th>Description</th></tr>
-<tr><td><code>pareto_rank</code></td><td>Integer</td><td>1 = first (best) frontier, 2 = second, etc.</td></tr>
-<tr><td><code>pareto_dominated</code></td><td>Integer</td><td>Count of features that dominate this one.</td></tr>
-<tr><td><code>pareto_dominates</code></td><td>Integer</td><td>Count of features this one dominates.</td></tr></table>
+<tr><td><code>pareto_rank</code></td><td>Integer</td><td>Frontier rank: 1 = first (best), 2 = next skin, etc.</td></tr>
+<tr><td><code>pareto_dominated</code></td><td>Integer</td><td>Global count of features that strictly dominate this one.</td></tr>
+<tr><td><code>pareto_dominates</code></td><td>Integer</td><td>Global count of features this one strictly dominates.</td></tr></table>
+
 <h4>8. Interpretation Guide</h4>
-<p><b>pareto_rank = 1:</b> no other feature is both cheaper AND more beneficial — the budget-bounded best pick set. <b>pareto_rank &gt; 3:</b> strictly worse options that should only be funded if budget exhausts the first two frontiers. The log prints the count of features per rank.</p>
+<p><b>pareto_rank = 1:</b> the budget-bounded best pick set — these features are optimal under any linear cost–benefit weighting scheme. <b>pareto_rank &gt; 3:</b> strictly worse options; fund only if budget exhausts first two frontiers. <b>pareto_dominated &ge; 100:</b> this feature is dominated by many — poor choice regardless of framing. The Processing log prints the feature count per rank; typical distribution is ~5–15% in rank 1. Feed the <b>Cost-Benefit Analyzer</b> output (<code>cb_cost</code>, <code>cb_benefit</code>) into this algorithm to identify interventions on the Pareto frontier.</p>
+
+<h4>Academic References</h4>
+<p class="ref">Deb, K., Pratap, A., Agarwal, S. &amp; Meyarivan, T. (2002). "A fast and elitist multiobjective genetic algorithm: NSGA-II." <i>IEEE Transactions on Evolutionary Computation</i>, 6(2), 182–197. DOI: <a href="https://doi.org/10.1109/4235.996017">10.1109/4235.996017</a></p>
+<p class="ref">Kung, H.T., Luccio, F. &amp; Preparata, F.P. (1975). "On finding the maxima of a set of vectors." <i>Journal of the ACM</i>, 22(4), 469–476. DOI: <a href="https://doi.org/10.1145/321906.321910">10.1145/321906.321910</a></p>
+<p class="ref">Miettinen, K. (1999). <i>Nonlinear Multiobjective Optimization.</i> Springer. DOI: <a href="https://doi.org/10.1007/978-1-4615-5563-6">10.1007/978-1-4615-5563-6</a></p>
+<p class="ref">Boardman, A.E., Greenberg, D.H., Vining, A.R. &amp; Weimer, D.L. (2018). <i>Cost-Benefit Analysis: Concepts and Practice.</i> 5th ed., Cambridge University Press.</p>
+<p class="ref">Malczewski, J. &amp; Rinner, C. (2015). <i>Multicriteria Decision Analysis in Geographic Information Science.</i> Springer. DOI: <a href="https://doi.org/10.1007/978-3-540-74757-4">10.1007/978-3-540-74757-4</a></p>
+<p class="ref">Chankong, V. &amp; Haimes, Y.Y. (1983). <i>Multiobjective Decision Making: Theory and Methodology.</i> North-Holland.</p>
+<p class="ref">Coello Coello, C.A., Van Veldhuizen, D.A. &amp; Lamont, G.B. (2007). <i>Evolutionary Algorithms for Solving Multi-Objective Problems.</i> 2nd ed., Springer.</p>
+<p class="ref">Pareto, V. (1906). <i>Manuale di Economia Politica.</i> Societa Editrice Libraria, Milano.</p>
 
 <h3>Lifecycle Cost Calculator (25-year NPV)</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:lifecycle_cost_calculator</code></p>
+
 <h4>1. Overview</h4>
-<p>Per planning unit, computes discounted Net Present Value over a configurable horizon (default 25 years) including upfront capex, annual opex, periodic maintenance events, and end-of-life replacement. Outputs the six NPV components plus an equivalent flat annual cost. Optional area scaling multiplies per-m² values by polygon area.</p>
+<p>Per planning unit, computes discounted Net Present Value over a configurable horizon (default 25 years) including upfront capex, annual opex, periodic maintenance events, and end-of-life replacement. Outputs the six NPV components plus an equivalent flat annual cost. Optional area scaling multiplies per-m^2 values by polygon area. This is the "total cost of ownership" companion to the <b>Cost-Benefit Analyzer</b>: it answers "what does this intervention cost over its full life?" rather than "which intervention gives the best return per euro?".</p>
+
+<h4>2. Theoretical Background</h4>
+<p>Lifecycle cost analysis (LCCA) is the standard engineering-economics method for comparing long-term investment alternatives (Fuller &amp; Petersen, 1996; ISO 15686-5:2017). The Net Present Value (NPV) framework discounts all future cash flows to their present-value equivalent using a discount rate that reflects the time value of money and, in public-sector applications, the social discount rate (typically 3–7% as recommended by the European Commission, 2014, and OMB Circular A-94). The annualisation formula converts the lump-sum NPV into an equivalent uniform annual cost via the capital recovery factor (also known as the annuity factor), enabling fair comparison between interventions with different lifespans. The default 25-year horizon and 4% discount rate follow the convention for urban infrastructure projects in temperate-climate OECD countries (Boardman et al., 2018). The 5-year maintenance interval default reflects typical green-infrastructure maintenance cycles (irrigation upgrades, canopy planting, drainage desilting). The engine is in <code>processing/synthesis/lifecycle_cost.py</code>.</p>
+
 <h4>3. Mathematical Formulation</h4>
 $$\text{NPV} = C + \sum_{t=1}^{H} \frac{O}{(1+r)^t} + \sum_{t \in M} \frac{m}{(1+r)^t} + \sum_{t \in R} \frac{q}{(1+r)^t} \tag{1}$$
 $$\text{annualised} = \text{NPV} \times \frac{r}{1 - (1+r)^{-H}} \tag{2}$$
-<p>where \(C\) = capex, \(O\) = annual opex, \(m\) = maintenance cost every M years, \(q\) = replacement cost every R years, \(H\) = horizon, \(r\) = discount rate.</p>
+$$\text{opex\_npv} = \begin{cases} O \cdot H & r = 0 \\ O \cdot \frac{1 - (1+r)^{-H}}{r} & r > 0 \end{cases} \tag{3}$$
+<p>where \(C\) is upfront capex, \(O\) is annual opex, \(m\) is maintenance cost every \(M\) years, \(q\) is replacement cost every \(R\) years, \(H\) is the analysis horizon, and \(r\) is the annual discount rate. All costs are multiplied by polygon area when <code>AREA_SCALE</code> is enabled for polygon input layers.</p>
+
 <h4>5. Parameters</h4>
 <table><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
-<tr><td><code>INPUT</code></td><td>Vector</td><td>—</td><td>Planning units.</td></tr>
+<tr><td><code>INPUT</code></td><td>Vector (Polygon/Point)</td><td>—</td><td>Planning units.</td></tr>
 <tr><td><code>CAPEX_FIELD</code></td><td>Field (Numeric)</td><td>—</td><td>Upfront capital cost.</td></tr>
 <tr><td><code>OPEX_FIELD</code></td><td>Field (Numeric)</td><td>(optional)</td><td>Annual O&amp;M cost.</td></tr>
 <tr><td><code>MAINT_INTERVAL</code></td><td>Integer</td><td>5</td><td>Years between maintenance events. 0 = none.</td></tr>
@@ -1451,19 +1665,29 @@ $$\text{annualised} = \text{NPV} \times \frac{r}{1 - (1+r)^{-H}} \tag{2}$$
 <tr><td><code>REPL_COST_FIELD</code></td><td>Field (Numeric)</td><td>(optional)</td><td>Per-feature override.</td></tr>
 <tr><td><code>HORIZON</code></td><td>Integer</td><td>25</td><td>Analysis horizon (years).</td></tr>
 <tr><td><code>DISCOUNT</code></td><td>Double</td><td>4.0</td><td>Discount rate (% per year).</td></tr>
-<tr><td><code>AREA_SCALE</code></td><td>Boolean</td><td>False</td><td>Multiply per-m² values by polygon area.</td></tr></table>
+<tr><td><code>AREA_SCALE</code></td><td>Boolean</td><td>False</td><td>Multiply per-m^2 values by polygon area.</td></tr></table>
+
 <h4>6. Output Description</h4>
 <table><tr><th>Field</th><th>Type</th><th>Description</th></tr>
-<tr><td><code>lc_capex_npv</code></td><td>Double</td><td>Upfront capex (already PV).</td></tr>
+<tr><td><code>lc_capex_npv</code></td><td>Double</td><td>Upfront capex (already present value).</td></tr>
 <tr><td><code>lc_opex_npv</code></td><td>Double</td><td>Sum of discounted annual opex.</td></tr>
 <tr><td><code>lc_maintenance_npv</code></td><td>Double</td><td>Sum of discounted maintenance events.</td></tr>
 <tr><td><code>lc_replacement_npv</code></td><td>Double</td><td>Sum of discounted replacements.</td></tr>
-<tr><td><code>lc_total_npv</code></td><td>Double</td><td>Total NPV.</td></tr>
+<tr><td><code>lc_total_npv</code></td><td>Double</td><td>Total NPV = capex + opex + maintenance + replacement.</td></tr>
 <tr><td><code>lc_annualised</code></td><td>Double</td><td>Equivalent flat annual cost over the horizon.</td></tr></table>
+
 <h4>8. Interpretation Guide</h4>
-<p>The log prints the sum of <code>lc_total_npv</code> across all features — the programme-level cost. The <code>lc_annualised</code> field is the most communicable number: "this intervention costs €X per year, flat, for 25 years." Use it to compare interventions with different horizons and maintenance profiles on a like-for-like basis.</p>
+<p>The Processing log prints the sum of <code>lc_total_npv</code> across all features — the programme-level cost. The <code>lc_annualised</code> field is the most communicable number: "this intervention costs EUR X per year, flat, for 25 years." Use it to compare interventions with different horizons and maintenance profiles on a like-for-like basis. <b>lc_maintenance_npv > lc_capex_npv:</b> the intervention is maintenance-heavy — the lifecycle costs are dominated by recurring expenses, not upfront investment. This is common in green infrastructure (regular irrigation, pruning, replanting) and should be accounted for in municipal O&amp;M budgets. <b>DISCOUNT = 0%:</b> use only for undiscounted break-even analysis; for public-sector economic appraisal, 3–5% is standard.</p>
+
 <h4>Academic References</h4>
+<p class="ref">Fuller, S.K. &amp; Petersen, S.R. (1996). <i>Life-Cycle Costing Manual for the Federal Energy Management Program.</i> NIST Handbook 135. DOI: <a href="https://doi.org/10.6028/NIST.HB.135">10.6028/NIST.HB.135</a></p>
 <p class="ref">European Commission. (2014). <i>Guide to Cost-Benefit Analysis of Investment Projects.</i> Directorate-General for Regional and Urban Policy.</p>
+<p class="ref">Boardman, A.E., Greenberg, D.H., Vining, A.R. &amp; Weimer, D.L. (2018). <i>Cost-Benefit Analysis: Concepts and Practice.</i> 5th ed., Cambridge University Press. DOI: <a href="https://doi.org/10.1017/9781108235594">10.1017/9781108235594</a></p>
+<p class="ref">ISO. (2017). <i>ISO 15686-5:2017 — Buildings and constructed assets — Service life planning — Part 5: Life-cycle costing.</i> International Organization for Standardization.</p>
+<p class="ref">U.S. Office of Management and Budget. (1992). <i>Circular A-94: Guidelines and Discount Rates for Benefit-Cost Analysis of Federal Programs.</i> Washington, DC.</p>
+<p class="ref">HM Treasury. (2020). <i>The Green Book: Central Government Guidance on Appraisal and Evaluation.</i> London. DOI: <a href="https://doi.org/10.1108/9781787562820-024">10.1108/9781787562820-024</a></p>
+<p class="ref">NIST. (2015). <i>Community Resilience Planning Guide for Buildings and Infrastructure Systems.</i> NIST Special Publication 1190. DOI: <a href="https://doi.org/10.6028/NIST.SP.1190">10.6028/NIST.SP.1190</a></p>
+<p class="ref">FEMA. (2018). <i>Seismic Performance Assessment of Buildings, Volume 1 — Methodology (FEMA P-58-1), Second Edition.</i> Washington, DC.</p>
 
 <!-- ================================================================================================= -->
 <!-- GROUP 9: SPATIAL STATISTICS -->
@@ -1479,45 +1703,161 @@ $$\text{annualised} = \text{NPV} \times \frac{r}{1 - (1+r)^{-H}} \tag{2}$$
 
 <h3>Resilience Time-Series Tracker</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:resilience_time_series_tracker</code></p>
+
 <h4>1. Overview</h4>
-<p>Joins two snapshots of a scored layer (e.g. 2020 baseline and 2025 update) on a stable unit ID. Emits per-unit delta, percent change, trend (Improved / Stable / Worsened), and optional target gap. Geometry is taken from the later snapshot.</p>
+<p>Joins two snapshots of a scored layer (e.g., 2020 baseline and 2025 update) on a stable unit ID field. Emits per-unit delta, percent change, trend (Improved / Stable / Worsened), and optional target gap. Geometry is taken from the later snapshot. This is the suite's primary longitudinal-analysis tool — it converts two static maps into a change map suitable for trend analysis, before/after intervention evaluation, and policy-target tracking.</p>
+
+<h4>2. Theoretical Background</h4>
+<p>Longitudinal spatial analysis of risk indicators has become standard practice in climate adaptation monitoring (Cutter &amp; Finch, 2008; Preston et al., 2011). The paired-snapshot approach used here is a <b>two-period panel design</b> — the simplest longitudinal design that can detect direction of change but not acceleration or non-linear trajectories. The trend classification uses a ±1 point deadband around zero to suppress reporting of sub-meaningful fluctuations caused by rounding or data-update noise. The percent change metric normalises the raw delta by the baseline, enabling comparison across units with different baseline scores (a +10 delta from a baseline of 20 is a +50% change; the same +10 from a baseline of 80 is only +12.5%). The optional target gap field operationalises the "distance to policy target" concept from the Sendai Framework's monitoring system (UNDRR, 2019). The engine is in <code>processing/reporting/time_series_tracker.py</code>.</p>
+
+<h4>3. Mathematical Formulation</h4>
+$$\Delta_i = s_i^{(t_1)} - s_i^{(t_0)} \tag{1}$$
+$$\text{pct}_i = 100 \cdot \frac{\Delta_i}{s_i^{(t_0)}} \quad \text{if } |s_i^{(t_0)}| > 10^{-6} \text{, else NULL} \tag{2}$$
+$$T_i = \begin{cases} \text{Improved} & \Delta_i < -1.0 \\ \text{Stable} & -1.0 \le \Delta_i \le 1.0 \\ \text{Worsened} & \Delta_i > 1.0 \end{cases} \tag{3}$$
+$$G_i = s_i^{(t_1)} - \tau \quad \text{(target gap, positive = above target)} \tag{4}$$
+<p>where \(s_i^{(t_0)}\) is the earlier-snapshot score, \(s_i^{(t_1)}\) is the later-snapshot score, and \(\tau\) is the policy target value (default 0 = not used).</p>
+
+<h4>4. Input Data Requirements</h4>
+<table><tr><th>Input</th><th>Type</th><th>Required</th><th>Notes</th></tr>
+<tr><td>Earlier snapshot</td><td>Vector (any geometry)</td><td>Yes</td><td>Must have an ID field and a numeric score field (0–100 preferred).</td></tr>
+<tr><td>Later snapshot</td><td>Vector (any geometry)</td><td>Yes</td><td>Must have the same ID scheme and a numeric score field.</td></tr></table>
+
 <h4>5. Parameters</h4>
 <table><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
-<tr><td>Earlier layer + score + ID field</td><td>—</td><td>—</td><td>Baseline data.</td></tr>
-<tr><td>Later layer + score + ID field</td><td>—</td><td>—</td><td>Current/target data.</td></tr>
-<tr><td>Target value or field</td><td>Double/Field</td><td>(optional)</td><td>Policy target for gap analysis.</td></tr></table>
+<tr><td><code>EARLIER</code></td><td>Vector (any geometry)</td><td>—</td><td>Earlier-snapshot layer.</td></tr>
+<tr><td><code>EARLIER_ID</code></td><td>Field</td><td>—</td><td>Stable unit ID field on the earlier layer.</td></tr>
+<tr><td><code>EARLIER_SCORE</code></td><td>Field (Numeric)</td><td>—</td><td>Earlier score field (0–100).</td></tr>
+<tr><td><code>LATER</code></td><td>Vector (any geometry)</td><td>—</td><td>Later-snapshot layer.</td></tr>
+<tr><td><code>LATER_ID</code></td><td>Field</td><td>—</td><td>Stable unit ID field on the later layer (must match earlier IDs).</td></tr>
+<tr><td><code>LATER_SCORE</code></td><td>Field (Numeric)</td><td>—</td><td>Later score field (0–100).</td></tr>
+<tr><td><code>TARGET_VALUE</code></td><td>Double</td><td>0.0</td><td>Policy target value. Positive gap = score exceeds target (i.e., risk is above the policy goal).</td></tr></table>
+
 <h4>6. Output Description</h4>
 <table><tr><th>Field</th><th>Type</th><th>Description</th></tr>
-<tr><td><code>ts_earlier_score</code></td><td>Double</td><td>Score from the earlier snapshot.</td></tr>
-<tr><td><code>ts_later_score</code></td><td>Double</td><td>Score from the later snapshot.</td></tr>
-<tr><td><code>ts_delta</code></td><td>Double</td><td>Later − earlier.</td></tr>
-<tr><td><code>ts_delta_pct</code></td><td>Double</td><td>100 × delta / earlier.</td></tr>
-<tr><td><code>ts_trend</code></td><td>String</td><td>Improved / Stable / Worsened.</td></tr>
-<tr><td><code>ts_target_gap</code></td><td>Double</td><td>Later − target. Positive = below target.</td></tr></table>
+<tr><td><code>ts_earlier_score</code></td><td>Double</td><td>Score from the earlier snapshot (clamped). NULL if no matching ID.</td></tr>
+<tr><td><code>ts_later_score</code></td><td>Double</td><td>Score from the later snapshot (clamped).</td></tr>
+<tr><td><code>ts_delta</code></td><td>Double</td><td>Later − earlier. NULL if no match.</td></tr>
+<tr><td><code>ts_delta_pct</code></td><td>Double</td><td>100 × delta / earlier. NULL if earlier ≈ 0 or no match.</td></tr>
+<tr><td><code>ts_trend</code></td><td>String</td><td>Improved / Stable / Worsened / No match.</td></tr>
+<tr><td><code>ts_target_gap</code></td><td>Double</td><td>Later − target. Positive = above target (risk too high).</td></tr></table>
+
+<h4>7. Symbolic Representation</h4>
+<p>Graduated by <code>ts_delta</code>, diverging RdBu ramp (blue = improved, white = stable, red = worsened), 5–7 class equal-interval classification centred on zero. Alternatively, categorised by <code>ts_trend</code>: Improved = green, Stable = grey, Worsened = red. The delta map is the project's core before/after exhibit.</p>
+
 <h4>8. Interpretation Guide</h4>
-<p>Feed <code>ts_later_score</code> and <code>ts_delta</code> into <b>Risk Trend Hot-Spot</b> for the fused temporal × spatial label. Units with ts_trend = Worsened AND high ts_later_score are the urgent-reversal priorities.</p>
+<p><b>ts_trend = No match:</b> the unit ID in the later layer was not found in the earlier layer (new units, boundary changes, or ID scheme mismatch). Check ID field correspondence. <b>ts_delta_pct > 50%:</b> a dramatic change — verify whether this is a genuine risk change or a data collection methodology change between snapshots. <b>ts_target_gap > 0 AND ts_trend = Worsened:</b> the unit is moving away from the policy target — the most concerning trajectory. Feed <code>ts_later_score</code> and <code>ts_delta</code> into <b>Risk Trend Hot-Spot</b> for the fused temporal × spatial label. Feed the full output into <b>Scenario Comparison</b> for before/after delta mapping.</p>
+
+<h4>Academic References</h4>
+<p class="ref">Cutter, S.L. &amp; Finch, C. (2008). "Temporal and spatial changes in social vulnerability to natural hazards." <i>Proceedings of the National Academy of Sciences</i>, 105(7), 2301–2306. DOI: <a href="https://doi.org/10.1073/pnas.0710375105">10.1073/pnas.0710375105</a></p>
+<p class="ref">Preston, B.L., Yuen, E.J. &amp; Westaway, R.M. (2011). "Putting vulnerability to climate change on the map: a review of approaches, benefits, and risks." <i>Sustainability Science</i>, 6(2), 177–202. DOI: <a href="https://doi.org/10.1007/s11625-011-0129-1">10.1007/s11625-011-0129-1</a></p>
+<p class="ref">UNDRR. (2019). <i>Global Assessment Report on Disaster Risk Reduction.</i> United Nations Office for Disaster Risk Reduction, Geneva.</p>
+<p class="ref">Füssel, H.M. (2007). "Vulnerability: a generally applicable conceptual framework for climate change research." <i>Global Environmental Change</i>, 17(2), 155–167. DOI: <a href="https://doi.org/10.1016/j.gloenvcha.2006.05.002">10.1016/j.gloenvcha.2006.05.002</a></p>
+<p class="ref">Adger, W.N. (2006). "Vulnerability." <i>Global Environmental Change</i>, 16(3), 268–281. DOI: <a href="https://doi.org/10.1016/j.gloenvcha.2006.02.006">10.1016/j.gloenvcha.2006.02.006</a></p>
+<p class="ref">IPCC. (2014). <i>Climate Change 2014: Impacts, Adaptation, and Vulnerability. Part A: Global and Sectoral Aspects.</i> Cambridge University Press.</p>
+<p class="ref">Cutter, S.L., Boruff, B.J. &amp; Shirley, W.L. (2003). "Social vulnerability to environmental hazards." <i>Social Science Quarterly</i>, 84(2), 242–261. DOI: <a href="https://doi.org/10.1111/1540-6237.8402002">10.1111/1540-6237.8402002</a></p>
+<p class="ref">Birkmann, J., Cardona, O.D., Carreno, M.L., Barbat, A.H., Pelling, M., Schneiderbauer, S., Kienberger, S., Keiler, M., Alexander, D., Zeil, P. &amp; Welle, T. (2013). "Framing vulnerability, risk and societal responses: the MOVE framework." <i>Natural Hazards</i>, 67(2), 193–211. DOI: <a href="https://doi.org/10.1007/s11069-013-0558-5">10.1007/s11069-013-0558-5</a></p>
 
 <h3>Scenario Comparison / Delta Map</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:scenario_comparison_delta</code></p>
+
 <h4>1. Overview</h4>
-<p>Compares two 0–100 score fields on the same layer (typically baseline vs proposed after intervention). Outputs delta, percent change, change class (Improved / Stable / Worsened), and an optional threshold for what counts as meaningful change. Use for before/after intervention analysis or comparing two planning scenarios.</p>
+<p>Compares two 0–100 score fields on the same layer (typically baseline vs proposed after intervention, or two alternative planning scenarios). Outputs delta (scenario − baseline), absolute delta, percent change, change class (Improved / Stable / Worsened), and an action hint. The meaningful-change threshold (default 5 points) filters out noise-level fluctuations from genuine interventions. This is the suite's primary decision-support comparison tool: it quantifies the spatial impact of a proposed intervention and identifies units where the scenario produces a meaningful difference.</p>
+
+<h4>2. Theoretical Background</h4>
+<p>Scenario comparison is a core methodology in sustainability assessment and spatial planning (Swart et al., 2004; Xiang &amp; Clarke, 2003). The delta-map approach — subtracting two spatial fields and mapping the residuals — follows the "comparative statics" tradition in spatial economics and the before/after control-impact (BACI) design in environmental impact assessment (Smith, 2014). The default 5-point threshold for meaningful change eliminates the "small change problem" identified by Openshaw &amp; Taylor (1979): without a threshold, every unit shows some delta, most of which is noise, and the resulting map is uninformative. A 5-point delta on a 0–100 scale represents roughly one-half of a standard classification band, which is both statistically detectable and operationally meaningful. The engine is in <code>processing/reporting/scenario_comparison.py</code>.</p>
+
+<h4>3. Mathematical Formulation</h4>
+$$\Delta_i = b_i^{(s)} - b_i^{(0)} \tag{1}$$
+$$\text{abs\_}\Delta_i = |\Delta_i| \tag{2}$$
+$$\text{pct}_i = \begin{cases} 100 \cdot \dfrac{\Delta_i}{b_i^{(0)}} & b_i^{(0)} \neq 0 \\ 0 & \text{otherwise} \end{cases} \tag{3}$$
+$$C_i = \begin{cases} \text{Improved} & \Delta_i \le -\tau \\ \text{Stable} & -\tau < \Delta_i < \tau \\ \text{Worsened} & \Delta_i \ge \tau \end{cases} \tag{4}$$
+<p>where \(b_i^{(0)}\) is the baseline score, \(b_i^{(s)}\) is the scenario score, and \(\tau\) is the meaningful-change threshold (default 5.0). The action hint is derived from the change class: Improved → "Document and replicate", Worsened → "Review scenario drivers", Stable → "Monitor".</p>
+
+<h4>4. Input Data Requirements</h4>
+<table><tr><th>Input</th><th>Type</th><th>Required</th><th>Notes</th></tr>
+<tr><td>Input layer</td><td>Vector (any geometry)</td><td>Yes</td><td>Must have both a baseline and a scenario score field on the same layer.</td></tr></table>
+
 <h4>5. Parameters</h4>
 <table><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
-<tr><td><code>BASELINE_FIELD</code></td><td>Field (Numeric)</td><td>—</td><td>Baseline score.</td></tr>
-<tr><td><code>PROPOSED_FIELD</code></td><td>Field (Numeric)</td><td>—</td><td>Proposed/post-intervention score.</td></tr>
-<tr><td><code>CHANGE_THRESHOLD</code></td><td>Double</td><td>5.0</td><td>Minimum delta to count as a real change.</td></tr></table>
+<tr><td><code>BASELINE_FIELD</code></td><td>Field (Numeric)</td><td>—</td><td>Baseline score field (0–100).</td></tr>
+<tr><td><code>SCENARIO_FIELD</code></td><td>Field (Numeric)</td><td>—</td><td>Scenario/proposed score field (0–100).</td></tr>
+<tr><td><code>THRESHOLD</code></td><td>Double</td><td>5.0</td><td>Meaningful-change threshold. Deltas with |delta| < threshold are classified as Stable.</td></tr></table>
+
 <h4>6. Output Description</h4>
 <table><tr><th>Field</th><th>Type</th><th>Description</th></tr>
-<tr><td><code>sc_delta</code></td><td>Double</td><td>Proposed − baseline.</td></tr>
-<tr><td><code>sc_delta_pct</code></td><td>Double</td><td>100 × delta / baseline.</td></tr>
-<tr><td><code>sc_change_class</code></td><td>String</td><td>Improved / Stable / Worsened.</td></tr></table>
+<tr><td><code>base_score</code></td><td>Double</td><td>Baseline score (validated).</td></tr>
+<tr><td><code>scen_score</code></td><td>Double</td><td>Scenario score (validated).</td></tr>
+<tr><td><code>delta</code></td><td>Double</td><td>Scenario − baseline.</td></tr>
+<tr><td><code>abs_delta</code></td><td>Double</td><td>Absolute value of delta.</td></tr>
+<tr><td><code>pct_change</code></td><td>Double</td><td>100 × delta / baseline (0 if baseline = 0).</td></tr>
+<tr><td><code>change_cls</code></td><td>String</td><td>Improved / Stable / Worsened.</td></tr>
+<tr><td><code>action_hint</code></td><td>String</td><td>Document and replicate / Review scenario drivers / Monitor.</td></tr></table>
+
 <h4>7. Symbolic Representation</h4>
-<p>Graduated by <code>sc_delta</code>, diverging RdBu ramp: blue = improved (risk reduced), white = stable, red = worsened. The delta map is the project's core before/after exhibit.</p>
+<p>Graduated by <code>delta</code>, diverging RdBu ramp (blue = improved, white = stable, red = worsened), 5–7 class classification centred on zero. The delta map is the project's core before/after exhibit. For presentations, create a side-by-side layout: baseline map (left), scenario map (centre), delta map (right).</p>
+
+<h4>8. Interpretation Guide</h4>
+<p><b>change_cls = Improved with large negative delta (e.g., −30):</b> the scenario/intervention substantially reduces risk — these are the success-story units to document and replicate. <b>change_cls = Worsened with positive delta:</b> the scenario increases risk relative to the baseline — review the scenario parameters; this may indicate a realistic future-worsening (e.g., climate projection) or a modelling error. <b>change_cls = Stable:</b> the intervention does not alter the risk profile enough to cross the threshold — either the intervention is too weak, the unit's baseline score is too far from the threshold zone, or both. <b>Percent change vs absolute delta:</b> use percent change for ranking (a +10 delta from a baseline of 20 = +50% is more dramatic than +10 from 80 = +12.5%); use absolute delta for spatial mapping (it preserves the interpretable 0–100 scale). Feed the output into <b>Bivariate Choropleth Symbology</b> with baseline and delta as axes to show "where was it high AND got worse".</p>
+
+<h4>Academic References</h4>
+<p class="ref">Swart, R.J., Raskin, P. &amp; Robinson, J. (2004). "The problem of the future: sustainability science and scenario analysis." <i>Global Environmental Change</i>, 14(2), 137–146. DOI: <a href="https://doi.org/10.1016/j.gloenvcha.2003.10.002">10.1016/j.gloenvcha.2003.10.002</a></p>
+<p class="ref">Xiang, W.N. &amp; Clarke, K.C. (2003). "The use of scenarios in land-use planning." <i>Environment and Planning B</i>, 30(6), 885–909. DOI: <a href="https://doi.org/10.1068/b2945">10.1068/b2945</a></p>
+<p class="ref">Smith, E.P. (2014). "BACI design." In A.H. El-Shaarawi &amp; W.W. Piegorsch (eds.), <i>Encyclopedia of Environmetrics</i>, 2nd ed., Wiley. DOI: <a href="https://doi.org/10.1002/9780470057339.vab001.pub2">10.1002/9780470057339.vab001.pub2</a></p>
+<p class="ref">Openshaw, S. &amp; Taylor, P.J. (1979). "A million or so correlation coefficients: three experiments on the modifiable areal unit problem." In N. Wrigley (ed.), <i>Statistical Applications in the Spatial Sciences</i>, Pion, pp. 127–144.</p>
+<p class="ref">Rounsevell, M.D.A. &amp; Metzger, M.J. (2010). "Developing qualitative scenario storylines for environmental change assessment." <i>Wiley Interdisciplinary Reviews: Climate Change</i>, 1(4), 606–619. DOI: <a href="https://doi.org/10.1002/wcc.63">10.1002/wcc.63</a></p>
+<p class="ref">Mahmoud, M., Liu, Y., Hartmann, H., Stewart, S., Wagener, T., Semmens, D., Stewart, R., Gupta, H., Dominguez, D., Dominguez, F. et al. (2009). "A formal framework for scenario development in support of environmental decision-making." <i>Environmental Modelling &amp; Software</i>, 24(7), 798–808. DOI: <a href="https://doi.org/10.1016/j.envsoft.2008.11.010">10.1016/j.envsoft.2008.11.010</a></p>
+<p class="ref">van Vuuren, D.P., Edmonds, J., Kainuma, M., Riahi, K., Thomson, A., Hibbard, K., Hurtt, G.C., Kram, T., Krey, V., Lamarque, J.F. et al. (2011). "The representative concentration pathways: an overview." <i>Climatic Change</i>, 109, 5–31. DOI: <a href="https://doi.org/10.1007/s10584-011-0148-z">10.1007/s10584-011-0148-z</a></p>
+<p class="ref">IPCC. (2021). <i>Climate Change 2021: The Physical Science Basis.</i> Cambridge University Press.</p>
 
 <h3>Scenario Planning Template</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:scenario_planning_template</code></p>
+
 <h4>1. Overview</h4>
-<p>Creates an editable baseline/proposed score worksheet from any scored layer. Adds intervention labels, scenario metadata, expected reduction, draft status, and notes fields for studio workflows. The output is a QGIS vector layer that can be edited directly in the attribute table or exported to CSV for spreadsheet-based planning.</p>
+<p>Creates an editable baseline/proposed score worksheet from any scored layer. Computes a scenario score by applying an expected reduction percentage to the baseline, then adds intervention labels, scenario metadata, expected reduction, draft status, and notes fields. The output is a QGIS vector layer that can be edited directly in the attribute table or exported to CSV for spreadsheet-based planning. This is the suite's studio-drafting tool: planners sketch intervention scenarios directly in QGIS, edit the proposed scores per unit, and then compare baseline vs scenario via <b>Scenario Comparison / Delta Map</b>.</p>
+
+<h4>2. Theoretical Background</h4>
+<p>The template follows the <b>participatory scenario planning</b> methodology developed in land-use and climate adaptation studies (Patel et al., 2007; Kok et al., 2006). Rather than prescribing specific intervention magnitudes, the template empowers the planner to estimate expected reductions per planning unit based on local knowledge of costs, feasibility, and community context. The built-in intervention-type catalogue (green cooling, flood storage, shelter improvement, social support, air mitigation, drought retrofit, custom) maps to the six hazard families in the suite, ensuring each intervention is linked to a specific risk dimension. The expected reduction percentage is applied uniformly as a starting hypothesis; the planner then edits individual units to reflect heterogeneity. The engine is in <code>processing/reporting/scenario_template.py</code>.</p>
+
+<h4>3. Mathematical Formulation</h4>
+$$\text{base\_score}_i = \max(0, \min(100, v_i)) \quad \text{(from field or default)} \tag{1}$$
+$$\text{scen\_score}_i = \max\left(0, \min\left(100, \text{base\_score}_i \cdot \left(1 - \frac{r}{100}\right)\right)\right) \tag{2}$$
+<p>where \(v_i\) is the existing baseline score value (if a base_score_field is provided; otherwise the default_base_score), and \(r\) is the expected reduction percentage (default 15%). The formula linearly scales: a 15% reduction on a baseline of 80 yields a scenario score of 68; on a baseline of 40 yields 34.</p>
+
+<h4>4. Input Data Requirements</h4>
+<table><tr><th>Input</th><th>Type</th><th>Required</th><th>Notes</th></tr>
+<tr><td>Input layer</td><td>Vector (any geometry)</td><td>Yes</td><td>Existing planning units or scored layer. If a baseline score field is supplied, its values are used; otherwise the default base score applies to all units.</td></tr></table>
+
+<h4>5. Parameters</h4>
+<table><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
+<tr><td><code>INPUT</code></td><td>Vector (any geometry)</td><td>—</td><td>Planning units or scored layer.</td></tr>
+<tr><td><code>BASE_SCORE_FIELD</code></td><td>Field (Numeric)</td><td>(optional)</td><td>Existing baseline score field. If omitted, all units use the default base score.</td></tr>
+<tr><td><code>DEFAULT_BASE_SCORE</code></td><td>Double</td><td>50.0</td><td>Default baseline score when no field is provided.</td></tr>
+<tr><td><code>SCENARIO_NAME</code></td><td>String</td><td>"Scenario A"</td><td>Scenario label (e.g., "Proposed Green Corridor").</td></tr>
+<tr><td><code>INTERVENTION_TYPE</code></td><td>Enum</td><td>Green cooling</td><td>Intervention category: Green cooling / Flood storage / Shelter improvement / Social support / Air mitigation / Drought retrofit / Custom.</td></tr>
+<tr><td><code>EXPECTED_REDUCTION</code></td><td>Double</td><td>15.0</td><td>Expected score reduction (%). Applied uniformly to all units as a starting hypothesis.</td></tr></table>
+
+<h4>6. Output Description</h4>
+<table><tr><th>Field</th><th>Type</th><th>Description</th></tr>
+<tr><td><code>scenario</code></td><td>String</td><td>Scenario name (user-supplied).</td></tr>
+<tr><td><code>interv_type</code></td><td>String</td><td>Selected intervention type (plain text).</td></tr>
+<tr><td><code>base_score</code></td><td>Double</td><td>Baseline score (from field or default, clamped 0–100).</td></tr>
+<tr><td><code>scen_score</code></td><td>Double</td><td>Computed scenario score = base_score × (1 − reduction/100), clamped 0–100.</td></tr>
+<tr><td><code>exp_reduce</code></td><td>Double</td><td>Expected reduction percentage.</td></tr>
+<tr><td><code>edit_status</code></td><td>String</td><td>Always "draft" — enables filtering for units that need expert review.</td></tr>
+<tr><td><code>notes</code></td><td>String</td><td>Default note: "Review and edit scenario score before comparison."</td></tr></table>
+
+<h4>8. Interpretation Guide</h4>
+<p>The template is a <b>studio drafting tool, not an automated optimiser</b>. The expected reduction percentage provides a uniform starting point. Planners should then: (1) filter by <code>edit_status = 'draft'</code> to see units needing review, (2) edit <code>scen_score</code> manually for units where the uniform reduction is unrealistic (e.g., units with existing green infrastructure may have a smaller marginal reduction), (3) update <code>notes</code> with site-specific justification, (4) change <code>edit_status</code> to "reviewed" when done. After editing, run the output through <b>Scenario Comparison / Delta Map</b> to visualise the spatial impact of the proposed intervention package. For multi-scenario studios, run the template multiple times with different intervention types and scenario names, then compare all proposed scenarios side-by-side.</p>
+
+<h4>Academic References</h4>
+<p class="ref">Patel, M., Kok, K. &amp; Rothman, D.S. (2007). "Participatory scenario construction in land use analysis: an insight into the experiences created by an approach in southern India." <i>Land Use Policy</i>, 24(3), 546–561. DOI: <a href="https://doi.org/10.1016/j.landusepol.2006.01.002">10.1016/j.landusepol.2006.01.002</a></p>
+<p class="ref">Kok, K., Patel, M., Rothman, D.S. &amp; Quaranta, G. (2006). "Multi-scale narratives from an IA perspective: Part II. Participatory local scenario development." <i>Futures</i>, 38(3), 285–311. DOI: <a href="https://doi.org/10.1016/j.futures.2005.07.006">10.1016/j.futures.2005.07.006</a></p>
+<p class="ref">Swart, R.J., Raskin, P. &amp; Robinson, J. (2004). "The problem of the future: sustainability science and scenario analysis." <i>Global Environmental Change</i>, 14(2), 137–146. DOI: <a href="https://doi.org/10.1016/j.gloenvcha.2003.10.002">10.1016/j.gloenvcha.2003.10.002</a></p>
+<p class="ref">Boardman, A.E., Greenberg, D.H., Vining, A.R. &amp; Weimer, D.L. (2018). <i>Cost-Benefit Analysis: Concepts and Practice.</i> 5th ed., Cambridge University Press. DOI: <a href="https://doi.org/10.1017/9781108235594">10.1017/9781108235594</a></p>
+<p class="ref">IPCC. (2014). <i>Climate Change 2014: Impacts, Adaptation, and Vulnerability. Part A: Global and Sectoral Aspects.</i> Cambridge University Press.</p>
+<p class="ref">Xiang, W.N. &amp; Clarke, K.C. (2003). "The use of scenarios in land-use planning." <i>Environment and Planning B</i>, 30(6), 885–909. DOI: <a href="https://doi.org/10.1068/b2945">10.1068/b2945</a></p>
+<p class="ref">NIST. (2015). <i>Community Resilience Planning Guide for Buildings and Infrastructure Systems.</i> NIST Special Publication 1190. DOI: <a href="https://doi.org/10.6028/NIST.SP.1190">10.6028/NIST.SP.1190</a></p>
+<p class="ref">UNISDR. (2015). <i>Sendai Framework for Disaster Risk Reduction 2015–2030.</i> United Nations, Geneva.</p>
 
 <h3>Resilience Score HTML Report</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:resilience_score_html_report</code></p>
@@ -1561,21 +1901,91 @@ $$\text{annualised} = \text{NPV} \times \frac{r}{1 - (1+r)^{-H}} \tag{2}$$
 
 <h3>Multi-Hazard Correlation Matrix</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:correlation_matrix</code></p>
+
 <h4>1. Overview</h4>
-<p>Computes pairwise Pearson and Spearman correlations between N numeric score fields on the same layer. Outputs a standalone HTML report with a colour-coded heatmap and top-10 correlations table, plus a long-format QGIS table sink for further analysis. Pure Python — no numpy/scipy dependency. Useful for spotting redundancy ("flood and seismic scores move together — pick one for the composite") or surprise divergences.</p>
+<p>Computes pairwise Pearson and Spearman correlations between N numeric score fields (2–12) on the same layer. Outputs a standalone HTML report with a colour-coded heatmap, top-10 correlations table, and strength interpretation, plus a long-format QGIS table sink for further analysis. Pure Python — no numpy/scipy dependency. Operational use: spot redundancy ("flood and seismic scores move together in this city — pick one for the composite") or surprise divergences ("heat is uncorrelated with everything — it captures a unique spatial dimension").</p>
+
+<h4>2. Theoretical Background</h4>
+<p>Correlation analysis between hazard scores serves as a diagnostic step before building a multi-hazard composite index. Highly correlated hazard fields (|r| &gt; 0.80) contribute redundant spatial information: including both overweights that risk dimension and inflates the composite's sensitivity to shared measurement errors (OECD, 2008). The Pearson coefficient measures linear association; the Spearman rank coefficient measures monotonic association and is robust to outliers and non-normality (Spearman, 1904). Reporting both allows the analyst to distinguish between genuinely linear relationships and rank-consistent but non-linear ones (e.g., a threshold effect where flood and heat correlate only above a certain score). The engine implements both correlations in pure Python using the standard product-moment formulas, with ties in Spearman ranks handled by average-rank assignment. The engine is in <code>processing/reporting/correlation_matrix.py</code>.</p>
+
+<h4>3. Mathematical Formulation</h4>
+$$r_P = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum (x_i - \bar{x})^2 \sum (y_i - \bar{y})^2}} \tag{1}$$
+$$\rho_S = r_P(\text{rank}(x), \text{rank}(y)) \quad \text{(ties receive average rank)} \tag{2}$$
+$$n_{\text{pairs}} = |\{i : x_i \neq \text{null} \land y_i \neq \text{null}\}| \tag{3}$$
+<p>where pairs with missing values in either field are excluded listwise from that pairwise correlation. The heatmap colour interpolation maps \(r \in [-1, 0]\) to blue tones and \(r \in [0, 1]\) to red tones, with grey for NULL pairs. Strength interpretation labels: |r| &ge; 0.7 = strong, &ge; 0.4 = moderate, &ge; 0.2 = weak, &lt; 0.2 = negligible.</p>
+
+<h4>4. Input Data Requirements</h4>
+<table><tr><th>Input</th><th>Type</th><th>Required</th><th>Notes</th></tr>
+<tr><td>Input layer</td><td>Vector (Polygon/Point)</td><td>Yes</td><td>Must have 2–12 numeric score fields. Missing values are excluded pairwise.</td></tr></table>
+
 <h4>5. Parameters</h4>
 <table><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
-<tr><td><code>INPUT</code></td><td>Vector</td><td>—</td><td>Layer with multiple score fields.</td></tr>
-<tr><td><code>SCORE_FIELDS</code></td><td>Field (Numeric, multiple)</td><td>—</td><td>Fields to correlate pairwise.</td></tr>
-<tr><td><code>HTML_OUTPUT</code></td><td>File</td><td>—</td><td>Path for the HTML heatmap report.</td></tr>
-</table>
+<tr><td><code>INPUT</code></td><td>Vector (Polygon/Point)</td><td>—</td><td>Layer with multiple numeric score fields.</td></tr>
+<tr><td><code>FIELDS</code></td><td>Field (Numeric, multiple)</td><td>—</td><td>2–12 fields to correlate pairwise.</td></tr>
+<tr><td><code>PROJECT</code></td><td>String</td><td>(optional)</td><td>Project/study name for the HTML report title.</td></tr>
+<tr><td><code>OUTPUT_HTML</code></td><td>File</td><td>—</td><td>Path for the HTML heatmap report.</td></tr>
+<tr><td><code>OUTPUT_TABLE</code></td><td>Table (sink)</td><td>—</td><td>Long-format QGIS table (field_a, field_b, pearson_r, spearman_r, n_pairs).</td></tr></table>
+
+<h4>6. Output Description</h4>
+<table><tr><th>Output</th><th>Key Fields</th><th>Description</th></tr>
+<tr><td><b>HTML report</b></td><td>—</td><td>Standalone HTML with Pearson heatmap, Spearman heatmap, top-10 correlations table, and legend.</td></tr>
+<tr><td><b>Long-format table</b></td><td><code>field_a</code>, <code>field_b</code>, <code>pearson_r</code>, <code>spearman_r</code>, <code>n_pairs</code></td><td>One row per pair (upper triangle only). Null if &lt; 3 valid pairs.</td></tr></table>
+
 <h4>8. Interpretation Guide</h4>
-<p><b>|r| &gt; 0.80:</b> near-redundant — the two hazards carry essentially the same spatial information. Consider dropping one from the composite or using their mean. <b>r ≈ 0:</b> the hazards are spatially independent — keeping both in the composite adds genuine information. <b>r &lt; −0.50:</b> inverse relationship (e.g. flood-prone lowlands vs heat-prone ridgetops in the same city) — the composite must handle this divergence explicitly.</p>
+<p><b>|r| &gt; 0.80, both Pearson and Spearman:</b> near-redundant — the two hazards carry essentially the same spatial information. Consider dropping one from the composite or using their mean. <b>Pearson high, Spearman low:</b> the relationship is driven by a few extreme values — check for outliers driving the linear correlation. <b>r &asymp; 0:</b> the hazards are spatially independent — keeping both in the composite adds genuine information. <b>r &lt; -0.50:</b> inverse relationship (e.g., flood-prone lowlands vs heat-prone ridgetops in the same city) — the composite must handle this divergence explicitly. <b>n_pairs varying across the table:</b> different fields have different missing-data patterns — fields with high missing rates (&lt; 80% of total features) should be flagged as incomplete for composite construction.</p>
+
+<h4>Academic References</h4>
+<p class="ref">Spearman, C. (1904). "The proof and measurement of association between two things." <i>The American Journal of Psychology</i>, 15(1), 72–101. DOI: <a href="https://doi.org/10.2307/1412159">10.2307/1412159</a></p>
+<p class="ref">Pearson, K. (1895). "Note on regression and inheritance in the case of two parents." <i>Proceedings of the Royal Society of London</i>, 58, 240–242. DOI: <a href="https://doi.org/10.1098/rspl.1895.0041">10.1098/rspl.1895.0041</a></p>
+<p class="ref">OECD. (2008). <i>Handbook on Constructing Composite Indicators: Methodology and User Guide.</i> OECD Publishing. DOI: <a href="https://doi.org/10.1787/9789264043466-en">10.1787/9789264043466-en</a></p>
+<p class="ref">Nardo, M., Saisana, M., Saltelli, A., Tarantola, S., Hoffman, A. &amp; Giovannini, E. (2005). <i>Handbook on Constructing Composite Indicators.</i> OECD Statistics Working Papers, 2005/03. DOI: <a href="https://doi.org/10.1787/533411815016">10.1787/533411815016</a></p>
+<p class="ref">Kendall, M.G. (1938). "A new measure of rank correlation." <i>Biometrika</i>, 30(1–2), 81–93. DOI: <a href="https://doi.org/10.1093/biomet/30.1-2.81">10.1093/biomet/30.1-2.81</a></p>
+<p class="ref">Cutter, S.L., Boruff, B.J. &amp; Shirley, W.L. (2003). "Social vulnerability to environmental hazards." <i>Social Science Quarterly</i>, 84(2), 242–261. DOI: <a href="https://doi.org/10.1111/1540-6237.8402002">10.1111/1540-6237.8402002</a></p>
+<p class="ref">IPCC. (2014). <i>Climate Change 2014: Impacts, Adaptation, and Vulnerability. Part A.</i> Cambridge University Press.</p>
+<p class="ref">UNDRR. (2019). <i>Global Assessment Report on Disaster Risk Reduction.</i> United Nations Office for Disaster Risk Reduction, Geneva.</p>
 
 <h3>3D Risk Volume Export</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:risk_3d_volume_export</code></p>
+
 <h4>1. Overview</h4>
-<p>Converts a 0–100 scored polygon layer into a GeoJSON file in EPSG:4326 with <code>extrusion_height</code> (= score × scale_factor) and <code>color_hex</code> attributes per feature. Three colour ramp choices: Yellow-Red (sequential), Blue-Red (diverging), or Greys. An optional base-height field is additive. The GeoJSON drops straight into PlanX 3D City Viewer, Three.js, deck.gl, or Cesium for interactive 3D exploration — the suite's most dramatic visual output.</p>
+<p>Converts a 0–100 scored polygon layer into a GeoJSON file in EPSG:4326 with <code>extrusion_height</code> (= score x scale_factor) and <code>color_hex</code> attributes per feature. Three colour ramp choices: Yellow-Red (sequential), Blue-Red (diverging), or Greys. An optional base-height field is additive — useful when polygons already carry building-height attributes and the risk extrusion should stack on top. The GeoJSON drops straight into PlanX 3D City Viewer, Three.js, deck.gl, or Cesium for interactive 3D exploration — the suite's most dramatic visual output, transforming a choropleth map into a city silhouette where the tallest, most saturated blocks are the worst hot spots.</p>
+
+<h4>2. Theoretical Background</h4>
+<p>3D visualisation of risk data builds on the cartographic extrusion metaphor formalised in geovisualisation research (MacEachren et al., 2004; Slocum et al., 2009). Extruding polygons by a risk score exploits the human visual system's sensitivity to height variation (Ware, 2012): equal risk differences are perceived as equal vertical displacement, making the 3D view a direct physicalisation of the risk surface. The CRS transformation to EPSG:4326 (WGS 84) ensures compatibility with all major web-mapping libraries (deck.gl, Cesium, Mapbox) which expect geographic coordinates. The colour-ramp encoding is redundant with height — providing two visual channels for the same variable — which improves interpretability for viewers who may not perceive height accurately (due to perspective, occlusion, or colour vision deficiency). The engine is in <code>processing/reporting/risk_3d_export.py</code>.</p>
+
+<h4>3. Mathematical Formulation</h4>
+$$\text{norm}_i = \frac{\min(\max(s_i, 0), 100)}{100} \tag{1}$$
+$$h_i = h_{\max} \cdot \text{norm}_i + b_i \tag{2}$$
+$$\text{color}_i = \begin{cases} f_{\text{YlRd}}(\text{norm}) & \text{(sequential)} \\ f_{\text{BuRd}}(\text{norm}) & \text{(diverging)} \\ f_{\text{Greys}}(\text{norm}) & \text{(greyscale)} \end{cases} \tag{3}$$
+<p>where \(s_i\) is the score (0–100), \(h_{\max}\) is the maximum extrusion height (default 100 m), \(b_i\) is the optional base height, and the colour functions are piecewise-linear interpolations through anchor colours. Polygons are reprojected from the source CRS to EPSG:4326 via QGIS's coordinate transform.</p>
+
+<h4>5. Parameters</h4>
+<table><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
+<tr><td><code>INPUT</code></td><td>Vector (Polygon)</td><td>—</td><td>Scored polygon layer.</td></tr>
+<tr><td><code>SCORE_FIELD</code></td><td>Field (Numeric)</td><td>—</td><td>Score field (0–100).</td></tr>
+<tr><td><code>MAX_HEIGHT</code></td><td>Double</td><td>100.0</td><td>Maximum extrusion height in metres for score = 100.</td></tr>
+<tr><td><code>BASE_HEIGHT_FIELD</code></td><td>Field (Numeric)</td><td>(optional)</td><td>Base height field in metres (added to extrusion).</td></tr>
+<tr><td><code>COLOR_RAMP</code></td><td>Enum</td><td>Yellow-Red</td><td>Colour ramp: Yellow-Red / Blue-Red / Greys.</td></tr>
+<tr><td><code>OUTPUT_GEOJSON</code></td><td>File</td><td>—</td><td>Output GeoJSON file path.</td></tr></table>
+
+<h4>6. Output Description</h4>
+<table><tr><th>Field</th><th>Type</th><th>Description</th></tr>
+<tr><td><code>extrusion_height</code></td><td>Double</td><td>Total extrusion height = base_height + max_height x (score/100).</td></tr>
+<tr><td><code>color_hex</code></td><td>String</td><td>CSS hex colour (e.g., #fdbb84) from the selected ramp.</td></tr>
+<tr><td><code>score_norm</code></td><td>Double</td><td>Normalised score = score/100 (0 to 1).</td></tr></table>
+
+<h4>8. Interpretation Guide</h4>
+<p>The 3D view is most effective with <b>max_height = 100 m</b> and a study area of 2–5 km extent. For presentation: use Yellow-Red for single-hazard risk; use Blue-Red (diverging) for delta maps (blue = improved, red = worsened). The 3D view is a complement to, not a replacement for, the 2D choropleth — use both in a report side by side. The GeoJSON metadata block records the source score field, maximum height, colour ramp, and feature count for provenance tracking.</p>
+
+<h4>Academic References</h4>
+<p class="ref">MacEachren, A.M., Gahegan, M., Pike, W., Brewer, I., Cai, G., Lengerich, E. &amp; Hardisty, F. (2004). "Geovisualization for knowledge construction and decision support." <i>IEEE Computer Graphics and Applications</i>, 24(1), 13–17. DOI: <a href="https://doi.org/10.1109/MCG.2004.1255801">10.1109/MCG.2004.1255801</a></p>
+<p class="ref">Slocum, T.A., McMaster, R.B., Kessler, F.C. &amp; Howard, H.H. (2009). <i>Thematic Cartography and Geovisualization.</i> 3rd ed., Pearson.</p>
+<p class="ref">Ware, C. (2012). <i>Information Visualization: Perception for Design.</i> 3rd ed., Morgan Kaufmann. DOI: <a href="https://doi.org/10.1016/C2009-0-62432-6">10.1016/C2009-0-62432-6</a></p>
+<p class="ref">Tufte, E.R. (1990). <i>Envisioning Information.</i> Graphics Press.</p>
+<p class="ref">Brewer, C.A. (2005). <i>Designing Better Maps: A Guide for GIS Users.</i> ESRI Press.</p>
+<p class="ref">Bertin, J. (1983). <i>Semiology of Graphics: Diagrams, Networks, Maps.</i> University of Wisconsin Press.</p>
+<p class="ref">NIST. (2015). <i>Community Resilience Planning Guide for Buildings and Infrastructure Systems.</i> NIST Special Publication 1190. DOI: <a href="https://doi.org/10.6028/NIST.SP.1190">10.6028/NIST.SP.1190</a></p>
+<p class="ref">Dollner, J. &amp; Walther, M. (2003). "Real-time expressive rendering of city models." <i>Proceedings of the 7th International Conference on Information Visualization (IV'03)</i>, 245–250. DOI: <a href="https://doi.org/10.1109/IV.2003.1217985">10.1109/IV.2003.1217985</a></p>
 
 <!-- ================================================================================================= -->
 <!-- APPENDIX A: DATA SOURCES -->
