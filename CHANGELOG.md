@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.26.5] - 2026-08-07
+
+- Added online user manual link (https://yusufeminoglu.github.io/planx_urban_resilience/) and GitHub repository star call-to-action.
+
 ## [1.26.4] - 2026-08-07
 
 - Add floating Save as PDF button to reference manual
