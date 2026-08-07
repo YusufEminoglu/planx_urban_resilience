@@ -6,102 +6,261 @@
 <title>PlanX Urban Resilience — Comprehensive Academic Reference Manual</title>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <style>
+:root {
+  --bg: #ffffff; --fg: #1a1a1a; --muted: #555;
+  --accent: #0d9488; --accent-dark: #0f766e; --accent-light: #ccfbf1;
+  --border: #ddd; --code-bg: #f5f7f7;
+  --sidebar-bg: #f0f4f4; --sidebar-fg: #333; --sidebar-active: #ccfbf1;
+  --table-stripe: #f9fbfb;
+  font-size: 11pt; line-height: 1.55;
+}
+@media (prefers-color-scheme: dark) {
   :root {
-    --bg: #fafaf9;
-    --card-bg: #ffffff;
-    --text: #1c1917;
-    --muted: #78716c;
-    --border: #e7e5e4;
-    --accent: #0d9488;
-    --accent-dim: #ccfbf1;
-    --warn: #f59e0b;
-    --warn-dim: #fef3c7;
-    --danger: #ef4444;
-    --danger-dim: #fee2e2;
-    --code-bg: #f5f5f4;
-    --table-stripe: #fafaf9;
+    --bg: #1a1a2e; --fg: #e0e0e0; --muted: #999;
+    --accent: #0d9488; --accent-dark: #0f766e; --accent-light: #0d2a2a;
+    --border: #333; --code-bg: #1e2d3d;
+    --sidebar-bg: #16213e; --sidebar-fg: #ccc; --sidebar-active: #0d2a2a;
+    --table-stripe: #1a2a3a;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.7;
-    font-size: 15px;
-  }
-  .wrap { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 6rem; }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg); color: var(--fg); display: flex; min-height: 100vh; }
 
-  h1 { font-size: 2.2rem; font-weight: 700; margin: 1.5rem 0 0.25rem; letter-spacing: -0.02em; }
-  h1 + p { color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; }
-  h2 {
-    font-size: 1.45rem; font-weight: 700; margin: 2.5rem 0 0.75rem;
-    padding-bottom: 0.4rem; border-bottom: 2px solid var(--accent);
-    color: var(--accent);
-  }
-  h3 {
-    font-size: 1.2rem; font-weight: 700; margin: 2rem 0 0.6rem;
-    padding: 0.4rem 0.75rem; background: var(--accent-dim);
-    border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0;
-  }
-  h4 { font-size: 1rem; font-weight: 700; margin: 1.5rem 0 0.5rem; color: #44403c; }
-  p { margin: 0.6rem 0; }
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
+/* ── Sidebar ───────────────────────────────────────────────────── */
+#sidebar {
+  width: 300px; min-width: 300px; height: 100vh; position: sticky; top: 0;
+  background: var(--sidebar-bg); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; overflow: hidden; z-index: 100;
+}
+#sidebar-header { padding: 16px 18px 8px; border-bottom: 1px solid var(--border); }
+#sidebar-header .logo { font-size: 1.4em; font-weight: 700; color: var(--accent); display: block; }
+#sidebar-header .subtitle { font-size: .78em; color: var(--muted); }
+#search-wrap { padding: 10px 14px; }
+#search {
+  width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px;
+  font-size: .9em; background: var(--bg); color: var(--fg); outline: none;
+}
+#search:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-light); }
+#toc { flex: 1; overflow-y: auto; padding: 4px 0; list-style: none; }
+.toc-group { border-bottom: 1px solid var(--border); }
+.toc-group-btn {
+  display: block; width: 100%; text-align: left; padding: 8px 18px;
+  background: none; border: none; font-size: .88em; font-weight: 600;
+  color: var(--sidebar-fg); cursor: pointer;
+}
+.toc-group-btn:hover { background: var(--accent-light); }
+.toc-group-btn .arrow { font-size: .7em; transition: transform .2s; display: inline-block; }
+.toc-group-btn[aria-expanded="false"] .arrow { transform: rotate(-90deg); }
+.toc-algs { list-style: none; overflow: hidden; }
+.toc-algs li a {
+  display: block; padding: 4px 18px 4px 28px; font-size: .85em;
+  color: var(--sidebar-fg); text-decoration: none; border-left: 3px solid transparent;
+}
+.toc-algs li a:hover, .toc-algs li a.active { background: var(--accent-light); border-left-color: var(--accent); color: var(--accent-dark); }
+.toc-algs li a.hidden { display: none; }
+#sidebar-footer { padding: 10px 18px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px; }
+#sidebar-footer a { font-size: .82em; color: var(--muted); text-decoration: none; }
+#sidebar-footer a:hover { color: var(--accent); }
 
-  code, pre {
-    font-family: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', 'Consolas', monospace;
-    font-size: 0.88em;
-    background: var(--code-bg);
-  }
-  code { padding: 0.15em 0.35em; border-radius: 3px; }
-  pre { padding: 1rem 1.2rem; border-radius: 6px; overflow-x: auto; margin: 0.8rem 0; line-height: 1.55; }
+/* ── Content ────────────────────────────────────────────────────── */
+#content { flex: 1; max-width: 52em; padding: 2em 2.5em 6em; overflow-y: auto; }
+h1 { font-size: 2.4em; margin: 0 0 .15em; color: var(--accent); }
+h1.subtitle { font-size: 1.15em; font-weight: 400; color: var(--muted); margin-bottom: 1.5em; }
+h2 { font-size: 1.55em; margin: 2em 0 .5em; padding-bottom: .25em;
+  border-bottom: 2px solid var(--accent); color: var(--accent-dark); }
+h3 { font-size: 1.2em; margin: 1.5em 0 .4em; }
+h4 { font-size: 1.05em; margin: 1.2em 0 .3em; color: var(--muted); }
+p, ul, ol { margin: .6em 0; }
+ul, ol { padding-left: 1.8em; }
+li { margin: .25em 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  font-size: .9em; background: var(--code-bg); padding: .1em .3em; border-radius: 3px; }
+pre { background: var(--code-bg); padding: .8em 1em; border-radius: 4px;
+  overflow-x: auto; margin: .8em 0; font-size: .88em; }
+table { width: 100%; border-collapse: collapse; margin: .8em 0; font-size: .95em; }
+th, td { text-align: left; padding: .45em .6em; border: 1px solid var(--border); }
+th { background: var(--accent-light); font-weight: 600; }
+tr:nth-child(even) td { background: var(--table-stripe); }
+.callout { background: var(--accent-light); border-left: 4px solid var(--accent);
+  padding: .6em 1em; margin: .8em 0; border-radius: 0 4px 4px 0; }
+.callout.warn { background: #fff8e6; border-left: 4px solid #e6c300;
+  padding: .6em 1em; margin: .8em 0; border-radius: 0 4px 4px 0; }
+.callout.danger { background: #fee2e2; border-left: 4px solid #ef4444; }
+.callout.info { background: #e0f2fe; border-left: 4px solid #0284c7; }
+@media (prefers-color-scheme: dark) { .callout.warn { background: #332; border-left-color: #665200; } .callout.danger { background: #2a1a1a; } .callout.info { background: #0f1a2a; } }
+.pid { font-size: .85em; color: var(--muted); margin: -.3em 0 .8em; }
+.ref { margin: .35em 0; padding-left: 1.5em; text-indent: -1.5em; font-size: .93em; }
 
-  table {
-    width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem;
-    font-size: 0.92em;
-  }
-  th {
-    background: #f0f0ee; font-weight: 700; text-align: left;
-    padding: 0.5rem 0.7rem; border: 1px solid var(--border);
-  }
-  td {
-    padding: 0.4rem 0.7rem; border: 1px solid var(--border);
-    vertical-align: top;
-  }
-  tr:nth-child(even) td { background: var(--table-stripe); }
+/* ── Back to top ────────────────────────────────────────────────── */
+#back-to-top {
+  position: fixed; bottom: 24px; right: 24px; width: 40px; height: 40px;
+  background: var(--accent); color: white; border: none; border-radius: 50%;
+  font-size: 1.3em; cursor: pointer; opacity: 0; transform: translateY(20px);
+  transition: opacity .2s, transform .2s; z-index: 200;
+}
+#back-to-top.visible { opacity: .85; transform: translateY(0); }
+#back-to-top:hover { opacity: 1; }
 
-  .callout {
-    padding: 0.75rem 1rem; border-radius: 6px; margin: 0.8rem 0;
-    font-size: 0.93em;
-  }
-  .callout.warn { background: var(--warn-dim); border-left: 4px solid var(--warn); }
-  .callout.danger { background: var(--danger-dim); border-left: 4px solid var(--danger); }
-  .callout.info { background: #e0f2fe; border-left: 4px solid #0284c7; }
+/* ── Mobile ─────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  body { flex-direction: column; }
+  #sidebar { width: 100%; min-width: 0; height: auto; position: static; max-height: 40vh; }
+  #content { padding: 1em 1em 4em; }
+  #back-to-top { bottom: 12px; right: 12px; }
+}
 
-  .pid { font-size: 0.85em; color: var(--muted); margin: -0.3rem 0 0.8rem; }
-  .ref { font-size: 0.9em; margin: 0.3rem 0; padding-left: 1.5em; text-indent: -1.5em; }
-
-  nav {
-    background: var(--card-bg); border: 1px solid var(--border);
-    border-radius: 8px; padding: 1.2rem 1.5rem; margin-bottom: 2rem;
-    columns: 2; column-gap: 2rem;
-  }
-  nav a { display: block; font-size: 0.88em; padding: 0.15em 0; }
-  nav .nav-h2 { font-weight: 700; margin-top: 0.5em; break-inside: avoid; }
-  nav .nav-h3 { padding-left: 1em; }
-
-  .toc-group { font-weight: 700; font-size: 1em; margin-top: 0.6em; }
-  .back-top { font-size: 0.8em; float: right; }
-
-  @media (max-width: 700px) {
-    .wrap { padding: 1rem; }
-    nav { columns: 1; }
-    h1 { font-size: 1.6rem; }
-  }
+/* ── Print ──────────────────────────────────────────────────────── */
+@media print {
+  body { display: block; }
+  #sidebar, #back-to-top { display: none !important; }
+  #content { max-width: none; padding: 0; }
+  h2 { page-break-before: always; }
+  h3, h4 { page-break-after: avoid; }
+  table, pre, .callout { page-break-inside: avoid; }
+  a { color: inherit; }
+  @page { margin: 2cm 2.2cm; }
+}
 </style>
 </head>
 <body>
-<div class="wrap">
+<nav id="sidebar">
+<div id="sidebar-header">
+<span class="logo">PlanX Urban Resilience</span>
+<span class="subtitle">Academic Reference Manual · v1.26.2 · 43 Tools</span>
+</div>
+<div id="search-wrap">
+<input type="text" id="search" placeholder="Search algorithms…" autocomplete="off">
+</div>
+<ul id="toc">
+<li class="toc-group">
+<button class="toc-group-btn" aria-expanded="true" style="border-left:4px solid #13a0a0; background: linear-gradient(90deg, #13a0a018 0%, transparent 100%)">
+<span class="arrow">▼</span> 0. Demo & QA
+</button>
+<ul class="toc-algs">
+<li><a href="#g0" data-name="syntheticresiliencedemodataset" data-display="synthetic resilience demo dataset">Synthetic Resilience Demo Dataset</a></li>
+</ul></li>
+<li class="toc-group">
+<button class="toc-group-btn" aria-expanded="true" style="border-left:4px solid #e53935; background: linear-gradient(90deg, #e5393518 0%, transparent 100%)">
+<span class="arrow">▼</span> 1. Seismic: Debris & Logistics
+</button>
+<ul class="toc-algs">
+<li><a href="#g1" data-name="post-earthquakecollapsemontecarlo" data-display="post-earthquake collapse (monte carlo)">Post-Earthquake Collapse (Monte Carlo)</a></li>
+</ul></li>
+<li class="toc-group">
+<button class="toc-group-btn" aria-expanded="true" style="border-left:4px solid #fb8c00; background: linear-gradient(90deg, #fb8c0018 0%, transparent 100%)">
+<span class="arrow">▼</span> 2. Heat: Comfort & Exposure
+</button>
+<ul class="toc-algs">
+<li><a href="#g2" data-name="urbanheatcomfortrisk" data-display="urban heat comfort risk">Urban Heat Comfort Risk</a></li>
+</ul></li>
+<li class="toc-group">
+<button class="toc-group-btn" aria-expanded="true" style="border-left:4px solid #1e88e5; background: linear-gradient(90deg, #1e88e518 0%, transparent 100%)">
+<span class="arrow">▼</span> 3. Flood: Pluvial Susceptibility
+</button>
+<ul class="toc-algs">
+<li><a href="#g3" data-name="pluvialfloodsusceptibility" data-display="pluvial flood susceptibility">Pluvial Flood Susceptibility</a></li>
+</ul></li>
+<li class="toc-group">
+<button class="toc-group-btn" aria-expanded="true" style="border-left:4px solid #8e24aa; background: linear-gradient(90deg, #8e24aa18 0%, transparent 100%)">
+<span class="arrow">▼</span> 4. Social: Vulnerability & Equity
+</button>
+<ul class="toc-algs">
+<li><a href="#g4" data-name="socialvulnerabilityindex" data-display="social vulnerability index">Social Vulnerability Index</a></li>
+</ul></li>
+<li class="toc-group">
+<button class="toc-group-btn" aria-expanded="true" style="border-left:4px solid #c62828; background: linear-gradient(90deg, #c6282818 0%, transparent 100%)">
+<span class="arrow">▼</span> 5. Emergency: Accessibility & Networks
+</button>
+<ul class="toc-algs">
+<li><a href="#g5" data-name="emergencyaccessibility&sheltercoverage" data-display="emergency accessibility & shelter coverage">Emergency Accessibility & Shelter Coverage</a></li>
+<li><a href="#g5" data-name="networkemergencyaccessibility" data-display="network emergency accessibility">Network Emergency Accessibility</a></li>
+<li><a href="#g5" data-name="networkcriticalityedgebetweenness" data-display="network criticality (edge betweenness)">Network Criticality (Edge Betweenness)</a></li>
+<li><a href="#g5" data-name="evacuationtimesimulation" data-display="evacuation time simulation">Evacuation Time Simulation</a></li>
+<li><a href="#g5" data-name="seismiccascade:debrisnetwork" data-display="seismic cascade: debris → network">Seismic Cascade: Debris → Network</a></li>
+<li><a href="#g5" data-name="optimalsheltersitingmclp" data-display="optimal shelter siting (mclp)">Optimal Shelter Siting (MCLP)</a></li>
+<li><a href="#g5" data-name="evacuationshelterarrivalsummary" data-display="evacuation shelter arrival summary">Evacuation Shelter Arrival Summary</a></li>
+</ul></li>
+<li class="toc-group">
+<button class="toc-group-btn" aria-expanded="true" style="border-left:4px solid #43a047; background: linear-gradient(90deg, #43a04718 0%, transparent 100%)">
+<span class="arrow">▼</span> 6. Air: Exposure Screening
+</button>
+<ul class="toc-algs">
+<li><a href="#g6" data-name="airquality/urbanexposure" data-display="air quality / urban exposure">Air Quality / Urban Exposure</a></li>
+</ul></li>
+<li class="toc-group">
+<button class="toc-group-btn" aria-expanded="true" style="border-left:4px solid #6d4c41; background: linear-gradient(90deg, #6d4c4118 0%, transparent 100%)">
+<span class="arrow">▼</span> 7. Drought: Green Infrastructure
+</button>
+<ul class="toc-algs">
+<li><a href="#g7" data-name="drought&greeninfrastructurestress" data-display="drought & green infrastructure stress">Drought & Green Infrastructure Stress</a></li>
+</ul></li>
+<li class="toc-group">
+<button class="toc-group-btn" aria-expanded="true" style="border-left:4px solid #00897b; background: linear-gradient(90deg, #00897b18 0%, transparent 100%)">
+<span class="arrow">▼</span> 8. Synthesis: Multi-Hazard & Priority
+</button>
+<ul class="toc-algs">
+<li><a href="#g8" data-name="joinhazardscorestoplanningunits" data-display="join hazard scores to planning units">Join Hazard Scores to Planning Units</a></li>
+<li><a href="#g8" data-name="climateadaptationprioritysynthesis" data-display="climate adaptation priority synthesis">Climate Adaptation Priority Synthesis</a></li>
+<li><a href="#g8" data-name="multi-hazardcompositeindex" data-display="multi-hazard composite index">Multi-Hazard Composite Index</a></li>
+<li><a href="#g8" data-name="equity-adjustedadaptationpriority" data-display="equity-adjusted adaptation priority">Equity-Adjusted Adaptation Priority</a></li>
+<li><a href="#g8" data-name="climateprojectionoverlay" data-display="climate projection overlay">Climate Projection Overlay</a></li>
+<li><a href="#g8" data-name="recoverycapacityindex" data-display="recovery capacity index">Recovery Capacity Index</a></li>
+<li><a href="#g8" data-name="risk-recoveryprioritymatrix" data-display="risk-recovery priority matrix">Risk-Recovery Priority Matrix</a></li>
+<li><a href="#g8" data-name="hot-spotclusteranalysisgetis-ordgi*" data-display="hot-spot cluster analysis (getis-ord gi*)">Hot-Spot Cluster Analysis (Getis-Ord Gi*)</a></li>
+<li><a href="#g8" data-name="lisalocalmoran'si" data-display="lisa local moran's i">LISA Local Moran's I</a></li>
+<li><a href="#g8" data-name="population-weightedexposure" data-display="population-weighted exposure">Population-Weighted Exposure</a></li>
+<li><a href="#g8" data-name="multi-periodhazardfrequency" data-display="multi-period hazard frequency">Multi-Period Hazard Frequency</a></li>
+<li><a href="#g8" data-name="vulnerabilitysurfaceidw" data-display="vulnerability surface (idw)">Vulnerability Surface (IDW)</a></li>
+<li><a href="#g8" data-name="criticalinfrastructureexposure" data-display="critical infrastructure exposure">Critical Infrastructure Exposure</a></li>
+<li><a href="#g8" data-name="scenariosensitivityanalysis" data-display="scenario sensitivity analysis">Scenario Sensitivity Analysis</a></li>
+<li><a href="#g8" data-name="risktrendhot-spotgi*delta" data-display="risk trend hot-spot (gi* × δ)">Risk Trend Hot-Spot (Gi* × Δ)</a></li>
+</ul></li>
+<li class="toc-group">
+<button class="toc-group-btn" aria-expanded="true" style="border-left:4px solid #5c6bc0; background: linear-gradient(90deg, #5c6bc018 0%, transparent 100%)">
+<span class="arrow">▼</span> 10. Economics: Cost-Benefit & Lifecycle
+</button>
+<ul class="toc-algs">
+<li><a href="#g10" data-name="cost-benefitanalyzer" data-display="cost-benefit analyzer">Cost-Benefit Analyzer</a></li>
+<li><a href="#g10" data-name="pareto-optimalinterventionselector" data-display="pareto-optimal intervention selector">Pareto-Optimal Intervention Selector</a></li>
+<li><a href="#g10" data-name="lifecyclecostcalculatornpv" data-display="lifecycle cost calculator (npv)">Lifecycle Cost Calculator (NPV)</a></li>
+</ul></li>
+<li class="toc-group">
+<button class="toc-group-btn" aria-expanded="true" style="border-left:4px solid #ef6c00; background: linear-gradient(90deg, #ef6c0018 0%, transparent 100%)">
+<span class="arrow">▼</span> 9. Spatial Statistics
+</button>
+<ul class="toc-algs">
+<li><a href="#g9" data-name="spatialstatisticsoverview" data-display="spatial statistics overview">Spatial Statistics Overview</a></li>
+</ul></li>
+<li class="toc-group">
+<button class="toc-group-btn" aria-expanded="true" style="border-left:4px solid #ad1457; background: linear-gradient(90deg, #ad145718 0%, transparent 100%)">
+<span class="arrow">▼</span> R. Reporting, Visualisation & QA
+</button>
+<ul class="toc-algs">
+<li><a href="#gR" data-name="resiliencetime-seriestracker" data-display="resilience time-series tracker">Resilience Time-Series Tracker</a></li>
+<li><a href="#gR" data-name="scenariocomparison/deltamap" data-display="scenario comparison / delta map">Scenario Comparison / Delta Map</a></li>
+<li><a href="#gR" data-name="scenarioplanningtemplate" data-display="scenario planning template">Scenario Planning Template</a></li>
+<li><a href="#gR" data-name="resiliencescorehtmlreport" data-display="resilience score html report">Resilience Score HTML Report</a></li>
+<li><a href="#gR" data-name="resiliencestudiobriefmarkdown" data-display="resilience studio brief (markdown)">Resilience Studio Brief (Markdown)</a></li>
+<li><a href="#gR" data-name="recommendedactionsreport" data-display="recommended actions report">Recommended Actions Report</a></li>
+<li><a href="#gR" data-name="applyresiliencesymbology" data-display="apply resilience symbology">Apply Resilience Symbology</a></li>
+<li><a href="#gR" data-name="bivariatechoroplethsymbology" data-display="bivariate choropleth symbology">Bivariate Choropleth Symbology</a></li>
+<li><a href="#gR" data-name="resiliencepdfatlas" data-display="resilience pdf atlas">Resilience PDF Atlas</a></li>
+<li><a href="#gR" data-name="multi-hazardcorrelationmatrix" data-display="multi-hazard correlation matrix">Multi-Hazard Correlation Matrix</a></li>
+<li><a href="#gR" data-name="3driskvolumeexport" data-display="3d risk volume export">3D Risk Volume Export</a></li>
+</ul></li>
+</ul>
+<div id="sidebar-footer">
+<a href="#appendix-a">📊 Data Sources</a>
+<a href="#appendix-b">🎨 Symbolization</a>
+<a href="#appendix-c">📖 Glossary</a>
+<a href="#appendix-d">📚 Bibliography</a>
+</div>
+</nav>
+
+<main id="content">
 
 <h1>PlanX Urban Resilience — Academic Reference Manual</h1>
 <p>Covering Urban Resilience v1.26.2 · 43 Algorithms · 10 Tool Groups<br>
@@ -1533,6 +1692,65 @@ PlanX Urban Resilience — Academic Reference Manual · v1.26.2 · 43 Algorithms
 Yusuf Eminoğlu · August 2026 · <a href="https://github.com/YusufEminoglu/planx_urban_resilience">GitHub</a>
 </p>
 
-</div><!-- .wrap -->
+</main>
+
+<button id="back-to-top" title="Back to top">↑</button>
+<script>
+// ── Sidebar TOC collapse ──────────────────────────────────────────
+document.querySelectorAll('.toc-group-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const expanded = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', !expanded);
+  });
+});
+
+// ── Search ────────────────────────────────────────────────────────
+const searchInput = document.getElementById('search');
+searchInput.addEventListener('input', () => {
+  const query = searchInput.value.toLowerCase().trim();
+  document.querySelectorAll('.toc-algs li a').forEach(link => {
+    const name = (link.dataset.name || '').toLowerCase();
+    const display = (link.dataset.display || '').toLowerCase();
+    const match = !query || name.includes(query) || display.includes(query);
+    link.classList.toggle('hidden', !match);
+  });
+  document.querySelectorAll('.toc-group').forEach(group => {
+    const visible = group.querySelectorAll('.toc-algs li a:not(.hidden)');
+    const btn = group.querySelector('.toc-group-btn');
+    if (query && visible.length > 0) btn.setAttribute('aria-expanded', 'true');
+  });
+});
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    searchInput.focus();
+  }
+});
+
+// ── Active section tracking ───────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      document.querySelectorAll('#toc a').forEach(a => a.classList.remove('active'));
+      const link = document.querySelector(`#toc a[href="#${id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+document.querySelectorAll('#content h2[id]').forEach(h2 => observer.observe(h2));
+
+// ── Back to top ───────────────────────────────────────────────────
+const btt = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => {
+  btt.classList.toggle('visible', window.scrollY > 400);
+});
+btt.addEventListener('click', () => {
+  document.getElementById('content').scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
 </body>
 </html>
