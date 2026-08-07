@@ -10,12 +10,17 @@
 [![Version](https://img.shields.io/github/v/tag/YusufEminoglu/planx_urban_resilience?label=version&color=blue)](https://github.com/YusufEminoglu/planx_urban_resilience/releases)
 [![License](https://img.shields.io/badge/license-GPL--3.0-orange)](LICENSE)
 [![QGIS Plugin Hub](https://img.shields.io/badge/QGIS%20Hub-install-589632?logo=qgis&logoColor=white)](https://plugins.qgis.org/plugins/planx_urban_resilience/)
+[![Documentation](https://img.shields.io/badge/📖_Reference_Manual-43_algorithms-13a0a0)](https://yusufeminoglu.github.io/planx_urban_resilience/)
 
 </div>
 
 ---
 
 PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. The suite ships **43 Processing algorithms**: synthetic QA data, seismic debris and cascade, heat, flood, social vulnerability, Euclidean and network emergency access, evacuation simulation, optimal shelter siting, network criticality, air and drought screening, adaptation/multi-hazard/equity/climate/recovery/sensitivity synthesis, hot-spot (Getis-Ord Gi*) and LISA cluster statistics with FDR-adjusted significance, correlation matrix, IDW vulnerability surfaces, Pareto and cost-benefit economics, lifecycle NPV, time-series tracking, scenario templates and comparison, HTML/Markdown/PDF reporting, 3D risk export, and QGIS style presets — plus a dashboard for module discovery and data readiness review. All 43 algorithms run on both QGIS 3.44 LTR and QGIS 4.0 — verified via headless e2e harness.
+
+## 📖 Documentation
+
+**[Comprehensive Academic Reference Manual](https://yusufeminoglu.github.io/planx_urban_resilience/)** — 43 algorithms across 10 modules. Every algorithm documented with theoretical background, mathematical formulation, complete parameter tables, output field descriptions, QGIS symbolization guidance, interpretation guides, and DOI-verified academic references. Hosted on GitHub Pages with search, collapsible sidebar, and per-algorithm deep links accessible directly from the QGIS Processing dialog (Help button).
 
 ## Modules
 
