@@ -122,7 +122,7 @@ Quality release: every one of the 43 algorithms now verified end-to-end on real 
 All notable changes to **PlanX: Urban Resilience** are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · versioning: [SemVer](https://semver.org/).
 
-## [Unreleased]
+## [1.26.3] - 2026-08-07
 
 ### Added
 - Dashboard **Beta** page with release-gate snapshot (`READY` / `NOT READY`) based on loaded layers, vector/raster balance, CRS spread and module-catalog presence.
