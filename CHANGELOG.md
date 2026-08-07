@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.26.4] - 2026-08-07
+
+- Add floating Save as PDF button to reference manual
+
 ## [1.26.2] - 2026-07-29
 
 Packaging and security-scan hygiene. No functional or algorithmic change.
