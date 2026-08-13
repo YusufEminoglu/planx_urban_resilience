@@ -103,20 +103,34 @@ class OptimalShelterSitingAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgor
         return self.tr(
             """
             <h3>Optimal Shelter Siting</h3>
-            <p>Pick K shelter sites from a candidate set so the population
-            covered within a maximum walking distance is maximised. Greedy
-            MCLP — at each step pick the site that adds the most uncovered
-            demand. 0.63-of-optimal worst case, but the de-facto choice
-            when budgets are tight.</p>
-            <p>An optional existing-shelter layer pre-covers some demand
-            so the K new picks fill the gaps.</p>
-            <p>Per-candidate outputs:</p>
-            <ul>
-              <li><code>oss_selected</code> — 1 if picked, else 0.</li>
-              <li><code>oss_rank</code> — 1..K selection order.</li>
-              <li><code>oss_pop_added</code> — additional population covered at selection.</li>
-              <li><code>oss_pop_total_cum</code> — cumulative covered population after this pick.</li>
-            </ul>
+            <p>Greedy Maximal Covering Location Problem (MCLP, Church &amp; ReVelle,
+            1974) - the practically-answerable reformulation of Toregas et al.'s (1971)
+            Location Set Covering Problem (minimum facilities to cover ALL demand, often
+            infeasible under a real budget): given a FIXED K, which K candidate sites
+            maximise covered population within MAX_DISTANCE? At each step the greedy
+            algorithm picks the candidate that adds the most still-uncovered demand.
+            Coverage is submodular (diminishing returns per added site, visible directly
+            in the per-step log), so Cornuejols, Fisher &amp; Nemhauser (1977) proved
+            greedy reaches at least (1 - 1/e) is approx 0.63 of the true optimum -
+            and in practice routinely &gt;95% (Daskin, 2013).</p>
+            <p>Coverage is a hard binary cutoff at MAX_DISTANCE (a unit at 499 m counts
+            fully, 501 m counts zero) using EUCLIDEAN distance - a straight line across a
+            river counts as covered even with no bridge. An optional EXISTING layer
+            pre-covers demand before the greedy loop runs, so the K new picks fill the
+            real remaining gap rather than re-covering what's already served.</p>
+            <p>How to read the results
+            - oss_selected / oss_rank: which candidates were picked, and in what order.
+            - oss_pop_added: the marginal population each pick added - watch this shrink
+            step over step (diminishing returns) in the processing log; a sharp drop
+            after site 2-3 tells you where the K budget stops paying for itself.
+            - oss_pop_total_cum: running total, compare to the log's overall coverage %.</p>
+            <p>Using the results: for anywhere real routing barriers matter, pre-route
+            demand through Network Emergency Accessibility first and use the resulting
+            network distance as a coverage-eligibility field instead of raw Euclidean
+            distance. This tool only ADDS sites - it never proposes relocating or
+            removing an existing one. The "top 10 uncovered demand units" log entry
+            identifies populations that may need a mobile response rather than a fixed
+            shelter.</p>
             """
         )
 

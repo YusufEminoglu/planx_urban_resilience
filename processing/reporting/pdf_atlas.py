@@ -193,12 +193,24 @@ class ResiliencePdfAtlasAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorit
             """
             <h3>Resilience PDF Atlas</h3>
             <p>Builds a multi-page atlas (cover + overview + per-class map pages)
-            from a scored resilience layer. Choose a map-book preset (A3 standard,
-            A4 compact, or A3 high-DPI studio). QGIS-native via QgsLayout.</p>
+            from a scored resilience layer, automating the standard cartographic
+            "map book" convention: a cover establishing context, an overview
+            orienting the reader, then successive detail pages each isolating one
+            risk class so a reader focuses on one story at a time. Choose a
+            map-book preset (A3 standard, A4 compact, or A3 high-DPI studio).
+            QGIS-native via QgsLayout - every page stays a first-class, editable
+            print layout you can open in the Layout Manager afterward.</p>
             <p>Pair with any algorithm in this suite that produces a 0-100
             score (Adaptation Priority, Multi-Hazard Composite, Recovery
             Capacity, Equity-Adjusted Priority, Climate Projection Overlay).
-            The optional class field is used to drive separate pages.</p>
+            The optional class field is used to drive separate pages - use a
+            coarse classification (this suite's standard 4-5 class convention),
+            not a raw continuous score, or the page count can become unwieldy.</p>
+            <p>Using the results: the 300 dpi Studio preset produces much larger
+            files and longer render times - reserve it for final print production,
+            not quick iterative review. For a fast on-screen check instead of a
+            print deliverable, use Resilience Score HTML Report or Resilience
+            Studio Brief.</p>
             """
         )
 

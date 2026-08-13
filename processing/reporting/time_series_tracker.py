@@ -83,13 +83,33 @@ class ResilienceTimeSeriesAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgor
         return self.tr(
             """
             <h3>Resilience Time-Series Tracker</h3>
-            <p>Joins two snapshots of the same scored layer on a stable unit
-            ID and emits per-unit deltas with a trend label.</p>
-            <p>Use cases: monitor a strategy against a 5-year horizon, compare
-            two scenario outputs (baseline vs proposed) without rebuilding a
-            comparison layer, or chart a single neighbourhood across pre/post-
-            intervention years.</p>
-            <p>Geometry is taken from the <i>later</i> snapshot.</p>
+            <p>Joins two snapshots of the same scored layer on a stable unit ID and
+            emits per-unit delta, percent change and trend - a two-period panel
+            design, the simplest longitudinal design that can detect direction of
+            change but not acceleration (Cutter &amp; Finch, 2008; Preston et al.,
+            2011 situate this in the climate-adaptation monitoring literature).
+            Trend uses a +/-1 point deadband around zero to suppress rounding/noise
+            from being reported as a real change.</p>
+            <p>Percent change normalises delta by the baseline (a +10 delta from
+            baseline 20 is +50%, the same +10 from baseline 80 is only +12.5%) -
+            use it for ranking, use the raw delta for mapping on the interpretable
+            0-100 scale. The optional target-gap field measures distance to a
+            policy target, in the spirit of Sendai Framework monitoring (UNDRR,
+            2019).</p>
+            <p>Use cases: monitor a strategy against a 5-year horizon, evaluate a
+            single neighbourhood pre/post-intervention. Geometry is taken from the
+            <i>later</i> snapshot.</p>
+            <p>How to read the results
+            - ts_trend = No match: the unit ID in the later layer wasn't found in
+            the earlier layer - check for boundary changes or ID-scheme mismatch
+            before assuming the unit simply wasn't scored.
+            - ts_target_gap &gt; 0 AND ts_trend = Worsened: moving away from the
+            policy target, the most concerning trajectory.</p>
+            <p>Using the results: feed ts_later_score and ts_delta into Risk Trend
+            Hot-Spot for the fused temporal x spatial label. This is for two
+            genuinely time-separated snapshots - for comparing two scenarios at the
+            SAME point in time (baseline vs. proposed), use Scenario Comparison /
+            Delta Map instead.</p>
             """
         )
 

@@ -84,12 +84,32 @@ class JoinScoresToPlanningUnitsAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessing
         return self.tr(
             """
             <h3>Join Hazard Scores to Planning Units</h3>
-            <p>Attach up to five 0-100 score fields from other layers onto
-            planning-unit polygons. Uses the <b>maximum</b> score among
-            intersecting features per unit.</p>
-            <p>Typical workflow: run Heat / Flood / Social modules, then join
-            their score fields here before Multi-Hazard Composite or Adaptation
-            Priority Synthesis.</p>
+            <p>Attaches up to five 0-100 score fields onto planning-unit polygons by
+            taking the MAXIMUM score among intersecting features per unit - a
+            deliberately conservative, precautionary-principle choice: if any part of
+            a unit is exposed to a high score, the whole unit inherits it. This avoids
+            the dilution problem of areal-weighted averaging, where a small
+            high-hazard sliver (a flood-prone stream corridor crossing a large tract)
+            gets averaged away by the tract's mostly-low-hazard area - an instance of
+            the wider Modifiable Areal Unit Problem.</p>
+            <p>The five source layers are joined independently with no cross-layer
+            normalisation - they only stay comparable because every hazard tool in
+            this suite outputs 0-100 by convention. A NULL joined field means "no
+            intersecting feature," never "zero risk" - do not conflate the two in a
+            downstream composite.</p>
+            <p>How to read the results
+            - Each OUT field is the max score from its source layer; check for NULLs
+            before running a composite, since a composite treating NULL as 0 silently
+            understates risk instead of flagging missing data.
+            - Cross-score consistency: sort by each joined field and compare top-10
+            lists - overlapping lists mean a concentrated multi-hazard problem,
+            disjoint lists mean the hazards are spatially independent.</p>
+            <p>Using the results: this is the standard "collect and align" step -
+            run Heat / Flood / Social / Air / Drought first, join here, then feed into
+            Multi-Hazard Composite Index or Climate Adaptation Priority Synthesis.
+            Where an areal-weighted average is more defensible than max-intersection
+            (aggregating a fine grid onto large administrative units), pre-process
+            with zonal statistics instead.</p>
             """
         )
 

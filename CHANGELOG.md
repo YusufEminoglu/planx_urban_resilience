@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.1.0] - 2026-08-13
+
+Documentation-only release: the online reference manual and every algorithm's in-GUI help text are rewritten to the same elite-academic register as the sibling PlanX plugin. No algorithm logic, parameters, or output fields changed.
+
+### Changed
+
+- Every one of the 43 algorithms' manual entry (`docs/URBAN_RESILIENCE_REFERENCE_MANUAL.html`) now has an **Academic lineage** paragraph (historical narrative, real citations, verified DOIs where available), an itemised **Key assumptions** list, and an explicit **When to use vs. when NOT to use** section cross-linking to the better-fit sibling tool. Several entries that were missing whole sections (Theoretical Background, Mathematical Formulation, or the Input Data Requirements table) had them written from scratch, cross-checked against the actual algorithm source. Manual grew from 26,439 to over 40,000 words.
+- Every algorithm's `shortHelpString()` rewritten to match: a compact methodology paragraph with inline citation, practical usage notes, a "How to read the results" field-by-field breakdown, and a "Using the results" closing paragraph with concrete planning actions.
+- Manual design polish: an on-page mini jump-nav per tool (auto-built from its subsections), a copy-anchor-link button on every tool heading, "See also" cross-link chips between related tools (derived from the when-NOT-to-use notes), and performance/complexity badges on the tools with genuine documented O(n) cost (seismic Monte Carlo, heat grid, network criticality, evacuation simulation, join-to-planning-units, Pareto selector).
+- The sidebar's "currently reading" highlight now tracks the specific tool being read, not just its hazard group.
+
+### Fixed
+
+- The manual had no per-algorithm HTML anchors — every tool `<h3>` lacked an `id`, so the dock's right-click "View Documentation" (which opens `helpUrl()` = manual URL + `#<algorithm name>`) landed on the manual but never scrolled to the right entry. Every tool now has a stable, code-name-matching anchor.
+- Six stale Processing-ID references in the Reporting section that no longer matched their algorithms' actual `name()` after a past rename.
+
 ## [2.0.0] - 2026-08-13
 
 Major GUI rewrite. Mirrors the sibling PlanX plugin: a docked Processing panel replaces the modal dashboard.

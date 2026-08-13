@@ -68,8 +68,35 @@ class AdaptationPrioritySynthesisAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessi
         return self.tr(
             """
             <h3>Climate Adaptation Priority Synthesis</h3>
-            <p>Combines existing 0-100 risk or deficit fields into one adaptation priority score. Use it on planning units, grid cells or neighborhood polygons after joining outputs from other PlanX Urban Resilience modules.</p>
-            <p>The algorithm does not spatially join layers by itself; prepare one polygon layer that already contains the fields you want to synthesize.</p>
+            <p>Linear weighted-sum multi-criteria composite - the simplest, most
+            transparent form of MCDA, following the same additive aggregation logic as
+            the ISO 14044 lifecycle-impact convention. Combines up to six 0-100
+            hazard fields (heat, flood, social, air, access, drought) with defaults
+            (0.20/0.20/0.20/0.15/0.15/0.10) chosen so no single hazard dominates by
+            construction - the weights are the explicit, auditable policy choice.</p>
+            <p>Linear weighted-sum means full compensability: a very low flood score
+            can offset a very high heat score. Missing fields are excluded and their
+            weight redistributed across present fields - a unit with only 2 of 6
+            fields still gets a score, but check the missing field before treating it
+            as equally reliable to a fully-populated unit. All six inputs must already
+            be on a common 0-100 scale; this tool performs no normalisation.</p>
+            <p>How to read the results
+            - adapt_score: the composite ranking number, 0-100.
+            - adapt_class: Immediate (&gt;=75) / High (55-74) / Medium (35-54) /
+            Monitor (&lt;35).
+            - drivers: which hazard(s) actually drove the score - "flood:92.1,
+            heat:45.0" means a flood priority, not a heat one; use this to assign
+            hazard-specific interventions rather than generic ones.
+            - missing: fields absent or zero-weighted - a reliability check, not a
+            score component.</p>
+            <p>Using the results: this algorithm does not spatially join layers by
+            itself - prepare one polygon layer via Join Hazard Scores to Planning
+            Units first. Feed adapt_score into Equity-Adjusted Priority to re-rank by
+            vulnerability, or into Risk-Recovery Priority Matrix with a recovery score
+            to find high-hazard + low-recovery gaps. Where the breakdown of which
+            hazard drives the score matters more than the single number, use
+            Multi-Hazard Composite Index instead - it keeps the diagnostic breakdown
+            visible rather than collapsing it away.</p>
             """
         )
 

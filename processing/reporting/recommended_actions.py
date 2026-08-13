@@ -147,6 +147,24 @@ class RecommendedActionsAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorit
             <p>Catalogue currently covers heat, flood, seismic, social,
             air, drought and emergency-access. Unknown hazards fall back
             to a generic checklist.</p>
+            <p>Hazard-family detection is a transparent, auditable case-insensitive
+            substring match against the dominant-hazard field (e.g. any value
+            containing "flood" maps to the flood catalogue) - not a fuzzy
+            classifier. A field using unexpected terminology (e.g. "inundation"
+            instead of "flood") will not match and falls back to generic. Only
+            ONE dominant hazard per unit drives the checklist, even for units
+            facing several comparably severe hazards.</p>
+            <p>The catalogue is fixed and identical for every project - it has no
+            awareness of local context, budget, or regulatory environment; every
+            item ("structural retrofit programme", "bioswales along low-lying
+            corridors") is a generic category needing local design and feasibility
+            work, not a costed proposal.</p>
+            <p>Using the results: if every unit falls back to the generic
+            checklist, check the dominant-hazard field's actual text values
+            against the catalogue keys (heat, flood, seism, social, air, drought,
+            emergency) - a terminology mismatch is the most common cause. Use the
+            checklists to facilitate a stakeholder workshop discussion, not as a
+            ranked or prioritised recommendation.</p>
             """
         )
 

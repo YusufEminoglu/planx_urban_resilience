@@ -131,22 +131,33 @@ class LisaLocalMoranAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
         return self.tr(
             """
             <h3>LISA Local Moran's I</h3>
-            <p>Companion to the Hot-Spot Gi* module — adds outlier detection
-            on top of cluster detection. For each feature labels:</p>
+            <p>Companion to the Hot-Spot Gi* module - Anselin's (1995) Local
+            Indicators of Spatial Association decompose the global Moran's I into
+            per-feature contributions, and crucially classify each feature by
+            comparing its own value against its neighbourhood's spatial lag - which
+            is what lets LISA detect OUTLIERS as well as clusters, a capability Gi*
+            (built purely to find clusters) structurally lacks. For each feature:</p>
             <ul>
               <li><b>HH</b> — high value in a high-value neighbourhood (cluster).</li>
               <li><b>LL</b> — low value in a low-value neighbourhood (cluster).</li>
-              <li><b>HL</b> — high value surrounded by low neighbours (outlier).</li>
-              <li><b>LH</b> — low value surrounded by high neighbours (outlier).</li>
+              <li><b>HL</b> — high value surrounded by low neighbours (outlier) -
+              e.g. a well-resourced pocket in an under-served district.</li>
+              <li><b>LH</b> — low value surrounded by high neighbours (outlier) - the equity gap Gi* cannot see.</li>
               <li><b>Not significant</b> at the 95 % level.</li>
             </ul>
             <p>Significance uses the analytic randomization moments of
             Anselin (1995) — per-feature E[I] and Var[I] from the
-            row-standardised weights and sample kurtosis. Because n local
-            tests run simultaneously, a Benjamini-Hochberg FDR-adjusted
-            p-value (<code>lisa_p_fdr</code>) and the corresponding
-            conservative quadrant label (<code>lisa_quad_fdr</code>) are
+            row-standardised weights and sample kurtosis. With very few features,
+            these moment estimates become unstable, undermining the significance
+            test that depends on them. Because n local tests run simultaneously, a
+            Benjamini-Hochberg FDR-adjusted p-value (<code>lisa_p_fdr</code>) and the
+            corresponding conservative quadrant label (<code>lisa_quad_fdr</code>) are
             also written — prefer those when reporting results.</p>
+            <p>Using the results: feed HL and LH units into Equity-Adjusted Priority
+            to see whether the equity adjustment changes their rank. Where only
+            cluster strength matters and outliers are not of interest, Gi*'s
+            continuous z-score is a more direct answer without LISA's added
+            HL/LH classification overhead.</p>
             """
         )
 

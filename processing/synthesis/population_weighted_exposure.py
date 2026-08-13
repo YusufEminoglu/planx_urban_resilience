@@ -81,10 +81,18 @@ class PopulationWeightedExposureAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessin
         return self.tr(
             """
             <h3>Population-Weighted Exposure</h3>
-            <p>Translates a 0-100 hazard score into a human-impact estimate
-            per planning unit. Population is taken either from a field on
-            the scored layer or from a separate point/polygon layer that
-            gets summed inside each unit.</p>
+            <p>Translates a 0-100 hazard score into a human-impact estimate, the
+            standard bridge from physical hazard to human impact in disaster-risk
+            literature (UNDRR, 2019) - a hazard score alone says nothing about how
+            many people are affected, which is usually the number that drives
+            budgetary attention. Population is taken either from a field on the
+            scored layer or from a separate point/polygon layer summed inside each
+            unit.</p>
+            <p>pop_exposed = score/100 x pop_total assumes risk scales linearly with
+            score - a transparent, defensible screening approximation, not a
+            validated dose-response curve for any specific hazard. Population is a
+            snapshot with no diurnal/seasonal variation (daytime workplace vs.
+            nighttime residential population can differ substantially).</p>
             <p>Per-unit outputs:</p>
             <ul>
               <li><code>pop_total</code> — population in this unit.</li>
@@ -92,7 +100,15 @@ class PopulationWeightedExposureAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessin
               <li><code>exposure_intensity</code> — Very High / High / Moderate / Low based on the score.</li>
               <li><code>exposure_class</code> — same as intensity (kept for symbology naming compatibility).</li>
             </ul>
-            <p>Study-area summary is printed to the processing log: total population, breakdown by risk class, top 10 units by exposed population.</p>
+            <p>Study-area summary is printed to the processing log: total population,
+            breakdown by risk class, top 10 units by exposed population.</p>
+            <p>Using the results: compare pop_exposed rankings against raw score
+            rankings - a moderate-hazard, high-population unit can outrank a
+            high-hazard, low-population one on exposure, a finding this module exists
+            to surface. Where the hazard-to-harm relationship is known to be strongly
+            non-linear (e.g. flood depth-damage curves, typically convex), this
+            linear model understates the difference - use a hazard-specific
+            dose-response function instead.</p>
             """
         )
 

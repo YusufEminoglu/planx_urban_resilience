@@ -96,8 +96,35 @@ class GreenInfrastructureStressAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessing
         return self.tr(
             """
             <h3>Drought and Green Infrastructure Stress</h3>
-            <p>Ranks parks, green patches or tree canopy polygons by drought/stress sensitivity using impervious context, distance to water, patch size and optional tree points.</p>
-            <p>This is an ecological planning-support index, not a plant physiology or irrigation model.</p>
+            <p>Ranks green-infrastructure patches by drought/thermal stress sensitivity, combining
+            island-biogeography edge effects (MacArthur &amp; Wilson, 1967 - smaller patches have a
+            higher edge-to-core ratio, so more of their area is exposed to the surrounding matrix's
+            microclimate) with McDonald et al.'s (2008) finding that impervious cover within
+            roughly 100-200 m of a green patch measurably raises its local temperature and moisture
+            stress. The 0-100 stress_score is a weighted mean of impervious context (share of
+            impervious surface in a buffer around the patch, radius = MAX_WATER_DISTANCE x 0.25),
+            distance to the nearest water feature, a small-patch penalty (relative to the size range
+            of the supplied layer), and a tree-density deficit (fewer TREES points nearby = higher
+            stress) using the i-Tree Eco sampling convention (Nowak et al., 2008).</p>
+            <p>Patch-size scoring is relative to <i>this run's</i> input set - adding one very large
+            park re-ranks every other patch's size component even though nothing about them changed
+            physically. Without a TREES layer, every patch's tree-density term reads worst-case
+            (100) unless TREE_WEIGHT is zeroed. Patches scoring >= 55 are written to a second,
+            priority-intervention output.</p>
+            <p>How to read the results
+            - stress_score >= 75: small, isolated patches surrounded by impervious surface, far
+            from water, with sparse trees - acute drought vulnerability.
+            - tree_count = 0 is a planting opportunity flag, not necessarily a crisis - it means no
+            tree points were supplied for that patch, check the TREES input coverage before acting on it.
+            - size_score is only meaningful relative to the other patches in the same run; it is
+            not an absolute area threshold.</p>
+            <p>Using the results: feed high-priority patches into Cost-Benefit Analyzer to rank
+            irrigation and tree-planting interventions by cost-effectiveness, and cross-reference
+            with Population-Weighted Exposure (using nearby population polygons) to quantify how
+            many people depend on each stressed green space. This is an ecological screening index
+            from geometry and land-cover context alone - it has no soil-moisture data and no plant
+            physiology model. Do not use it to diagnose actual plant water stress or to schedule
+            irrigation; use remote-sensing NDVI/NDWI or soil-moisture sensors for that.</p>
             """
         )
 

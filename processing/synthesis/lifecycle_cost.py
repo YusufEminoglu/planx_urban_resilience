@@ -103,16 +103,30 @@ class LifecycleCostAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
             """
             <h3>Lifecycle Cost Calculator</h3>
             <p>Per unit, computes the discounted Net Present Value of an
-            intervention over a configurable horizon (default 25 years).
-            Includes capex, annual opex, periodic maintenance and
-            replacement events.</p>
+            intervention over a configurable horizon (default 25 years, 4% discount
+            rate) - the standard engineering-economics method for comparing
+            long-term investment alternatives (Fuller &amp; Petersen, 1996; ISO
+            15686-5:2017). Includes capex, annual opex, periodic maintenance and
+            replacement events, annualised via the capital recovery factor so
+            interventions with different lifespans can be compared fairly.</p>
+            <p>The discount rate and all recurring costs are treated as constant
+            for the whole horizon - real public discount rates and maintenance
+            costs can vary over time, which this model does not represent; treat
+            outputs as expected-value planning estimates, not guaranteed budgets.</p>
             <p>Outputs <code>lc_capex_npv</code>, <code>lc_opex_npv</code>,
             <code>lc_maintenance_npv</code>, <code>lc_replacement_npv</code>,
             <code>lc_total_npv</code>, <code>lc_annualised</code>
             (equivalent flat annual cost over the horizon).</p>
             <p>If <i>Area scaling</i> is on and the input is polygon, all
-            per-m² fields are multiplied by polygon area; otherwise they
-            are used literally per feature.</p>
+            per-m² fields are multiplied by polygon area (no economies of scale
+            represented); otherwise they are used literally per feature.</p>
+            <p>Using the results: lc_annualised is the most communicable number -
+            "this costs X per year, flat, for 25 years." lc_maintenance_npv &gt;
+            lc_capex_npv flags a maintenance-heavy intervention (common in green
+            infrastructure) that should be budgeted for accordingly. Use this for
+            the rigorous total-cost-of-ownership comparison across a shortlist -
+            for fast first-pass screening across many candidates, Cost-Benefit
+            Analyzer's simpler ratio model is faster to populate.</p>
             """
         )
 

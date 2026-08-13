@@ -149,16 +149,26 @@ class CorrelationMatrixAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorith
         return self.tr(
             """
             <h3>Multi-Hazard Correlation Matrix</h3>
-            <p>Pairwise Pearson and Spearman correlations between N
-            numeric score fields on the same layer. Output is a
-            standalone HTML report with a colour-coded heatmap, top
+            <p>Pairwise Pearson (linear) and Spearman (rank/monotonic, robust to
+            outliers) correlations between N numeric score fields on the same
+            layer - highly correlated fields (|r| &gt; 0.80) contribute redundant
+            spatial information to a composite index, inflating its sensitivity to
+            shared measurement error (OECD, 2008 composite-indicator guidance).
+            Output is a standalone HTML report with a colour-coded heatmap, top
             correlations table, and per-pair diagnostics.</p>
             <p>Use case: spot redundancy in a composite ("seismic and
             flood already move together in this city") or surprise
             divergences ("heat is uncorrelated with everything else").</p>
             <p>Also returns a long-format table (field_a / field_b /
             pearson_r / spearman_r / n_pairs) for further joining or
-            styling.</p>
+            styling. Missing values are excluded PAIRWISE, so n_pairs can differ
+            across the table - always check it alongside the coefficient before
+            trusting a strong correlation from very few valid pairs.</p>
+            <p>Using the results: run this before building any multi-hazard
+            composite to inform weight choices and which fields to include -
+            correlation measures association, not causation, and spatial data is
+            never truly independent (spatial autocorrelation), so treat the
+            strength labels as descriptive, not formal hypothesis tests.</p>
             """
         )
 

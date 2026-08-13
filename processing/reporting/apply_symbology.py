@@ -105,8 +105,22 @@ class ApplyResilienceSymbologyAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingA
         return self.tr(
             """
             <h3>Apply Resilience Symbology</h3>
-            <p>Applies a consistent PlanX color preset to a scored or classified resilience layer. Use it after generating risk grids, accessibility outputs, scenario comparison layers, or adaptation priority synthesis outputs.</p>
-            <p>The algorithm styles the selected layer in-place and can optionally save a QML style file.</p>
+            <p>Applies a consistent, colourblind-conscious PlanX colour preset to a
+            scored or classified resilience layer. Every tool in this suite that
+            produces a 0-100 score or a fixed class set (Covered/Watch/Underserved/
+            Critical/Unreachable; Improved/Stable/Worsened; Monitor/Medium/High/
+            Immediate) uses the same breakpoints and labels throughout - this tool
+            exists to share ONE colour vocabulary across the whole plugin, so "red
+            means Very High" only needs learning once.</p>
+            <p>Use it after generating risk grids, accessibility outputs, scenario
+            comparison layers, or adaptation priority synthesis outputs. The
+            algorithm styles the selected layer in-place (a side effect, not a new
+            output layer) and can optionally save a QML style file for reuse.</p>
+            <p>Using the results: the four presets only work if the target field's
+            values or labels match exactly what each preset expects (0-100 numeric
+            for the risk-score preset, the exact string labels for the others) - a
+            field using different terminology or a different numeric range needs
+            reconciling with this suite's naming convention first.</p>
             """
         )
 

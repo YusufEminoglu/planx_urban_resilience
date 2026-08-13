@@ -72,8 +72,26 @@ class ScenarioTemplateAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm
         return self.tr(
             """
             <h3>Scenario Planning Template</h3>
-            <p>Creates a scenario-editing layer from any planning unit or risk layer. It copies the input features and adds baseline/proposed score fields, scenario metadata, an intervention type, expected reduction and edit notes.</p>
-            <p>Use the output as a clean worksheet before running Scenario Comparison / Delta Map. Lower scores are assumed to be better.</p>
+            <p>Creates an editable baseline/proposed worksheet from any planning
+            unit or risk layer, following the participatory scenario-planning
+            tradition in land-use and climate-adaptation studies (Patel et al.,
+            2007; Kok et al., 2006): rather than prescribing intervention
+            magnitudes, it gives the planner a starting hypothesis to edit with
+            local knowledge of cost, feasibility and context.</p>
+            <p>scen_score = base_score x (1 - reduction/100) applies the expected
+            reduction UNIFORMLY as a deliberately naive starting point - every
+            unit is assumed to respond identically, which is almost never true.
+            The tool performs no engineering or spatial validation of the values
+            you enter; edit_status always starts as "draft" as a workflow marker,
+            not a data-quality signal.</p>
+            <p>Use the output as a clean worksheet before running Scenario
+            Comparison / Delta Map. Lower scores are assumed to be better.</p>
+            <p>Using the results: (1) filter by edit_status = 'draft' to find
+            units needing review, (2) edit scen_score manually where the uniform
+            reduction is unrealistic, (3) document the reasoning in notes, (4)
+            mark edit_status "reviewed" when done. Ground EXPECTED_REDUCTION in
+            the relevant hazard tool's own literature (e.g. Bowler et al., 2010,
+            for green-cooling magnitude) rather than guessing a number.</p>
             """
         )
 

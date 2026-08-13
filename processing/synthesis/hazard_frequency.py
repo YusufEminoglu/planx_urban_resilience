@@ -109,7 +109,17 @@ class HazardFrequencyAggregationAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessin
             <h3>Multi-Period Hazard Frequency Aggregation</h3>
             <p>Collapse N temporal hazard snapshots (e.g., the same flood
             model run for 2020 / 2030 / 2050, or seismic Monte Carlo
-            across magnitudes) into ONE composite per planning unit.</p>
+            across magnitudes) into ONE composite per planning unit, addressing the
+            temporal-compounding problem in risk assessment (IPCC, 2012; Zscheischler
+            et al., 2018): a unit scoring 80 in every period represents a
+            fundamentally different risk than one scoring 95 once and 30 otherwise,
+            even with an identical mean.</p>
+            <p>All source layers must share the same score field name. The threshold
+            tau (default 50) is a single global cutoff applied identically to every
+            period. Frequency-weighted mean penalises single-period spikes by
+            design - a genuinely catastrophic one-off event scores lower on this
+            composite than a chronically moderate hazard; use Max mode when
+            worst-case, not average, preparedness is the question.</p>
             <p>Output fields:</p>
             <ul>
               <li><code>hf_frequency</code> — count of source layers whose intersecting score exceeds the threshold at this unit.</li>
@@ -117,6 +127,13 @@ class HazardFrequencyAggregationAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessin
               <li><code>hf_composite</code> — Mean, Max, or Frequency-weighted mean depending on the chosen mode. Frequency-weighted mean = mean × (freq / N) so units that score high in BOTH many periods AND high intensity rise to the top.</li>
               <li><code>hf_class</code> — Very High / High / Moderate / Low based on the composite.</li>
             </ul>
+            <p>Using the results: hf_frequency = N (every period above threshold)
+            flags persistent, chronic exposure needing structural adaptation, not
+            just emergency response. Feed the output into Climate Projection Overlay
+            for a second temporal-stress dimension, or Scenario Sensitivity Analysis
+            to test whether rank is stable when threshold tau varies. Use this for
+            the SAME hazard across different time periods or scenarios - for
+            genuinely different hazards, use Multi-Hazard Composite Index instead.</p>
             """
         )
 

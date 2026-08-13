@@ -95,8 +95,34 @@ class PluvialFloodSusceptibilityAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessin
         return self.tr(
             """
             <h3>Pluvial Flood Susceptibility</h3>
-            <p>Offline-first screening model for identifying low-lying and drainage-sensitive urban areas from a DEM, study area, and optional exposed assets.</p>
-            <p>This is not a hydrodynamic model. It is intended for early-stage planning, classroom analysis, and prioritization.</p>
+            <p>Topographic screening model in the tradition of Beven &amp; Kirkby's (1979) TOPMODEL
+            wetness-index logic: low, flat, poorly-drained-toward positions pond; high, steep,
+            well-drained-away positions shed water. Rather than a full catchment-contributing-area
+            computation, this tool uses two lightweight DEM proxies a planner can compute in
+            seconds - relative elevation within the study envelope, and local relief within a fixed
+            radius - combined with drainage-line proximity into a 0-100 flood_score, the same
+            "cheap multi-criteria overlay" family validated by Tehrany et al. (2014) for rapid
+            municipal flood-susceptibility mapping.</p>
+            <p>NEIGHBORHOOD sets the radius for the local-relief (flatness) sample - four cardinal
+            points, not a full slope raster. Without a DRAINAGE layer the drainage term defaults to
+            a neutral 50 rather than failing. DEM sampling is clamped a half-pixel inside the raster
+            extent so cells on the study-area boundary never read outside the DEM. Buildings and
+            roads intersecting cells at or above EXPOSURE_THRESHOLD (default 55) are written to the
+            two exposed-asset outputs.</p>
+            <p>How to read the results
+            - flood_score &gt;= 75: lowest quartile of the local elevation range, minimal relief,
+            near a drainage line - classic floodplain floor.
+            - flood_score 55-74: transitional slopes near drainage corridors.
+            - flood_score &lt; 35: ridge-top or hillslope cells far from water.
+            - drain_dist = -1 means no DRAINAGE layer was supplied for that run; the drainage
+            component of the score is neutral, not zero.</p>
+            <p>Using the results: cross-reference exposed buildings with Social Vulnerability Index
+            to find high-exposure + high-vulnerability neighbourhoods, and feed exposed roads into
+            Network Criticality to check whether key evacuation routes sit in flood-prone cells.
+            This is not a hydrodynamic model - it has no rainfall intensity, infiltration, or
+            storm-drain capacity term. Use it for spatial prioritisation and to decide which
+            sub-catchments deserve a real 2D hydrodynamic study; do not use it for regulatory
+            floodplain delineation, insurance rate mapping, or design-storm analysis.</p>
             """
         )
 

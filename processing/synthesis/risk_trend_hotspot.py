@@ -130,17 +130,32 @@ class RiskTrendHotspotAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm
             """
             <h3>Risk Trend Hot-Spot</h3>
             <p>Fuses temporal trend (Δ score between two snapshots) with
-            spatial clustering (Getis-Ord Gi* on the later snapshot)
-            into a single label per unit:</p>
+            spatial clustering (Getis-Ord Gi* on the later snapshot) into a single
+            label per unit - the suite's early-warning tool, answering "where is
+            risk both clustered AND getting worse right now." A two-stage design:
+            first compute hot-spot significance on the later snapshot, then
+            annotate with the trend - simpler than a full space-time scan statistic
+            (Kulldorff, 1997) while preserving the key operational insight.</p>
             <ul>
               <li><b>Rising / Stable / Cooling hot spot</b> — clustered high values, trajectory tag.</li>
               <li><b>Rising / Stable / Cooling cold spot</b> — clustered low values, trajectory tag.</li>
               <li><b>Hot / Cold, no cluster</b> — value extreme but not significantly clustered.</li>
               <li><b>Not significant</b>.</li>
             </ul>
+            <p>The significance test is purely spatial and cross-sectional - it does
+            not test whether the CHANGE is clustered, only the current level. Only
+            two time points are used, so this cannot distinguish a genuinely
+            accelerating trend from a single noisy jump; 3+ snapshots would be
+            needed to fit an actual trend line.</p>
             <p>Pair with the <i>Resilience Time-Series Tracker</i> output:
             <code>ts_later_score</code> as the later score and
             <code>ts_delta</code> as the delta.</p>
+            <p>Using the results: "Rising hot spot" is the strongest early-warning
+            signal - a statistically significant high-value cluster with an
+            increasing score, the immediate-intervention priority. Check the delta
+            tolerance against the underlying score's known measurement noise before
+            trusting a Rising/Cooling label at face value, especially across
+            closely-spaced snapshots.</p>
             """
         )
 

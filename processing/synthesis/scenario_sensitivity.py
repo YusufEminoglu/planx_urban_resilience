@@ -127,11 +127,32 @@ class ScenarioSensitivityAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgori
             """
             <h3>Scenario Sensitivity Analysis</h3>
             <p>Stress-tests composite scores by varying component weights with
-            Latin Hypercube Sampling. Units with <b>high stability</b> keep a
-            similar rank regardless of reasonable weight choices; <b>low
-            stability</b> units are sensitive to how hazards are prioritised.</p>
+            Latin Hypercube Sampling (McKay, Beckman &amp; Conover, 1979) - a
+            stratified Monte Carlo design that explores the full weight space more
+            efficiently than brute-force random sampling. Weight sensitivity is
+            widely recognised as the primary source of rank uncertainty in
+            multi-criteria decision analysis (Saltelli et al., 2004): every
+            composite tool in this suite asks for weights that are policy
+            judgements, not measured constants, and this tool answers "how much
+            does the ranking actually depend on getting those judgements exactly
+            right?"</p>
+            <p>Each weight is perturbed independently within +/-PERTURB of its
+            nominal value, then renormalised to sum to 1 per sample - weights are
+            NOT modelled as correlated with each other, a simplification of the
+            true weight-elicitation problem. Units with <b>high stability</b> keep a
+            similar composite score regardless of reasonable weight choices;
+            <b>low stability</b> units are sensitive to how hazards are weighted.
+            Stability reflects only the unit's OWN score variance, not whether its
+            RANK relative to other units is stable - two high-stability units can
+            still swap relative order under perturbation.</p>
             <p><b>Outputs:</b> baseline composite (nominal weights), mean, std,
             p05/p95, range, and a 0-100 stability score.</p>
+            <p>Using the results: ss_stability &lt; 50 means changing weights by
+            +/-50% shifts the score by more than 12.5 points on average - flag
+            these units as "rank uncertain, review qualitatively" rather than
+            trusting the composite blindly. This tool tells you HOW MUCH the weight
+            choice matters, not what the weights SHOULD be - it is not a substitute
+            for actually engaging stakeholders on the weight choice itself.</p>
             """
         )
 

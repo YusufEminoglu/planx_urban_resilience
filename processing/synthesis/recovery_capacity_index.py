@@ -106,20 +106,40 @@ class RecoveryCapacityIndexAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgo
         return self.tr(
             """
             <h3>Recovery Capacity Index</h3>
-            <p>Measures the OPPOSITE side of resilience: how well a unit can
-            bounce back after a shock. Composite of four offline-derivable
-            proxies:</p>
+            <p>Measures the OPPOSITE side of resilience: how well a unit can bounce
+            back after a shock, operationalising the "adaptive capacity" dimension
+            of the IPCC AR5 vulnerability framework. Composite of four
+            offline-derivable proxies:</p>
             <ol>
-              <li><b>Diversity</b> (HHI-based land-use mix from multiple share
-              fields).</li>
-              <li><b>Redundancy</b> (e.g. number of road accesses; scaled).</li>
+              <li><b>Diversity</b> - Hirschman-Herfindahl Index (borrowed from
+              industrial-organisation economics, where it measures market
+              concentration) applied to land-use shares following Cervero &amp;
+              Kockelman's (1997) "3Ds" framework: many small, evenly-sized land uses
+              signal a healthier local mix than one dominant use.</li>
+              <li><b>Redundancy</b> - road-access count, scaled, following the
+              "multiple paths" principle from network resilience theory: a location
+              reachable by several routes recovers service faster after any one
+              route is disrupted.</li>
               <li><b>Green coverage</b> (0-1 or 0-100).</li>
               <li><b>Social cohesion proxy</b> (0-100, e.g. ownership rate or
-              stable-population fraction).</li>
+              stable-population fraction) - both drawn from Cutter, Ash &amp; Emrich's
+              (2014) validated recovery-capacity indicators.</li>
             </ol>
-            <p>Pair with Adaptation Priority Synthesis or Multi-Hazard Composite
-            to find units that are <b>high-risk AND low-recovery</b> - the
-            sharpest intervention targets.</p>
+            <p>All four sub-scores are optional and independently excludable - check
+            rc_data_gap before treating a partially-scored unit as comparable to a
+            fully-scored one. REDUNDANCY_SCALE (default 25.0) is a saturation
+            constant, not a fitted parameter: a location with 25+ road-access points
+            scores the maximum 100 regardless of whether it has 25 or 250 - tune it
+            to your study area's actual access-count range. The four sub-scores are
+            treated as independently additive; the model represents no interaction
+            between them (e.g. diverse land uses matter less if nobody can reach them).</p>
+            <p>Using the results: pair with Adaptation Priority Synthesis or
+            Multi-Hazard Composite to find units that are <b>high-risk AND
+            low-recovery</b> via Risk-Recovery Priority Matrix - the sharpest
+            intervention targets. This uses offline-derivable proxies specifically
+            because they need no survey data; it is not a substitute for a full
+            community-resilience assessment (economic/institutional/social capital
+            surveys) where the stakes justify collecting primary data.</p>
             """
         )
 
