@@ -15,9 +15,11 @@ from qgis.PyQt.QtCore import Qt, QUrl
 from qgis.PyQt.QtGui import QBrush, QColor, QDesktopServices, QIcon, QPixmap
 from qgis.PyQt.QtWidgets import (
     QDockWidget,
+    QHBoxLayout,
     QLabel,
     QLineEdit,
     QMenu,
+    QPushButton,
     QTreeWidget,
     QTreeWidgetItem,
     QVBoxLayout,
@@ -25,10 +27,11 @@ from qgis.PyQt.QtWidgets import (
 )
 from qgis.core import QgsApplication
 
-from .processing._mixins import ALL_GROUPS
+from .processing._mixins import ALL_GROUPS, HelpUrlMixin
 
 PLUGIN_DIR = os.path.dirname(__file__)
 PROVIDER_ID = "planx_urban_resilience"
+DOC_BASE_URL = HelpUrlMixin.DOC_BASE_URL
 
 # Every colour used below is pinned explicitly (never inherited from the
 # host QPalette) - QGIS4/Qt6 hosts a dark palette by default and unpinned
@@ -56,6 +59,11 @@ QTreeWidget {
 }
 QTreeWidget::item { padding: 3px 2px; }
 QTreeWidget::item:selected { background: #e6f4f2; color: #0f766e; }
+QPushButton#urbanResilienceDocBtn {
+    background: #0f766e; color: white; font-weight: bold;
+    border: none; border-radius: 4px; padding: 6px 12px;
+}
+QPushButton#urbanResilienceDocBtn:hover { background: #0d9488; }
 QToolTip {
     background: #102027; color: #ffffff;
     border: 1px solid #102027; padding: 4px 6px;
@@ -91,6 +99,14 @@ class UrbanResilienceDock(QDockWidget):
         hint.setObjectName("urbanResilienceHint")
         hint.setWordWrap(True)
         layout.addWidget(hint)
+
+        doc_row = QHBoxLayout()
+        doc_btn = QPushButton("\U0001F4D6 Open Reference Manual")
+        doc_btn.setObjectName("urbanResilienceDocBtn")
+        doc_btn.setToolTip("Open the comprehensive academic reference manual (GitHub Pages)")
+        doc_btn.clicked.connect(lambda: QDesktopServices.openUrl(QUrl(DOC_BASE_URL)))
+        doc_row.addWidget(doc_btn)
+        layout.addLayout(doc_row)
 
         self.search = QLineEdit()
         self.search.setObjectName("urbanResilienceSearch")

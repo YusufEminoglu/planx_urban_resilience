@@ -67,7 +67,7 @@ QGIS_VER_DIR = "".join(
     c for c in QGIS_VER_STR if c.isalnum() or c in "_-"
 ).rstrip("_-")
 
-import processing  # noqa: E402
+import processing  # noqa: E402,F401
 from processing.core.Processing import Processing  # noqa: E402
 
 Processing.initialize()
@@ -76,6 +76,7 @@ from qgis.PyQt.QtWidgets import (  # noqa: E402
     QApplication,
     QLabel,
     QLineEdit,
+    QPushButton,
 )
 from qgis.PyQt.QtGui import QColor, QPalette  # noqa: E402
 
@@ -138,6 +139,8 @@ for f in _icon_failures:
     print(f"  ICON FAILURE: {f}")
 
 # ── group colour check: every domain colour is readable on white ────
+
+
 def _srgb_to_linear(c):
     return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
 
@@ -177,7 +180,7 @@ def check_widget_contrasts(root_widget, root_pixmap, label: str):
         fg = w.palette().color(w.foregroundRole())
         if fg.alpha() == 0:
             continue
-        if isinstance(w, QLineEdit):
+        if isinstance(w, (QLineEdit, QPushButton)):
             bg = _bg_from_own_grab(w)
         else:
             bg = _bg_from_page(w, root_widget, root_pixmap)
@@ -255,7 +258,7 @@ def collect_checkable(root) -> list:
     stack = [root]
     while stack:
         w = stack.pop()
-        if isinstance(w, (QLabel, QLineEdit)) and w.isVisible():
+        if isinstance(w, (QLabel, QLineEdit, QPushButton)) and w.isVisible():
             results.append(w)
         for child in w.children():
             try:

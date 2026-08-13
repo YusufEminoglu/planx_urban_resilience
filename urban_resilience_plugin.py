@@ -5,11 +5,6 @@ from qgis.core import QgsApplication
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtGui import QIcon
 
-try:  # Qt5: QtWidgets / Qt6: QtGui
-    from qgis.PyQt.QtWidgets import QAction
-except ImportError:  # QGIS 4 / Qt6 without shim
-    from qgis.PyQt.QtGui import QAction
-
 from .processing.urban_resilience_provider import PlanXUrbanResilienceProvider
 from .urban_resilience_dock import UrbanResilienceDock
 
@@ -36,15 +31,15 @@ class PlanXUrbanResiliencePlugin:
         )
         self.dock = UrbanResilienceDock(self.iface)
         self.iface.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.dock)
-        self.action = QAction(icon, "PlanX Urban Resilience", self.iface.mainWindow())
-        self.action.setToolTip("Show the PlanX Urban Resilience panel")
-        self.action.triggered.connect(self.show_dock)
+        # toggleViewAction() is the dock's own checkable show/hide action -
+        # clicking it again hides the panel, and it stays in sync if the
+        # user closes the dock via its own [x] button too (same behaviour
+        # as every native QGIS panel toggle icon).
+        self.action = self.dock.toggleViewAction()
+        self.action.setIcon(icon)
+        self.action.setToolTip("Show or hide the PlanX Urban Resilience panel")
         self.iface.addToolBarIcon(self.action)
         self.iface.addPluginToMenu("&PlanX Urban Resilience", self.action)
-
-    def show_dock(self):
-        self.dock.show()
-        self.dock.raise_()
 
     def unload(self):
         if self.iface and self.action:
