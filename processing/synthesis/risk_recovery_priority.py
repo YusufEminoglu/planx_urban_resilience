@@ -69,32 +69,24 @@ class RiskRecoveryPriorityAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgor
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>Risk-Recovery Priority Matrix</h3>
-            <p>Combines a hazard or adaptation priority score (0-100) with a
-            recovery capacity score (0-100) into a bivariate risk matrix - the
-            standard ISO 31000 decision-support pattern where a two-axis grid
-            replaces a single number specifically so a decision-maker can see WHY a
-            unit is high-priority, not just THAT it is. The multiplicative form
-            follows the "risk = hazard x vulnerability / coping capacity" convention
-            of the UNDRR risk-assessment framework - structurally the same
-            amplifier pattern as Equity-Adjusted Priority, applied to recovery
-            capacity instead of social vulnerability (the two tools can be chained
-            in either order).</p>
-            <p><code>priority = hazard * (1 + w * (100 - recovery) / 100)</code></p>
-            <p>The two input scores are assumed independent - in reality
-            well-resourced areas often also have lower physical exposure, which this
-            multiplicative form does not detect or correct for. Recovery capacity is
-            a single scalar (typically rc_score from Recovery Capacity Index), so any
-            nuance about which recovery dimension is weakest is lost by the time it
-            reaches this tool.</p>
-            <p>Using the results: use the matrix to triage a long list of planning
-            units into four quadrants - Act now (high hazard/low recovery), Prepare
-            (high/high), Support recovery (low/low), Monitor (low hazard/high
-            recovery). Check for correlation between your hazard and recovery fields
-            first - a spuriously high priority can result from two correlated inputs
-            moving together rather than genuinely compounding risk.</p>
-            """
+            "<h3>Risk-Recovery Priority Matrix</h3> <p>Combines a hazard or adaptation priority score "
+            "(0-100) with a recovery capacity score (0-100) into a bivariate risk matrix - the "
+            "standard ISO 31000 decision-support pattern where a two-axis grid replaces a single "
+            "number specifically so a decision-maker can see WHY a unit is high-priority, not just "
+            'THAT it is. The multiplicative form follows the "risk = hazard x vulnerability / coping '
+            'capacity" convention of the UNDRR risk-assessment framework - structurally the same '
+            "amplifier pattern as Equity-Adjusted Priority, applied to recovery capacity instead of "
+            "social vulnerability (the two tools can be chained in either order).</p> "
+            "<p><code>priority = hazard * (1 + w * (100 - recovery) / 100)</code></p> <p>The two "
+            "input scores are assumed independent - in reality well-resourced areas often also have "
+            "lower physical exposure, which this multiplicative form does not detect or correct for. "
+            "Recovery capacity is a single scalar (typically rc_score from Recovery Capacity Index), "
+            "so any nuance about which recovery dimension is weakest is lost by the time it reaches "
+            "this tool.</p> <p>Using the results: use the matrix to triage a long list of planning "
+            "units into four quadrants - Act now (high hazard/low recovery), Prepare (high/high), "
+            "Support recovery (low/low), Monitor (low hazard/high recovery). Check for correlation "
+            "between your hazard and recovery fields first - a spuriously high priority can result "
+            "from two correlated inputs moving together rather than genuinely compounding risk.</p>"
         )
 
     def initAlgorithm(self, config=None):

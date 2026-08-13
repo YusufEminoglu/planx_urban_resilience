@@ -85,36 +85,23 @@ class CostBenefitAnalyzerAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgori
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>Cost-Benefit Analyzer</h3>
-            <p>Ranks planning units by cost-effectiveness using a transparent
-            two-input model - the standard, textbook first-pass prioritisation
-            method in public-sector economic appraisal (Boardman et al., 2018),
-            simpler and faster than a full NPV analysis (see the sibling Lifecycle
-            Cost Calculator for that) but able to rank hundreds of candidates in
-            one pass:</p>
-            <pre>
-cost    = unit_cost × area
-benefit = score × reduction_factor × population_weight
-ratio   = benefit / cost
-            </pre>
-            <p>Either a single default unit cost / reduction factor or
-            per-feature fields can be supplied. Population weighting is
-            optional. The reduction factor (default 0.7) is a planning-level
-            estimate of how much risk the intervention removes, not an
-            engineering-validated figure for any specific design. The output
-            layer also includes a 1-N priority rank so you can drive a print
-            layout straight from it.</p>
-            <p>The processing log prints the cumulative-budget curve — useful
-            for finding the "to capture 80 % of benefit you need to fund
-            25 % of units" breakpoint.</p>
-            <p>Using the results: the B/C ratio says nothing about absolute
-            budget - pair rank with the absolute cb_cost/cb_benefit values, not
-            the ratio alone. Feed cb_priority_rank == 1 features into
-            Pareto-Optimal Selector to find the full cost-benefit frontier;
-            ratio-ranking and Pareto selection can disagree when absolute costs
-            vary widely across candidates.</p>
-            """
+            "<h3>Cost-Benefit Analyzer</h3> <p>Ranks planning units by cost-effectiveness using a "
+            "transparent two-input model - the standard, textbook first-pass prioritisation method in "
+            "public-sector economic appraisal (Boardman et al., 2018), simpler and faster than a full "
+            "NPV analysis (see the sibling Lifecycle Cost Calculator for that) but able to rank "
+            "hundreds of candidates in one pass:</p> <pre> cost = unit_cost × area benefit = score × "
+            "reduction_factor × population_weight ratio = benefit / cost </pre> <p>Either a single "
+            "default unit cost / reduction factor or per-feature fields can be supplied. Population "
+            "weighting is optional. The reduction factor (default 0.7) is a planning-level estimate "
+            "of how much risk the intervention removes, not an engineering-validated figure for any "
+            "specific design. The output layer also includes a 1-N priority rank so you can drive a "
+            "print layout straight from it.</p> <p>The processing log prints the cumulative-budget "
+            'curve — useful for finding the "to capture 80 % of benefit you need to fund 25 % of '
+            'units" breakpoint.</p> <p>Using the results: the B/C ratio says nothing about absolute '
+            "budget - pair rank with the absolute cb_cost/cb_benefit values, not the ratio alone. "
+            "Feed cb_priority_rank == 1 features into Pareto-Optimal Selector to find the full "
+            "cost-benefit frontier; ratio-ranking and Pareto selection can disagree when absolute "
+            "costs vary widely across candidates.</p>"
         )
 
     def initAlgorithm(self, config=None):

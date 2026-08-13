@@ -69,37 +69,29 @@ class NetworkCriticalityAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorit
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>Network Criticality (edge betweenness proxy)</h3>
-            <p>Betweenness centrality (Freeman, 1977) measures how much shortest-path
-            traffic flows through an edge, summed over every origin-destination pair -
-            exact computation (Brandes, 2001) is O(VE), too slow for interactive QGIS use
-            on a real road network. This tool narrows the scope instead: the shortest path
-            from each real ORIGIN to its single nearest real DESTINATION only, an
-            origin-destination usage-count proxy that trades betweenness's generality for
-            realism (an actual emergency-access flow pattern) and speed
-            (O(origins x edges log vertices)). Closer in spirit to traffic-assignment-based
-            criticality than to graph-theoretic betweenness proper.</p>
-            <p>usage_count is a raw frequency count, criticality_score = 100 x usage_count
-            / max usage_count <i>within this run</i> - not comparable across runs with
-            different origin/destination sets. Each origin routes to its single nearest
-            destination only; if that shelter fills up, the "next nearest" reassignment
-            this implies never actually happens here.</p>
-            <p>How to read the results
-            - criticality_score is a busy-ness measure, not a removal-impact measure. A
-            busy edge with parallel alternatives costs little to lose; a quiet edge can
-            still be the ONLY connector for a small demand pocket - usage_count alone
-            cannot tell these two cases apart.
-            - criticality_score &gt;= 90 marks the busiest few percent of edges under
-            normal, all-shelters-available routing.</p>
-            <p>Using the results: pair with Evacuation Time Simulation's per-edge load
-            output to check whether the busiest corridors also carry the highest
-            congestion, and with Seismic Cascade to see whether debris blockages coincide
-            with high-criticality edges. Do not use this to identify single points of
-            failure or redundancy gaps - that needs an extra-cost-on-removal analysis
-            (remove a candidate edge, re-route, measure the detour), which this tool does
-            not perform.</p>
-            """
+            "<h3>Network Criticality (edge betweenness proxy)</h3> <p>Betweenness centrality "
+            "(Freeman, 1977) measures how much shortest-path traffic flows through an edge, summed "
+            "over every origin-destination pair - exact computation (Brandes, 2001) is O(VE), too "
+            "slow for interactive QGIS use on a real road network. This tool narrows the scope "
+            "instead: the shortest path from each real ORIGIN to its single nearest real DESTINATION "
+            "only, an origin-destination usage-count proxy that trades betweenness's generality for "
+            "realism (an actual emergency-access flow pattern) and speed (O(origins x edges log "
+            "vertices)). Closer in spirit to traffic-assignment-based criticality than to "
+            "graph-theoretic betweenness proper.</p> <p>usage_count is a raw frequency count, "
+            "criticality_score = 100 x usage_count / max usage_count <i>within this run</i> - not "
+            "comparable across runs with different origin/destination sets. Each origin routes to its "
+            'single nearest destination only; if that shelter fills up, the "next nearest" '
+            "reassignment this implies never actually happens here.</p> <p>How to read the results - "
+            "criticality_score is a busy-ness measure, not a removal-impact measure. A busy edge with "
+            "parallel alternatives costs little to lose; a quiet edge can still be the ONLY connector "
+            "for a small demand pocket - usage_count alone cannot tell these two cases apart. - "
+            "criticality_score &gt;= 90 marks the busiest few percent of edges under normal, "
+            "all-shelters-available routing.</p> <p>Using the results: pair with Evacuation Time "
+            "Simulation's per-edge load output to check whether the busiest corridors also carry the "
+            "highest congestion, and with Seismic Cascade to see whether debris blockages coincide "
+            "with high-criticality edges. Do not use this to identify single points of failure or "
+            "redundancy gaps - that needs an extra-cost-on-removal analysis (remove a candidate edge, "
+            "re-route, measure the detour), which this tool does not perform.</p>"
         )
 
     def initAlgorithm(self, config=None):

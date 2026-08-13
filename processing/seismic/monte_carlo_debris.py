@@ -65,75 +65,64 @@ class UrbanResilienceSeismicAnalystV2(HelpUrlMixin, GroupMixin, QgsProcessingAlg
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3><b>Methodology &amp; Theoretical Framework</b></h3>
-            <p>This module is a stochastic spatial decision-support engine that models structural
-            vulnerability and urban mobility loss for a given earthquake scenario. Base collapse
-            probability is looked up from four construction-era bands modelled on FEMA's HAZUS-MH
-            (2003) fragility framework (pre-1985 0.85, 1985-2000 0.60, 2001-2018 0.25, post-2018
-            0.05), then scaled exponentially by moment magnitude: mag_factor = exp(0.8 x (Mw -
-            7.0)). A Monte Carlo simulation draws one Bernoulli collapse outcome per building from
-            that probability, producing a dynamic risk envelope that differs slightly on every run
-            unless the seed is fixed. Debris geometry for a collapsed building follows Goretti &amp;
-            Sarli's (2006) empirically calibrated spread ratio (radius = building height x spread
-            coefficient k); the void/solid volume ratio used to convert footprint area into debris
-            volume follows FEMA P-58 (2018) guidance by construction material. A seed parameter is
-            exposed so a given scenario can be reproduced exactly, or re-rolled by changing the
-            seed to sample a different stochastic realisation of the same magnitude.</p>
-
-            <h3><b>Input Parameter Guide</b></h3>
-            <table border="1" style="border-collapse: collapse; width: 100%;">
-              <tr>
-                <th style="padding: 5px; text-align: left;">Parameter</th>
-                <th style="padding: 5px; text-align: left;">Description &amp; Recommended Values</th>
-              </tr>
-              <tr>
-                <td style="padding: 5px;"><b>Moment Magnitude (Mw)</b></td>
-                <td style="padding: 5px;">Earthquake energy. Has an exponential effect on the fragility function (e.g. 7.0 - 7.6).</td>
-              </tr>
-              <tr>
-                <td style="padding: 5px;"><b>Debris Spread Coefficient (k)</b></td>
-                <td style="padding: 5px;">Fraction of a collapsed building's height thrown horizontally onto adjacent roads (Goretti &amp; Sarli, 2006). Typically <b>0.30 to 0.50</b>.</td>
-              </tr>
-              <tr>
-                <td style="padding: 5px;"><b>Void/Solid Volume Ratio</b></td>
-                <td style="padding: 5px;">Fraction of the gross building volume that becomes actual debris (concrete/brick). Per FEMA guidance: <br>• Steel/Glass: <b>0.10 - 0.20</b><br>• Reinforced concrete (RC): <b>0.25 - 0.35</b><br>• Unreinforced masonry: <b>0.35 - 0.45</b></td>
-              </tr>
-              <tr>
-                <td style="padding: 5px;"><b>Random Seed</b></td>
-                <td style="padding: 5px;">Fixes the Monte Carlo draw so results are reproducible run-to-run; change it to sample a different stochastic realization of the same scenario.</td>
-              </tr>
-            </table>
-
-            <h3><b>Output Schema</b></h3>
-            <ul>
-                <li><b>[01_Static] Net Logistics Network Topology:</b> Cadastral road/void fabric with building footprints subtracted.</li>
-                <li><b>[02_Static] Morphological Conflict:</b> Static form index modelling encroachments onto parcel boundaries as negative vectors.</li>
-                <li><b>[03_Dynamic] Stochastic Risk &amp; Volume Index:</b> Point layer with collapse probability, estimated debris volume (m3), and severity class per building.</li>
-                <li><b>[04_Dynamic] Macro-Debris Spread Envelope:</b> Dissolved debris polygon covering all collapsed buildings.</li>
-                <li><b>[05_Dynamic] Critical Network Blockage Areas:</b> Cumulative debris mass that falls specifically on the road network.</li>
-                <li><b>[06_Dynamic] Post-Disaster Active Evacuation Corridors:</b> Remaining accessible routes for search-and-rescue logistics.</li>
-            </ul>
-
-            <h3><b>How to Read the Results</b></h3>
-            <ul>
-                <li><b>collapse_prob</b> sorts your retrofit-priority list: buildings above 0.80 under a Mw &gt; 7.0 scenario are pre-code construction and the first candidates for structural assessment.</li>
-                <li><b>collapsed</b> (0/1) is this run's Monte Carlo outcome, not a certainty - re-run with a different seed to see how sensitive the network-blockage picture is to the specific draw.</li>
-                <li><b>debris_vol_m3</b> and <b>blocked_area_m2</b> scale with building height and footprint - a single tall building can outweigh several low ones in total road-blockage impact.</li>
-                <li>[06] Evacuation Corridors is the headline output for response planning: what survives once [05]'s blockages are subtracted from the network.</li>
-            </ul>
-
-            <h3><b>Using the Results</b></h3>
-            <p>Compare Mw 6.5 against Mw 7.5 runs (same seed) to see the exponential, non-linear jump
-            in road loss between a moderate and a major event - this is usually more informative
-            for planning than a single "design" magnitude. Feed [04] Macro-Debris Envelope into
-            <b>Seismic Cascade: Debris -&gt; Network Degradation</b> for the full pre- vs. post-quake
-            accessibility comparison, and [03] Structural Damage Index into <b>Population-Weighted
-            Exposure</b> to translate collapse probabilities into estimated human impact. This is a
-            planning-screening tool, not an engineering-grade structural assessment - do not use
-            individual collapse_prob values to make retrofit funding decisions without a site
-            inspection.</p>
-            """
+            "<h3><b>Methodology &amp; Theoretical Framework</b></h3> <p>This module is a stochastic "
+            "spatial decision-support engine that models structural vulnerability and urban mobility "
+            "loss for a given earthquake scenario. Base collapse probability is looked up from four "
+            "construction-era bands modelled on FEMA's HAZUS-MH (2003) fragility framework (pre-1985 "
+            "0.85, 1985-2000 0.60, 2001-2018 0.25, post-2018 0.05), then scaled exponentially by "
+            "moment magnitude: mag_factor = exp(0.8 x (Mw - 7.0)). A Monte Carlo simulation draws one "
+            "Bernoulli collapse outcome per building from that probability, producing a dynamic risk "
+            "envelope that differs slightly on every run unless the seed is fixed. Debris geometry "
+            "for a collapsed building follows Goretti &amp; Sarli's (2006) empirically calibrated "
+            "spread ratio (radius = building height x spread coefficient k); the void/solid volume "
+            "ratio used to convert footprint area into debris volume follows FEMA P-58 (2018) "
+            "guidance by construction material. A seed parameter is exposed so a given scenario can "
+            "be reproduced exactly, or re-rolled by changing the seed to sample a different "
+            "stochastic realisation of the same magnitude.</p> <h3><b>Input Parameter Guide</b></h3> "
+            '<table border="1" style="border-collapse: collapse; width: 100%;"> <tr> <th '
+            'style="padding: 5px; text-align: left;">Parameter</th> <th style="padding: 5px; '
+            'text-align: left;">Description &amp; Recommended Values</th> </tr> <tr> <td '
+            'style="padding: 5px;"><b>Moment Magnitude (Mw)</b></td> <td style="padding: '
+            '5px;">Earthquake energy. Has an exponential effect on the fragility function (e.g. 7.0 - '
+            '7.6).</td> </tr> <tr> <td style="padding: 5px;"><b>Debris Spread Coefficient '
+            "(k)</b></td> <td style=\"padding: 5px;\">Fraction of a collapsed building's height thrown "
+            "horizontally onto adjacent roads (Goretti &amp; Sarli, 2006). Typically <b>0.30 to "
+            '0.50</b>.</td> </tr> <tr> <td style="padding: 5px;"><b>Void/Solid Volume Ratio</b></td> '
+            '<td style="padding: 5px;">Fraction of the gross building volume that becomes actual '
+            "debris (concrete/brick). Per FEMA guidance: <br>• Steel/Glass: <b>0.10 - 0.20</b><br>• "
+            "Reinforced concrete (RC): <b>0.25 - 0.35</b><br>• Unreinforced masonry: <b>0.35 - "
+            '0.45</b></td> </tr> <tr> <td style="padding: 5px;"><b>Random Seed</b></td> <td '
+            'style="padding: 5px;">Fixes the Monte Carlo draw so results are reproducible run-to-run; '
+            "change it to sample a different stochastic realization of the same scenario.</td> </tr> "
+            "</table> <h3><b>Output Schema</b></h3> <ul> <li><b>[01_Static] Net Logistics Network "
+            "Topology:</b> Cadastral road/void fabric with building footprints subtracted.</li> "
+            "<li><b>[02_Static] Morphological Conflict:</b> Static form index modelling encroachments "
+            "onto parcel boundaries as negative vectors.</li> <li><b>[03_Dynamic] Stochastic Risk "
+            "&amp; Volume Index:</b> Point layer with collapse probability, estimated debris volume "
+            "(m3), and severity class per building.</li> <li><b>[04_Dynamic] Macro-Debris Spread "
+            "Envelope:</b> Dissolved debris polygon covering all collapsed buildings.</li> "
+            "<li><b>[05_Dynamic] Critical Network Blockage Areas:</b> Cumulative debris mass that "
+            "falls specifically on the road network.</li> <li><b>[06_Dynamic] Post-Disaster Active "
+            "Evacuation Corridors:</b> Remaining accessible routes for search-and-rescue "
+            "logistics.</li> </ul> <h3><b>How to Read the Results</b></h3> <ul> "
+            "<li><b>collapse_prob</b> sorts your retrofit-priority list: buildings above 0.80 under a "
+            "Mw &gt; 7.0 scenario are pre-code construction and the first candidates for structural "
+            "assessment.</li> <li><b>collapsed</b> (0/1) is this run's Monte Carlo outcome, not a "
+            "certainty - re-run with a different seed to see how sensitive the network-blockage "
+            "picture is to the specific draw.</li> <li><b>debris_vol_m3</b> and "
+            "<b>blocked_area_m2</b> scale with building height and footprint - a single tall building "
+            "can outweigh several low ones in total road-blockage impact.</li> <li>[06] Evacuation "
+            "Corridors is the headline output for response planning: what survives once [05]'s "
+            "blockages are subtracted from the network.</li> </ul> <h3><b>Using the Results</b></h3> "
+            "<p>Compare Mw 6.5 against Mw 7.5 runs (same seed) to see the exponential, non-linear "
+            "jump in road loss between a moderate and a major event - this is usually more "
+            'informative for planning than a single "design" magnitude. Feed [04] Macro-Debris '
+            "Envelope into <b>Seismic Cascade: Debris -&gt; Network Degradation</b> for the full pre- "
+            "vs. post-quake accessibility comparison, and [03] Structural Damage Index into "
+            "<b>Population-Weighted Exposure</b> to translate collapse probabilities into estimated "
+            "human impact. This is a planning-screening tool, not an engineering-grade structural "
+            "assessment - do not use individual collapse_prob values to make retrofit funding "
+            "decisions without a site inspection.</p>"
         )
 
     def initAlgorithm(self, config=None):

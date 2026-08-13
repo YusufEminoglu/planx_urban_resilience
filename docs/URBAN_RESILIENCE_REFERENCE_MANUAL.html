@@ -95,7 +95,9 @@ tr:nth-child(even) td { background: var(--table-stripe); }
 .ref { margin: .35em 0; padding-left: 1.5em; text-indent: -1.5em; font-size: .93em; }
 
 /* ── On-page nav / anchor links / badges / see-also (Phase 7) ─────── */
-h3[id] { display: flex; align-items: baseline; gap: .45em; scroll-margin-top: .5em; }
+h3[id] { display: flex; align-items: center; gap: .5em; scroll-margin-top: .5em; }
+.tool-icon { width: 28px; height: 28px; flex: none; border-radius: 6px; }
+@media print { .tool-icon { display: none; } }
 h4[id] { scroll-margin-top: .5em; }
 .anchor-copy {
   background: none; border: none; cursor: pointer; font-size: .58em; line-height: 1;
@@ -171,7 +173,7 @@ h3[id]:hover .anchor-copy, .anchor-copy:focus { opacity: 1; }
 <nav id="sidebar">
 <div id="sidebar-header">
 <span class="logo">PlanX Urban Resilience</span>
-<span class="subtitle">Academic Reference Manual · v1.26.2 · 43 Tools</span>
+<span class="subtitle">Academic Reference Manual · v2.1.1 · 43 Tools</span>
 </div>
 <div id="search-wrap">
 <input type="text" id="search" placeholder="Search algorithms…" autocomplete="off">
@@ -305,7 +307,7 @@ h3[id]:hover .anchor-copy, .anchor-copy:focus { opacity: 1; }
 <main id="content">
 
 <h1>PlanX Urban Resilience — Academic Reference Manual</h1>
-<p>Covering Urban Resilience v1.26.2 · 43 Algorithms · 10 Tool Groups<br>
+<p>Covering Urban Resilience v2.1.1 · 43 Algorithms · 10 Tool Groups<br>
 Yusuf Eminoğlu · <a href="https://github.com/YusufEminoglu/planx_urban_resilience">github.com/YusufEminoglu/planx_urban_resilience</a></p>
 
 <!-- ===== NAVIGATION ===== -->
@@ -389,7 +391,7 @@ Yusuf Eminoğlu · <a href="https://github.com/YusufEminoglu/planx_urban_resilie
 <p>The Demo group provides a single synthetic-data generator. It produces a self-contained artificial study area with buildings, roads, impervious surfaces, green infrastructure, water bodies, shelters, social-unit polygons, and sensitive receptors — all with plausible geometries and essential attribute fields. Use it for classroom demonstrations, smoke-testing the full suite, or prototyping a workflow before acquiring real data.</p>
 
 <!-- --- Synthetic Resilience Demo Dataset --- -->
-<h3 id="synthetic_resilience_demo_dataset">Synthetic Resilience Demo Dataset</h3>
+<h3 id="synthetic_resilience_demo_dataset"><img class="tool-icon" src="icons/tool_synthetic_resilience_demo_dataset.png" alt="" loading="lazy">Synthetic Resilience Demo Dataset</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:synthetic_resilience_demo_dataset</code></p>
 
 <h4>1. Overview</h4>
@@ -443,7 +445,7 @@ Yusuf Eminoğlu · <a href="https://github.com/YusufEminoglu/planx_urban_resilie
 <h2 id="g1">1. Seismic: Debris &amp; Logistics</h2>
 <p>The Seismic group models post-earthquake building collapse, debris generation, and evacuation-network degradation. The single algorithm uses a Monte Carlo framework driven by a user-supplied moment magnitude scenario and building-age fragility functions. It produces six output layers spanning static network topology through dynamic debris envelopes to post-disaster clearance corridors.</p>
 
-<h3 id="seismic_debris_monte_carlo">Post-Earthquake Collapse, Debris &amp; Evacuation Network (Monte Carlo)</h3>
+<h3 id="seismic_debris_monte_carlo"><img class="tool-icon" src="icons/tool_seismic_debris_monte_carlo.png" alt="" loading="lazy">Post-Earthquake Collapse, Debris &amp; Evacuation Network (Monte Carlo)</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:seismic_debris_monte_carlo</code></p>
 
 <h4>1. Overview</h4>
@@ -513,7 +515,7 @@ $$\text{debris\_volume} = A_{\text{footprint}} \times H \times v_r \quad \text{(
 <h2 id="g2">2. Heat: Comfort &amp; Exposure</h2>
 <p>The Heat group provides an offline-first urban heat comfort risk screening model. It combines impervious surface share, building density, green/cooling deficit (distance to parks and water), and optional vulnerable-asset exposure into a 0–100 heat risk score on a user-defined grid. It is a planning-support index, not a microclimate simulation.</p>
 
-<h3 id="urban_heat_comfort_risk">Urban Heat Comfort Risk (screening)</h3>
+<h3 id="urban_heat_comfort_risk"><img class="tool-icon" src="icons/tool_urban_heat_comfort_risk.png" alt="" loading="lazy">Urban Heat Comfort Risk (screening)</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:urban_heat_comfort_risk</code></p>
 
 <h4>1. Overview</h4>
@@ -580,7 +582,7 @@ $$\text{heat\_score} = \frac{w_i \cdot I + w_b \cdot B + w_g \cdot \frac{D_g + C
 <h2 id="g3">3. Flood: Pluvial Susceptibility</h2>
 <p>The Flood group provides an offline-first pluvial (rainfall-driven) flood susceptibility screening model. It uses a DEM to compute relative low-elevation, flat-slope proxy, and drainage proximity scores on a user-defined grid. The model identifies low-lying, poorly-drained urban cells and marks exposed buildings and road segments. It is a planning-support index, not a hydrodynamic model.</p>
 
-<h3 id="pluvial_flood_susceptibility">Pluvial Flood Susceptibility (screening)</h3>
+<h3 id="pluvial_flood_susceptibility"><img class="tool-icon" src="icons/tool_pluvial_flood_susceptibility.png" alt="" loading="lazy">Pluvial Flood Susceptibility (screening)</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:pluvial_flood_susceptibility</code></p>
 
 <h4>1. Overview</h4>
@@ -649,7 +651,7 @@ $$D = 100\left(1 - \frac{dist_{\text{drain}}}{\max(4r, 1.0)}\right) \quad \text{
 <h2 id="g4">4. Social: Vulnerability &amp; Equity</h2>
 <p>The Social group provides a weighted social vulnerability index (SVI) following the Cutter et al. (2003) framework. It normalises neighbourhood- or census-polygon indicators (elderly, children, disability, low-income, population density) to 0–100 and combines them with user-controlled weights. Missing data fields are flagged but do not block the computation.</p>
 
-<h3 id="social_vulnerability_index">Social Vulnerability Index (screening)</h3>
+<h3 id="social_vulnerability_index"><img class="tool-icon" src="icons/tool_social_vulnerability_index.png" alt="" loading="lazy">Social Vulnerability Index (screening)</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:social_vulnerability_index</code></p>
 
 <h4>1. Overview</h4>
@@ -717,7 +719,7 @@ $$n_k = 100 \cdot \frac{x_{i,k} - \min(x_k)}{\max(x_k) - \min(x_k)} \tag{2}$$
 <h2 id="g5">5. Emergency: Accessibility, Evacuation &amp; Networks</h2>
 <p>The Emergency group is the largest operational cluster in the suite — seven algorithms spanning Euclidean shelter coverage, network-based accessibility routing, edge-betweenness criticality, capacity-constrained evacuation simulation with optional timestep queuing, seismic cascade analysis, and optimal shelter siting via greedy maximal-coverage location. Together they model the full emergency-response spatial chain: <i>who can reach a shelter → which roads are bottlenecks → how long does evacuation take → what happens to the network after the quake → where should new shelters go?</i></p>
 
-<h3 id="emergency_accessibility_shelter_coverage">Emergency Accessibility and Shelter Coverage</h3>
+<h3 id="emergency_accessibility_shelter_coverage"><img class="tool-icon" src="icons/tool_emergency_accessibility_shelter_coverage.png" alt="" loading="lazy">Emergency Accessibility and Shelter Coverage</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:emergency_accessibility_shelter_coverage</code></p>
 <h4>1. Overview</h4>
 <p>Creates a Euclidean grid-based access-deficit map from shelter or safe-assembly points. Each cell's score is the distance to the nearest shelter, normalised between a target service distance and a critical distance, with an optional barrier-overlap penalty. Underserved assets (buildings or population points beyond the service distance) are flagged in a separate layer.</p>
@@ -763,7 +765,7 @@ $$\text{access\_score} = \text{clamp}\left(100\cdot\frac{d - d_{\text{service}}}
 <p class="ref">Radke, J. &amp; Mu, L. (2000). "Spatial decompositions, modeling and mapping service regions to predict access to social programs." <i>Geographic Information Sciences</i>, 6(2), 105–112.</p>
 <p class="ref">Luo, W. &amp; Wang, F. (2003). "Measures of spatial accessibility to health care in a GIS environment." <i>Environment and Planning B</i>, 30(6), 865–884.</p>
 
-<h3 id="network_emergency_accessibility">Network Emergency Accessibility</h3>
+<h3 id="network_emergency_accessibility"><img class="tool-icon" src="icons/tool_network_emergency_accessibility.png" alt="" loading="lazy">Network Emergency Accessibility</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:network_emergency_accessibility</code></p>
 <h4>1. Overview</h4>
 <p>Computes road-network distance and travel time from population origins to the nearest shelter using multi-source Dijkstra on a graph built from line-segment vertices. Each origin receives <code>net_dist_m</code>, <code>time_min</code>, an access class, and a QA flag (<code>large_snap_distance</code> if the origin's snap to the graph exceeds 5× the tolerance). Origins classified as Underserved, Critical, or Unreachable are written to a separate underserved layer.</p>
@@ -807,7 +809,7 @@ $$\text{access\_cls} = f(\text{time\_min}, \text{target}, \text{critical}) \tag{
 <p class="ref">Dijkstra, E.W. (1959). "A note on two problems in connexion with graphs." <i>Numerische Mathematik</i>, 1, 269–271.</p>
 <p class="ref">Cardinal, J. et al. (2011). "A unified framework for rich routing problems." <i>Computers &amp; Operations Research</i>, 38(5), 831–843.</p>
 
-<h3 id="network_criticality">Network Criticality (edge betweenness proxy)</h3>
+<h3 id="network_criticality"><img class="tool-icon" src="icons/tool_network_criticality.png" alt="" loading="lazy">Network Criticality (edge betweenness proxy)</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:network_criticality</code></p>
 <h4>1. Overview</h4>
 <p>For every origin → nearest-destination shortest path on the road network, counts how many times each edge is used. The resulting per-edge count is normalised 0–100 as <code>criticality_score</code>. High-score edges are bottlenecks: closing one forces the most reroutes. This is an offline proxy for edge betweenness centrality — computationally O(O × V log V) against the full O(VE) betweenness.</p>
@@ -851,7 +853,7 @@ $$\text{criticality\_score}(e) = 100 \cdot \frac{\text{usage\_count}(e)}{\max_{e
 <p class="ref">Girvan, M. &amp; Newman, M.E.J. (2002). "Community structure in social and biological networks." <i>Proceedings of the National Academy of Sciences</i>, 99(12), 7821–7826.</p>
 <p class="ref">Brandes, U. (2001). "A faster algorithm for betweenness centrality." <i>Journal of Mathematical Sociology</i>, 25(2), 163–177.</p>
 
-<h3 id="evacuation_time_simulation">Evacuation Time Simulation</h3>
+<h3 id="evacuation_time_simulation"><img class="tool-icon" src="icons/tool_evacuation_time_simulation.png" alt="" loading="lazy">Evacuation Time Simulation</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:evacuation_time_simulation</code></p>
 <h4>1. Overview</h4>
 <p>Greedy capacity-constrained shelter assignment on a road network. Origins with population are assigned to shelters along shortest paths, respecting shelter capacity. An optional timestep queue defers departures when road segments exceed per-interval flow capacity. Outputs include per-origin travel time, delay, and evacuation class; per-shelter utilisation; and per-edge trip count, population load, congestion percentage, and bottleneck score. The Processing log reports P50 and P95 evacuation times.</p>
@@ -909,7 +911,7 @@ $$\text{evac\_min}(o) = t \cdot \Delta + \frac{\text{dist}_{\text{path}(o, s)}}{
 <p class="ref">Southworth, F. (1991). "Regional evacuation modeling: a state-of-the-art review." Oak Ridge National Laboratory, ORNL/TM-11740.</p>
 <p class="ref">Murray-Tuite, P. &amp; Wolshon, B. (2013). "Evacuation transportation modeling: an overview of research, development, and practice." <i>Transportation Research Part C</i>, 27, 25–45. DOI: <a href="https://doi.org/10.1016/j.trc.2012.11.005">10.1016/j.trc.2012.11.005</a></p>
 
-<h3 id="seismic_cascade_accessibility">Seismic Cascade: Debris → Network Degradation</h3>
+<h3 id="seismic_cascade_accessibility"><img class="tool-icon" src="icons/tool_seismic_cascade_accessibility.png" alt="" loading="lazy">Seismic Cascade: Debris → Network Degradation</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:seismic_cascade_accessibility</code></p>
 <h4>1. Overview</h4>
 <p>Pipes the seismic debris polygon output into the road network, drops blocked edges, then re-runs multi-source Dijkstra on the degraded network and compares pre- vs post-hazard accessibility per origin. Outputs include pre- and post-hazard distances, delta, reachability flags, and a status label (Newly cut off / Always cut off / Worse / Same / Recovered). This is the suite's headline cross-domain cascading-hazard analysis.</p>
@@ -955,7 +957,7 @@ $$\text{cas\_status}(o) = \begin{cases} \text{Newly cut off} & \text{pre reachab
 <h4>Academic References</h4>
 <p class="ref">NIST. (2015). <i>Community Resilience Planning Guide for Buildings and Infrastructure Systems.</i> NIST Special Publication 1190.</p>
 
-<h3 id="optimal_shelter_siting">Optimal Shelter Siting (greedy maximal coverage)</h3>
+<h3 id="optimal_shelter_siting"><img class="tool-icon" src="icons/tool_optimal_shelter_siting.png" alt="" loading="lazy">Optimal Shelter Siting (greedy maximal coverage)</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:optimal_shelter_siting</code></p>
 <h4>1. Overview</h4>
 <p>Solves the Maximal Covering Location Problem (MCLP): from a set of candidate shelter sites, pick K so the population covered within a maximum walking distance is maximised. Uses greedy selection — at each step pick the candidate that adds the most uncovered demand. This is a 0.63-of-optimal approximation in the worst case (Cornuéjols et al., 1977) but is the de-facto practical choice. An optional existing-shelter layer pre-covers some demand so the K new picks fill the gaps.</p>
@@ -1001,7 +1003,7 @@ $$\text{candidate}^* = \arg\max_{c \in C \setminus S} \sum_{d \in D : \text{dist
 <p class="ref">Cornuéjols, G., Fisher, M.L. &amp; Nemhauser, G.L. (1977). "Location of bank accounts to optimize float." <i>Management Science</i>, 23(8), 789–810.</p>
 <p class="ref">Daskin, M.S. (2013). <i>Network and Discrete Location: Models, Algorithms, and Applications.</i> 2nd ed., Wiley.</p>
 
-<h3 id="evacuation_shelter_arrival_summary">Evacuation Shelter Arrival Summary</h3>
+<h3 id="evacuation_shelter_arrival_summary"><img class="tool-icon" src="icons/tool_evacuation_shelter_arrival_summary.png" alt="" loading="lazy">Evacuation Shelter Arrival Summary</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:evacuation_shelter_arrival_summary</code></p>
 
 <h4>1. Overview</h4>
@@ -1069,7 +1071,7 @@ $$\text{P50}(s) = \min \left\{ t : \text{cumulative\_pct}(s, t) \ge 50 \right\} 
 <h2 id="g6">6. Air: Exposure Screening</h2>
 <p>The Air group provides a planning-support exposure grid combining road proximity, industrial/emission-source proximity, sensitive-receptor density, and green-buffer mitigation. It is a spatial screening index, not an atmospheric dispersion model.</p>
 
-<h3 id="air_quality_exposure_screening">Air Quality / Urban Exposure (screening)</h3>
+<h3 id="air_quality_exposure_screening"><img class="tool-icon" src="icons/tool_air_quality_exposure_screening.png" alt="" loading="lazy">Air Quality / Urban Exposure (screening)</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:air_quality_exposure_screening</code></p>
 <h4>1. Overview</h4>
 <p>Scores each grid cell for air-quality exposure using four additive components: <b>road proximity risk</b> (distance to major traffic corridors), <b>emission-source proximity</b> (industrial/point sources), <b>sensitive-receptor density</b> (schools, hospitals, housing clusters), and <b>green-buffer mitigation</b> (tree belts and green patches that reduce exposure). The composite subtracts the green-buffer term — green infrastructure <i>reduces</i> the score.</p>
@@ -1126,7 +1128,7 @@ $$\text{air\_score} = \frac{w_r \cdot R + w_s \cdot S + w_e \cdot E}{\max(w_r + 
 <h2 id="g7">7. Drought: Green Infrastructure Stress</h2>
 <p>The Drought group ranks parks, green patches, and tree-canopy polygons by drought and thermal stress sensitivity using impervious context, distance to water, patch size, and tree density. It is an ecological planning-support index, not a plant-physiology or irrigation model.</p>
 
-<h3 id="green_infrastructure_drought_stress">Drought and Green Infrastructure Stress</h3>
+<h3 id="green_infrastructure_drought_stress"><img class="tool-icon" src="icons/tool_green_infrastructure_drought_stress.png" alt="" loading="lazy">Drought and Green Infrastructure Stress</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:green_infrastructure_drought_stress</code></p>
 <h4>1. Overview</h4>
 <p>For each green-infrastructure polygon, computes four stress components: <b>impervious context</b> (share of impervious surface in a buffer around the patch), <b>water distance</b> (distance to nearest blue infrastructure), <b>patch size sensitivity</b> (smaller patches = more vulnerable to edge effects and drought), and <b>tree density deficit</b> (sparse tree cover within the patch). The weighted composite is a 0–100 stress score. Patches scoring ≥55 are written to a priority-intervention layer.</p>
@@ -1182,7 +1184,7 @@ $$T = \text{clamp}(100 - \text{tree\_count} \times 10) \quad \text{(low-tree-den
 <h2 id="g8">8. Synthesis: Multi-Hazard, Adaptation &amp; Priority</h2>
 <p>The Synthesis group is the intellectual core of the suite — 16 algorithms that compose, compare, prioritise, and stress-test resilience scores. They fall into four sub-themes: <b>spatial joins</b> (Join Scores to Planning Units brings hazard-layer outputs onto a common polygon layer), <b>composite indices</b> (Climate Adaptation Priority, Multi-Hazard Composite, Recovery Capacity, Hazard Frequency), <b>equity and climate adjustment</b> (Equity-Adjusted Priority, Climate Projection Overlay), and <b>prioritisation</b> (Risk-Recovery Matrix, Scenario Sensitivity, Population-Weighted Exposure, Critical Infrastructure Exposure, Vulnerability Surface IDW).</p>
 
-<h3 id="join_scores_to_planning_units">Join Hazard Scores to Planning Units</h3>
+<h3 id="join_scores_to_planning_units"><img class="tool-icon" src="icons/tool_join_scores_to_planning_units.png" alt="" loading="lazy">Join Hazard Scores to Planning Units</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:join_scores_to_planning_units</code></p>
 
 <h4>1. Overview</h4>
@@ -1237,7 +1239,7 @@ $$\text{score}(u) = \max\left(\left\{\text{clamp}(f_s) \mid f \in S, \text{geom}
 <p class="ref">Flowerdew, R. &amp; Green, M. (1992). "Developments in areal interpolation methods and GIS." <i>The Annals of Regional Science</i>, 26(1), 67–78. DOI: <a href="https://doi.org/10.1007/BF01581481">10.1007/BF01581481</a></p>
 <p class="ref">Cutter, S.L., Boruff, B.J. &amp; Shirley, W.L. (2003). "Social vulnerability to environmental hazards." <i>Social Science Quarterly</i>, 84(2), 242–261. DOI: <a href="https://doi.org/10.1111/1540-6237.8402002">10.1111/1540-6237.8402002</a></p>
 
-<h3 id="climate_adaptation_priority_synthesis">Climate Adaptation Priority Synthesis</h3>
+<h3 id="climate_adaptation_priority_synthesis"><img class="tool-icon" src="icons/tool_climate_adaptation_priority_synthesis.png" alt="" loading="lazy">Climate Adaptation Priority Synthesis</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:climate_adaptation_priority_synthesis</code></p>
 <h4>1. Overview</h4>
 <p>Combines up to six 0–100 hazard/deficit score fields already joined onto a common polygon layer into a single weighted <code>adapt_score</code>. Outputs the composite, a priority class, the top three driving hazards (with their scores), and a list of missing fields.</p>
@@ -1279,7 +1281,7 @@ $$\text{adapt\_score} = \frac{\sum_{k} w_k \cdot \text{clamp}(s_k)}{\sum_{k : w_
 <h4>8. Interpretation Guide</h4>
 <p><b>adapt_class = Immediate:</b> units where multiple hazards score ≥75 simultaneously. <b>drivers:</b> tells you which hazard(s) dominate — "flood:92.1, heat:45.0" means the unit is a flood priority, not a heat priority. Use this to assign hazard-specific interventions. Feed into <b>Equity-Adjusted Priority</b> to re-rank by vulnerability. Feed into <b>Risk-Recovery Priority Matrix</b> with <code>rc_score</code> to find high-hazard + low-recovery gaps.</p>
 
-<h3 id="multi_hazard_composite_index">Multi-Hazard Composite Index</h3>
+<h3 id="multi_hazard_composite_index"><img class="tool-icon" src="icons/tool_multi_hazard_composite_index.png" alt="" loading="lazy">Multi-Hazard Composite Index</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:multi_hazard_composite_index</code></p>
 <h4>1. Overview</h4>
 <p>Combines N hazard score fields (each 0–100) per planning unit into a single composite with diagnostic transparency: <b>which hazard dominates?</b>, <b>how diverse is the stress profile?</b>, and <b>how many data gaps exist?</b> The Adaptation Priority Synthesis collapses everything to one score; this algorithm keeps the breakdown visible.</p>
@@ -1320,7 +1322,7 @@ $$\text{mh\_diversity} = 100 \cdot \frac{-\sum_i p_i \ln p_i}{\ln N}, \quad p_i 
 <h4>Academic References</h4>
 <p class="ref">Shannon, C.E. (1948). "A mathematical theory of communication." <i>Bell System Technical Journal</i>, 27(3), 379–423.</p>
 
-<h3 id="equity_adjusted_priority">Equity-Adjusted Adaptation Priority</h3>
+<h3 id="equity_adjusted_priority"><img class="tool-icon" src="icons/tool_equity_adjusted_priority.png" alt="" loading="lazy">Equity-Adjusted Adaptation Priority</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:equity_adjusted_priority</code></p>
 <h4>1. Overview</h4>
 <p>Re-ranks adaptation priority by multiplying a hazard/composite score (0–100) by an equity factor derived from the Social Vulnerability Index. Units that are both high-hazard and high-vulnerability rise to the top. The equity weight <i>w</i> controls amplification: w = 0 returns the raw hazard score; w = 1 doubles the score at SVI = 100.</p>
@@ -1363,7 +1365,7 @@ $$\text{eq\_adjusted\_score} = \text{clamp}\left(100 \cdot \frac{\text{hazard} \
 <h4>Academic References</h4>
 <p class="ref">Shi, L. et al. (2016). "Roadmap towards justice in urban climate adaptation research." <i>Nature Climate Change</i>, 6(2), 131–137. DOI: <a href="https://doi.org/10.1038/nclimate2841">10.1038/nclimate2841</a></p>
 
-<h3 id="climate_projection_overlay">Climate Projection Overlay</h3>
+<h3 id="climate_projection_overlay"><img class="tool-icon" src="icons/tool_climate_projection_overlay.png" alt="" loading="lazy">Climate Projection Overlay</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:climate_projection_overlay</code></p>
 <h4>1. Overview</h4>
 <p>Applies a literature-based amplification factor to a today's hazard/composite score so planners can see the unit-level impact of a warming scenario. Offline-first — no CMIP/downscaled rasters required. Built-in scenarios: Stable (×1.00), Mild +1.5°C ~2050 (×1.15), Moderate +2°C ~2070 (×1.30), High +3°C ~2100 (×1.60), plus a custom override. Outputs include projected score, delta, and delta class.</p>
@@ -1404,7 +1406,7 @@ $$\text{cp\_delta} = \text{cp\_projected} - \text{today} \tag{2}$$
 <h4>Academic References</h4>
 <p class="ref">IPCC. (2021). <i>Climate Change 2021: The Physical Science Basis. Contribution of Working Group I to the Sixth Assessment Report.</i> Cambridge University Press.</p>
 
-<h3 id="recovery_capacity_index">Recovery Capacity Index</h3>
+<h3 id="recovery_capacity_index"><img class="tool-icon" src="icons/tool_recovery_capacity_index.png" alt="" loading="lazy">Recovery Capacity Index</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:recovery_capacity_index</code></p>
 <h4>1. Overview</h4>
 <p>Measures the opposite side of resilience — how well a unit can <b>bounce back</b> after a shock. Composites four offline-derivable proxies: <b>land-use diversity</b> (HHI-based from multiple share fields), <b>redundancy</b> (road-access count, scaled), <b>green coverage</b> (0–1 or 0–100), and <b>social cohesion</b> (0–100 proxy, e.g. home-ownership rate). Missing sub-scores are excluded from the weighted mean. Outputs each sub-score, the composite, a class, and a data-gap count.</p>
@@ -1455,7 +1457,7 @@ $$\text{rc\_score} = \frac{\sum_k w_k \cdot \text{sub}_k}{\sum_k w_k \cdot [\tex
 <p class="ref">Cervero, R. &amp; Kockelman, K. (1997). "Travel demand and the 3Ds: density, diversity, and design." <i>Transportation Research Part D</i>, 2(3), 199–219.</p>
 <p class="ref">Gao, J., Barzel, B. &amp; Barabási, A.L. (2016). "Universal resilience patterns in complex networks." <i>Nature</i>, 530, 307–312.</p>
 
-<h3 id="risk_recovery_priority_matrix">Risk-Recovery Priority Matrix</h3>
+<h3 id="risk_recovery_priority_matrix"><img class="tool-icon" src="icons/tool_risk_recovery_priority_matrix.png" alt="" loading="lazy">Risk-Recovery Priority Matrix</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:risk_recovery_priority_matrix</code></p>
 <h4>1. Overview</h4>
 <p>Combines a hazard/adaptation score (0–100) with a recovery capacity score (0–100) into a single priority: <b>high hazard + low recovery → highest priority</b>. Uses the same multiplicative-deficit form as Equity-Adjusted Priority: priority = hazard × (1 + w × deficit/100), where deficit = 100 − recovery. Normalised back to 0–100.</p>
@@ -1498,7 +1500,7 @@ $$\text{rr\_priority\_score} = \text{clamp}\left(100 \cdot \frac{\text{hazard} \
 <h4>Academic References</h4>
 <p class="ref">UNDRR. (2019). <i>Global Assessment Report on Disaster Risk Reduction.</i> United Nations Office for Disaster Risk Reduction, Geneva.</p>
 
-<h3 id="hotspot_analysis_getis_ord">Hot-Spot Cluster Analysis (Getis-Ord Gi*)</h3>
+<h3 id="hotspot_analysis_getis_ord"><img class="tool-icon" src="icons/tool_hotspot_analysis_getis_ord.png" alt="" loading="lazy">Hot-Spot Cluster Analysis (Getis-Ord Gi*)</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:hotspot_analysis_getis_ord</code></p>
 <h4>1. Overview</h4>
 <p>Tags each feature as a statistically significant hot spot (cluster of high values), cold spot (cluster of low values), or not significant using the Getis-Ord Gi* local statistic. Supports inverse-distance and fixed-distance spatial weights. Includes Benjamini-Hochberg FDR-adjusted p-values and class labels to control for multiple testing across n simultaneous local tests. Pure Python implementation — no numpy dependency.</p>
@@ -1541,7 +1543,7 @@ $$G_i^* = \frac{\sum_j w_{ij} x_j - \bar{x} \sum_j w_{ij}}{s \sqrt{\frac{n \sum_
 <p class="ref">Ord, J.K. &amp; Getis, A. (1995). "Local spatial autocorrelation statistics: distributional issues and an application." <i>Geographical Analysis</i>, 27(4), 286–306.</p>
 <p class="ref">Benjamini, Y. &amp; Hochberg, Y. (1995). "Controlling the false discovery rate." <i>Journal of the Royal Statistical Society: Series B</i>, 57(1), 289–300.</p>
 
-<h3 id="lisa_local_moran">LISA Local Moran's I (cluster + outlier)</h3>
+<h3 id="lisa_local_moran"><img class="tool-icon" src="icons/tool_lisa_local_moran.png" alt="" loading="lazy">LISA Local Moran's I (cluster + outlier)</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:lisa_local_moran</code></p>
 <h4>1. Overview</h4>
 <p>Companion to Hot-Spot Gi* — adds <b>outlier detection</b> to cluster detection. Tags each feature as HH (high-high cluster), LL (low-low cluster), HL (high-low outlier — a high-value feature in a low-value neighbourhood), LH (low-high outlier), or Not significant. The HL and LH classes expose under-served pockets Gi* cannot identify. Uses Anselin (1995) analytic randomization moments for significance and Benjamini-Hochberg FDR adjustment.</p>
@@ -1581,7 +1583,7 @@ $$z(I_i) = \frac{I_i - E[I_i]}{\sqrt{\text{Var}[I_i]}} \tag{2}$$
 <h4>Academic References</h4>
 <p class="ref">Anselin, L. (1995). "Local indicators of spatial association — LISA." <i>Geographical Analysis</i>, 27(2), 93–115.</p>
 
-<h3 id="population_weighted_exposure">Population-Weighted Exposure</h3>
+<h3 id="population_weighted_exposure"><img class="tool-icon" src="icons/tool_population_weighted_exposure.png" alt="" loading="lazy">Population-Weighted Exposure</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:population_weighted_exposure</code></p>
 <h4>1. Overview</h4>
 <p>Translates a 0–100 hazard score into a human-impact estimate: how many people live inside each risk class? Population comes from either a field on the scored layer or a separate point/polygon layer. Per-unit outputs: <code>pop_total</code>, <code>pop_exposed</code> (= score/100 × pop), <code>exposure_intensity</code>, <code>exposure_class</code>. The Processing log prints a study-area summary: total population, breakdown by risk class, and top 10 units by exposed population.</p>
@@ -1619,7 +1621,7 @@ $$\text{pop\_exposed} = \frac{\text{score}}{100} \times \text{pop\_total} \tag{1
 <h4>8. Interpretation Guide</h4>
 <p><b>pop_exposed &gt; 5 000:</b> large exposed populations — the humanitarian-priority units. The log's "Top units by exposed population" table is the audience-ready headline. Compare <code>pop_exposed</code> rankings with the raw <code>score</code> rankings: units with moderate hazard but very high population may rank higher on exposure than on hazard — a classic finding that justifies this module's existence.</p>
 
-<h3 id="hazard_frequency_aggregation">Multi-Period Hazard Frequency Aggregation</h3>
+<h3 id="hazard_frequency_aggregation"><img class="tool-icon" src="icons/tool_hazard_frequency_aggregation.png" alt="" loading="lazy">Multi-Period Hazard Frequency Aggregation</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:hazard_frequency_aggregation</code></p>
 
 <h4>1. Overview</h4>
@@ -1681,7 +1683,7 @@ $$s_{\text{composite}}(u) = \begin{cases} \bar{s}(u) & \text{Mean mode} \\ \max_
 <p class="ref">UNDRR. (2019). <i>Global Assessment Report on Disaster Risk Reduction.</i> United Nations Office for Disaster Risk Reduction, Geneva.</p>
 <p class="ref">Kreibich, H., Di Baldassarre, G., Vorogushyn, S., Aerts, J.C.J.H., Apel, H., Aronica, G.T., Arnbjerg-Nielsen, K., Bouwer, L.M., Bubeck, P., Caloiero, T. et al. (2017). "Adaptation to flood risk: results of international paired flood event studies." <i>Earth's Future</i>, 5(10), 953–965. DOI: <a href="https://doi.org/10.1002/2017EF000606">10.1002/2017EF000606</a></p>
 
-<h3 id="vulnerability_surface_idw">Vulnerability Surface (IDW interpolation)</h3>
+<h3 id="vulnerability_surface_idw"><img class="tool-icon" src="icons/tool_vulnerability_surface_idw.png" alt="" loading="lazy">Vulnerability Surface (IDW interpolation)</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:vulnerability_surface_idw</code></p>
 <h4>1. Overview</h4>
 <p>Interpolates sparse point measurements (sensor readings, survey scores, social-cohesion samples) into a continuous surface as polygon grid cells using inverse-distance weighting (IDW). Parameters: IDW power (higher = sharper local peaks), optional search radius, and optional neighbour cap. Pure Python — no raster dependencies.</p>
@@ -1722,7 +1724,7 @@ $$\hat{z}(x) = \frac{\sum_i w_i z_i}{\sum_i w_i}, \quad w_i = \frac{1}{d(x, x_i)
 <h4>Academic References</h4>
 <p class="ref">Shepard, D. (1968). "A two-dimensional interpolation function for irregularly-spaced data." <i>Proceedings of the 1968 ACM National Conference</i>, 517–524.</p>
 
-<h3 id="critical_infrastructure_exposure">Critical Infrastructure Exposure</h3>
+<h3 id="critical_infrastructure_exposure"><img class="tool-icon" src="icons/tool_critical_infrastructure_exposure.png" alt="" loading="lazy">Critical Infrastructure Exposure</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:critical_infrastructure_exposure</code></p>
 
 <h4>1. Overview</h4>
@@ -1790,7 +1792,7 @@ $$E_i = \frac{H_i}{100} \cdot c_{\text{norm}, i} \cdot 100 = H_i \cdot \frac{c_{
 <p class="ref">Buldyrev, S.V., Parshani, R., Paul, G., Stanley, H.E. &amp; Havlin, S. (2010). "Catastrophic cascade of failures in interdependent networks." <i>Nature</i>, 464, 1025–1028. DOI: <a href="https://doi.org/10.1038/nature08932">10.1038/nature08932</a></p>
 <p class="ref">FEMA. (2003). <i>HAZUS-MH MR4 Technical Manual.</i> Federal Emergency Management Agency, Washington, DC.</p>
 
-<h3 id="scenario_sensitivity">Scenario Sensitivity Analysis</h3>
+<h3 id="scenario_sensitivity"><img class="tool-icon" src="icons/tool_scenario_sensitivity.png" alt="" loading="lazy">Scenario Sensitivity Analysis</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:scenario_sensitivity</code></p>
 <h4>1. Overview</h4>
 <p>Stress-tests composite scores by varying component weights via Latin Hypercube Sampling (LHS). Each weight may vary by ± the perturbation fraction around its nominal value. Per unit, computes the baseline composite (nominal weights), mean, standard deviation, p05/p95, range, and a 0–100 stability score (100 = identical across all samples, 0 = highly sensitive). Units with low stability change rank under reasonable weight uncertainty — flag them for qualitative review.</p>
@@ -1836,7 +1838,7 @@ $$\text{ss\_stability} = \text{clamp}\left(100 \cdot \left(1 - \frac{\sigma(C)}{
 <p class="ref">McKay, M.D., Beckman, R.J. &amp; Conover, W.J. (1979). "A comparison of three methods for selecting values of input variables." <i>Technometrics</i>, 21(2), 239–245.</p>
 <p class="ref">Saltelli, A. et al. (2004). <i>Sensitivity Analysis in Practice.</i> Wiley.</p>
 
-<h3 id="risk_trend_hotspot">Risk Trend Hot-Spot (Gi* x Delta score)</h3>
+<h3 id="risk_trend_hotspot"><img class="tool-icon" src="icons/tool_risk_trend_hotspot.png" alt="" loading="lazy">Risk Trend Hot-Spot (Gi* x Delta score)</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:risk_trend_hotspot</code></p>
 
 <h4>1. Overview</h4>
@@ -1908,7 +1910,7 @@ $$\text{label}_i = f(G_i^*, \text{sig}_i, \text{rising}_i, \text{falling}_i) \ta
 <h2 id="g10">10. Economics: Cost-Benefit, Lifecycle &amp; Optimisation</h2>
 <p>Three algorithms that move the suite from "where is the risk?" to "what does the response cost, and in what order should we act?". Together they form a budget-allocation pipeline: score interventions → rank by benefit/cost → identify the Pareto frontier → compute lifecycle NPV.</p>
 
-<h3 id="cost_benefit_analyzer">Cost-Benefit Analyzer (planning prioritisation)</h3>
+<h3 id="cost_benefit_analyzer"><img class="tool-icon" src="icons/tool_cost_benefit_analyzer.png" alt="" loading="lazy">Cost-Benefit Analyzer (planning prioritisation)</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:cost_benefit_analyzer</code></p>
 <h4>1. Overview</h4>
 <p>Ranks planning units by cost-effectiveness using a transparent two-input model: cost = unit_cost × area (or per-feature for points), benefit = score × reduction_factor × population_weight. The B/C ratio drives a 1-N priority rank. The Processing log prints the cumulative-benefit curve: "to capture 80% of benefit you need to fund 25% of units."</p>
@@ -1948,7 +1950,7 @@ $$\text{ratio} = \frac{\text{benefit}}{\text{cost}} \quad (\text{cost} = 0, \tex
 <h4>Academic References</h4>
 <p class="ref">Boardman, A.E. et al. (2018). <i>Cost-Benefit Analysis: Concepts and Practice.</i> 5th ed., Cambridge University Press.</p>
 
-<h3 id="pareto_optimal_selector">Pareto-Optimal Intervention Selector</h3>
+<h3 id="pareto_optimal_selector"><img class="tool-icon" src="icons/tool_pareto_optimal_selector.png" alt="" loading="lazy">Pareto-Optimal Intervention Selector</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:pareto_optimal_selector</code></p>
 
 <h4>1. Overview</h4>
@@ -1998,7 +2000,7 @@ $$D_i = |\{j \neq i : j \succ i\}| \tag{2}$$
 <p class="ref">Coello Coello, C.A., Van Veldhuizen, D.A. &amp; Lamont, G.B. (2007). <i>Evolutionary Algorithms for Solving Multi-Objective Problems.</i> 2nd ed., Springer.</p>
 <p class="ref">Pareto, V. (1906). <i>Manuale di Economia Politica.</i> Societa Editrice Libraria, Milano.</p>
 
-<h3 id="lifecycle_cost_calculator">Lifecycle Cost Calculator (25-year NPV)</h3>
+<h3 id="lifecycle_cost_calculator"><img class="tool-icon" src="icons/tool_lifecycle_cost_calculator.png" alt="" loading="lazy">Lifecycle Cost Calculator (25-year NPV)</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:lifecycle_cost_calculator</code></p>
 
 <h4>1. Overview</h4>
@@ -2073,7 +2075,7 @@ $$\text{opex\_npv} = \begin{cases} O \cdot H & r = 0 \\ O \cdot \frac{1 - (1+r)^
 <h2 id="gR">R. Reporting, Visualisation &amp; QA</h2>
 <p>The Reporting group provides ten algorithms for output styling, comparison, export, and communication. They transform the numeric scores from the hazard and synthesis modules into studio-ready deliverables: HTML/Markdown reports, PDF atlas pages, styled QGIS layers, 3D GeoJSON exports, correlation matrices, and curated intervention checklists.</p>
 
-<h3 id="resilience_time_series">Resilience Time-Series Tracker</h3>
+<h3 id="resilience_time_series"><img class="tool-icon" src="icons/tool_resilience_time_series.png" alt="" loading="lazy">Resilience Time-Series Tracker</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:resilience_time_series</code></p>
 
 <h4>1. Overview</h4>
@@ -2137,7 +2139,7 @@ $$G_i = s_i^{(t_1)} - \tau \quad \text{(target gap, positive = above target)} \t
 <p class="ref">Cutter, S.L., Boruff, B.J. &amp; Shirley, W.L. (2003). "Social vulnerability to environmental hazards." <i>Social Science Quarterly</i>, 84(2), 242–261. DOI: <a href="https://doi.org/10.1111/1540-6237.8402002">10.1111/1540-6237.8402002</a></p>
 <p class="ref">Birkmann, J., Cardona, O.D., Carreno, M.L., Barbat, A.H., Pelling, M., Schneiderbauer, S., Kienberger, S., Keiler, M., Alexander, D., Zeil, P. &amp; Welle, T. (2013). "Framing vulnerability, risk and societal responses: the MOVE framework." <i>Natural Hazards</i>, 67(2), 193–211. DOI: <a href="https://doi.org/10.1007/s11069-013-0558-5">10.1007/s11069-013-0558-5</a></p>
 
-<h3 id="resilience_scenario_comparison">Scenario Comparison / Delta Map</h3>
+<h3 id="resilience_scenario_comparison"><img class="tool-icon" src="icons/tool_resilience_scenario_comparison.png" alt="" loading="lazy">Scenario Comparison / Delta Map</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:resilience_scenario_comparison</code></p>
 
 <h4>1. Overview</h4>
@@ -2197,7 +2199,7 @@ $$C_i = \begin{cases} \text{Improved} & \Delta_i \le -\tau \\ \text{Stable} & -\
 <p class="ref">van Vuuren, D.P., Edmonds, J., Kainuma, M., Riahi, K., Thomson, A., Hibbard, K., Hurtt, G.C., Kram, T., Krey, V., Lamarque, J.F. et al. (2011). "The representative concentration pathways: an overview." <i>Climatic Change</i>, 109, 5–31. DOI: <a href="https://doi.org/10.1007/s10584-011-0148-z">10.1007/s10584-011-0148-z</a></p>
 <p class="ref">IPCC. (2021). <i>Climate Change 2021: The Physical Science Basis.</i> Cambridge University Press.</p>
 
-<h3 id="scenario_planning_template">Scenario Planning Template</h3>
+<h3 id="scenario_planning_template"><img class="tool-icon" src="icons/tool_scenario_planning_template.png" alt="" loading="lazy">Scenario Planning Template</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:scenario_planning_template</code></p>
 
 <h4>1. Overview</h4>
@@ -2255,7 +2257,7 @@ $$\text{scen\_score}_i = \max\left(0, \min\left(100, \text{base\_score}_i \cdot 
 <p class="ref">NIST. (2015). <i>Community Resilience Planning Guide for Buildings and Infrastructure Systems.</i> NIST Special Publication 1190. DOI: <a href="https://doi.org/10.6028/NIST.SP.1190">10.6028/NIST.SP.1190</a></p>
 <p class="ref">UNISDR. (2015). <i>Sendai Framework for Disaster Risk Reduction 2015–2030.</i> United Nations, Geneva.</p>
 
-<h3 id="resilience_score_html_report">Resilience Score HTML Report</h3>
+<h3 id="resilience_score_html_report"><img class="tool-icon" src="icons/tool_resilience_score_html_report.png" alt="" loading="lazy">Resilience Score HTML Report</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:resilience_score_html_report</code></p>
 <h4>1. Overview</h4>
 <p>Generates a standalone HTML report from any scored polygon or point layer with a 0–100 score field. Contents: summary cards (feature count, average score, score range, high-priority count), a class-distribution table, and a top-drivers table parsed from an optional notes/driver field. The file opens in any browser — no QGIS, network connection, or external asset needed to view it.</p>
@@ -2288,7 +2290,7 @@ $$\text{scen\_score}_i = \max\left(0, \min\left(100, \text{base\_score}_i \cdot 
 <h4>Academic References</h4>
 <p class="ref">Tufte, E.R. (1983). <i>The Visual Display of Quantitative Information.</i> Graphics Press, Cheshire, CT.</p>
 
-<h3 id="resilience_studio_brief_markdown">Resilience Studio Brief (Markdown)</h3>
+<h3 id="resilience_studio_brief_markdown"><img class="tool-icon" src="icons/tool_resilience_studio_brief_markdown.png" alt="" loading="lazy">Resilience Studio Brief (Markdown)</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:resilience_studio_brief_markdown</code></p>
 <h4>1. Overview</h4>
 <p>Generates a first-draft executive-summary Markdown document from a scored layer: study context, executive summary, key-metrics table, class distribution, dominant drivers, suggested next actions, and a standing limitations section. The Markdown renders natively on GitHub/GitLab, in any Markdown editor, or can be pandoc-converted to PDF/DOCX for formal submission.</p>
@@ -2318,7 +2320,7 @@ $$\text{scen\_score}_i = \max\left(0, \min\left(100, \text{base\_score}_i \cdot 
 <h4>8. Interpretation Guide</h4>
 <p>Edit the Study Context section first — the default placeholder text is generic and should be replaced with the actual study area, timeframe, and purpose before the brief leaves the studio. Treat the Suggested Next Actions list as conversation starters for a design review, not as a finished recommendation.</p>
 
-<h3 id="recommended_actions_report">Recommended Actions Report (Markdown)</h3>
+<h3 id="recommended_actions_report"><img class="tool-icon" src="icons/tool_recommended_actions_report.png" alt="" loading="lazy">Recommended Actions Report (Markdown)</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:recommended_actions_report</code></p>
 <h4>1. Overview</h4>
 <p>Turns a scored layer with optional class and dominant-hazard fields into a structured Markdown report: class distribution, top-N units table, and <b>curated intervention checklists per hazard family</b> (heat: cool roofs, green corridors, reflective pavements; flood: bioswales, detention basins, raised plinths; seismic: retrofit, soft-storey bracing; social: community centres, early-warning systems; air: green screens, traffic filtering; drought: drip irrigation, drought-tolerant species; emergency: satellite shelters, pre-positioned supplies). Each checklist item is a plain-language action with a rationale sentence.</p>
@@ -2352,7 +2354,7 @@ $$\text{scen\_score}_i = \max\left(0, \min\left(100, \text{base\_score}_i \cdot 
 <h4>8. Interpretation Guide</h4>
 <p>If every unit falls back to the generic checklist, check the dominant-hazard field's actual text values against the catalogue keys — a mismatch there is the most common reason for an unexpectedly generic-only report. Use the per-hazard checklists as a facilitation tool in a stakeholder workshop: ask which of the 3–4 listed actions is most feasible for this specific site, rather than treating the list as a ranked or prioritised recommendation.</p>
 
-<h3 id="apply_resilience_symbology">Apply Resilience Symbology</h3>
+<h3 id="apply_resilience_symbology"><img class="tool-icon" src="icons/tool_apply_resilience_symbology.png" alt="" loading="lazy">Apply Resilience Symbology</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:apply_resilience_symbology</code></p>
 <h4>1. Overview</h4>
 <p>Applies pre-configured QGIS categorised or graduated renderers to the most common resilience output types: 0–100 risk scores (5-class custom ramp: Low #2A9D8F teal, Moderate #E9C46A amber, High #F4A261 orange, Very High #D62828 red), access classes (Covered/Watch/Underserved/Critical/Unreachable), scenario change classes (Improved/Stable/Worsened), and adaptation priority classes (Monitor/Medium/High/Immediate). Optional QML export for reusable cartographic presets.</p>
@@ -2378,7 +2380,7 @@ $$\text{scen\_score}_i = \max\left(0, \min\left(100, \text{base\_score}_i \cdot 
 <h4>6. Output Description</h4>
 <p>No new layer or fields are created — the input layer's renderer is replaced in place. If <code>OUTPUT_QML</code> is supplied, a standalone QML style file is written for reuse on other layers or projects.</p>
 
-<h3 id="bivariate_choropleth_symbology">Bivariate Choropleth Symbology</h3>
+<h3 id="bivariate_choropleth_symbology"><img class="tool-icon" src="icons/tool_bivariate_choropleth_symbology.png" alt="" loading="lazy">Bivariate Choropleth Symbology</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:bivariate_choropleth_symbology</code></p>
 <h4>1. Overview</h4>
 <p>Classifies polygon units into Low/Mid/High on two axes (risk and vulnerability) using tertile breaks, then applies a Stevens-style 3×3 bivariate palette via a QGIS categorised renderer. Adds <code>bv_class</code>, <code>bv_risk_bin</code>, and <code>bv_vuln_bin</code> fields so the symbology survives layer-style export. The 9-colour palette is the standard bivariate matrix:
@@ -2415,7 +2417,7 @@ $$\text{scen\_score}_i = \max\left(0, \min\left(100, \text{base\_score}_i \cdot 
 <tr><td><code>bv_vuln_bin</code></td><td>Integer</td><td>0/1/2 = Low/Mid/High on the vulnerability axis.</td></tr>
 <tr><td><code>bv_class</code></td><td>String</td><td>Combined label, e.g. "R-H_V-H" (high risk, high vulnerability) — also drives the categorised renderer applied automatically.</td></tr></table>
 
-<h3 id="resilience_pdf_atlas">Resilience PDF Atlas</h3>
+<h3 id="resilience_pdf_atlas"><img class="tool-icon" src="icons/tool_resilience_pdf_atlas.png" alt="" loading="lazy">Resilience PDF Atlas</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:resilience_pdf_atlas</code></p>
 <h4>1. Overview</h4>
 <p>Generates a multi-page QgsLayout PDF atlas from a scored layer. Presets: A3 standard, A4 compact, A3 studio (300 dpi). Pages include a cover sheet, study-area overview map, and one map per risk class with automated legend, scale bar, and title block. The atlas is a QGIS print layout — open it in the Layout Manager to fine-tune before final export.</p>
@@ -2446,7 +2448,7 @@ $$\text{scen\_score}_i = \max\left(0, \min\left(100, \text{base\_score}_i \cdot 
 <h4>6. Output Description</h4>
 <p>One multi-page PDF: a cover sheet (title/subtitle/author/project), a study-area overview map with the full graduated-colour classification, and one detail page per distinct class value (when a class field is supplied), each with its own legend, scale bar, and title block.</p>
 
-<h3 id="multi_hazard_correlation_matrix">Multi-Hazard Correlation Matrix</h3>
+<h3 id="multi_hazard_correlation_matrix"><img class="tool-icon" src="icons/tool_multi_hazard_correlation_matrix.png" alt="" loading="lazy">Multi-Hazard Correlation Matrix</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:multi_hazard_correlation_matrix</code></p>
 
 <h4>1. Overview</h4>
@@ -2499,7 +2501,7 @@ $$n_{\text{pairs}} = |\{i : x_i \neq \text{null} \land y_i \neq \text{null}\}| \
 <p class="ref">IPCC. (2014). <i>Climate Change 2014: Impacts, Adaptation, and Vulnerability. Part A.</i> Cambridge University Press.</p>
 <p class="ref">UNDRR. (2019). <i>Global Assessment Report on Disaster Risk Reduction.</i> United Nations Office for Disaster Risk Reduction, Geneva.</p>
 
-<h3 id="risk_3d_volume_export">3D Risk Volume Export</h3>
+<h3 id="risk_3d_volume_export"><img class="tool-icon" src="icons/tool_risk_3d_volume_export.png" alt="" loading="lazy">3D Risk Volume Export</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:risk_3d_volume_export</code></p>
 
 <h4>1. Overview</h4>
@@ -2666,7 +2668,7 @@ $$\text{color}_i = \begin{cases} f_{\text{YlRd}}(\text{norm}) & \text{(sequentia
 
 <hr style="margin:2rem 0;border-color:var(--border);">
 <p style="text-align:center;color:var(--muted);font-size:0.85em;">
-PlanX Urban Resilience — Academic Reference Manual · v2.1.0 · 43 Algorithms<br>
+PlanX Urban Resilience — Academic Reference Manual · v2.1.1 · 43 Algorithms<br>
 Yusuf Eminoğlu · August 2026 · <a href="https://github.com/YusufEminoglu/planx_urban_resilience">GitHub</a>
 </p>
 
@@ -2785,7 +2787,7 @@ btt.addEventListener('click', () => {
 
   const titles = {};
   document.querySelectorAll('#content h3[id]').forEach(h3 => {
-    titles[h3.id] = (h3.childNodes[0] ? h3.childNodes[0].textContent : h3.textContent).trim();
+    titles[h3.id] = h3.textContent.trim();
   });
 
   document.querySelectorAll('#content h3[id]').forEach(h3 => {

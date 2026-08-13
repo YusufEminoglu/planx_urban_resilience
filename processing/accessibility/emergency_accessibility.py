@@ -78,37 +78,29 @@ class EmergencyAccessibilityAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlg
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>Emergency Accessibility and Shelter Coverage</h3>
-            <p>Euclidean nearest-shelter screening in the accessibility tradition Hansen
-            (1959) founded (access as a function of distance to opportunity) and Radke
-            &amp; Mu (2000) operationalised for service planning as the two-step floating
-            catchment area (2SFCA) method, later refined by Luo &amp; Wang (2003) for
-            healthcare access. This tool implements the simplest member of that family: a
-            single-step distance-decay score to the nearest shelter, without 2SFCA's
-            catchment-overlap correction or supply/demand ratio (both need a shelter
-            capacity field, which this tool does not take by design).</p>
-            <p>access_score ramps linearly from 0 at SERVICE_DISTANCE to 100 at
-            CRITICAL_DISTANCE, plus an additive barrier-overlap penalty (BARRIER_WEIGHT x
-            share of the cell covered by BARRIERS) standing in for the detour a real
-            barrier (river, highway without a crossing) would force - it can only push the
-            score toward worse, it never recomputes an actual reroute. Only the nearest
-            shelter counts; the model has no notion of that shelter's remaining capacity.</p>
-            <p>How to read the results
-            - access_class Critical: &gt;75% of the way from service to critical distance
-            - no nearby shelter at all.
-            - Underserved: 55-74%. Watch: 35-54%, in reach but not comfortable. Covered:
-            &lt;35%.
-            - barrier_pct is diagnostic: a cell can have a short dist_shelter but still
-            score poorly if it sits mostly behind a barrier polygon.</p>
-            <p>Using the results: cross-reference underserved assets with Social
-            Vulnerability Index to find vulnerable populations with poor shelter access.
-            Use this for a first-pass screening pass with no road data on hand. Switch to
-            Network Emergency Accessibility anywhere real routing barriers matter (rivers,
-            highways, one-way systems), and to Evacuation Time Simulation or Optimal
-            Shelter Siting for any decision that needs to account for shelter capacity -
-            this tool deliberately does not.</p>
-            """
+            "<h3>Emergency Accessibility and Shelter Coverage</h3> <p>Euclidean nearest-shelter "
+            "screening in the accessibility tradition Hansen (1959) founded (access as a function of "
+            "distance to opportunity) and Radke &amp; Mu (2000) operationalised for service planning "
+            "as the two-step floating catchment area (2SFCA) method, later refined by Luo &amp; Wang "
+            "(2003) for healthcare access. This tool implements the simplest member of that family: a "
+            "single-step distance-decay score to the nearest shelter, without 2SFCA's "
+            "catchment-overlap correction or supply/demand ratio (both need a shelter capacity field, "
+            "which this tool does not take by design).</p> <p>access_score ramps linearly from 0 at "
+            "SERVICE_DISTANCE to 100 at CRITICAL_DISTANCE, plus an additive barrier-overlap penalty "
+            "(BARRIER_WEIGHT x share of the cell covered by BARRIERS) standing in for the detour a "
+            "real barrier (river, highway without a crossing) would force - it can only push the "
+            "score toward worse, it never recomputes an actual reroute. Only the nearest shelter "
+            "counts; the model has no notion of that shelter's remaining capacity.</p> <p>How to read "
+            "the results - access_class Critical: &gt;75% of the way from service to critical "
+            "distance - no nearby shelter at all. - Underserved: 55-74%. Watch: 35-54%, in reach but "
+            "not comfortable. Covered: &lt;35%. - barrier_pct is diagnostic: a cell can have a short "
+            "dist_shelter but still score poorly if it sits mostly behind a barrier polygon.</p> "
+            "<p>Using the results: cross-reference underserved assets with Social Vulnerability Index "
+            "to find vulnerable populations with poor shelter access. Use this for a first-pass "
+            "screening pass with no road data on hand. Switch to Network Emergency Accessibility "
+            "anywhere real routing barriers matter (rivers, highways, one-way systems), and to "
+            "Evacuation Time Simulation or Optimal Shelter Siting for any decision that needs to "
+            "account for shelter capacity - this tool deliberately does not.</p>"
         )
 
     def initAlgorithm(self, config=None):

@@ -149,31 +149,22 @@ class Risk3DVolumeExportAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorit
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>3D Risk Volume Export</h3>
-            <p>Turns a 0-100 scored polygon layer into a GeoJSON file with
-            <code>extrusion_height</code> and <code>color_hex</code>
-            attributes so it drops straight into the PlanX 3D City viewer
-            (or Three.js / deck.gl / Cesium) without manual styling - exploiting
-            the human visual system's sensitivity to height variation (Ware, 2012)
-            so equal risk differences read as equal vertical displacement. Colour
-            is deliberately redundant with height (two channels for one variable),
-            improving interpretability for viewers who may not perceive height
-            accurately due to perspective, occlusion, or colour vision deficiency.</p>
-            <p>The tallest, most saturated blocks in the resulting 3D view
-            are the worst hot spots — a single picture worth a thousand
-            choropleth slides.</p>
-            <p>GeoJSON is written in EPSG:4326 for web-map compatibility;
-            the in-QGIS vector output keeps the source CRS. MAX_HEIGHT is a
-            display-tuning parameter with no inherent physical meaning - unless
-            BASE_HEIGHT_FIELD carries real building heights and is used
-            additively, extrusion is purely visual, not an actual 3D building
-            model.</p>
-            <p>Using the results: 3D perspective introduces occlusion (tall
-            extrusions can hide shorter ones) and makes precise value comparison
-            harder than a flat map - keep this alongside the 2D choropleth in a
-            report, not as a replacement for it.</p>
-            """
+            "<h3>3D Risk Volume Export</h3> <p>Turns a 0-100 scored polygon layer into a GeoJSON file "
+            "with <code>extrusion_height</code> and <code>color_hex</code> attributes so it drops "
+            "straight into the PlanX 3D City viewer (or Three.js / deck.gl / Cesium) without manual "
+            "styling - exploiting the human visual system's sensitivity to height variation (Ware, "
+            "2012) so equal risk differences read as equal vertical displacement. Colour is "
+            "deliberately redundant with height (two channels for one variable), improving "
+            "interpretability for viewers who may not perceive height accurately due to perspective, "
+            "occlusion, or colour vision deficiency.</p> <p>The tallest, most saturated blocks in the "
+            "resulting 3D view are the worst hot spots — a single picture worth a thousand choropleth "
+            "slides.</p> <p>GeoJSON is written in EPSG:4326 for web-map compatibility; the in-QGIS "
+            "vector output keeps the source CRS. MAX_HEIGHT is a display-tuning parameter with no "
+            "inherent physical meaning - unless BASE_HEIGHT_FIELD carries real building heights and "
+            "is used additively, extrusion is purely visual, not an actual 3D building model.</p> "
+            "<p>Using the results: 3D perspective introduces occlusion (tall extrusions can hide "
+            "shorter ones) and makes precise value comparison harder than a flat map - keep this "
+            "alongside the 2D choropleth in a report, not as a replacement for it.</p>"
         )
 
     def initAlgorithm(self, config=None):

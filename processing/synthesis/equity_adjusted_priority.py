@@ -77,36 +77,27 @@ class EquityAdjustedPriorityAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlg
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>Equity-Adjusted Adaptation Priority</h3>
-            <p>Re-ranks adaptation priority by multiplying a hazard/composite score
-            (0-100) with an equity factor derived from the Social Vulnerability Index
-            (0-100), following the distributive-justice framework for climate
-            adaptation (Shi et al., 2016): resources should be allocated proportional
-            to both physical exposure AND social vulnerability, since treating hazard
-            score alone as the ranking criterion implicitly assumes every unit has
-            equal capacity to respond.</p>
-            <p><b>Equity factor:</b> <code>1 + w * (SVI / 100)</code></p>
-            <ul>
-              <li><b>w = 0</b> -> result equals the raw hazard score (no adjustment, the neutral default).</li>
-              <li><b>w = 1</b> -> a fully vulnerable unit doubles in priority.</li>
-              <li><b>w = 0.5</b> (default) -> SVI=100 gets a 50% boost.</li>
-            </ul>
-            <p>The adjustment is multiplicative, not additive: a unit with a very low
-            hazard score gains little absolute priority even at high SVI, since
-            there's little to amplify - this tool re-ranks AMONG already-hazardous
-            units by vulnerability, it does not manufacture priority from
-            vulnerability alone. SVI must already be joined onto the same layer;
-            this tool computes no vulnerability score of its own.</p>
-            <p>How to read the results: units where eq_adjusted_score exceeds
-            eq_hazard by more than 10 points are the equity finding - physically
-            moderate hazard but high social vulnerability pushed them up the list.</p>
-            <p>Using the results: use w=0.5 for balanced prioritisation, w=1.0 for a
-            strongly equity-first ranking - but treat the weight choice itself as a
-            policy decision for affected communities to weigh in on, not a purely
-            technical one. Adjusted score is normalized back to 0-100 so it remains
-            comparable across runs and joinable with other resilience layers.</p>
-            """
+            "<h3>Equity-Adjusted Adaptation Priority</h3> <p>Re-ranks adaptation priority by "
+            "multiplying a hazard/composite score (0-100) with an equity factor derived from the "
+            "Social Vulnerability Index (0-100), following the distributive-justice framework for "
+            "climate adaptation (Shi et al., 2016): resources should be allocated proportional to "
+            "both physical exposure AND social vulnerability, since treating hazard score alone as "
+            "the ranking criterion implicitly assumes every unit has equal capacity to respond.</p> "
+            "<p><b>Equity factor:</b> <code>1 + w * (SVI / 100)</code></p> <ul> <li><b>w = 0</b> -> "
+            "result equals the raw hazard score (no adjustment, the neutral default).</li> <li><b>w = "
+            "1</b> -> a fully vulnerable unit doubles in priority.</li> <li><b>w = 0.5</b> (default) "
+            "-> SVI=100 gets a 50% boost.</li> </ul> <p>The adjustment is multiplicative, not "
+            "additive: a unit with a very low hazard score gains little absolute priority even at "
+            "high SVI, since there's little to amplify - this tool re-ranks AMONG already-hazardous "
+            "units by vulnerability, it does not manufacture priority from vulnerability alone. SVI "
+            "must already be joined onto the same layer; this tool computes no vulnerability score of "
+            "its own.</p> <p>How to read the results: units where eq_adjusted_score exceeds eq_hazard "
+            "by more than 10 points are the equity finding - physically moderate hazard but high "
+            "social vulnerability pushed them up the list.</p> <p>Using the results: use w=0.5 for "
+            "balanced prioritisation, w=1.0 for a strongly equity-first ranking - but treat the "
+            "weight choice itself as a policy decision for affected communities to weigh in on, not a "
+            "purely technical one. Adjusted score is normalized back to 0-100 so it remains "
+            "comparable across runs and joinable with other resilience layers.</p>"
         )
 
     def initAlgorithm(self, config=None):

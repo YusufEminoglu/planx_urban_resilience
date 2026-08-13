@@ -187,40 +187,30 @@ class SeismicCascadeAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>Seismic Cascade — Debris → Network Degradation</h3>
-            <p>Cross-domain cascading-hazard analysis, following the perturb-and-measure
-            methodology formalised in NIST's (2015) Community Resilience Planning Guide:
-            take a baseline network, perturb it with physical damage, measure the
-            resulting service gap. Here the "damage" is the debris-polygon output from
-            Seismic Debris Monte Carlo - this tool pipes it into the road network, drops
-            every edge the debris intersects, builds pre- and post-hazard graphs, and
-            runs multi-source Dijkstra from all destinations on each. The two tools are
-            designed to be run back-to-back, one producing exactly what the other
-            consumes.</p>
-            <p>Debris blockage is binary - a segment is fully passable or fully blocked,
-            with no partial-capacity reduction for a segment merely narrowed on one side.
-            There is no repair/clearance timeline: the "post" graph is the worst moment
-            immediately after the event, not the gradual reopening that follows. Only
-            debris-driven blockage is modelled - a road segment with genuine pavement or
-            bridge damage but no adjacent building debris is invisible to this tool.</p>
-            <p>How to read the results
-            - cas_status = Newly cut off: reachable before the quake, isolated after -
-            the intervention-priority class.
-            - cas_status = Worse: still reachable but via a &gt;=1% longer detour
-            (cas_delta_dist &gt; 0).
-            - cas_status = Always cut off: never reachable, pre or post - a pre-existing
-            gap the quake did not create.
-            - Origins and destinations snap to the pre- and post-graphs independently, so
-            a large delta near a blocked segment is worth a map spot-check, not just a
-            table read.</p>
-            <p>Using the results: run this across several Mw values (6.5, 7.0, 7.5 ...)
-            and compare the Newly-cut-off counts printed to the log to find the magnitude
-            at which the network fails catastrophically rather than gradually. This is
-            not a structural assessment of the road itself - it never asks whether the
-            pavement or a bridge was damaged by shaking, only whether adjacent-building
-            debris blocks it.</p>
-            """
+            "<h3>Seismic Cascade — Debris → Network Degradation</h3> <p>Cross-domain cascading-hazard "
+            "analysis, following the perturb-and-measure methodology formalised in NIST's (2015) "
+            "Community Resilience Planning Guide: take a baseline network, perturb it with physical "
+            'damage, measure the resulting service gap. Here the "damage" is the debris-polygon '
+            "output from Seismic Debris Monte Carlo - this tool pipes it into the road network, drops "
+            "every edge the debris intersects, builds pre- and post-hazard graphs, and runs "
+            "multi-source Dijkstra from all destinations on each. The two tools are designed to be "
+            "run back-to-back, one producing exactly what the other consumes.</p> <p>Debris blockage "
+            "is binary - a segment is fully passable or fully blocked, with no partial-capacity "
+            "reduction for a segment merely narrowed on one side. There is no repair/clearance "
+            'timeline: the "post" graph is the worst moment immediately after the event, not the '
+            "gradual reopening that follows. Only debris-driven blockage is modelled - a road segment "
+            "with genuine pavement or bridge damage but no adjacent building debris is invisible to "
+            "this tool.</p> <p>How to read the results - cas_status = Newly cut off: reachable before "
+            "the quake, isolated after - the intervention-priority class. - cas_status = Worse: still "
+            "reachable but via a &gt;=1% longer detour (cas_delta_dist &gt; 0). - cas_status = Always "
+            "cut off: never reachable, pre or post - a pre-existing gap the quake did not create. - "
+            "Origins and destinations snap to the pre- and post-graphs independently, so a large "
+            "delta near a blocked segment is worth a map spot-check, not just a table read.</p> "
+            "<p>Using the results: run this across several Mw values (6.5, 7.0, 7.5 ...) and compare "
+            "the Newly-cut-off counts printed to the log to find the magnitude at which the network "
+            "fails catastrophically rather than gradually. This is not a structural assessment of the "
+            "road itself - it never asks whether the pavement or a bridge was damaged by shaking, "
+            "only whether adjacent-building debris blocks it.</p>"
         )
 
     def initAlgorithm(self, config=None):

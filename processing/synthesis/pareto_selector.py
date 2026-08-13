@@ -89,34 +89,26 @@ class ParetoSelectorAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>Pareto-Optimal Intervention Selector</h3>
-            <p>Identifies the Pareto frontier of a (cost, benefit) trade-off via
-            non-dominated sorting (NSGA-II style, Deb et al., 2002) - the set of
-            interventions where no other is BOTH cheaper AND more beneficial.
-            Named after Vilfredo Pareto, this is the cornerstone of multi-objective
-            optimisation: rank-1 features are optimal under ANY linear cost-benefit
-            weighting, a stronger guarantee than a single B/C ratio can offer. Pair
-            with the Cost-Benefit Analyzer (uses its <code>cb_cost</code> /
-            <code>cb_benefit</code> outputs) or feed any two numeric trade-off
-            fields.</p>
-            <p>Per-feature outputs:</p>
-            <ul>
-              <li><code>pareto_rank</code> — 1 = first frontier (best), 2 = second skin after removing the first, etc.</li>
-              <li><code>pareto_dominated</code> — count of other features that strictly dominate this one.</li>
-              <li><code>pareto_dominates</code> — count of other features this one strictly dominates.</li>
-            </ul>
-            <p>Only two objectives are considered - real decisions often have more
-            dimensions (equity, co-benefits, political feasibility) this tool
-            cannot represent; treat the frontier as a shortlist for further
-            judgement. Domination is strict and binary, so a feature 0.1% worse on
-            cost but identical on benefit still counts as dominated.</p>
-            <p>Budget-bounded use: when funds cover only N interventions,
-            picking everything with <code>pareto_rank == 1</code> guarantees
-            no objectively better alternative exists. Do not use this as the sole
-            selection criterion when non-cost/benefit factors are decisive - it
-            answers which options are efficient, not which should be funded.</p>
-            """
+            "<h3>Pareto-Optimal Intervention Selector</h3> <p>Identifies the Pareto frontier of a "
+            "(cost, benefit) trade-off via non-dominated sorting (NSGA-II style, Deb et al., 2002) - "
+            "the set of interventions where no other is BOTH cheaper AND more beneficial. Named after "
+            "Vilfredo Pareto, this is the cornerstone of multi-objective optimisation: rank-1 "
+            "features are optimal under ANY linear cost-benefit weighting, a stronger guarantee than "
+            "a single B/C ratio can offer. Pair with the Cost-Benefit Analyzer (uses its "
+            "<code>cb_cost</code> / <code>cb_benefit</code> outputs) or feed any two numeric "
+            "trade-off fields.</p> <p>Per-feature outputs:</p> <ul> <li><code>pareto_rank</code> — 1 "
+            "= first frontier (best), 2 = second skin after removing the first, etc.</li> "
+            "<li><code>pareto_dominated</code> — count of other features that strictly dominate this "
+            "one.</li> <li><code>pareto_dominates</code> — count of other features this one strictly "
+            "dominates.</li> </ul> <p>Only two objectives are considered - real decisions often have "
+            "more dimensions (equity, co-benefits, political feasibility) this tool cannot represent; "
+            "treat the frontier as a shortlist for further judgement. Domination is strict and "
+            "binary, so a feature 0.1% worse on cost but identical on benefit still counts as "
+            "dominated.</p> <p>Budget-bounded use: when funds cover only N interventions, picking "
+            "everything with <code>pareto_rank == 1</code> guarantees no objectively better "
+            "alternative exists. Do not use this as the sole selection criterion when "
+            "non-cost/benefit factors are decisive - it answers which options are efficient, not "
+            "which should be funded.</p>"
         )
 
     def initAlgorithm(self, config=None):

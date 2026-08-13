@@ -99,36 +99,27 @@ class CriticalInfrastructureExposureAlgorithm(HelpUrlMixin, GroupMixin, QgsProce
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>Critical Infrastructure Exposure</h3>
-            <p>Crosses a hazard score layer with a critical-facility layer
-            (schools, hospitals, fire stations, water/power assets) combining
-            hazard risk assessment with infrastructure-interdependency theory
-            (Rinaldi, Peerenboom &amp; Kelly, 2001): a facility is critical not only
-            for the function it delivers directly, but because failures elsewhere
-            (power, water, roads) can knock it out too. The multiplicative
-            hazard x criticality form follows the standard R = H x V x E risk
-            equation (UNDRR, 2019).</p>
-            <p><code>combined = (hazard / 100) × (criticality_norm) × 100</code>
-            where <code>criticality_norm</code> linearly maps the user's raw
-            criticality field to 0-100 using its own min and max - usable with any
-            scale (1-5, 1-100, replacement value, population served) without prior
-            knowledge of the bounds, but only meaningful relative to the other
-            facilities in this run. Hazard is sampled by polygon CONTAINMENT of the
-            facility centroid, not intersection - a facility spanning two hazard
-            zones is scored entirely by whichever zone contains its centre.</p>
-            <p>If no criticality field is given, every facility uses the default
-            criticality so the output is essentially the hazard score sampled at
-            each facility.</p>
-            <p>Using the results: feed the top-N facilities into Cost-Benefit
-            Analyzer to rank retrofit options. This scores single-facility,
-            single-snapshot exposure only - it has no representation of cascading,
-            network-level interdependency failures (Buldyrev et al., 2010); a
-            facility scoring Low here could still be knocked out by a dependency
-            this tool cannot see. It is not a substitute for a genuine
-            infrastructure-interdependency simulation study (Ouyang, 2014 reviews
-            those methods) where cascading failure is the actual concern.</p>
-            """
+            "<h3>Critical Infrastructure Exposure</h3> <p>Crosses a hazard score layer with a "
+            "critical-facility layer (schools, hospitals, fire stations, water/power assets) "
+            "combining hazard risk assessment with infrastructure-interdependency theory (Rinaldi, "
+            "Peerenboom &amp; Kelly, 2001): a facility is critical not only for the function it "
+            "delivers directly, but because failures elsewhere (power, water, roads) can knock it out "
+            "too. The multiplicative hazard x criticality form follows the standard R = H x V x E "
+            "risk equation (UNDRR, 2019).</p> <p><code>combined = (hazard / 100) × (criticality_norm) "
+            "× 100</code> where <code>criticality_norm</code> linearly maps the user's raw "
+            "criticality field to 0-100 using its own min and max - usable with any scale (1-5, "
+            "1-100, replacement value, population served) without prior knowledge of the bounds, but "
+            "only meaningful relative to the other facilities in this run. Hazard is sampled by "
+            "polygon CONTAINMENT of the facility centroid, not intersection - a facility spanning two "
+            "hazard zones is scored entirely by whichever zone contains its centre.</p> <p>If no "
+            "criticality field is given, every facility uses the default criticality so the output is "
+            "essentially the hazard score sampled at each facility.</p> <p>Using the results: feed "
+            "the top-N facilities into Cost-Benefit Analyzer to rank retrofit options. This scores "
+            "single-facility, single-snapshot exposure only - it has no representation of cascading, "
+            "network-level interdependency failures (Buldyrev et al., 2010); a facility scoring Low "
+            "here could still be knocked out by a dependency this tool cannot see. It is not a "
+            "substitute for a genuine infrastructure-interdependency simulation study (Ouyang, 2014 "
+            "reviews those methods) where cascading failure is the actual concern.</p>"
         )
 
     def initAlgorithm(self, config=None):

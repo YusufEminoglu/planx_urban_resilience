@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.1.1] - 2026-08-13
+
+Help-text formatting fix, new main plugin icon, and manual visual polish.
+
+### Fixed
+
+- `shortHelpString()` for all 43 algorithms reformatted so no sentence is broken by a hard line-wrap in the source — every paragraph is now a single continuous logical run built from implicit string concatenation (matching the sibling PlanX plugin's own convention), with content unchanged byte-for-byte after whitespace normalisation.
+- The Phase 7 manual design-polish pass's "See also" cross-links silently rendered empty for every one of the 43 tools: the script read a tool's title from `h3.childNodes[0]`, which became the new icon `<img>` (below) instead of the title text node. Fixed to read `h3.textContent` directly.
+
+### Changed
+
+- New main plugin icon (`icons/plugin.svg`): a shield outline framing a small city skyline with a recovery arc. Fully transparent background — replaces the old solid teal-gradient rounded-square tile — with bolder strokes for legibility down to 16px toolbar size.
+- The reference manual now shows each tool's own dock icon next to its heading, visually tying the manual to the in-app panel.
+
 ## [2.1.0] - 2026-08-13
 
 Documentation-only release: the online reference manual and every algorithm's in-GUI help text are rewritten to the same elite-academic register as the sibling PlanX plugin. No algorithm logic, parameters, or output fields changed.

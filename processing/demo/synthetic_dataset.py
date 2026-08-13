@@ -82,38 +82,31 @@ class SyntheticResilienceDatasetAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessin
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>Synthetic Resilience Demo Dataset</h3>
-            <p>Generates a complete artificial city block in one run - nine layers (study
-            area, buildings, roads, impervious surfaces, green infrastructure, water,
-            shelters, social units, sensitive receptors) built from a fixed cellular
-            template, not a statistical or agent-based city generator. This is a test
-            fixture in the software-testing sense (Fisher &amp; Tate, 2006): the layout is
-            deterministic, so the same SCALE value always produces byte-identical
-            geometry across runs and machines.</p>
-            <p>Output CRS is fixed to EPSG:3857 (metric, projected). SCALE (default 1.0,
-            range 0.25-5.0) scales the whole layout uniformly in metres - it does not add
-            more features, only stretches the same relative geometry. Buildings carry
-            floor_count / land_use / year / population; roads carry class / capacity_ph /
-            direction; social units carry population / elderly / children / disability /
-            low_income - the exact field names the hazard and synthesis modules in this
-            suite expect, so every other tool accepts these layers with no preparation.</p>
-            <p>How to read the results
-            - Nine layers land in the project after one run; none need further editing
-            before feeding them into another tool.
-            - Attribute values (floor counts, population figures, construction years) are
-            hand-picked plausible numbers, not sampled from any census or building-stock
-            survey - read nothing into their specific magnitudes.
-            - Geometry is fixed relative to SCALE, so two runs at the same SCALE are
-            identical; this is what makes the dataset a reliable regression fixture.</p>
-            <p>Using the results: run this first on a new install, or after any code
-            change, to confirm every one of the other 42 algorithms accepts its inputs
-            without error; use it for classroom demonstrations where every student needs
-            an identical starting dataset. Do not use it for any published or
-            decision-supporting analysis, and do not use it to test edge cases the fixed
-            template does not contain (disconnected networks, multipart geometries,
-            missing CRS) - build a dedicated fixture for those instead.</p>
-            """
+            "<h3>Synthetic Resilience Demo Dataset</h3> <p>Generates a complete artificial city block "
+            "in one run - nine layers (study area, buildings, roads, impervious surfaces, green "
+            "infrastructure, water, shelters, social units, sensitive receptors) built from a fixed "
+            "cellular template, not a statistical or agent-based city generator. This is a test "
+            "fixture in the software-testing sense (Fisher &amp; Tate, 2006): the layout is "
+            "deterministic, so the same SCALE value always produces byte-identical geometry across "
+            "runs and machines.</p> <p>Output CRS is fixed to EPSG:3857 (metric, projected). SCALE "
+            "(default 1.0, range 0.25-5.0) scales the whole layout uniformly in metres - it does not "
+            "add more features, only stretches the same relative geometry. Buildings carry "
+            "floor_count / land_use / year / population; roads carry class / capacity_ph / direction; "
+            "social units carry population / elderly / children / disability / low_income - the exact "
+            "field names the hazard and synthesis modules in this suite expect, so every other tool "
+            "accepts these layers with no preparation.</p> <p>How to read the results - Nine layers "
+            "land in the project after one run; none need further editing before feeding them into "
+            "another tool. - Attribute values (floor counts, population figures, construction years) "
+            "are hand-picked plausible numbers, not sampled from any census or building-stock survey "
+            "- read nothing into their specific magnitudes. - Geometry is fixed relative to SCALE, so "
+            "two runs at the same SCALE are identical; this is what makes the dataset a reliable "
+            "regression fixture.</p> <p>Using the results: run this first on a new install, or after "
+            "any code change, to confirm every one of the other 42 algorithms accepts its inputs "
+            "without error; use it for classroom demonstrations where every student needs an "
+            "identical starting dataset. Do not use it for any published or decision-supporting "
+            "analysis, and do not use it to test edge cases the fixed template does not contain "
+            "(disconnected networks, multipart geometries, missing CRS) - build a dedicated fixture "
+            "for those instead.</p>"
         )
 
     def initAlgorithm(self, config=None):

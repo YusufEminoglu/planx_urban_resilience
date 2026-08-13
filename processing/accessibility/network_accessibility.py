@@ -63,37 +63,29 @@ class NetworkEmergencyAccessibilityAlgorithm(HelpUrlMixin, GroupMixin, QgsProces
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>Network Emergency Accessibility</h3>
-            <p>Network-distance travel time to the nearest shelter, built on Dijkstra's
-            (1959) shortest-path algorithm - the foundation underneath essentially every
-            network-accessibility GIS tool. Road vertices are snapped into a graph at
-            SNAP_TOLERANCE following the node-snapping approach of Cardinal et al. (2011);
-            a single multi-source Dijkstra traversal seeded from every destination at once
-            replaces one traversal per origin, cutting runtime from
-            O(origins x edges log vertices) to O(edges log vertices).</p>
-            <p>time_min = net_dist_m / (1000 x SPEED_KMH) x 60, using ONE constant speed
-            for every segment - a highway and a footpath are traversed identically unless
-            you post-process. The default 4.5 km/h is unobstructed walking speed with no
-            stairs, slope, or mobility constraint. A road layer with near-miss endpoints
-            (a common digitising artefact) silently produces a disconnected subgraph
-            rather than an error.</p>
-            <p>How to read the results
-            - qa_flag = large_snap_distance: the origin sits far from any road vertex -
-            check the road layer for gaps or increase SNAP_TOLERANCE. A high fraction of
-            these across your dataset means the road layer needs re-noding, not a
-            parameter tweak.
-            - qa_flag = not_connected (net_dist_m = -1): the road subgraph containing this
-            origin has no path to any destination - a genuine network-disconnection
-            problem, not a distance problem.
-            - access_cls buckets time_min against TARGET_MINUTES/CRITICAL_MINUTES:
-            Covered / Watch / Underserved / Critical / Unreachable.</p>
-            <p>Using the results: feed underserved and unreachable origins into Optimal
-            Shelter Siting to find candidate sites that close the gap. This is the
-            network-realistic sibling to the Euclidean Emergency Accessibility and Shelter
-            Coverage tool - use it wherever real street topology matters. It has no
-            capacity or congestion awareness; for that, use Evacuation Time Simulation.</p>
-            """
+            "<h3>Network Emergency Accessibility</h3> <p>Network-distance travel time to the nearest "
+            "shelter, built on Dijkstra's (1959) shortest-path algorithm - the foundation underneath "
+            "essentially every network-accessibility GIS tool. Road vertices are snapped into a graph "
+            "at SNAP_TOLERANCE following the node-snapping approach of Cardinal et al. (2011); a "
+            "single multi-source Dijkstra traversal seeded from every destination at once replaces "
+            "one traversal per origin, cutting runtime from O(origins x edges log vertices) to "
+            "O(edges log vertices).</p> <p>time_min = net_dist_m / (1000 x SPEED_KMH) x 60, using ONE "
+            "constant speed for every segment - a highway and a footpath are traversed identically "
+            "unless you post-process. The default 4.5 km/h is unobstructed walking speed with no "
+            "stairs, slope, or mobility constraint. A road layer with near-miss endpoints (a common "
+            "digitising artefact) silently produces a disconnected subgraph rather than an error.</p> "
+            "<p>How to read the results - qa_flag = large_snap_distance: the origin sits far from any "
+            "road vertex - check the road layer for gaps or increase SNAP_TOLERANCE. A high fraction "
+            "of these across your dataset means the road layer needs re-noding, not a parameter "
+            "tweak. - qa_flag = not_connected (net_dist_m = -1): the road subgraph containing this "
+            "origin has no path to any destination - a genuine network-disconnection problem, not a "
+            "distance problem. - access_cls buckets time_min against TARGET_MINUTES/CRITICAL_MINUTES: "
+            "Covered / Watch / Underserved / Critical / Unreachable.</p> <p>Using the results: feed "
+            "underserved and unreachable origins into Optimal Shelter Siting to find candidate sites "
+            "that close the gap. This is the network-realistic sibling to the Euclidean Emergency "
+            "Accessibility and Shelter Coverage tool - use it wherever real street topology matters. "
+            "It has no capacity or congestion awareness; for that, use Evacuation Time "
+            "Simulation.</p>"
         )
 
     def initAlgorithm(self, config=None):

@@ -97,41 +97,36 @@ class AirQualityExposureAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorit
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>Air Quality / Urban Exposure</h3>
-            <p>Land-use-regression-style screening grid, in the tradition Briggs et al. (1997)
-            founded by showing that a handful of GIS-derivable proximity variables (road distance,
-            source proximity) predict a large share of intra-urban NO2/PM variation without a
-            dispersion model. Each cell's air_score sums road-proximity, emission-source-proximity
-            and sensitive-receptor-density terms, then <i>subtracts</i> a green-buffer mitigation
-            term (area share of GREEN_BUFFERS x BUFFER_WEIGHT) grounded in Nowak, Crane &amp;
-            Stevens' (2006) finding that urban tree canopy removes measurable particulate mass in
-            open settings. That subtraction is not universal, though: Vos et al. (2013) found dense
-            roadside planting in an enclosed street canyon can trap pollutants and <i>raise</i>
-            local concentration by reducing ventilation - green buffers help most in open contexts,
-            not narrow canyons.</p>
-            <p>ROAD_DISTANCE (default 300 m) and SOURCE_DISTANCE (default 600 m) are linear
-            decay-to-zero radii, not measured plume extents - road distance in particular tracks the
-            near-road influence zone widely used in traffic-related air pollution (TRAP) exposure
-            studies. Sensitive-receptor density is capped at 4 receptors per cell (25 points each);
-            source and sensitive layers are optional and read as 0 contribution when omitted.</p>
-            <p>How to read the results
-            - air_score >= 75: within about 50 m of a major road or downwind of an industrial
-            source, with no offsetting green buffer - the environmental-justice hotspots.
-            - green_share is diagnostic, not just decorative: a high air_score despite a large
-            green_share means the road/source pressure is strong enough to overwhelm the mitigation
-            credit, or (per Vos et al., 2013) the planting sits in a canyon where it may not be
-            helping at all.
-            - Exposed sensitive receptors are only written for cells scoring >= 55 - schools,
-            hospitals or housing that clear that bar are the intervention shortlist.</p>
-            <p>Using the results: overlay with the Urban Heat Comfort Risk grid to find cells that
-            are both hot and polluted (double environmental burden), and cross-reference with Social
-            Vulnerability Index to test whether pollution exposure and social vulnerability coincide
-            in the same neighbourhoods. This is not an atmospheric dispersion model - it has no
-            wind, stability class, or source-strength term. Use it for first-pass spatial screening
-            and siting new green buffers in open areas; do not use it for regulatory compliance or
-            health-risk quantification, which need modelled or monitored concentrations.</p>
-            """
+            "<h3>Air Quality / Urban Exposure</h3> <p>Land-use-regression-style screening grid, in "
+            "the tradition Briggs et al. (1997) founded by showing that a handful of GIS-derivable "
+            "proximity variables (road distance, source proximity) predict a large share of "
+            "intra-urban NO2/PM variation without a dispersion model. Each cell's air_score sums "
+            "road-proximity, emission-source-proximity and sensitive-receptor-density terms, then "
+            "<i>subtracts</i> a green-buffer mitigation term (area share of GREEN_BUFFERS x "
+            "BUFFER_WEIGHT) grounded in Nowak, Crane &amp; Stevens' (2006) finding that urban tree "
+            "canopy removes measurable particulate mass in open settings. That subtraction is not "
+            "universal, though: Vos et al. (2013) found dense roadside planting in an enclosed street "
+            "canyon can trap pollutants and <i>raise</i> local concentration by reducing ventilation "
+            "- green buffers help most in open contexts, not narrow canyons.</p> <p>ROAD_DISTANCE "
+            "(default 300 m) and SOURCE_DISTANCE (default 600 m) are linear decay-to-zero radii, not "
+            "measured plume extents - road distance in particular tracks the near-road influence zone "
+            "widely used in traffic-related air pollution (TRAP) exposure studies. Sensitive-receptor "
+            "density is capped at 4 receptors per cell (25 points each); source and sensitive layers "
+            "are optional and read as 0 contribution when omitted.</p> <p>How to read the results - "
+            "air_score >= 75: within about 50 m of a major road or downwind of an industrial source, "
+            "with no offsetting green buffer - the environmental-justice hotspots. - green_share is "
+            "diagnostic, not just decorative: a high air_score despite a large green_share means the "
+            "road/source pressure is strong enough to overwhelm the mitigation credit, or (per Vos et "
+            "al., 2013) the planting sits in a canyon where it may not be helping at all. - Exposed "
+            "sensitive receptors are only written for cells scoring >= 55 - schools, hospitals or "
+            "housing that clear that bar are the intervention shortlist.</p> <p>Using the results: "
+            "overlay with the Urban Heat Comfort Risk grid to find cells that are both hot and "
+            "polluted (double environmental burden), and cross-reference with Social Vulnerability "
+            "Index to test whether pollution exposure and social vulnerability coincide in the same "
+            "neighbourhoods. This is not an atmospheric dispersion model - it has no wind, stability "
+            "class, or source-strength term. Use it for first-pass spatial screening and siting new "
+            "green buffers in open areas; do not use it for regulatory compliance or health-risk "
+            "quantification, which need modelled or monitored concentrations.</p>"
         )
 
     def initAlgorithm(self, config=None):

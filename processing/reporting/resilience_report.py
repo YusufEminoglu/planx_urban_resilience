@@ -64,27 +64,21 @@ class ResilienceReportAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>Resilience Score HTML Report</h3>
-            <p>Exports a compact, self-contained HTML summary from any polygon or
-            point layer with a 0-100 score field: summary cards (feature count,
-            average, range, high-priority count), a class-distribution table, and
-            a top-drivers table. Front-loads the headline numbers before any table,
-            following standard technical-communication practice (Tufte, 1983) - a
-            reader gets the essentials in the first few seconds.</p>
-            <p>This is a mirror of the source layer's current field values, not an
-            independent analysis - it re-runs no upstream algorithm, so any
-            upstream error shows up here unchanged, and the file goes stale if the
-            source layer is later edited. Driver/notes text is split on commas and
-            semicolons; a different separator won't tally correctly. The
-            high-priority threshold (&gt;=55) is hard-coded to this suite's
-            standard risk-class convention.</p>
-            <p>Using the results: a large "missing score values" count is itself a
-            data-quality finding, not just a footnote. Use this for a quick,
-            shareable, no-QGIS-required summary; where narrative prose is needed
-            instead of cards and tables, use Resilience Studio Brief, which
-            generates full sections around the same underlying statistics.</p>
-            """
+            "<h3>Resilience Score HTML Report</h3> <p>Exports a compact, self-contained HTML summary "
+            "from any polygon or point layer with a 0-100 score field: summary cards (feature count, "
+            "average, range, high-priority count), a class-distribution table, and a top-drivers "
+            "table. Front-loads the headline numbers before any table, following standard "
+            "technical-communication practice (Tufte, 1983) - a reader gets the essentials in the "
+            "first few seconds.</p> <p>This is a mirror of the source layer's current field values, "
+            "not an independent analysis - it re-runs no upstream algorithm, so any upstream error "
+            "shows up here unchanged, and the file goes stale if the source layer is later edited. "
+            "Driver/notes text is split on commas and semicolons; a different separator won't tally "
+            "correctly. The high-priority threshold (&gt;=55) is hard-coded to this suite's standard "
+            'risk-class convention.</p> <p>Using the results: a large "missing score values" count is '
+            "itself a data-quality finding, not just a footnote. Use this for a quick, shareable, "
+            "no-QGIS-required summary; where narrative prose is needed instead of cards and tables, "
+            "use Resilience Studio Brief, which generates full sections around the same underlying "
+            "statistics.</p>"
         )
 
     def initAlgorithm(self, config=None):

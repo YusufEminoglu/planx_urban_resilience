@@ -62,34 +62,24 @@ class ScenarioComparisonAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorit
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>Scenario Comparison / Delta Map</h3>
-            <p>Compares two 0-100 score fields on the same layer - baseline vs.
-            proposed intervention, or two alternative planning scenarios - a
-            core methodology in sustainability assessment (Swart et al., 2004;
-            Xiang &amp; Clarke, 2003), following the "comparative statics"
-            tradition of subtracting two spatial fields and mapping the residual.
-            The default 5-point threshold avoids Openshaw &amp; Taylor's (1979)
-            "small change problem": without a threshold every unit shows some
-            delta, most of it noise.</p>
-            <p>The output adds baseline, scenario, delta, absolute delta, percent
-            change and an improved/stable/worsened class plus an action hint. Lower
-            scores are assumed to be better (this suite's 0-100 scores are always
-            "higher = worse" risk scores). A negative delta therefore means
-            improvement.</p>
-            <p>How to read the results
-            - change_cls = Improved with a large negative delta: a success-story
-            unit to document and replicate.
-            - change_cls = Worsened: review the scenario parameters - this may be
-            a realistic future-worsening (e.g. climate projection) or a modelling
-            error.
-            - Use percent change for ranking, absolute delta for mapping.</p>
-            <p>Using the results: this is a same-moment (cross-sectional)
-            comparison of two alternatives, not a longitudinal one - use
-            Resilience Time-Series Tracker for comparing across real time
-            instead. Feed the output into Bivariate Choropleth Symbology with
-            baseline and delta as axes to show "where was it high AND got worse".</p>
-            """
+            "<h3>Scenario Comparison / Delta Map</h3> <p>Compares two 0-100 score fields on the same "
+            "layer - baseline vs. proposed intervention, or two alternative planning scenarios - a "
+            "core methodology in sustainability assessment (Swart et al., 2004; Xiang &amp; Clarke, "
+            '2003), following the "comparative statics" tradition of subtracting two spatial fields '
+            "and mapping the residual. The default 5-point threshold avoids Openshaw &amp; Taylor's "
+            '(1979) "small change problem": without a threshold every unit shows some delta, most of '
+            "it noise.</p> <p>The output adds baseline, scenario, delta, absolute delta, percent "
+            "change and an improved/stable/worsened class plus an action hint. Lower scores are "
+            "assumed to be better (this suite's 0-100 scores are always \"higher = worse\" risk "
+            "scores). A negative delta therefore means improvement.</p> <p>How to read the results - "
+            "change_cls = Improved with a large negative delta: a success-story unit to document and "
+            "replicate. - change_cls = Worsened: review the scenario parameters - this may be a "
+            "realistic future-worsening (e.g. climate projection) or a modelling error. - Use percent "
+            "change for ranking, absolute delta for mapping.</p> <p>Using the results: this is a "
+            "same-moment (cross-sectional) comparison of two alternatives, not a longitudinal one - "
+            "use Resilience Time-Series Tracker for comparing across real time instead. Feed the "
+            "output into Bivariate Choropleth Symbology with baseline and delta as axes to show "
+            '"where was it high AND got worse".</p>'
         )
 
     def initAlgorithm(self, config=None):

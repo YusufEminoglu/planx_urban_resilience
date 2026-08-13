@@ -106,31 +106,23 @@ class BivariateSymbologyAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorit
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>Bivariate Choropleth Symbology</h3>
-            <p>Classifies every feature into Low / Mid / High on two scored axes
-            (e.g., <b>risk</b> and <b>vulnerability</b>) using tertile breaks, then
-            assigns the 9-category Stevens-style bivariate palette - a cartographic
-            convention popularised specifically because a single-variable map
-            cannot answer "where are BOTH high at once," which is exactly the
-            equity-and-exposure double-burden question this shows at a glance.</p>
-            <p>Output layer adds <code>bv_class</code> (e.g. <code>R-H_V-M</code>),
-            <code>bv_risk_bin</code> and <code>bv_vuln_bin</code> fields and
-            comes with a categorised renderer already applied.</p>
-            <p>Tertile breaks are computed from the SUPPLIED layer's own value
-            range - the same extent-relative caveat as Social Vulnerability
-            Index's normalisation: re-running on a different extent moves the
-            Low/Mid/High boundaries even for identical values. A 3x3 matrix is a
-            deliberate resolution limit; finer binning becomes hard to decode
-            visually.</p>
-            <p>Reads beautifully alongside a 3×3 legend grid placed in the
-            print layout (no built-in legend item is generated — place it
-            manually as a cartographic element).</p>
-            <p>Using the results: check Multi-Hazard Correlation Matrix first if
-            the two input fields might be strongly correlated - a bivariate map of
-            two nearly-identical fields wastes the second colour dimension on
-            redundant information.</p>
-            """
+            "<h3>Bivariate Choropleth Symbology</h3> <p>Classifies every feature into Low / Mid / "
+            "High on two scored axes (e.g., <b>risk</b> and <b>vulnerability</b>) using tertile "
+            "breaks, then assigns the 9-category Stevens-style bivariate palette - a cartographic "
+            'convention popularised specifically because a single-variable map cannot answer "where '
+            'are BOTH high at once," which is exactly the equity-and-exposure double-burden question '
+            "this shows at a glance.</p> <p>Output layer adds <code>bv_class</code> (e.g. "
+            "<code>R-H_V-M</code>), <code>bv_risk_bin</code> and <code>bv_vuln_bin</code> fields and "
+            "comes with a categorised renderer already applied.</p> <p>Tertile breaks are computed "
+            "from the SUPPLIED layer's own value range - the same extent-relative caveat as Social "
+            "Vulnerability Index's normalisation: re-running on a different extent moves the "
+            "Low/Mid/High boundaries even for identical values. A 3x3 matrix is a deliberate "
+            "resolution limit; finer binning becomes hard to decode visually.</p> <p>Reads "
+            "beautifully alongside a 3×3 legend grid placed in the print layout (no built-in legend "
+            "item is generated — place it manually as a cartographic element).</p> <p>Using the "
+            "results: check Multi-Hazard Correlation Matrix first if the two input fields might be "
+            "strongly correlated - a bivariate map of two nearly-identical fields wastes the second "
+            "colour dimension on redundant information.</p>"
         )
 
     def initAlgorithm(self, config=None):

@@ -121,37 +121,30 @@ class HotSpotAnalysisAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm)
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>Hot-Spot Cluster Analysis (Getis-Ord Gi*)</h3>
-            <p>Tags each feature as a statistically significant <b>hot spot</b>
-            (cluster of high values), <b>cold spot</b> (cluster of low values), or
-            <b>not significant</b>, based on its neighbours' values - answering
-            not just "is there clustering somewhere" but WHERE specifically. Gi*
-            (as opposed to Gi) includes the feature itself in its own neighbourhood
-            sum, which behaves better at dataset edges and is the standard variant
-            in practice. Use on any 0-100 resilience score: composite, social
-            vulnerability, recovery capacity, etc.</p>
-            <p><b>Outputs added to each feature:</b></p>
-            <ul>
-              <li><code>gi_zscore</code> - standardised statistic; |z| &gt; 1.65 ~ 90% confidence.</li>
-              <li><code>gi_pvalue</code> - two-sided p-value derived from z.</li>
-              <li><code>gi_p_fdr</code> - Benjamini-Hochberg FDR-adjusted p-value (controls false discoveries across the n simultaneous local tests).</li>
-              <li><code>gi_class</code> - Hot-99 / Hot-95 / Hot-90 / Not significant / Cold-90 / Cold-95 / Cold-99.</li>
-              <li><code>gi_class_fdr</code> - same labels from the FDR-adjusted p-value; prefer this when reporting.</li>
-            </ul>
-            <p>Spatial weights are either <b>inverse distance</b> (row-standardised) or a <b>fixed-distance band</b> (1 if within distance, else 0). Self is always included (Gi*, not Gi).</p>
-            <p>Gi* assumes the value field is at least approximately normally
-            distributed - a handful of extreme outliers can distort results (try a
-            log or rank transform for strongly skewed fields). The DISTANCE band and
-            weight method materially change which features get flagged; running at
-            2-3 different bands to check stability is standard practice, not
-            optional. gi_class will always flag more features than gi_class_fdr -
-            report which one you mean.</p>
-            <p>Using the results: where outliers (a high value surrounded by low
-            neighbours, or vice versa) are the object of interest rather than
-            clusters, use LISA Local Moran's I instead - Gi* is built to find
-            clusters, not outliers.</p>
-            """
+            "<h3>Hot-Spot Cluster Analysis (Getis-Ord Gi*)</h3> <p>Tags each feature as a "
+            "statistically significant <b>hot spot</b> (cluster of high values), <b>cold spot</b> "
+            "(cluster of low values), or <b>not significant</b>, based on its neighbours' values - "
+            'answering not just "is there clustering somewhere" but WHERE specifically. Gi* (as '
+            "opposed to Gi) includes the feature itself in its own neighbourhood sum, which behaves "
+            "better at dataset edges and is the standard variant in practice. Use on any 0-100 "
+            "resilience score: composite, social vulnerability, recovery capacity, etc.</p> "
+            "<p><b>Outputs added to each feature:</b></p> <ul> <li><code>gi_zscore</code> - "
+            "standardised statistic; |z| &gt; 1.65 ~ 90% confidence.</li> <li><code>gi_pvalue</code> "
+            "- two-sided p-value derived from z.</li> <li><code>gi_p_fdr</code> - Benjamini-Hochberg "
+            "FDR-adjusted p-value (controls false discoveries across the n simultaneous local "
+            "tests).</li> <li><code>gi_class</code> - Hot-99 / Hot-95 / Hot-90 / Not significant / "
+            "Cold-90 / Cold-95 / Cold-99.</li> <li><code>gi_class_fdr</code> - same labels from the "
+            "FDR-adjusted p-value; prefer this when reporting.</li> </ul> <p>Spatial weights are "
+            "either <b>inverse distance</b> (row-standardised) or a <b>fixed-distance band</b> (1 if "
+            "within distance, else 0). Self is always included (Gi*, not Gi).</p> <p>Gi* assumes the "
+            "value field is at least approximately normally distributed - a handful of extreme "
+            "outliers can distort results (try a log or rank transform for strongly skewed fields). "
+            "The DISTANCE band and weight method materially change which features get flagged; "
+            "running at 2-3 different bands to check stability is standard practice, not optional. "
+            "gi_class will always flag more features than gi_class_fdr - report which one you "
+            "mean.</p> <p>Using the results: where outliers (a high value surrounded by low "
+            "neighbours, or vice versa) are the object of interest rather than clusters, use LISA "
+            "Local Moran's I instead - Gi* is built to find clusters, not outliers.</p>"
         )
 
     def initAlgorithm(self, config=None):

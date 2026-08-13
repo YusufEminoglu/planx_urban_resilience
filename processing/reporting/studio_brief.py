@@ -64,28 +64,21 @@ class StudioBriefAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>Resilience Studio Brief</h3>
-            <p>Creates a Markdown brief from a scored resilience layer, one step up
-            the communication ladder from Resilience Score HTML Report: the same
-            underlying statistics, rendered as narrative prose following the
-            standard structure of a planning-studio memo or policy brief - context,
-            executive summary, evidence, suggested next steps, caveats.</p>
-            <p>The executive-summary paragraph and suggested-actions list are
-            generated from simple conditional rules on the same average/count
-            statistics (e.g. "if average score &gt;= 55, prioritise near-term
-            design"), not from any additional analysis - a template to edit, not
-            an automated recommendation engine. A standing Limitations section
-            appears on every run by design, so the brief can never be mistaken for
-            a finished, caveat-free document.</p>
-            <p>It summarizes key score metrics, class distribution, dominant
-            drivers, limitations, and recommended next actions.</p>
-            <p>Using the results: edit the Study Context paragraph first - the
-            default placeholder is generic and should be replaced with the real
-            study area, timeframe and purpose before the brief leaves the studio.
-            Treat every generated sentence as a first draft a domain expert should
-            verify and very likely rewrite before it reaches an external audience.</p>
-            """
+            "<h3>Resilience Studio Brief</h3> <p>Creates a Markdown brief from a scored resilience "
+            "layer, one step up the communication ladder from Resilience Score HTML Report: the same "
+            "underlying statistics, rendered as narrative prose following the standard structure of a "
+            "planning-studio memo or policy brief - context, executive summary, evidence, suggested "
+            "next steps, caveats.</p> <p>The executive-summary paragraph and suggested-actions list "
+            "are generated from simple conditional rules on the same average/count statistics (e.g. "
+            '"if average score &gt;= 55, prioritise near-term design"), not from any additional '
+            "analysis - a template to edit, not an automated recommendation engine. A standing "
+            "Limitations section appears on every run by design, so the brief can never be mistaken "
+            "for a finished, caveat-free document.</p> <p>It summarizes key score metrics, class "
+            "distribution, dominant drivers, limitations, and recommended next actions.</p> <p>Using "
+            "the results: edit the Study Context paragraph first - the default placeholder is generic "
+            "and should be replaced with the real study area, timeframe and purpose before the brief "
+            "leaves the studio. Treat every generated sentence as a first draft a domain expert "
+            "should verify and very likely rewrite before it reaches an external audience.</p>"
         )
 
     def initAlgorithm(self, config=None):

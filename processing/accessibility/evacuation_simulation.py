@@ -157,41 +157,31 @@ class EvacuationTimeSimulationAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingA
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>Evacuation Time Simulation</h3>
-            <p>Greedy capacity-constrained shelter assignment with optional timestep
-            queueing, in the macroscopic-flow tradition Daganzo's (1994) Cell
-            Transmission Model established: discretise time into steps and cap how much
-            flow crosses a link per step, without simulating individual vehicles.
-            Yperman's (2007) Link Transmission Model refined that for large networks;
-            TIMESTEP_MINUTES here is a simplified, planning-scale instance of the same
-            discretised-flow-with-capacity-cap logic. Shelter assignment itself is a
-            greedy nearest-capacity heuristic in the Church &amp; ReVelle (1974)
-            facility-location tradition.</p>
-            <p>Assignment is order-dependent: ASSIGN_ORDER (farthest-first vs
-            largest-population-first) changes which shelters fill and which origins go
-            unassigned, because greedy locks in early decisions later origins must live
-            with. Road capacity is a fixed persons/hour ceiling with no speed-density
-            degradation as flow approaches it - real traffic flow slows non-linearly near
-            jam density, which this hard cap does not represent. Timestep minutes = 0
-            means instant greedy assignment, no queueing.</p>
-            <p>How to read the results
-            - qa_flag = no_capacity: population that could not be assigned - it does not
-            vanish, it needs more shelter capacity or more sites (feed into Optimal
-            Shelter Siting).
-            - congestion_pct &gt; 100 on an edge: assigned load exceeds its hourly
-            capacity - a bottleneck.
-            - P95 evacuation time (in the log): the time by which 95% of assigned
-            population has reached a shelter; compare instant vs timestep-queue mode to
-            see the congestion delay.</p>
-            <p>Using the results: feed congested edges into Cost-Benefit Analyzer to rank
-            road-widening interventions. This model assumes perfect compliance - no
-            shadow evacuation (people leaving who weren't told to) or evacuation refusal,
-            both well-documented real behaviours (Murray-Tuite &amp; Wolshon, 2013). Use
-            it for macro-scale screening and assignment-order sensitivity, not for
-            micro-level traffic-engineering decisions (signal timing, lane geometry) -
-            that needs a true microsimulation.</p>
-            """
+            "<h3>Evacuation Time Simulation</h3> <p>Greedy capacity-constrained shelter assignment "
+            "with optional timestep queueing, in the macroscopic-flow tradition Daganzo's (1994) Cell "
+            "Transmission Model established: discretise time into steps and cap how much flow crosses "
+            "a link per step, without simulating individual vehicles. Yperman's (2007) Link "
+            "Transmission Model refined that for large networks; TIMESTEP_MINUTES here is a "
+            "simplified, planning-scale instance of the same discretised-flow-with-capacity-cap "
+            "logic. Shelter assignment itself is a greedy nearest-capacity heuristic in the Church "
+            "&amp; ReVelle (1974) facility-location tradition.</p> <p>Assignment is order-dependent: "
+            "ASSIGN_ORDER (farthest-first vs largest-population-first) changes which shelters fill "
+            "and which origins go unassigned, because greedy locks in early decisions later origins "
+            "must live with. Road capacity is a fixed persons/hour ceiling with no speed-density "
+            "degradation as flow approaches it - real traffic flow slows non-linearly near jam "
+            "density, which this hard cap does not represent. Timestep minutes = 0 means instant "
+            "greedy assignment, no queueing.</p> <p>How to read the results - qa_flag = no_capacity: "
+            "population that could not be assigned - it does not vanish, it needs more shelter "
+            "capacity or more sites (feed into Optimal Shelter Siting). - congestion_pct &gt; 100 on "
+            "an edge: assigned load exceeds its hourly capacity - a bottleneck. - P95 evacuation time "
+            "(in the log): the time by which 95% of assigned population has reached a shelter; "
+            "compare instant vs timestep-queue mode to see the congestion delay.</p> <p>Using the "
+            "results: feed congested edges into Cost-Benefit Analyzer to rank road-widening "
+            "interventions. This model assumes perfect compliance - no shadow evacuation (people "
+            "leaving who weren't told to) or evacuation refusal, both well-documented real behaviours "
+            "(Murray-Tuite &amp; Wolshon, 2013). Use it for macro-scale screening and "
+            "assignment-order sensitivity, not for micro-level traffic-engineering decisions (signal "
+            "timing, lane geometry) - that needs a true microsimulation.</p>"
         )
 
     def initAlgorithm(self, config=None):

@@ -91,37 +91,32 @@ class UrbanHeatComfortRiskAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgor
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>Urban Heat Comfort Risk</h3>
-            <p>Screening model for urban heat exposure, built on Oke's (1982) energy-balance
-            account of the urban heat island: reduced sky-view, low-albedo/impervious materials
-            and building mass all raise surface heat storage, while green space and water provide
-            measurable local cooling (Bowler et al., 2010 meta-analysis; effective range roughly
-            200-400 m). Each grid cell gets a 0-100 heat_score from four additive, user-weighted
-            components: impervious share, building density, a green deficit / cooling-distance
-            term, and optional vulnerable-asset proximity - the same land-cover surrogates used in
-            Stewart &amp; Oke's (2012) Local Climate Zone framework, since real air/surface
-            temperature is rarely available to a planning studio.</p>
-            <p>CELL_SIZE trades resolution for runtime (smaller cells = more cells to score).
-            COOLING_DISTANCE (default 400 m) is the walking distance within which a park or water
-            body counts as accessible cooling - every qualifying feature counts equally regardless
-            of its size or canopy density. Without an IMPERVIOUS layer, that component reads 0;
-            without GREEN/WATER, the cooling term reads worst-case (100).</p>
-            <p>How to read the results
-            - heat_score >= 75 (Very High): dense building clusters, almost no green space, far
-            from water - the classic UHI core.
-            - heat_score 55-74 (High): residential districts with moderate tree cover but high
-            impervious share.
-            - heat_score &lt; 35 (Low): park-adjacent or water-adjacent cells.
-            - Priority cooling zones (heat_score &gt;= 55) are the intervention shortlist, not a
-            temperature forecast - the score is a relative land-cover composite, not a measured or
-            simulated air temperature.</p>
-            <p>Using the results: cross-reference priority cooling zones with Population-Weighted
-            Exposure to find cells where high heat risk coincides with high population density, and
-            feed them into Cost-Benefit Analyzer to rank tree-planting or reflective-pavement
-            interventions. Do not use heat_score to predict actual temperature or a heat-index
-            value - that needs a real microclimate simulation or land-surface-temperature retrieval.</p>
-            """
+            "<h3>Urban Heat Comfort Risk</h3> <p>Screening model for urban heat exposure, built on "
+            "Oke's (1982) energy-balance account of the urban heat island: reduced sky-view, "
+            "low-albedo/impervious materials and building mass all raise surface heat storage, while "
+            "green space and water provide measurable local cooling (Bowler et al., 2010 "
+            "meta-analysis; effective range roughly 200-400 m). Each grid cell gets a 0-100 "
+            "heat_score from four additive, user-weighted components: impervious share, building "
+            "density, a green deficit / cooling-distance term, and optional vulnerable-asset "
+            "proximity - the same land-cover surrogates used in Stewart &amp; Oke's (2012) Local "
+            "Climate Zone framework, since real air/surface temperature is rarely available to a "
+            "planning studio.</p> <p>CELL_SIZE trades resolution for runtime (smaller cells = more "
+            "cells to score). COOLING_DISTANCE (default 400 m) is the walking distance within which a "
+            "park or water body counts as accessible cooling - every qualifying feature counts "
+            "equally regardless of its size or canopy density. Without an IMPERVIOUS layer, that "
+            "component reads 0; without GREEN/WATER, the cooling term reads worst-case (100).</p> "
+            "<p>How to read the results - heat_score >= 75 (Very High): dense building clusters, "
+            "almost no green space, far from water - the classic UHI core. - heat_score 55-74 (High): "
+            "residential districts with moderate tree cover but high impervious share. - heat_score "
+            "&lt; 35 (Low): park-adjacent or water-adjacent cells. - Priority cooling zones "
+            "(heat_score &gt;= 55) are the intervention shortlist, not a temperature forecast - the "
+            "score is a relative land-cover composite, not a measured or simulated air "
+            "temperature.</p> <p>Using the results: cross-reference priority cooling zones with "
+            "Population-Weighted Exposure to find cells where high heat risk coincides with high "
+            "population density, and feed them into Cost-Benefit Analyzer to rank tree-planting or "
+            "reflective-pavement interventions. Do not use heat_score to predict actual temperature "
+            "or a heat-index value - that needs a real microclimate simulation or "
+            "land-surface-temperature retrieval.</p>"
         )
 
     def initAlgorithm(self, config=None):

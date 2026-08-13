@@ -82,36 +82,27 @@ class EvacuationArrivalSummaryAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingA
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>Evacuation Shelter Arrival Summary</h3>
-            <p>Aggregates assigned evacuation origins into per-shelter arrival
-            curves - cumulative-arrival-curve analysis is a standard tool in
-            emergency operations planning (FEMA, 2019; NIST, 2015). Use
-            <code>evac_timestep</code> from queue-mode evacuation, or bin
-            <code>evac_min</code> when timestep is unavailable. P50/P95
-            time-to-capacity operationalise "shelter service speed" - a shelter
-            reaching 90% capacity in the first 10 minutes has a compressed
-            arrival profile (nearby, unimpeded catchment); one reaching only 30%
-            after 40 minutes has a distant catchment, congested access routes, or
-            both.</p>
-            <p>Outputs a table with arrivals and cumulative population per
-            shelter/step, plus an optional HTML summary with a stacked-bar
-            timeline per shelter.</p>
-            <p>This tool is a pure post-processor: it adds no new routing or
-            capacity logic, so every assumption of the parent Evacuation Time
-            Simulation (perfect compliance, no shadow evacuation, hard capacity
-            caps) carries through unchanged. TIMESTEP_MINUTES here should match
-            the upstream simulation's own timestep for the P50/P95 figures to
-            correspond to real decision points.</p>
-            <p>Using the results: a shelter whose final cumulative_pct falls short
-            of 100% signals unassigned or queue-stalled origins in the PARENT
-            simulation - trace back to its qa_flag field rather than debugging
-            here. Bimodal arrival curves suggest two distinct catchment
-            sub-populations; consider splitting the distant one to a closer
-            shelter. Running this on an instant-assignment (TIMESTEP_MINUTES=0)
-            simulation collapses the arrival profile to a simple travel-time
-            histogram, losing the congestion story this tool is built to surface.</p>
-            """
+            "<h3>Evacuation Shelter Arrival Summary</h3> <p>Aggregates assigned evacuation origins "
+            "into per-shelter arrival curves - cumulative-arrival-curve analysis is a standard tool "
+            "in emergency operations planning (FEMA, 2019; NIST, 2015). Use "
+            "<code>evac_timestep</code> from queue-mode evacuation, or bin <code>evac_min</code> when "
+            'timestep is unavailable. P50/P95 time-to-capacity operationalise "shelter service speed" '
+            "- a shelter reaching 90% capacity in the first 10 minutes has a compressed arrival "
+            "profile (nearby, unimpeded catchment); one reaching only 30% after 40 minutes has a "
+            "distant catchment, congested access routes, or both.</p> <p>Outputs a table with "
+            "arrivals and cumulative population per shelter/step, plus an optional HTML summary with "
+            "a stacked-bar timeline per shelter.</p> <p>This tool is a pure post-processor: it adds "
+            "no new routing or capacity logic, so every assumption of the parent Evacuation Time "
+            "Simulation (perfect compliance, no shadow evacuation, hard capacity caps) carries "
+            "through unchanged. TIMESTEP_MINUTES here should match the upstream simulation's own "
+            "timestep for the P50/P95 figures to correspond to real decision points.</p> <p>Using the "
+            "results: a shelter whose final cumulative_pct falls short of 100% signals unassigned or "
+            "queue-stalled origins in the PARENT simulation - trace back to its qa_flag field rather "
+            "than debugging here. Bimodal arrival curves suggest two distinct catchment "
+            "sub-populations; consider splitting the distant one to a closer shelter. Running this on "
+            "an instant-assignment (TIMESTEP_MINUTES=0) simulation collapses the arrival profile to a "
+            "simple travel-time histogram, losing the congestion story this tool is built to "
+            "surface.</p>"
         )
 
     def initAlgorithm(self, config=None):

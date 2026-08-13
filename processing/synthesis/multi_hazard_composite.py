@@ -86,41 +86,31 @@ class MultiHazardCompositeAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgor
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>Multi-Hazard Composite Index</h3>
-            <p>Combines N hazard score fields (0-100 each) into one composite, in the
-            spirit of the IPCC AR5 "reasons for concern" framework that assesses
-            multiple climate risks jointly rather than hazard-by-hazard - a place
-            facing three moderate stresses can be more fragile than one facing a
-            single severe stress. On top of the composite, this tool computes a
-            Shannon (1948) entropy diversity index: 0 means one hazard explains
-            everything (concentrated, one clear intervention target), 100 means all
-            hazards contribute equally (diffuse, no single fix suffices) - exactly the
-            axis a plain weighted-sum score discards, since two units can share an
-            identical composite while having completely different risk profiles.</p>
-            <p>Diversity is computed on each hazard's relative weighted contribution,
-            normalised by ln(N) where N is the number of fields supplied in THIS run -
-            mh_diversity values are only directly comparable across units analysed
-            with the same field count.</p>
-            <p><b>Outputs added to each feature:</b></p>
-            <ul>
-              <li><b>mh_score</b> - weighted mean of hazard scores (0-100).</li>
-              <li><b>mh_class</b> - Very High / High / Moderate / Low.</li>
-              <li><b>mh_dominant</b> - field name with the largest weighted contribution; the hazard to target first.</li>
-              <li><b>mh_diversity</b> - 0 (single hazard dominant) to 100 (multi-stressed across all hazards).</li>
-              <li><b>mh_drivers</b> - top 3 contributing field names (CSV).</li>
-              <li><b>mh_data_gap</b> - number of hazard fields with null or
-              non-numeric values; a nonzero value means the composite is based on
-              incomplete data.</li>
-            </ul>
-            <p>Weights: optional CSV string matching the order of selected fields.
-            Empty -&gt; equal weights. Negative -&gt; clamped to 0.</p>
-            <p>Using the results: units combining high mh_score with high mh_diversity
-            are the most complex cases - feed them into Scenario Sensitivity Analysis
-            to test whether their rank is stable under weight uncertainty. Where a
-            single simple composite is all that's needed for reporting, use the
-            leaner Climate Adaptation Priority Synthesis instead.</p>
-            """
+            "<h3>Multi-Hazard Composite Index</h3> <p>Combines N hazard score fields (0-100 each) "
+            'into one composite, in the spirit of the IPCC AR5 "reasons for concern" framework that '
+            "assesses multiple climate risks jointly rather than hazard-by-hazard - a place facing "
+            "three moderate stresses can be more fragile than one facing a single severe stress. On "
+            "top of the composite, this tool computes a Shannon (1948) entropy diversity index: 0 "
+            "means one hazard explains everything (concentrated, one clear intervention target), 100 "
+            "means all hazards contribute equally (diffuse, no single fix suffices) - exactly the "
+            "axis a plain weighted-sum score discards, since two units can share an identical "
+            "composite while having completely different risk profiles.</p> <p>Diversity is computed "
+            "on each hazard's relative weighted contribution, normalised by ln(N) where N is the "
+            "number of fields supplied in THIS run - mh_diversity values are only directly comparable "
+            "across units analysed with the same field count.</p> <p><b>Outputs added to each "
+            "feature:</b></p> <ul> <li><b>mh_score</b> - weighted mean of hazard scores (0-100).</li> "
+            "<li><b>mh_class</b> - Very High / High / Moderate / Low.</li> <li><b>mh_dominant</b> - "
+            "field name with the largest weighted contribution; the hazard to target first.</li> "
+            "<li><b>mh_diversity</b> - 0 (single hazard dominant) to 100 (multi-stressed across all "
+            "hazards).</li> <li><b>mh_drivers</b> - top 3 contributing field names (CSV).</li> "
+            "<li><b>mh_data_gap</b> - number of hazard fields with null or non-numeric values; a "
+            "nonzero value means the composite is based on incomplete data.</li> </ul> <p>Weights: "
+            "optional CSV string matching the order of selected fields. Empty -&gt; equal weights. "
+            "Negative -&gt; clamped to 0.</p> <p>Using the results: units combining high mh_score "
+            "with high mh_diversity are the most complex cases - feed them into Scenario Sensitivity "
+            "Analysis to test whether their rank is stable under weight uncertainty. Where a single "
+            "simple composite is all that's needed for reporting, use the leaner Climate Adaptation "
+            "Priority Synthesis instead.</p>"
         )
 
     def initAlgorithm(self, config=None):

@@ -98,40 +98,29 @@ class ClimateProjectionOverlayAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingA
 
     def shortHelpString(self):
         return self.tr(
-            """
-            <h3>Climate Projection Overlay</h3>
-            <p>Applies a single literature-derived amplification factor to today's
-            hazard/composite score, trading physical downscaling fidelity for
-            accessibility - no CMIP/regional-climate-model raster stack required.
-            Built-in factors are drawn from IPCC AR6 WG1 regional fact sheets, which
-            project heatwave frequency increases of roughly 1.3-1.6x per degree of
-            warming and flood magnitude increases of roughly 1.1-1.5x.</p>
-            <p><b>Scenarios:</b></p>
-            <ul>
-              <li>Stable (today) - factor 1.00</li>
-              <li>Mild (+1.5C, ~2050) - factor 1.15</li>
-              <li>Moderate (+2C, ~2070) - factor 1.30</li>
-              <li>High (+3C, ~2100) - factor 1.60</li>
-              <li>Custom - use the explicit factor parameter</li>
-            </ul>
-            <p>A single scalar cannot represent how climate change reshapes the
-            SPATIAL PATTERN of a hazard, only its overall magnitude - today's
-            geographic distribution of exposure is assumed to persist unchanged,
-            which is frequently false (e.g. sea-level rise shifts WHERE flooding
-            occurs, not just how much). The clamp at 100 means a unit already near
-            the ceiling shows little visible delta even under an aggressive scenario.</p>
-            <p>How to read the results: cp_delta_class = Major increase (&gt;25
-            points) flags units that cross a risk-class threshold under the scenario
-            (e.g. Moderate 45 -&gt; High 72) - the units where climate change
-            qualitatively changes the risk profile, not just the number.</p>
-            <p>Using the results: run all four built-in scenarios and compare the
-            Major-increase counts to show the non-linear escalation of risk. For
-            hazard-specific factors (heat 1.3, flood 1.5, etc.) run the algorithm
-            once per hazard with a Custom factor - the built-in factors are generic
-            cross-hazard averages, not hazard- or location-specific projections.
-            Where decision stakes justify it, commission real downscaled climate
-            projections instead of relying on this generic scalar.</p>
-            """
+            "<h3>Climate Projection Overlay</h3> <p>Applies a single literature-derived amplification "
+            "factor to today's hazard/composite score, trading physical downscaling fidelity for "
+            "accessibility - no CMIP/regional-climate-model raster stack required. Built-in factors "
+            "are drawn from IPCC AR6 WG1 regional fact sheets, which project heatwave frequency "
+            "increases of roughly 1.3-1.6x per degree of warming and flood magnitude increases of "
+            "roughly 1.1-1.5x.</p> <p><b>Scenarios:</b></p> <ul> <li>Stable (today) - factor "
+            "1.00</li> <li>Mild (+1.5C, ~2050) - factor 1.15</li> <li>Moderate (+2C, ~2070) - factor "
+            "1.30</li> <li>High (+3C, ~2100) - factor 1.60</li> <li>Custom - use the explicit factor "
+            "parameter</li> </ul> <p>A single scalar cannot represent how climate change reshapes the "
+            "SPATIAL PATTERN of a hazard, only its overall magnitude - today's geographic "
+            "distribution of exposure is assumed to persist unchanged, which is frequently false "
+            "(e.g. sea-level rise shifts WHERE flooding occurs, not just how much). The clamp at 100 "
+            "means a unit already near the ceiling shows little visible delta even under an "
+            "aggressive scenario.</p> <p>How to read the results: cp_delta_class = Major increase "
+            "(&gt;25 points) flags units that cross a risk-class threshold under the scenario (e.g. "
+            "Moderate 45 -&gt; High 72) - the units where climate change qualitatively changes the "
+            "risk profile, not just the number.</p> <p>Using the results: run all four built-in "
+            "scenarios and compare the Major-increase counts to show the non-linear escalation of "
+            "risk. For hazard-specific factors (heat 1.3, flood 1.5, etc.) run the algorithm once per "
+            "hazard with a Custom factor - the built-in factors are generic cross-hazard averages, "
+            "not hazard- or location-specific projections. Where decision stakes justify it, "
+            "commission real downscaled climate projections instead of relying on this generic "
+            "scalar.</p>"
         )
 
     def initAlgorithm(self, config=None):
