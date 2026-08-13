@@ -53,10 +53,12 @@ def _text(feature, field_name, default=""):
         return default
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_REPORT, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class EvacuationArrivalSummaryAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class EvacuationArrivalSummaryAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_REPORT
+    ICON = "tool_evacuation_shelter_arrival_summary.png"
     INPUT = "INPUT"
     SHELTER_FIELD = "SHELTER_FIELD"
     POP_FIELD = "POP_FIELD"
@@ -77,12 +79,6 @@ class EvacuationArrivalSummaryAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Evacuation Shelter Arrival Summary")
-
-    def group(self):
-        return self.tr("9 - Report and QA")
-
-    def groupId(self):
-        return "planx_urban_resilience_reporting"
 
     def shortHelpString(self):
         return self.tr(

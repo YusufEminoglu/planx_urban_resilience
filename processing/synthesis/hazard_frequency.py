@@ -71,10 +71,12 @@ def _risk_class(score: float) -> str:
     return "Low"
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_SYNTHESIS, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class HazardFrequencyAggregationAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class HazardFrequencyAggregationAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_SYNTHESIS
+    ICON = "tool_hazard_frequency_aggregation.png"
     UNITS = "UNITS"
     SOURCES = "SOURCES"
     SCORE_FIELD = "SCORE_FIELD"
@@ -100,12 +102,6 @@ class HazardFrequencyAggregationAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Multi-Period Hazard Frequency Aggregation")
-
-    def group(self):
-        return self.tr("8 - Synthesis")
-
-    def groupId(self):
-        return "planx_urban_resilience_synthesis"
 
     def shortHelpString(self):
         return self.tr(

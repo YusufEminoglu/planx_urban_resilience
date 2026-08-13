@@ -16,7 +16,7 @@
 
 ---
 
-PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. The suite ships **43 Processing algorithms**: synthetic QA data, seismic debris and cascade, heat, flood, social vulnerability, Euclidean and network emergency access, evacuation simulation, optimal shelter siting, network criticality, air and drought screening, adaptation/multi-hazard/equity/climate/recovery/sensitivity synthesis, hot-spot (Getis-Ord Gi*) and LISA cluster statistics with FDR-adjusted significance, correlation matrix, IDW vulnerability surfaces, Pareto and cost-benefit economics, lifecycle NPV, time-series tracking, scenario templates and comparison, HTML/Markdown/PDF reporting, 3D risk export, and QGIS style presets — plus a dashboard for module discovery and data readiness review. All 43 algorithms run on both QGIS 3.44 LTR and QGIS 4.0 — verified via headless e2e harness.
+PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. The suite ships **43 Processing algorithms**: synthetic QA data, seismic debris and cascade, heat, flood, social vulnerability, Euclidean and network emergency access, evacuation simulation, optimal shelter siting, network criticality, air and drought screening, adaptation/multi-hazard/equity/climate/recovery/sensitivity synthesis, hot-spot (Getis-Ord Gi*) and LISA cluster statistics with FDR-adjusted significance, correlation matrix, IDW vulnerability surfaces, Pareto and cost-benefit economics, lifecycle NPV, time-series tracking, scenario templates and comparison, HTML/Markdown/PDF reporting, 3D risk export, and QGIS style presets — plus a docked Processing panel, colour-grouped by hazard domain with a per-tool icon, for module discovery. All 43 algorithms run on both QGIS 3.44 LTR and QGIS 4.0 — verified via headless e2e harness.
 
 ## 📖 Documentation
 
@@ -260,25 +260,17 @@ Outputs:
 
 ## QGIS 4 support
 
-The dashboard is dark-theme-safe: all text, button, input and tooltip colours are explicitly pinned so the panel reads identically under the light host palette of QGIS 3 and the dark host palette of QGIS 4. Verified via an automated GUI smoke test that simulates the QGIS 4 dark theme, offscreen-grabs every page, and asserts WCAG contrast ≥ 3.0 on every visible widget (472 checks, 0 failures on both 3.44 LTR and 4.0.2).
+The dock is dark-theme-safe: all text, background and tooltip colours are explicitly pinned so the panel reads identically under the light host palette of QGIS 3 and the dark host palette of QGIS 4. Verified via an automated GUI smoke test that simulates the QGIS 4 dark theme, offscreen-grabs the dock, and asserts WCAG contrast ≥ 3.0 on every visible widget and every group-header colour, on both 3.44 LTR and 4.2.0.
 
-## Dashboard
+## Docked Processing panel
 
-The plugin adds a `PlanX Urban Resilience` toolbar/menu action. The dashboard includes:
+The plugin adds a `PlanX Urban Resilience` toolbar/menu action that opens (or raises) a dock — also reachable via **View → Panels → PlanX Urban Resilience**. It replaces the old dashboard dialog with a QGIS-native panel:
 
-- Overview of available modules
-- Data readiness report for loaded QGIS layers
-- Module cards with required and optional inputs
-- Processing launch shortcuts
-- Summary guidance and limitations
-- Beta readiness page with quick gate checks (layers, CRS, raster presence, module catalog)
-- One-click issue template copy flow for structured bug reporting
-- One-click diagnostics copy (layer/profile/algorithm-registry status) for support tickets
-- One-click smoke-test plan copy plus quick launch buttons for core tools (Synthetic, Heat, Network Access)
-- Core-module readiness heuristics (Heat/Flood/Social/Emergency/Synthesis) visible in Beta tab
-- One-click release-notes draft copy for rapid Hub/GitHub publication prep
-- One-click QGIS Hub changelog draft copy from live runtime readiness snapshot
-- Beta readiness HTML export for audit trail and team review
+- A searchable tree of all 43 tools, one entry per algorithm, grouped by hazard/report domain.
+- Each of the 10 groups (Demo and QA, Seismic, Heat, Flood, Social, Emergency, Air, Drought, Synthesis, Report and QA) has its own colour.
+- Every tool has its own icon.
+- Double-click a tool to open its Processing dialog; right-click for documentation (opens the matching page of the [reference manual](https://yusufeminoglu.github.io/planx_urban_resilience/)).
+- The search box filters the tree live by tool name.
 
 ## Important Limitations
 

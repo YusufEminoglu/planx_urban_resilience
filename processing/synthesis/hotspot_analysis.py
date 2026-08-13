@@ -89,10 +89,12 @@ def _gi_class(z: float, p: float) -> str:
     return "Not significant"
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_SYNTHESIS, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class HotSpotAnalysisAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class HotSpotAnalysisAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_SYNTHESIS
+    ICON = "tool_hotspot_analysis_getis_ord.png"
     INPUT = "INPUT"
     VALUE_FIELD = "VALUE_FIELD"
     DISTANCE = "DISTANCE"
@@ -116,12 +118,6 @@ class HotSpotAnalysisAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Hot-Spot Cluster Analysis (Getis-Ord Gi*)")
-
-    def group(self):
-        return self.tr("8 - Synthesis")
-
-    def groupId(self):
-        return "planx_urban_resilience_synthesis"
 
     def shortHelpString(self):
         return self.tr(

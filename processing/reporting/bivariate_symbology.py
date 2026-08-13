@@ -77,10 +77,12 @@ def _percentiles(values: list[float], pct: list[int]) -> list[float]:
     return out
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_REPORT, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class BivariateSymbologyAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class BivariateSymbologyAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_REPORT
+    ICON = "tool_bivariate_choropleth_symbology.png"
     INPUT = "INPUT"
     RISK_FIELD = "RISK_FIELD"
     VULN_FIELD = "VULN_FIELD"
@@ -101,12 +103,6 @@ class BivariateSymbologyAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Bivariate Choropleth Symbology (risk × vulnerability)")
-
-    def group(self):
-        return self.tr("9 - Report and QA")
-
-    def groupId(self):
-        return "planx_urban_resilience_reporting"
 
     def shortHelpString(self):
         return self.tr(

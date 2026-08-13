@@ -61,10 +61,12 @@ def _count_near(geom, features, index):
     return count
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_DROUGHT, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class GreenInfrastructureStressAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class GreenInfrastructureStressAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_DROUGHT
+    ICON = "tool_green_infrastructure_drought_stress.png"
     GREEN = "GREEN"
     STUDY_AREA = "STUDY_AREA"
     IMPERVIOUS = "IMPERVIOUS"
@@ -89,12 +91,6 @@ class GreenInfrastructureStressAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Drought and Green Infrastructure Stress")
-
-    def group(self):
-        return self.tr("7 - Drought: green infrastructure stress")
-
-    def groupId(self):
-        return "planx_urban_resilience_drought"
 
     def shortHelpString(self):
         return self.tr(

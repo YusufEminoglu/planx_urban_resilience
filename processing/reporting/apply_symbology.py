@@ -70,10 +70,12 @@ def _graduated_renderer(layer, field_name):
     return renderer
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_REPORT, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class ApplyResilienceSymbologyAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class ApplyResilienceSymbologyAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_REPORT
+    ICON = "tool_apply_resilience_symbology.png"
     LAYER = "LAYER"
     FIELD = "FIELD"
     PRESET = "PRESET"
@@ -98,12 +100,6 @@ class ApplyResilienceSymbologyAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Apply Resilience Symbology")
-
-    def group(self):
-        return self.tr("9 - Report and QA")
-
-    def groupId(self):
-        return "planx_urban_resilience_reporting"
 
     def shortHelpString(self):
         return self.tr(

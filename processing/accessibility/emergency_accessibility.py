@@ -47,10 +47,12 @@ def _nearest_distance(point_geom, features, index):
     return point_geom.distance(nearest.geometry())
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_EMERGENCY, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class EmergencyAccessibilityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class EmergencyAccessibilityAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_EMERGENCY
+    ICON = "tool_emergency_accessibility_shelter_coverage.png"
     STUDY_AREA = "STUDY_AREA"
     SHELTERS = "SHELTERS"
     POPULATION_ASSETS = "POPULATION_ASSETS"
@@ -73,12 +75,6 @@ class EmergencyAccessibilityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Emergency Accessibility and Shelter Coverage")
-
-    def group(self):
-        return self.tr("5 - Emergency: accessibility and coverage")
-
-    def groupId(self):
-        return "planx_urban_resilience_emergency"
 
     def shortHelpString(self):
         return self.tr(

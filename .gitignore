@@ -2,3 +2,4 @@ __pycache__/
 .pytest_cache/
 *.py[cod]
 *$py.class
+tests/_gui_grabs/

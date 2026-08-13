@@ -44,10 +44,12 @@ def _max_intersect_score(unit_geom, source, field_name):
     return best
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_SYNTHESIS, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class JoinScoresToPlanningUnitsAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class JoinScoresToPlanningUnitsAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_SYNTHESIS
+    ICON = "tool_join_scores_to_planning_units.png"
     UNITS = "UNITS"
     SOURCE1 = "SOURCE1"
     FIELD1 = "FIELD1"
@@ -77,12 +79,6 @@ class JoinScoresToPlanningUnitsAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Join Hazard Scores to Planning Units")
-
-    def group(self):
-        return self.tr("8 - Synthesis")
-
-    def groupId(self):
-        return "planx_urban_resilience_synthesis"
 
     def shortHelpString(self):
         return self.tr(

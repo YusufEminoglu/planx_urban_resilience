@@ -68,10 +68,12 @@ def _centroid_xy(geom: QgsGeometry):
     return (c.x(), c.y())
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_EMERGENCY, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class OptimalShelterSitingAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class OptimalShelterSitingAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_EMERGENCY
+    ICON = "tool_optimal_shelter_siting.png"
     CANDIDATES = "CANDIDATES"
     DEMAND = "DEMAND"
     POP_FIELD = "POP_FIELD"
@@ -96,12 +98,6 @@ class OptimalShelterSitingAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Optimal Shelter Siting (greedy maximal coverage)")
-
-    def group(self):
-        return self.tr("5 - Emergency")
-
-    def groupId(self):
-        return "planx_urban_resilience_emergency"
 
     def shortHelpString(self):
         return self.tr(

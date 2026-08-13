@@ -159,10 +159,12 @@ def _apply_classified_renderer(layer: QgsVectorLayer, field: str, method_idx: in
     layer.setRenderer(QgsGraduatedSymbolRenderer(field, ranges))
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_REPORT, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class ResiliencePdfAtlasAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class ResiliencePdfAtlasAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_REPORT
+    ICON = "tool_resilience_pdf_atlas.png"
     INPUT = "INPUT"
     SCORE_FIELD = "SCORE_FIELD"
     CLASS_FIELD = "CLASS_FIELD"
@@ -185,12 +187,6 @@ class ResiliencePdfAtlasAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Resilience PDF Atlas")
-
-    def group(self):
-        return self.tr("9 - Report and QA")
-
-    def groupId(self):
-        return "planx_urban_resilience_reporting"
 
     def shortHelpString(self):
         return self.tr(

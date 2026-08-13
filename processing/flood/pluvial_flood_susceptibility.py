@@ -58,10 +58,12 @@ def _make_sampler(provider):
     return _sample
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_FLOOD, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class PluvialFloodSusceptibilityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class PluvialFloodSusceptibilityAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_FLOOD
+    ICON = "tool_pluvial_flood_susceptibility.png"
     DEM = "DEM"
     STUDY_AREA = "STUDY_AREA"
     BUILDINGS = "BUILDINGS"
@@ -88,12 +90,6 @@ class PluvialFloodSusceptibilityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Pluvial Flood Susceptibility (screening)")
-
-    def group(self):
-        return self.tr("3 - Flood: pluvial susceptibility")
-
-    def groupId(self):
-        return "planx_urban_resilience_flood"
 
     def shortHelpString(self):
         return self.tr(

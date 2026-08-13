@@ -55,10 +55,12 @@ def _source_fields(source):
     return source.fields() if source is not None else QgsFields()
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_HEAT, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class UrbanHeatComfortRiskAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class UrbanHeatComfortRiskAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_HEAT
+    ICON = "tool_urban_heat_comfort_risk.png"
     STUDY_AREA = "STUDY_AREA"
     BUILDINGS = "BUILDINGS"
     IMPERVIOUS = "IMPERVIOUS"
@@ -86,12 +88,6 @@ class UrbanHeatComfortRiskAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Urban Heat Comfort Risk (screening)")
-
-    def group(self):
-        return self.tr("2 - Heat: comfort and exposure")
-
-    def groupId(self):
-        return "planx_urban_resilience_heat"
 
     def shortHelpString(self):
         return self.tr(

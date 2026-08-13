@@ -115,10 +115,12 @@ class OriginJob:
     path_edges: list[int] = field(default_factory=list)
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_EMERGENCY, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class EvacuationTimeSimulationAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class EvacuationTimeSimulationAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_EMERGENCY
+    ICON = "tool_evacuation_time_simulation.png"
     ROADS = "ROADS"
     ORIGINS = "ORIGINS"
     POP_FIELD = "POP_FIELD"
@@ -152,12 +154,6 @@ class EvacuationTimeSimulationAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Evacuation Time Simulation")
-
-    def group(self):
-        return self.tr("5 - Emergency")
-
-    def groupId(self):
-        return "planx_urban_resilience_emergency"
 
     def shortHelpString(self):
         return self.tr(

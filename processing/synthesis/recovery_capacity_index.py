@@ -67,10 +67,12 @@ def _shares_to_diversity(shares: list[float]) -> float:
     return max(0.0, min(100.0, diversity))
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_SYNTHESIS, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class RecoveryCapacityIndexAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class RecoveryCapacityIndexAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_SYNTHESIS
+    ICON = "tool_recovery_capacity_index.png"
     INPUT = "INPUT"
     DIVERSITY_FIELDS = "DIVERSITY_FIELDS"
     REDUNDANCY_FIELD = "REDUNDANCY_FIELD"
@@ -99,12 +101,6 @@ class RecoveryCapacityIndexAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Recovery Capacity Index")
-
-    def group(self):
-        return self.tr("8 - Synthesis")
-
-    def groupId(self):
-        return "planx_urban_resilience_synthesis"
 
     def shortHelpString(self):
         return self.tr(

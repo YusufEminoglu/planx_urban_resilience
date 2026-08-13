@@ -44,10 +44,12 @@ from qgis.core import (
 from .._helpers import clamp, composite_risk_class
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_SYNTHESIS, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class EquityAdjustedPriorityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class EquityAdjustedPriorityAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_SYNTHESIS
+    ICON = "tool_equity_adjusted_priority.png"
     INPUT = "INPUT"
     HAZARD_FIELD = "HAZARD_FIELD"
     SVI_FIELD = "SVI_FIELD"
@@ -72,12 +74,6 @@ class EquityAdjustedPriorityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Equity-Adjusted Adaptation Priority")
-
-    def group(self):
-        return self.tr("8 - Synthesis")
-
-    def groupId(self):
-        return "planx_urban_resilience_synthesis"
 
     def shortHelpString(self):
         return self.tr(

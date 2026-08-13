@@ -60,10 +60,12 @@ def _dominates(a, b) -> bool:
     return (ac <= bc and ab >= bb) and (ac < bc or ab > bb)
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_SYNTHESIS, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class ParetoSelectorAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class ParetoSelectorAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_SYNTHESIS
+    ICON = "tool_pareto_optimal_selector.png"
     INPUT = "INPUT"
     COST_FIELD = "COST_FIELD"
     BENEFIT_FIELD = "BENEFIT_FIELD"
@@ -84,12 +86,6 @@ class ParetoSelectorAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Pareto-Optimal Intervention Selector")
-
-    def group(self):
-        return self.tr("8 - Synthesis")
-
-    def groupId(self):
-        return "planx_urban_resilience_synthesis"
 
     def shortHelpString(self):
         return self.tr(

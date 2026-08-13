@@ -37,10 +37,12 @@ def _value(feature, field_name):
         return ""
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_REPORT, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class ResilienceReportAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class ResilienceReportAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_REPORT
+    ICON = "tool_resilience_score_html_report.png"
     INPUT = "INPUT"
     SCORE_FIELD = "SCORE_FIELD"
     CLASS_FIELD = "CLASS_FIELD"
@@ -59,12 +61,6 @@ class ResilienceReportAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Resilience Score HTML Report")
-
-    def group(self):
-        return self.tr("9 - Report and QA")
-
-    def groupId(self):
-        return "planx_urban_resilience_reporting"
 
     def shortHelpString(self):
         return self.tr(

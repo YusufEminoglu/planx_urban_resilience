@@ -47,10 +47,12 @@ def _risk_class(score: float) -> str:
     return "Low"
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_SYNTHESIS, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class PopulationWeightedExposureAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class PopulationWeightedExposureAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_SYNTHESIS
+    ICON = "tool_population_weighted_exposure.png"
     INPUT = "INPUT"
     SCORE_FIELD = "SCORE_FIELD"
     POP_FIELD = "POP_FIELD"
@@ -74,12 +76,6 @@ class PopulationWeightedExposureAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Population-Weighted Exposure")
-
-    def group(self):
-        return self.tr("8 - Synthesis")
-
-    def groupId(self):
-        return "planx_urban_resilience_synthesis"
 
     def shortHelpString(self):
         return self.tr(

@@ -59,10 +59,12 @@ def _safe_float(v, default=0.0):
         return default
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_SYNTHESIS, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class LifecycleCostAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class LifecycleCostAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_SYNTHESIS
+    ICON = "tool_lifecycle_cost_calculator.png"
     INPUT = "INPUT"
     CAPEX_FIELD = "CAPEX_FIELD"
     OPEX_FIELD = "OPEX_FIELD"
@@ -95,12 +97,6 @@ class LifecycleCostAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Lifecycle Cost Calculator (25-year NPV)")
-
-    def group(self):
-        return self.tr("8 - Synthesis")
-
-    def groupId(self):
-        return "planx_urban_resilience_synthesis"
 
     def shortHelpString(self):
         return self.tr(

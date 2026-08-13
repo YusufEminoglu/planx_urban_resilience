@@ -62,10 +62,12 @@ def _point_count(cell_geom, features, index):
     return count
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_AIR, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class AirQualityExposureAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class AirQualityExposureAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_AIR
+    ICON = "tool_air_quality_exposure_screening.png"
     STUDY_AREA = "STUDY_AREA"
     ROADS = "ROADS"
     EMISSION_SOURCES = "EMISSION_SOURCES"
@@ -92,12 +94,6 @@ class AirQualityExposureAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Air Quality / Urban Exposure (screening)")
-
-    def group(self):
-        return self.tr("6 - Air: exposure screening")
-
-    def groupId(self):
-        return "planx_urban_resilience_air"
 
     def shortHelpString(self):
         return self.tr(

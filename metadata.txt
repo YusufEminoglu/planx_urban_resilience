@@ -4,8 +4,8 @@ email=yusuf.eminoglu@deu.edu.tr
 author=Yusuf Eminoglu
 qgisMinimumVersion=3.28
 description=PlanX urban resilience suite (43 tools): seismic, heat, flood, social, emergency access, evacuation, network criticality, air, drought, synthesis, hot-spot/LISA statistics, risk-recovery matrix, time-series, scenario tools, HTML/Markdown/PDF atlas, symbology.
-about=43 Processing algorithms and a QGIS dashboard for city-scale resilience screening: synthetic QA, seismic debris, heat and flood, social vulnerability, Euclidean and network emergency access, evacuation simulation with optional timestep queue, network criticality, air and drought, multi-hazard and equity-adjusted synthesis, climate projection overlay, recovery capacity, scenario sensitivity, risk-recovery priority matrix, time-series tracking, scenario templates, HTML/Markdown/PDF atlas with map-book presets, shelter arrival summaries, and symbology. DEU City and Regional Planning educational workflows. Online User Manual & Documentation: https://yusufeminoglu.github.io/planx_urban_resilience/ | If you find this plugin helpful, please consider starring the repository on GitHub (https://github.com/YusufEminoglu/planx_urban_resilience)!
-version=1.26.5
+about=43 Processing algorithms and a docked Processing panel (colour-grouped, per-tool icons) for city-scale resilience screening: synthetic QA, seismic debris, heat and flood, social vulnerability, Euclidean and network emergency access, evacuation simulation with optional timestep queue, network criticality, air and drought, multi-hazard and equity-adjusted synthesis, climate projection overlay, recovery capacity, scenario sensitivity, risk-recovery priority matrix, time-series tracking, scenario templates, HTML/Markdown/PDF atlas with map-book presets, shelter arrival summaries, and symbology. DEU City and Regional Planning educational workflows. Online User Manual & Documentation: https://yusufeminoglu.github.io/planx_urban_resilience/ | If you find this plugin helpful, please consider starring the repository on GitHub (https://github.com/YusufEminoglu/planx_urban_resilience)!
+version=2.0.0
 tracker=https://github.com/YusufEminoglu/planx_urban_resilience/issues
 repository=https://github.com/YusufEminoglu/planx_urban_resilience
 
@@ -20,6 +20,11 @@ hasProcessingProvider=yes
 plugin_dependencies=
 license=GPL-3
 changelog=
+    PlanX Urban Resilience 2.0.0 - Major GUI rewrite: the modal dashboard is replaced by a docked Processing panel, matching the sibling PlanX plugin.
+        - New docked panel (View -> Panels -> PlanX Urban Resilience): a searchable, grouped tool tree replaces the old Overview/Data/Modules/Run/Report/Test/Beta dashboard pages. Double-click a tool to run it, right-click for documentation.
+        - Each of the 10 hazard/report groups now has its own colour (Seismic amber, Heat orange-red, Flood blue, Social purple, Emergency red, Air cyan, Drought gold, Synthesis teal, Report/QA slate, Demo/QA grey) and every one of the 43 tools has its own hand-drawn icon (was: one shared plugin icon for all tools).
+        - Fixed: the Emergency and Synthesis groups were silently split across two different toolbox group labels each (inconsistent group() strings sharing one groupId), so the Processing toolbox and Algorithm dialog sometimes showed them as separate groups; unified to one label per domain.
+        - Removed: the dashboard's Data/Report/Beta developer tooling (issue-template, diagnostics, smoke-test-plan, release-notes and Hub-changelog-draft clipboard actions) and the hand-maintained MODULES catalog it used to stay in sync with the Processing registry - the dock now reads the registry directly, so there is nothing left to drift out of sync.
     PlanX Urban Resilience 1.26.2 - Security packaging hotfix: excluded pytest cache artifacts from the QGIS Hub archive and cleaned all seven Hub-reported W503 quality findings.
         - Added plugin-level and shared packaging exclusions for .pytest_cache so CACHEDIR.TAG and test cache data cannot enter release archives.
         - Reformatted arithmetic, HTML assembly, attribute-list construction, and LISA variance code without changing behavior.

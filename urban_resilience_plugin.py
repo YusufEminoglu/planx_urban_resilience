@@ -2,6 +2,7 @@
 import os
 
 from qgis.core import QgsApplication
+from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtGui import QIcon
 
 try:  # Qt5: QtWidgets / Qt6: QtGui
@@ -9,8 +10,8 @@ try:  # Qt5: QtWidgets / Qt6: QtGui
 except ImportError:  # QGIS 4 / Qt6 without shim
     from qgis.PyQt.QtGui import QAction
 
-from .dashboard import UrbanResilienceDashboard
 from .processing.urban_resilience_provider import PlanXUrbanResilienceProvider
+from .urban_resilience_dock import UrbanResilienceDock
 
 
 class PlanXUrbanResiliencePlugin:
@@ -18,7 +19,7 @@ class PlanXUrbanResiliencePlugin:
         self.iface = iface
         self.provider = None
         self.action = None
-        self.dialog = None
+        self.dock = None
 
     def initProcessing(self):
         if self.provider is not None:
@@ -33,22 +34,23 @@ class PlanXUrbanResiliencePlugin:
         icon = self.provider.icon() if self.provider else QIcon(
             os.path.join(os.path.dirname(__file__), "icons", "plugin.svg")
         )
+        self.dock = UrbanResilienceDock(self.iface)
+        self.iface.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.dock)
         self.action = QAction(icon, "PlanX Urban Resilience", self.iface.mainWindow())
-        self.action.setToolTip("Open the PlanX Urban Resilience dashboard")
-        self.action.triggered.connect(self.open_dashboard)
+        self.action.setToolTip("Show the PlanX Urban Resilience panel")
+        self.action.triggered.connect(self.show_dock)
         self.iface.addToolBarIcon(self.action)
         self.iface.addPluginToMenu("&PlanX Urban Resilience", self.action)
 
-    def open_dashboard(self):
-        if self.dialog is None:
-            self.dialog = UrbanResilienceDashboard(self.iface, self.iface.mainWindow())
-        self.dialog.show()
-        self.dialog.raise_()
-        self.dialog.activateWindow()
+    def show_dock(self):
+        self.dock.show()
+        self.dock.raise_()
 
     def unload(self):
         if self.iface and self.action:
             self.iface.removePluginMenu("&PlanX Urban Resilience", self.action)
             self.iface.removeToolBarIcon(self.action)
+        if self.iface and self.dock:
+            self.iface.removeDockWidget(self.dock)
         if self.provider:
             QgsApplication.processingRegistry().removeProvider(self.provider)

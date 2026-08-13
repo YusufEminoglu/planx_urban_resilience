@@ -95,10 +95,12 @@ def _label(gi_z: float, sig: int, delta: float | None, delta_tol: float) -> str:
     return "Not significant"
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_SYNTHESIS, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class RiskTrendHotspotAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class RiskTrendHotspotAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_SYNTHESIS
+    ICON = "tool_risk_trend_hotspot.png"
     INPUT = "INPUT"
     LATER_SCORE = "LATER_SCORE"
     DELTA_FIELD = "DELTA_FIELD"
@@ -122,12 +124,6 @@ class RiskTrendHotspotAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Risk Trend Hot-Spot (Gi* × Δ score)")
-
-    def group(self):
-        return self.tr("8 - Synthesis")
-
-    def groupId(self):
-        return "planx_urban_resilience_synthesis"
 
     def shortHelpString(self):
         return self.tr(

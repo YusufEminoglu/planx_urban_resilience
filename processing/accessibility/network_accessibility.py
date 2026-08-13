@@ -33,10 +33,12 @@ def _nearest_node(point_geom, node_features, node_index):
     return node["key"], distance
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_EMERGENCY, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class NetworkEmergencyAccessibilityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class NetworkEmergencyAccessibilityAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_EMERGENCY
+    ICON = "tool_network_emergency_accessibility.png"
     ROADS = "ROADS"
     ORIGINS = "ORIGINS"
     DESTINATIONS = "DESTINATIONS"
@@ -58,12 +60,6 @@ class NetworkEmergencyAccessibilityAlgorithm(HelpUrlMixin, QgsProcessingAlgorith
 
     def displayName(self):
         return self.tr("Network Emergency Accessibility")
-
-    def group(self):
-        return self.tr("5 - Emergency: accessibility and coverage")
-
-    def groupId(self):
-        return "planx_urban_resilience_emergency"
 
     def shortHelpString(self):
         return self.tr(

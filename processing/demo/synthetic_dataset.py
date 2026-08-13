@@ -51,10 +51,12 @@ def _add(sink, fields, geometry, attrs):
     sink.addFeature(feature, QgsFeatureSink.FastInsert)
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_DEMO, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class SyntheticResilienceDatasetAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class SyntheticResilienceDatasetAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_DEMO
+    ICON = "tool_synthetic_resilience_demo_dataset.png"
     SCALE = "SCALE"
     STUDY_AREA = "STUDY_AREA"
     BUILDINGS = "BUILDINGS"
@@ -77,12 +79,6 @@ class SyntheticResilienceDatasetAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Synthetic Resilience Demo Dataset")
-
-    def group(self):
-        return self.tr("0 - Demo and QA")
-
-    def groupId(self):
-        return "planx_urban_resilience_demo"
 
     def shortHelpString(self):
         return self.tr(

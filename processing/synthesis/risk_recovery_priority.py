@@ -36,10 +36,12 @@ def _score(feature, field_name):
     return clamp(feature.attribute(field_name)) if field_name else None
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_SYNTHESIS, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class RiskRecoveryPriorityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class RiskRecoveryPriorityAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_SYNTHESIS
+    ICON = "tool_risk_recovery_priority_matrix.png"
     INPUT = "INPUT"
     HAZARD_FIELD = "HAZARD_FIELD"
     RECOVERY_FIELD = "RECOVERY_FIELD"
@@ -64,12 +66,6 @@ class RiskRecoveryPriorityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Risk-Recovery Priority Matrix")
-
-    def group(self):
-        return self.tr("8 - Synthesis")
-
-    def groupId(self):
-        return "planx_urban_resilience_synthesis"
 
     def shortHelpString(self):
         return self.tr(

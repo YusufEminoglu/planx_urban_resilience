@@ -31,10 +31,12 @@ def _numeric(feature, field_name):
         return 0.0
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_SYNTHESIS, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class AdaptationPrioritySynthesisAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class AdaptationPrioritySynthesisAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_SYNTHESIS
+    ICON = "tool_climate_adaptation_priority_synthesis.png"
     UNITS = "UNITS"
     HEAT_FIELD = "HEAT_FIELD"
     FLOOD_FIELD = "FLOOD_FIELD"
@@ -61,12 +63,6 @@ class AdaptationPrioritySynthesisAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm)
 
     def displayName(self):
         return self.tr("Climate Adaptation Priority Synthesis")
-
-    def group(self):
-        return self.tr("8 - Synthesis: adaptation priorities")
-
-    def groupId(self):
-        return "planx_urban_resilience_synthesis"
 
     def shortHelpString(self):
         return self.tr(

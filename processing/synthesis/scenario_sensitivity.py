@@ -87,10 +87,12 @@ def _stability(std: float) -> float:
     return clamp(100.0 * (1.0 - std / 25.0)) or 0.0
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_SYNTHESIS, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class ScenarioSensitivityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class ScenarioSensitivityAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_SYNTHESIS
+    ICON = "tool_scenario_sensitivity.png"
     INPUT = "INPUT"
     COMPONENT_FIELDS = "COMPONENT_FIELDS"
     WEIGHTS = "WEIGHTS"
@@ -119,12 +121,6 @@ class ScenarioSensitivityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Scenario Sensitivity Analysis")
-
-    def group(self):
-        return self.tr("8 - Synthesis")
-
-    def groupId(self):
-        return "planx_urban_resilience_synthesis"
 
     def shortHelpString(self):
         return self.tr(

@@ -54,10 +54,12 @@ def _shannon_index(weighted_scores: list[float]) -> float:
     return clamp(100.0 * entropy / max_entropy) or 0.0
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_SYNTHESIS, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class MultiHazardCompositeAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class MultiHazardCompositeAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_SYNTHESIS
+    ICON = "tool_multi_hazard_composite_index.png"
     INPUT = "INPUT"
     HAZARD_FIELDS = "HAZARD_FIELDS"
     WEIGHTS = "WEIGHTS"
@@ -81,12 +83,6 @@ class MultiHazardCompositeAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Multi-Hazard Composite Index")
-
-    def group(self):
-        return self.tr("8 - Synthesis")
-
-    def groupId(self):
-        return "planx_urban_resilience_synthesis"
 
     def shortHelpString(self):
         return self.tr(

@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.0.0] - 2026-08-13
+
+Major GUI rewrite. Mirrors the sibling PlanX plugin: a docked Processing panel replaces the modal dashboard.
+
+### Changed
+
+- The modal `UrbanResilienceDashboard` dialog is replaced by `UrbanResilienceDock`, a `QDockWidget` opened via **View -> Panels -> PlanX Urban Resilience** (or the toolbar/menu action). It shows a searchable tree of all 43 tools grouped by hazard/report domain; double-click a tool to open its Processing dialog, right-click for documentation.
+- Every one of the 10 groups (Demo and QA, Seismic, Heat, Flood, Social, Emergency, Air, Drought, Synthesis, Report and QA) now renders with its own colour in the tree.
+- Every one of the 43 tools now has its own icon (previously all tools shared the single plugin icon).
+
+### Fixed
+
+- The Emergency group was split across two toolbox labels ("5 - Emergency" vs "5 - Emergency: accessibility and coverage") and Synthesis likewise ("8 - Synthesis" vs "8 - Synthesis: adaptation priorities") - same `groupId`, inconsistent `group()` text. Unified to one label per domain via a shared `GroupMixin`.
+
+### Removed
+
+- The dashboard's Data/Report/Beta pages and their developer-facing tooling: issue-template copy, runtime diagnostics, smoke-test-plan copy, release-notes-draft copy, Hub-changelog-draft copy, and the Beta HTML export.
+- The hand-maintained `MODULES` catalog the dashboard used to mirror the Processing registry (a second list that could drift out of sync); the dock now reads `QgsApplication.processingRegistry()` directly.
+
 ## [1.26.5] - 2026-08-07
 
 - Added online user manual link (https://yusufeminoglu.github.io/planx_urban_resilience/) and GitHub repository star call-to-action.

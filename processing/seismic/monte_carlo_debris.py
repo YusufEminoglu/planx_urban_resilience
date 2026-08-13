@@ -26,10 +26,12 @@ import math
 
 
 from .._helpers import SeededRng  # noqa: E402
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_SEISMIC, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class UrbanResilienceSeismicAnalystV2(HelpUrlMixin, QgsProcessingAlgorithm):
+class UrbanResilienceSeismicAnalystV2(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_SEISMIC
+    ICON = "tool_seismic_debris_monte_carlo.png"
 
     INPUT_BUILDINGS = 'INPUT_BUILDINGS'
     FIELD_FLOORS = 'FIELD_FLOORS'
@@ -60,12 +62,6 @@ class UrbanResilienceSeismicAnalystV2(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr('Post-Earthquake Collapse, Debris & Evacuation Network (Monte Carlo)')
-
-    def group(self):
-        return self.tr('1 — Seismic: Debris & Logistics')
-
-    def groupId(self):
-        return 'planx_urban_resilience_seismic'
 
     def shortHelpString(self):
         return self.tr(

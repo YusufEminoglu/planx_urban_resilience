@@ -117,10 +117,12 @@ def _xform_pt(point, transform):
     return [round(point.x(), 7), round(point.y(), 7)]
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_REPORT, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class Risk3DVolumeExportAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class Risk3DVolumeExportAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_REPORT
+    ICON = "tool_risk_3d_volume_export.png"
     INPUT = "INPUT"
     SCORE_FIELD = "SCORE_FIELD"
     MAX_HEIGHT = "MAX_HEIGHT"
@@ -144,12 +146,6 @@ class Risk3DVolumeExportAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("3D Risk Volume Export (GeoJSON for PlanX 3D City)")
-
-    def group(self):
-        return self.tr("9 - Report and QA")
-
-    def groupId(self):
-        return "planx_urban_resilience_reporting"
 
     def shortHelpString(self):
         return self.tr(

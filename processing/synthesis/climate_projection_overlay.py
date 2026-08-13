@@ -65,10 +65,12 @@ def _delta_class(delta: float) -> str:
     return "Major increase"
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_SYNTHESIS, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class ClimateProjectionOverlayAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class ClimateProjectionOverlayAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_SYNTHESIS
+    ICON = "tool_climate_projection_overlay.png"
     INPUT = "INPUT"
     SCORE_FIELD = "SCORE_FIELD"
     SCENARIO = "SCENARIO"
@@ -93,12 +95,6 @@ class ClimateProjectionOverlayAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Climate Projection Overlay")
-
-    def group(self):
-        return self.tr("8 - Synthesis")
-
-    def groupId(self):
-        return "planx_urban_resilience_synthesis"
 
     def shortHelpString(self):
         return self.tr(

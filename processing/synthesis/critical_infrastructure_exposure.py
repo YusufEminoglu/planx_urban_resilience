@@ -65,10 +65,12 @@ def _safe_float(value, default=None):
         return default
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_SYNTHESIS, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class CriticalInfrastructureExposureAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class CriticalInfrastructureExposureAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_SYNTHESIS
+    ICON = "tool_critical_infrastructure_exposure.png"
     HAZARD = "HAZARD"
     HAZARD_FIELD = "HAZARD_FIELD"
     FACILITIES = "FACILITIES"
@@ -94,12 +96,6 @@ class CriticalInfrastructureExposureAlgorithm(HelpUrlMixin, QgsProcessingAlgorit
 
     def displayName(self):
         return self.tr("Critical Infrastructure Exposure")
-
-    def group(self):
-        return self.tr("8 - Synthesis")
-
-    def groupId(self):
-        return "planx_urban_resilience_synthesis"
 
     def shortHelpString(self):
         return self.tr(

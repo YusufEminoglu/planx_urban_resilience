@@ -45,10 +45,12 @@ def _trend(delta: float, tol: float = 1.0) -> str:
     return "Stable"
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_REPORT, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class ResilienceTimeSeriesAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class ResilienceTimeSeriesAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_REPORT
+    ICON = "tool_resilience_time_series.png"
     EARLIER = "EARLIER"
     LATER = "LATER"
     EARLIER_ID = "EARLIER_ID"
@@ -76,12 +78,6 @@ class ResilienceTimeSeriesAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Resilience Time-Series Tracker")
-
-    def group(self):
-        return self.tr("9 - Report and QA")
-
-    def groupId(self):
-        return "planx_urban_resilience_reporting"
 
     def shortHelpString(self):
         return self.tr(

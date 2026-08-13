@@ -42,10 +42,12 @@ from ._network_graph import (
 )
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_EMERGENCY, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class NetworkCriticalityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class NetworkCriticalityAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_EMERGENCY
+    ICON = "tool_network_criticality.png"
     ROADS = "ROADS"
     ORIGINS = "ORIGINS"
     DESTINATIONS = "DESTINATIONS"
@@ -64,12 +66,6 @@ class NetworkCriticalityAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Network Criticality (edge betweenness proxy)")
-
-    def group(self):
-        return self.tr("5 - Emergency")
-
-    def groupId(self):
-        return "planx_urban_resilience_emergency"
 
     def shortHelpString(self):
         return self.tr(

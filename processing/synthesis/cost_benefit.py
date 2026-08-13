@@ -51,10 +51,12 @@ def _safe_float(value, default=None):
         return default
 
 
-from .._mixins import HelpUrlMixin  # noqa: E402
+from .._mixins import GROUP_SYNTHESIS, GroupMixin, HelpUrlMixin  # noqa: E402
 
 
-class CostBenefitAnalyzerAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
+class CostBenefitAnalyzerAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorithm):
+    GROUP = GROUP_SYNTHESIS
+    ICON = "tool_cost_benefit_analyzer.png"
     INPUT = "INPUT"
     SCORE_FIELD = "SCORE_FIELD"
     UNIT_COST = "UNIT_COST"
@@ -80,12 +82,6 @@ class CostBenefitAnalyzerAlgorithm(HelpUrlMixin, QgsProcessingAlgorithm):
 
     def displayName(self):
         return self.tr("Cost-Benefit Analyzer (planning prioritisation)")
-
-    def group(self):
-        return self.tr("8 - Synthesis")
-
-    def groupId(self):
-        return "planx_urban_resilience_synthesis"
 
     def shortHelpString(self):
         return self.tr(
