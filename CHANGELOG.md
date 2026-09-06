@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.2] - 2026-09-06
+
+- Migrate repository and documentation URLs to GitLab and Cloudflare Pages.
+
 ## [2.1.1] - 2026-08-13
 
 Help-text formatting fix, new main plugin icon, and manual visual polish.
