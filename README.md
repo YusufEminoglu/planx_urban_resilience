@@ -7,7 +7,7 @@
 **City-scale resilience screening for QGIS — 43 Processing tools: seismic, flood, heat, social vulnerability, evacuation, spatial statistics, scenarios, reports.**
 
 [![QGIS](https://img.shields.io/badge/QGIS-3.28%2B-93b023?logo=qgis&logoColor=white)](https://plugins.qgis.org/plugins/planx_urban_resilience/)
-[![Version](https://img.shields.io/github/v/tag/YusufEminoglu/planx_urban_resilience?label=version&color=blue)](https://gitlab.com/geospacephilo/EasyFillet/releases)
+[![Version](https://img.shields.io/github/v/tag/YusufEminoglu/planx_urban_resilience?label=version&color=blue)](https://github.com/YusufEminoglu/planx_urban_resilience/releases)
 [![License](https://img.shields.io/badge/license-GPL--3.0-orange)](LICENSE)
 [![QGIS Plugin Hub](https://img.shields.io/badge/QGIS%20Hub-install-589632?logo=qgis&logoColor=white)](https://plugins.qgis.org/plugins/planx_urban_resilience/)
 [![Documentation](https://img.shields.io/badge/📖_Reference_Manual-43_algorithms-13a0a0)](https://geophilo.com/planx_urban_resilience/)
@@ -293,12 +293,12 @@ This plugin is one of 15 open-source QGIS plugins for urban planning by the same
 
 | Planning & analysis | CAD & production | 3D & visualization |
 |---|---|---|
-| [PlanX](https://gitlab.com/geospacephilo/EasyFillet) — spatial-planning suite | [PlanX CAD Toolset](https://gitlab.com/geospacephilo/EasyFillet) — drafting-grade CAD | [PlanX 3D City](https://gitlab.com/geospacephilo/EasyFillet) — Three.js city viewer |
-| [GeoStats Lab](https://gitlab.com/geospacephilo/EasyFillet) — spatial statistics | [EasyFillet](https://gitlab.com/geospacephilo/EasyFillet) — tangent-arc fillet | [3D OSM Model](https://gitlab.com/geospacephilo/EasyFillet) — OSM → 3D city in browser |
-| [Suitability Lab](https://gitlab.com/geospacephilo/EasyFillet) — raster MCDA | [Settlement Toolset](https://gitlab.com/geospacephilo/EasyFillet) — 9-stage settlement plans | [OSM Quick 3D](https://gitlab.com/geospacephilo/EasyFillet) — OSM → native QGIS 3D |
-| [DataCube Lab](https://gitlab.com/geospacephilo/EasyFillet) — spatiotemporal cubes | [UIP Toolset](https://gitlab.com/geospacephilo/EasyFillet) — Turkish master-plan automation | [Urban Procedural 3D](https://gitlab.com/geospacephilo/EasyFillet) — parametric zoning lab |
-| [Urban Resilience](https://gitlab.com/geospacephilo/EasyFillet) — 43 resilience tools | [ParcelFlux](https://gitlab.com/geospacephilo/EasyFillet) — parcel subdivision | [CartoLab](https://gitlab.com/geospacephilo/EasyFillet) — publication cartography |
+| [PlanX](https://github.com/YusufEminoglu/planx_urban_resilience) — spatial-planning suite | [PlanX CAD Toolset](https://github.com/YusufEminoglu/planx_urban_resilience) — drafting-grade CAD | [PlanX 3D City](https://github.com/YusufEminoglu/planx_urban_resilience) — Three.js city viewer |
+| [GeoStats Lab](https://github.com/YusufEminoglu/planx_urban_resilience) — spatial statistics | [EasyFillet](https://github.com/YusufEminoglu/planx_urban_resilience) — tangent-arc fillet | [3D OSM Model](https://github.com/YusufEminoglu/planx_urban_resilience) — OSM → 3D city in browser |
+| [Suitability Lab](https://github.com/YusufEminoglu/planx_urban_resilience) — raster MCDA | [Settlement Toolset](https://github.com/YusufEminoglu/planx_urban_resilience) — 9-stage settlement plans | [OSM Quick 3D](https://github.com/YusufEminoglu/planx_urban_resilience) — OSM → native QGIS 3D |
+| [DataCube Lab](https://github.com/YusufEminoglu/planx_urban_resilience) — spatiotemporal cubes | [UIP Toolset](https://github.com/YusufEminoglu/planx_urban_resilience) — Turkish master-plan automation | [Urban Procedural 3D](https://github.com/YusufEminoglu/planx_urban_resilience) — parametric zoning lab |
+| [Urban Resilience](https://github.com/YusufEminoglu/planx_urban_resilience) — 43 resilience tools | [ParcelFlux](https://github.com/YusufEminoglu/planx_urban_resilience) — parcel subdivision | [CartoLab](https://github.com/YusufEminoglu/planx_urban_resilience) — publication cartography |
 
 ## 📜 License & author
 
-GPL-3.0 © [Yusuf Eminoğlu](https://github.com/YusufEminoglu) — bug reports and feature requests welcome in [Issues](https://gitlab.com/geospacephilo/EasyFillet/-/issues). See [LICENSE](LICENSE).
+GPL-3.0 © [Yusuf Eminoğlu](https://github.com/YusufEminoglu) — bug reports and feature requests welcome in [Issues](https://github.com/YusufEminoglu/planx_urban_resilience/issues). See [LICENSE](LICENSE).

@@ -4,10 +4,10 @@ email=yusuf.eminoglu@deu.edu.tr
 author=Yusuf Eminoglu
 qgisMinimumVersion=3.28
 description=PlanX urban resilience suite (43 tools): seismic, heat, flood, social, emergency access, evacuation, network criticality, air, drought, synthesis, hot-spot/LISA statistics, risk-recovery matrix, time-series, scenario tools, HTML/Markdown/PDF atlas, symbology.
-about=43 Processing algorithms and a docked Processing panel (colour-grouped, per-tool icons) for city-scale resilience screening: synthetic QA, seismic debris, heat and flood, social vulnerability, Euclidean and network emergency access, evacuation simulation with optional timestep queue, network criticality, air and drought, multi-hazard and equity-adjusted synthesis, climate projection overlay, recovery capacity, scenario sensitivity, risk-recovery priority matrix, time-series tracking, scenario templates, HTML/Markdown/PDF atlas with map-book presets, shelter arrival summaries, and symbology. DEU City and Regional Planning educational workflows. Online User Manual & Documentation: https://geophilo.com/planx_urban_resilience/ | If you find this plugin helpful, please consider starring the repository on GitLab (https://gitlab.com/geospacephilo/planx_urban_resilience)!
+about=43 Processing algorithms and a docked Processing panel (colour-grouped, per-tool icons) for city-scale resilience screening: synthetic QA, seismic debris, heat and flood, social vulnerability, Euclidean and network emergency access, evacuation simulation with optional timestep queue, network criticality, air and drought, multi-hazard and equity-adjusted synthesis, climate projection overlay, recovery capacity, scenario sensitivity, risk-recovery priority matrix, time-series tracking, scenario templates, HTML/Markdown/PDF atlas with map-book presets, shelter arrival summaries, and symbology. DEU City and Regional Planning educational workflows. Online User Manual & Documentation: https://geophilo.com/planx_urban_resilience/ | If you find this plugin helpful, please consider starring the repository on GitHub (https://github.com/YusufEminoglu/planx_urban_resilience)!
 version=2.1.2
-tracker=https://gitlab.com/geospacephilo/planx_urban_resilience/-/issues
-repository=https://gitlab.com/geospacephilo/planx_urban_resilience
+tracker=https://github.com/YusufEminoglu/planx_urban_resilience/issues
+repository=https://github.com/YusufEminoglu/planx_urban_resilience
 
 category=Processing
 tags=planx,urban resilience,drr,seismic,debris,heat,flood,social vulnerability,emergency accessibility,network analysis,air quality,drought,adaptation,scenario planning,scenario comparison,reporting,markdown,symbology,synthetic data,climate,spatial planning,QGIS,processing
