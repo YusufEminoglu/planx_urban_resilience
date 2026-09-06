@@ -10,7 +10,7 @@
 [![Version](https://img.shields.io/github/v/tag/YusufEminoglu/planx_urban_resilience?label=version&color=blue)](https://gitlab.com/geospacephilo/EasyFillet/releases)
 [![License](https://img.shields.io/badge/license-GPL--3.0-orange)](LICENSE)
 [![QGIS Plugin Hub](https://img.shields.io/badge/QGIS%20Hub-install-589632?logo=qgis&logoColor=white)](https://plugins.qgis.org/plugins/planx_urban_resilience/)
-[![Documentation](https://img.shields.io/badge/📖_Reference_Manual-43_algorithms-13a0a0)](https://geophilo.pages.dev/planx_urban_resilience/)
+[![Documentation](https://img.shields.io/badge/📖_Reference_Manual-43_algorithms-13a0a0)](https://geophilo.com/planx_urban_resilience/)
 
 </div>
 
@@ -20,7 +20,7 @@ PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resili
 
 ## 📖 Documentation
 
-**[Comprehensive Academic Reference Manual](https://geophilo.pages.dev/planx_urban_resilience/)** — 43 algorithms across 10 modules. Every algorithm documented with theoretical background, mathematical formulation, complete parameter tables, output field descriptions, QGIS symbolization guidance, interpretation guides, and DOI-verified academic references. Hosted on Web Documentation with search, collapsible sidebar, and per-algorithm deep links accessible directly from the QGIS Processing dialog (Help button).
+**[Comprehensive Academic Reference Manual](https://geophilo.com/planx_urban_resilience/)** — 43 algorithms across 10 modules. Every algorithm documented with theoretical background, mathematical formulation, complete parameter tables, output field descriptions, QGIS symbolization guidance, interpretation guides, and DOI-verified academic references. Hosted on Web Documentation with search, collapsible sidebar, and per-algorithm deep links accessible directly from the QGIS Processing dialog (Help button).
 
 ## Modules
 
@@ -269,7 +269,7 @@ The plugin adds a `PlanX Urban Resilience` toolbar/menu action that opens (or ra
 - A searchable tree of all 43 tools, one entry per algorithm, grouped by hazard/report domain.
 - Each of the 10 groups (Demo and QA, Seismic, Heat, Flood, Social, Emergency, Air, Drought, Synthesis, Report and QA) has its own colour.
 - Every tool has its own icon.
-- Double-click a tool to open its Processing dialog; right-click for documentation (opens the matching page of the [reference manual](https://geophilo.pages.dev/planx_urban_resilience/)).
+- Double-click a tool to open its Processing dialog; right-click for documentation (opens the matching page of the [reference manual](https://geophilo.com/planx_urban_resilience/)).
 - The search box filters the tree live by tool name.
 
 ## Important Limitations
