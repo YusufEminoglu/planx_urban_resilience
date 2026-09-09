@@ -2692,13 +2692,38 @@ document.querySelectorAll('.toc-group-btn').forEach(btn => {
 });
 
 // ── Search ────────────────────────────────────────────────────────
+// data-name/data-display only ever encode the algorithm's id and title, in
+// two spellings -- a query that only matches words inside the algorithm's
+// actual body text (parameters, interpretation notes, etc.) would find
+// nothing. sectionText() walks forward from the linked heading (an id lives
+// on a bare <h2>/<h3>, not a wrapping container) to the next heading of the
+// same-or-higher level and returns everything in between, once, cached.
+const _sectionTextCache = {};
+function sectionText(href) {
+  if (href in _sectionTextCache) return _sectionTextCache[href];
+  const el = href ? document.querySelector(href) : null;
+  let text = '';
+  if (el) {
+    const stopTags = el.tagName === 'H2' ? ['H2'] : ['H2', 'H3'];
+    const parts = [el.textContent];
+    let sib = el.nextElementSibling;
+    while (sib && !stopTags.includes(sib.tagName)) {
+      parts.push(sib.textContent);
+      sib = sib.nextElementSibling;
+    }
+    text = parts.join(' ').toLowerCase();
+  }
+  _sectionTextCache[href] = text;
+  return text;
+}
 const searchInput = document.getElementById('search');
 searchInput.addEventListener('input', () => {
   const query = searchInput.value.toLowerCase().trim();
   document.querySelectorAll('.toc-algs li a').forEach(link => {
     const name = (link.dataset.name || '').toLowerCase();
     const display = (link.dataset.display || '').toLowerCase();
-    const match = !query || name.includes(query) || display.includes(query);
+    const match = !query || name.includes(query) || display.includes(query) ||
+      sectionText(link.getAttribute('href')).includes(query);
     link.classList.toggle('hidden', !match);
   });
   document.querySelectorAll('.toc-group').forEach(group => {
