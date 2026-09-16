@@ -4,15 +4,15 @@ email=yusuf.eminoglu@deu.edu.tr
 author=Yusuf Eminoglu
 qgisMinimumVersion=3.28
 description=PlanX urban resilience suite (43 tools): seismic, heat, flood, social, emergency access, evacuation, network criticality, air, drought, synthesis, hot-spot/LISA statistics, risk-recovery matrix, time-series, scenario tools, HTML/Markdown/PDF atlas, symbology.
-about=43 Processing algorithms and a docked Processing panel (colour-grouped, per-tool icons) for city-scale resilience screening: synthetic QA, seismic debris, heat and flood, social vulnerability, Euclidean and network emergency access, evacuation simulation with optional timestep queue, network criticality, air and drought, multi-hazard and equity-adjusted synthesis, climate projection overlay, recovery capacity, scenario sensitivity, risk-recovery priority matrix, time-series tracking, scenario templates, HTML/Markdown/PDF atlas with map-book presets, shelter arrival summaries, and symbology. DEU City and Regional Planning educational workflows. Online User Manual & Documentation: https://geophilo.com/planx_urban_resilience/ | If you find this plugin helpful, please consider starring the repository on GitLab (https://gitlab.com/geospacephilo/planx_urban_resilience)!
-version=2.1.2
-tracker=https://gitlab.com/geospacephilo/planx_urban_resilience/-/issues
-repository=https://gitlab.com/geospacephilo/planx_urban_resilience
+about=43 Processing algorithms and a docked Processing panel (colour-grouped, per-tool icons) for city-scale resilience screening: synthetic QA, seismic debris, heat and flood, social vulnerability, Euclidean and network emergency access, evacuation simulation with optional timestep queue, network criticality, air and drought, multi-hazard and equity-adjusted synthesis, climate projection overlay, recovery capacity, scenario sensitivity, risk-recovery priority matrix, time-series tracking, scenario templates, HTML/Markdown/PDF atlas with map-book presets, shelter arrival summaries, and symbology. DEU City and Regional Planning educational workflows. Online User Manual & Documentation: https://geophilo.com/planx_urban_resilience/ | If you find this plugin helpful, please consider starring the repository on GitLab (https://gitlab.com/geophilo1/planx_urban_resilience)!
+version=2.1.3
+tracker=https://gitlab.com/geophilo1/planx_urban_resilience/-/issues
+repository=https://gitlab.com/geophilo1/planx_urban_resilience
 
 category=Processing
 tags=planx,urban resilience,drr,seismic,debris,heat,flood,social vulnerability,emergency accessibility,network analysis,air quality,drought,adaptation,scenario planning,scenario comparison,reporting,markdown,symbology,synthetic data,climate,spatial planning,QGIS,processing
 homepage=https://geophilo.com/planx_urban_resilience/
-icon=icons/plugin.svg
+icon=icons/icon.png
 experimental=False
 deprecated=False
 qgisMaximumVersion=4.99
@@ -20,6 +20,7 @@ hasProcessingProvider=yes
 plugin_dependencies=
 license=GPL-3
 changelog=
+    2.1.3 - Upgraded official plugin icon to high-end tactile 3D brand identity with circular teal pedestal; synchronized documentation, repository and issue tracker endpoints to GeoPhilo and GitLab.
     PlanX Urban Resilience 2.1.1 - Help-text formatting fix, new main plugin icon, and manual visual polish.
         - shortHelpString() text for all 43 algorithms reformatted so no sentence is broken by a hard line-wrap: every paragraph is now one continuous logical run (matching the sibling PlanX plugin's own convention), regardless of how the consuming widget handles whitespace. Wording unchanged; only the underlying text layout changed.
         - New main plugin icon (icons/plugin.svg): a shield outline framing a small city skyline with a recovery arc, fully transparent background (replaces the old solid teal-gradient rounded-square tile), bolder strokes for legibility down to 16px toolbar size.
@@ -72,7 +73,7 @@ changelog=
     PlanX Urban Resilience 1.21.0 - Four advanced modules: spatial outliers, hazard cascading, planning economics, criticality overlay.
         - LISA Local Moran's I: companion to Hot-Spot Gi*. Outputs lisa_z, lisa_lag, lisa_I, lisa_pvalue, lisa_quadrant (HH/LL/HL/LH/Not significant). The HL and LH outlier classes are the under-served pockets Gi* cannot expose.
         - Seismic Cascade (Debris -> Network Degradation): pipes seismic debris polygons into the road graph, drops blocked edges, re-runs multi-source Dijkstra and compares pre- vs post-hazard accessibility per origin. Outputs cas_pre_dist, cas_post_dist, cas_delta_dist, reachable flags and a status label (Newly cut off / Always cut off / Worse / Same / Recovered). Genuine cross-domain hazard chain modelling.
-        - Cost-Benefit Analyzer: cost = unit_cost x area; benefit = score x reduction_factor x population. Outputs cb_cost, cb_benefit, cb_ratio, cb_priority_rank. Log prints the cumulative-benefit curve (10/25/50/75/90 %% breakpoints) so planners can find the budget-breakpoint that captures most of the benefit.
+        - Cost-Benefit Analyzer: cost = unit_cost x area; benefit = score x reduction_factor x population. Outputs cb_cost, cb_benefit, cb_ratio, cb_priority_rank. Log prints the cumulative-benefit curve (10/25/50/75/90 percentile breakpoints) so planners can find the budget-breakpoint that captures most of the benefit.
         - Critical Infrastructure Exposure: combines hazard score and facility criticality into a single ci_combined score (0-100). Per-facility ci_hazard, ci_criticality, ci_combined, ci_exposure_class plus top-10 and mean-by-class log breakdown.
         - Provider and dashboard catalog updated.
     PlanX Urban Resilience 1.20.0 - Four new algorithms pushing the suite to elite scientific + planning-actionable level.

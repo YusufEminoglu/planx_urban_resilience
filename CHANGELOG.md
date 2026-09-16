@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.1.3] - 2026-09-17
+
+- Upgraded official plugin icon to high-end tactile 3D brand identity (isometric 45°, slim teal pedestal, full bleed transparent canvas).
+- Synchronized documentation, repository and issue tracker endpoints to GeoPhilo and GitLab.
+
 ## [2.1.2] - 2026-09-06
 
 - Migrate repository and documentation URLs to GitLab and Cloudflare Pages.
