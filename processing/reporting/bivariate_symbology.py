@@ -17,7 +17,6 @@ symbology survives layer-style export.
 """
 from __future__ import annotations
 
-import contextlib
 import math
 
 from qgis.PyQt.QtCore import QVariant
@@ -30,13 +29,14 @@ from qgis.core import (
     QgsFillSymbol,
     QgsProcessing,
     QgsProcessingAlgorithm,
-    QgsProcessingContext,
     QgsProcessingException,
     QgsProcessingParameterFeatureSink,
     QgsProcessingParameterFeatureSource,
     QgsProcessingParameterField,
     QgsRendererCategory,
 )
+
+from .._styling import style_output
 
 
 # Risk (rows, low→high) × Vulnerability (cols, low→high).
@@ -213,30 +213,27 @@ class BivariateSymbologyAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessingAlgorit
             if idx % 25 == 0:
                 feedback.setProgress(int(100 * (idx + 1) / total))
 
-        # Apply renderer to the destination layer (when launched
-        # interactively, layerToLoadOnCompletionDetails picks this up).
-        self._apply_renderer(context, dest_id)
-        feedback.pushInfo("Bivariate renderer applied. Place a 3×3 legend grid in your print layout.")
+        # Style the loaded result, whatever its format: a GeoPackage or
+        # Shapefile output is re-read from disk on load, so styling the
+        # layer held by the context during the run never reached it.
+        if style_output(context, dest_id, apply_bivariate_renderer, feedback):
+            feedback.pushInfo("Bivariate renderer applied. Place a 3×3 legend grid in your print layout.")
         return {self.OUTPUT: dest_id}
 
-    @staticmethod
-    def _apply_renderer(context: QgsProcessingContext, dest_id: str) -> None:
-        # Symbology is a nice-to-have; never let it block output writing.
-        with contextlib.suppress(Exception):
-            layer = context.getMapLayer(dest_id)
-            if layer is None or not hasattr(layer, "setRenderer"):
-                return
-            categories: list = []
-            for r_bin in range(3):
-                for v_bin in range(3):
-                    label = f"R-{AXIS_LABELS[r_bin]}_V-{AXIS_LABELS[v_bin]}"
-                    color = QColor(BIVARIATE_PALETTE[r_bin][v_bin])
-                    symbol = QgsFillSymbol.createSimple({
-                        "color": f"{color.red()},{color.green()},{color.blue()},230",
-                        "outline_color": "60,60,60,200",
-                        "outline_width": "0.2",
-                    })
-                    categories.append(QgsRendererCategory(label, symbol, label))
-            renderer = QgsCategorizedSymbolRenderer("bv_class", categories)
-            layer.setRenderer(renderer)
-            layer.triggerRepaint()
+
+def apply_bivariate_renderer(layer) -> None:
+    """3×3 categorized renderer on ``bv_class`` with the bivariate palette."""
+    if layer is None or not hasattr(layer, "setRenderer"):
+        return
+    categories: list = []
+    for r_bin in range(3):
+        for v_bin in range(3):
+            label = f"R-{AXIS_LABELS[r_bin]}_V-{AXIS_LABELS[v_bin]}"
+            color = QColor(BIVARIATE_PALETTE[r_bin][v_bin])
+            symbol = QgsFillSymbol.createSimple({
+                "color": f"{color.red()},{color.green()},{color.blue()},230",
+                "outline_color": "60,60,60,200",
+                "outline_width": "0.2",
+            })
+            categories.append(QgsRendererCategory(label, symbol, label))
+    layer.setRenderer(QgsCategorizedSymbolRenderer("bv_class", categories))

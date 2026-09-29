@@ -505,6 +505,20 @@ bv = run("bivariate_choropleth_symbology", {
 if bv:
     nonempty(bv, "OUTPUT", "bivariate")
 
+# The renderer must reach the layer QGIS loads, for temporary AND file outputs:
+# styling the context's layer during the run never reached a GeoPackage result.
+for _kind in ("TEMPORARY_OUTPUT", os.path.join(TMP, "bivariate_styled.gpkg")):
+    _before = set(QgsProject.instance().mapLayers())
+    processing.runAndLoadResults(P + "bivariate_choropleth_symbology", {
+        "INPUT": units, "RISK_FIELD": "score", "VULN_FIELD": "svi", "OUTPUT": _kind,
+    })
+    _new = [QgsProject.instance().mapLayer(i)
+            for i in set(QgsProject.instance().mapLayers()) - _before]
+    _r = _new[0].renderer() if _new else None
+    check(_r is not None and _r.type() == "categorizedSymbol"
+          and _r.classAttribute() == "bv_class" and len(_r.categories()) == 9,
+          f"bivariate renderer survives load ({'gpkg' if _kind.endswith('.gpkg') else 'temporary'})")
+
 print("=== 33 hotspot Gi* ===")
 hs = run("hotspot_analysis_getis_ord", {
     "INPUT": units, "VALUE_FIELD": "score", "DISTANCE": 500.0,

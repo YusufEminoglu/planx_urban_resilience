@@ -1,5 +1,16 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+
+- **Bivariate Choropleth Symbology lost its colours when saved to a file.**
+  The 3×3 renderer was set on the layer held by the Processing context, which
+  only is the loaded layer for temporary outputs; a GeoPackage or Shapefile
+  result is re-read from disk and arrived as a plain single symbol. The
+  renderer is now applied to whatever layer QGIS loads. The e2e suite checks
+  both output kinds (the GeoPackage check fails against the old code).
+
 ## [2.1.3] - 2026-09-17
 
 - Upgraded official plugin icon to high-end tactile 3D brand identity (isometric 45°, slim teal pedestal, full bleed transparent canvas).
