@@ -2,6 +2,35 @@
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-10-17
+
+### Added
+
+- **Wildfire / WUI Exposure Screening algorithm** (`processing/wildfire/wui_exposure.py`, ID: `planx_urban_resilience:wui_exposure_screening`):
+  - Integrates wildland fuel proximity and coverage (Radeloff et al., 2005), building-to-vegetation interface density within the radiant heat and ember ignition zone (Cohen, 2000), topographic slope rate-of-spread amplification (Rothermel, 1972), and emergency road egress deficits (Cova, 2005).
+  - Produces complete 0–100 grid scoring, priority WUI zone polygons, and individual exposed interface structure points.
+  - Distinct 256x256 per-tool icon (`icons/tool_wui_exposure_screening.png`).
+- **Coastal / Sea-Level-Rise (SLR) Exposure Screening algorithm** (`processing/coastal/slr_exposure.py`, ID: `planx_urban_resilience:coastal_slr_exposure`):
+  - Implements a hydrologically connected bathtub inundation model (Poulter & Halpin, 2008; Gesch, 2009; IPCC AR6, 2021) with BFS flood-fill connectivity check from the shoreline across 8-connected or 4-connected grid cells, preventing isolated inland topographic depressions from falsely scoring as coastal flooding.
+  - Supports scenario presets (+0.5 m, +1.0 m, +2.0 m, custom) and local tidal datum / MHHW offsets.
+  - Distinct 256x256 per-tool icon (`icons/tool_coastal_slr_exposure.png`).
+- **Synthesis & reporting cross-hazard integration**:
+  - `climate_adaptation_priority_synthesis`: added optional `WUI_FIELD` (`WEIGHT_WUI`) and `COASTAL_FIELD` (`WEIGHT_COASTAL`) parameters so all 8 hazard domains participate in multi-criteria synthesis.
+  - `recommended_actions_report`: added curated intervention checklists for `wildfire` and `coastal` hazard categories.
+
+### Changed
+
+- **Brand-new official 3D isometric plugin icon** (`icons/icon.png`):
+  - Deep-teal circular plinth, tactile architectural urban diorama, layered green/blue infrastructure, and multi-hazard resilience shields, matching `02cadgis`, `02geo3d`, and `planx_geostats` design guidelines.
+- **Docked Processing Panel enhancements** (`urban_resilience_dock.py`):
+  - Added 1-click **Demo Dataset** launcher button opening the synthetic data generator instantly.
+  - Added **Expand All** and **Collapse All** utility buttons.
+  - Added live tool count badge (`Showing 45 / 45 tools across 10 domains`) responsive to search filters.
+  - Upgraded context menu with **Run Tool...**, **Copy Algorithm ID**, and **View Documentation** actions.
+  - Verified WCAG contrast >= 5.4 across all widgets under both dark and default host palettes.
+- **Documentation**:
+  - Expanded `docs/URBAN_RESILIENCE_REFERENCE_MANUAL.html` with academic lineage, mathematical formulations, parameters, and interpretation guides for both new algorithms under `#wui_exposure_screening` and `#coastal_slr_exposure`.
+
 ## [2.1.4] - 2026-09-29
 
 ### Fixed

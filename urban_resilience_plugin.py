@@ -27,7 +27,7 @@ class PlanXUrbanResiliencePlugin:
         if not self.iface:
             return
         icon = self.provider.icon() if self.provider else QIcon(
-            os.path.join(os.path.dirname(__file__), "icons", "plugin.svg")
+            os.path.join(os.path.dirname(__file__), "icons", "icon.png")
         )
         self.dock = UrbanResilienceDock(self.iface)
         self.iface.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.dock)

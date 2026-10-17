@@ -46,7 +46,9 @@ from .synthesis.vulnerability_surface_idw import VulnerabilitySurfaceIDWAlgorith
 from .reporting.correlation_matrix import CorrelationMatrixAlgorithm
 from .synthesis.risk_trend_hotspot import RiskTrendHotspotAlgorithm
 from .accessibility.optimal_shelter_siting import OptimalShelterSitingAlgorithm
+from .coastal.slr_exposure import CoastalSlrExposureAlgorithm
 from .synthesis.lifecycle_cost import LifecycleCostAlgorithm
+from .wildfire.wui_exposure import WildfireWuiExposureAlgorithm
 
 
 class PlanXUrbanResilienceProvider(QgsProcessingProvider):
@@ -55,11 +57,13 @@ class PlanXUrbanResilienceProvider(QgsProcessingProvider):
         self.addAlgorithm(UrbanResilienceSeismicAnalystV2())
         self.addAlgorithm(UrbanHeatComfortRiskAlgorithm())
         self.addAlgorithm(PluvialFloodSusceptibilityAlgorithm())
+        self.addAlgorithm(CoastalSlrExposureAlgorithm())
         self.addAlgorithm(SocialVulnerabilityIndexAlgorithm())
         self.addAlgorithm(EmergencyAccessibilityAlgorithm())
         self.addAlgorithm(NetworkEmergencyAccessibilityAlgorithm())
         self.addAlgorithm(AirQualityExposureAlgorithm())
         self.addAlgorithm(GreenInfrastructureStressAlgorithm())
+        self.addAlgorithm(WildfireWuiExposureAlgorithm())
         self.addAlgorithm(AdaptationPrioritySynthesisAlgorithm())
         self.addAlgorithm(MultiHazardCompositeAlgorithm())
         self.addAlgorithm(EquityAdjustedPriorityAlgorithm())
@@ -102,5 +106,8 @@ class PlanXUrbanResilienceProvider(QgsProcessingProvider):
         return "PlanX: Urban Resilience"
 
     def icon(self):
-        icon_path = os.path.join(os.path.dirname(__file__), "..", "icons", "plugin.svg")
-        return QIcon(icon_path)
+        png_path = os.path.join(os.path.dirname(__file__), "..", "icons", "icon.png")
+        if os.path.exists(png_path):
+            return QIcon(png_path)
+        svg_path = os.path.join(os.path.dirname(__file__), "..", "icons", "plugin.svg")
+        return QIcon(svg_path)

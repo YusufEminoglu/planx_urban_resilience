@@ -660,6 +660,26 @@ if lc:
         check(abs(f1["lc_opex_npv"] - opex_npv) < 1.0,
               f"lifecycle: opex NPV ~{opex_npv:.0f} (got {f1['lc_opex_npv']})")
 
+print("=== 45 wildfire WUI exposure ===")
+wui = run("wui_exposure_screening", {
+    "STUDY_AREA": study, "VEGETATION": green, "BUILDINGS": buildings,
+    "ROADS": roads, "DEM": dem, "CELL_SIZE": 100.0,
+    "OUTPUT_GRID": "TEMPORARY_OUTPUT", "OUTPUT_PRIORITY": "TEMPORARY_OUTPUT",
+    "OUTPUT_EXPOSED": "TEMPORARY_OUTPUT",
+}, "wildfire WUI exposure")
+if wui:
+    nonempty(wui, "OUTPUT_GRID", "wui")
+
+print("=== 46 coastal SLR exposure ===")
+slr = run("coastal_slr_exposure", {
+    "STUDY_AREA": study, "DEM": dem, "COASTLINE": water, "BUILDINGS": buildings,
+    "ROADS": roads, "SCENARIO_PRESET": 1, "CELL_SIZE": 100.0,
+    "OUTPUT_GRID": "TEMPORARY_OUTPUT", "OUTPUT_PRIORITY": "TEMPORARY_OUTPUT",
+    "OUTPUT_EXPOSED": "TEMPORARY_OUTPUT",
+}, "coastal SLR exposure")
+if slr:
+    nonempty(slr, "OUTPUT_GRID", "slr")
+
 print()
 print("=" * 60)
 print(f"PASSED algorithms: {len(passed)}")

@@ -205,10 +205,11 @@ h3[id]:hover .anchor-copy, .anchor-copy:focus { opacity: 1; }
 </ul></li>
 <li class="toc-group">
 <button class="toc-group-btn" aria-expanded="true" style="border-left:4px solid #1e88e5; background: linear-gradient(90deg, #1e88e518 0%, transparent 100%)">
-<span class="arrow">▼</span> 3. Flood: Pluvial Susceptibility
+<span class="arrow">▼</span> 3. Flood &amp; Coastal: Pluvial &amp; SLR Susceptibility
 </button>
 <ul class="toc-algs">
 <li><a href="#pluvial_flood_susceptibility" data-name="pluvialfloodsusceptibility" data-display="pluvial flood susceptibility">Pluvial Flood Susceptibility</a></li>
+<li><a href="#coastal_slr_exposure" data-name="coastalsealevelriseexposure" data-display="coastal / sea-level-rise exposure">Coastal / Sea-Level-Rise (SLR) Exposure</a></li>
 </ul></li>
 <li class="toc-group">
 <button class="toc-group-btn" aria-expanded="true" style="border-left:4px solid #8e24aa; background: linear-gradient(90deg, #8e24aa18 0%, transparent 100%)">
@@ -239,10 +240,11 @@ h3[id]:hover .anchor-copy, .anchor-copy:focus { opacity: 1; }
 </ul></li>
 <li class="toc-group">
 <button class="toc-group-btn" aria-expanded="true" style="border-left:4px solid #6d4c41; background: linear-gradient(90deg, #6d4c4118 0%, transparent 100%)">
-<span class="arrow">▼</span> 7. Drought: Green Infrastructure
+<span class="arrow">▼</span> 7. Drought &amp; Wildfire: Green &amp; WUI Stress
 </button>
 <ul class="toc-algs">
 <li><a href="#green_infrastructure_drought_stress" data-name="drought&greeninfrastructurestress" data-display="drought & green infrastructure stress">Drought & Green Infrastructure Stress</a></li>
+<li><a href="#wui_exposure_screening" data-name="wildfirewuiexposurescreening" data-display="wildfire / wui exposure screening">Wildfire / WUI Exposure Screening</a></li>
 </ul></li>
 <li class="toc-group">
 <button class="toc-group-btn" aria-expanded="true" style="border-left:4px solid #00897b; background: linear-gradient(90deg, #00897b18 0%, transparent 100%)">
@@ -657,6 +659,42 @@ $$D = 100\left(1 - \frac{dist_{\text{drain}}}{\max(4r, 1.0)}\right) \quad \text{
 <!-- ================================================================================================= -->
 <h2 id="g4">4. Social: Vulnerability &amp; Equity</h2>
 <p>The Social group provides a weighted social vulnerability index (SVI) following the Cutter et al. (2003) framework. It normalises neighbourhood- or census-polygon indicators (elderly, children, disability, low-income, population density) to 0–100 and combines them with user-controlled weights. Missing data fields are flagged but do not block the computation.</p>
+
+
+<h3 id="coastal_slr_exposure"><img class="tool-icon" src="icons/tool_coastal_slr_exposure.png" alt="" loading="lazy">Coastal / Sea-Level-Rise (SLR) Exposure Screening</h3>
+<p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:coastal_slr_exposure</code></p>
+
+<h4>1. Overview</h4>
+<p>Evaluates coastal inundation and sea-level-rise (SLR) plus storm-surge exposure using a hydrologically connected bathtub flood-fill model. Unlike naive elevation slicing which erroneously flags isolated inland depressions below sea level, this algorithm executes a breadth-first search (BFS) connectivity propagation from the coastline across 8-connected or 4-connected grid cells. It outputs connected inundation depth, wave/surge proximity exposure, and flags isolated low-lying sinks.</p>
+
+<h4>2. Theoretical Background</h4>
+<p><b>Academic lineage.</b> Poulter &amp; Halpin (2008) demonstrated that hydrologically connected models prevent substantial over-prediction of coastal flooding compared to unconditional bathtub models. Gesch (2009) established best practices for vertical uncertainty in coastal digital elevation models. The scenario levels (+0.5 m, +1.0 m, +2.0 m) align with IPCC AR6 (2021) sea-level rise projections under intermediate and high emissions pathways combined with tidal datums (MHHW) and extreme storm surge heights.</p>
+<p><b>Connectivity mechanics.</b> Grid cells below total design water level ($WL = WL_{scenario} + MHHW_{offset}$) that touch the shoreline are seeded into a FIFO queue. Connected submergence propagates to adjacent submerged cells. Disconnected depressions are assigned <code>connected = 0</code> and received discounted scores to reflect potential groundwater/pluvial ponding rather than open ocean inundation.</p>
+
+<h4>3. Parameters &amp; Usage</h4>
+<ul>
+<li><code>STUDY_AREA</code> (Polygon): Area of interest boundary.</li>
+<li><code>DEM</code> (Raster): Coastal digital elevation model in metres.</li>
+<li><code>COASTLINE</code> (Line or Polygon): Shoreline, marine water body, or open ocean boundary.</li>
+<li><code>BUILDINGS</code> (Optional Polygon/Point): Coastal building footprints or structures.</li>
+<li><code>ROADS</code> (Optional Line): Road network for infrastructure vulnerability.</li>
+<li><code>SCENARIO_PRESET</code> (Enum): +0.5 m (IPCC AR6 Low-Int 2100), +1.0 m (IPCC AR6 High 2100), +2.0 m (Extreme SLR + 100-yr Storm Surge), or Custom.</li>
+<li><code>WATER_LEVEL_M</code> (Double, default 1.0 m): Custom water level above datum.</li>
+<li><code>MHHW_OFFSET_M</code> (Double, default 0.0 m): Mean Higher High Water or local tidal offset.</li>
+<li><code>CONNECTIVITY_RULE</code> (Enum): 8-connected (cardinal + diagonal) or 4-connected (cardinal only).</li>
+<li><code>CELL_SIZE</code> (Double, default 100.0 m): Analysis grid cell resolution.</li>
+<li><code>NEAR_SHORE_BUFFER_M</code> (Double, default 250.0 m): Proximity zone for wave action and wave runup.</li>
+</ul>
+
+<h4>4. Output Layers</h4>
+<ul>
+<li><code>OUTPUT_GRID</code> (Polygon): Complete regular grid carrying <code>elev_m</code>, <code>water_lvl_m</code>, <code>inund_m</code>, <code>freeboard_m</code>, <code>sink_depth</code>, <code>connected</code>, <code>coast_dist</code>, <code>slr_score</code> (0-100), and <code>risk_class</code>.</li>
+<li><code>OUTPUT_PRIORITY</code> (Polygon): Cells with hydrologic connection (<code>connected = 1</code>) or acute SLR scores (>= 55).</li>
+<li><code>OUTPUT_EXPOSED</code> (Point): Impacted coastal structures with depth and connectivity attributes.</li>
+</ul>
+
+<h4>5. Interpretation &amp; Practice</h4>
+<p>Use this tool to delineate high-hazard coastal retreat and living shoreline priority corridors. Feed the resulting priority zones into Recommended Actions to generate nature-based coastal defense interventions.</p>
 
 <h3 id="social_vulnerability_index"><img class="tool-icon" src="icons/tool_social_vulnerability_index.png" alt="" loading="lazy">Social Vulnerability Index (screening)</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:social_vulnerability_index</code></p>
@@ -1190,6 +1228,42 @@ $$T = \text{clamp}(100 - \text{tree\_count} \times 10) \quad \text{(low-tree-den
 <!-- ================================================================================================= -->
 <h2 id="g8">8. Synthesis: Multi-Hazard, Adaptation &amp; Priority</h2>
 <p>The Synthesis group is the intellectual core of the suite — 16 algorithms that compose, compare, prioritise, and stress-test resilience scores. They fall into four sub-themes: <b>spatial joins</b> (Join Scores to Planning Units brings hazard-layer outputs onto a common polygon layer), <b>composite indices</b> (Climate Adaptation Priority, Multi-Hazard Composite, Recovery Capacity, Hazard Frequency), <b>equity and climate adjustment</b> (Equity-Adjusted Priority, Climate Projection Overlay), and <b>prioritisation</b> (Risk-Recovery Matrix, Scenario Sensitivity, Population-Weighted Exposure, Critical Infrastructure Exposure, Vulnerability Surface IDW).</p>
+
+
+<h3 id="wui_exposure_screening"><img class="tool-icon" src="icons/tool_wui_exposure_screening.png" alt="" loading="lazy">Wildfire / WUI Exposure Screening</h3>
+<p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:wui_exposure_screening</code></p>
+
+<h4>1. Overview</h4>
+<p>Screens urban and suburban planning areas for Wildland-Urban Interface (WUI) wildfire vulnerability. Combines wildland fuel proximity and coverage, structure-to-vegetation interface density within the radiant heat and ember zone, topographic slope rate-of-spread amplification, and emergency evacuation egress deficits.</p>
+
+<h4>2. Theoretical Background</h4>
+<p><b>Academic lineage.</b> Radeloff et al. (2005) established the federal and academic standard for WUI classification based on housing density and wildland vegetation proximity. Cohen (2000) demonstrated through thermal modelling that home ignition during wildfires is governed by radiant heat within 30-100 m and ember penetration. Rothermel (1972) established the mathematical foundation for topographic slope amplification where rate of spread increases exponentially on steep uphill terrain. Cova (2005) proved that limited emergency egress corridors severely amplify loss-of-life risk during sudden wildfire evacuations.</p>
+<p><b>Mathematical formulation.</b> For each cell:
+$$S_{wui} = \frac{w_{fuel} S_{fuel} + w_{inter} S_{inter} + w_{slope} S_{slope} + w_{egress} S_{egress}}{\sum w}$$
+Where slope is calculated via finite differences on the DEM (scaled across 0-35% slope), fuel proximity is scaled within <code>WUI_BUFFER</code>, and egress distance measures euclidean distance to the nearest road outlet.</p>
+
+<h4>3. Parameters &amp; Usage</h4>
+<ul>
+<li><code>STUDY_AREA</code> (Polygon): Analysis boundary.</li>
+<li><code>VEGETATION</code> (Polygon): Wildland, forest, or high-fuel biomass patches.</li>
+<li><code>BUILDINGS</code> (Optional Polygon/Point): Urban and suburban structures.</li>
+<li><code>ROADS</code> (Optional Line): Emergency egress and access network.</li>
+<li><code>DEM</code> (Optional Raster): Elevation raster for slope calculation (falls back gracefully to neutral 50.0 when omitted).</li>
+<li><code>CELL_SIZE</code> (Double, default 100.0 m): Analysis cell dimensions.</li>
+<li><code>WUI_BUFFER</code> (Double, default 300.0 m): Structure-vegetation radiant and ember interface boundary.</li>
+<li><code>MAX_EGRESS_DIST</code> (Double, default 400.0 m): Maximum acceptable walking or driving distance to an egress route.</li>
+<li><code>WEIGHT_FUEL</code>, <code>WEIGHT_INTERFACE</code>, <code>WEIGHT_SLOPE</code>, <code>WEIGHT_EGRESS</code>: User-calibrated multi-criteria weights.</li>
+</ul>
+
+<h4>4. Output Layers</h4>
+<ul>
+<li><code>OUTPUT_GRID</code> (Polygon): Complete grid with <code>fuel_share</code>, <code>fuel_dist_m</code>, <code>wui_bldg_n</code>, <code>slope_pct</code>, <code>egress_m</code>, <code>wui_score</code> (0-100), and <code>risk_class</code>.</li>
+<li><code>OUTPUT_PRIORITY</code> (Polygon): High and Very High WUI exposure zones (wui_score >= 60).</li>
+<li><code>OUTPUT_EXPOSED</code> (Point): Individual structures located within the direct radiant/ember exposure buffer.</li>
+</ul>
+
+<h4>5. Interpretation &amp; Practice</h4>
+<p>Prioritise priority zones for defensible-space bylaws, fuel reduction thinning, ember-resistant roofing codes, and redundant egress road construction.</p>
 
 <h3 id="join_scores_to_planning_units"><img class="tool-icon" src="icons/tool_join_scores_to_planning_units.png" alt="" loading="lazy">Join Hazard Scores to Planning Units</h3>
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:join_scores_to_planning_units</code></p>

@@ -44,12 +44,16 @@ class AdaptationPrioritySynthesisAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessi
     AIR_FIELD = "AIR_FIELD"
     ACCESS_FIELD = "ACCESS_FIELD"
     DROUGHT_FIELD = "DROUGHT_FIELD"
+    WUI_FIELD = "WUI_FIELD"
+    COASTAL_FIELD = "COASTAL_FIELD"
     WEIGHT_HEAT = "WEIGHT_HEAT"
     WEIGHT_FLOOD = "WEIGHT_FLOOD"
     WEIGHT_SOCIAL = "WEIGHT_SOCIAL"
     WEIGHT_AIR = "WEIGHT_AIR"
     WEIGHT_ACCESS = "WEIGHT_ACCESS"
     WEIGHT_DROUGHT = "WEIGHT_DROUGHT"
+    WEIGHT_WUI = "WEIGHT_WUI"
+    WEIGHT_COASTAL = "WEIGHT_COASTAL"
     OUTPUT = "OUTPUT"
 
     def tr(self, string):
@@ -68,14 +72,14 @@ class AdaptationPrioritySynthesisAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessi
         return self.tr(
             "<h3>Climate Adaptation Priority Synthesis</h3> <p>Linear weighted-sum multi-criteria "
             "composite - the simplest, most transparent form of MCDA, following the same additive "
-            "aggregation logic as the ISO 14044 lifecycle-impact convention. Combines up to six 0-100 "
-            "hazard fields (heat, flood, social, air, access, drought) with defaults "
-            "(0.20/0.20/0.20/0.15/0.15/0.10) chosen so no single hazard dominates by construction - "
+            "aggregation logic as the ISO 14044 lifecycle-impact convention. Combines up to eight 0-100 "
+            "hazard fields (heat, flood, social, air, access, drought, wildfire/WUI, coastal/SLR) with "
+            "auditable weights chosen so no single hazard dominates by construction - "
             "the weights are the explicit, auditable policy choice.</p> <p>Linear weighted-sum means "
             "full compensability: a very low flood score can offset a very high heat score. Missing "
             "fields are excluded and their weight redistributed across present fields - a unit with "
-            "only 2 of 6 fields still gets a score, but check the missing field before treating it as "
-            "equally reliable to a fully-populated unit. All six inputs must already be on a common "
+            "only 2 of 8 fields still gets a score, but check the missing field before treating it as "
+            "equally reliable to a fully-populated unit. All inputs must already be on a common "
             "0-100 scale; this tool performs no normalisation.</p> <p>How to read the results - "
             "adapt_score: the composite ranking number, 0-100. - adapt_class: Immediate (&gt;=75) / "
             "High (55-74) / Medium (35-54) / Monitor (&lt;35). - drivers: which hazard(s) actually "
@@ -100,6 +104,8 @@ class AdaptationPrioritySynthesisAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessi
             (self.AIR_FIELD, "Air exposure score field (optional)"),
             (self.ACCESS_FIELD, "Accessibility deficit score field (optional)"),
             (self.DROUGHT_FIELD, "Green infrastructure stress score field (optional)"),
+            (self.WUI_FIELD, "Wildfire / WUI exposure score field (optional)"),
+            (self.COASTAL_FIELD, "Coastal / SLR exposure score field (optional)"),
         ):
             self.addParameter(QgsProcessingParameterField(key, self.tr(label), parentLayerParameterName=self.UNITS, optional=True, type=QgsProcessingParameterField.Numeric))
         for key, label, default in (
@@ -109,6 +115,8 @@ class AdaptationPrioritySynthesisAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessi
             (self.WEIGHT_AIR, "Air exposure weight", 0.15),
             (self.WEIGHT_ACCESS, "Accessibility deficit weight", 0.15),
             (self.WEIGHT_DROUGHT, "Green infrastructure stress weight", 0.10),
+            (self.WEIGHT_WUI, "Wildfire / WUI exposure weight", 0.15),
+            (self.WEIGHT_COASTAL, "Coastal / SLR exposure weight", 0.15),
         ):
             self.addParameter(QgsProcessingParameterNumber(key, self.tr(label), QgsProcessingParameterNumber.Double, defaultValue=default, minValue=0.0, maxValue=1.0))
         self.addParameter(QgsProcessingParameterFeatureSink(self.OUTPUT, self.tr("Climate adaptation priority layer")))
@@ -122,6 +130,8 @@ class AdaptationPrioritySynthesisAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessi
             "air": self.parameterAsString(parameters, self.AIR_FIELD, context),
             "access": self.parameterAsString(parameters, self.ACCESS_FIELD, context),
             "drought": self.parameterAsString(parameters, self.DROUGHT_FIELD, context),
+            "wildfire": self.parameterAsString(parameters, self.WUI_FIELD, context),
+            "coastal": self.parameterAsString(parameters, self.COASTAL_FIELD, context),
         }
         weights = {
             "heat": self.parameterAsDouble(parameters, self.WEIGHT_HEAT, context),
@@ -130,6 +140,8 @@ class AdaptationPrioritySynthesisAlgorithm(HelpUrlMixin, GroupMixin, QgsProcessi
             "air": self.parameterAsDouble(parameters, self.WEIGHT_AIR, context),
             "access": self.parameterAsDouble(parameters, self.WEIGHT_ACCESS, context),
             "drought": self.parameterAsDouble(parameters, self.WEIGHT_DROUGHT, context),
+            "wildfire": self.parameterAsDouble(parameters, self.WEIGHT_WUI, context),
+            "coastal": self.parameterAsDouble(parameters, self.WEIGHT_COASTAL, context),
         }
 
         out_fields = QgsFields()

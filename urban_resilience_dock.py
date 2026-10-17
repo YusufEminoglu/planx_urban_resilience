@@ -14,6 +14,7 @@ import os
 from qgis.PyQt.QtCore import Qt, QUrl
 from qgis.PyQt.QtGui import QBrush, QColor, QDesktopServices, QIcon, QPixmap
 from qgis.PyQt.QtWidgets import (
+    QApplication,
     QDockWidget,
     QHBoxLayout,
     QLabel,
@@ -45,7 +46,8 @@ QLabel#urbanResilienceHeader {
     color: white; font-weight: bold; font-size: 13px;
     padding: 10px 12px; border-radius: 6px;
 }
-QLabel#urbanResilienceHint { color: #64748b; font-size: 11px; }
+QLabel#urbanResilienceHint { color: #475569; font-size: 11px; }
+QLabel#urbanResilienceCount { color: #334155; font-size: 11px; font-weight: bold; }
 QLineEdit#urbanResilienceSearch {
     background: #ffffff; color: #243044;
     border: 1px solid #cbd5e1; border-radius: 6px;
@@ -61,9 +63,19 @@ QTreeWidget::item { padding: 3px 2px; }
 QTreeWidget::item:selected { background: #e6f4f2; color: #0f766e; }
 QPushButton#urbanResilienceDocBtn {
     background: #0f766e; color: white; font-weight: bold;
-    border: none; border-radius: 4px; padding: 6px 12px;
+    border: none; border-radius: 4px; padding: 6px 10px;
 }
 QPushButton#urbanResilienceDocBtn:hover { background: #0d9488; }
+QPushButton#urbanResilienceDemoBtn {
+    background: #1d4ed8; color: white; font-weight: bold;
+    border: none; border-radius: 4px; padding: 6px 10px;
+}
+QPushButton#urbanResilienceDemoBtn:hover { background: #2563eb; }
+QPushButton#urbanResilienceUtilBtn {
+    background: #e2e8f0; color: #1e293b; font-weight: bold;
+    border: 1px solid #cbd5e1; border-radius: 4px; padding: 4px 8px; font-size: 11px;
+}
+QPushButton#urbanResilienceUtilBtn:hover { background: #cbd5e1; }
 QToolTip {
     background: #102027; color: #ffffff;
     border: 1px solid #102027; padding: 4px 6px;
@@ -95,25 +107,51 @@ class UrbanResilienceDock(QDockWidget):
         header.setObjectName("urbanResilienceHeader")
         layout.addWidget(header)
 
-        hint = QLabel("Double-click a tool to run it. Right-click for documentation.")
+        hint = QLabel("Double-click a tool to run it. Right-click for Run, Copy ID, or Documentation.")
         hint.setObjectName("urbanResilienceHint")
         hint.setWordWrap(True)
         layout.addWidget(hint)
 
         doc_row = QHBoxLayout()
-        doc_btn = QPushButton("\U0001F4D6 Open Reference Manual")
+        doc_btn = QPushButton("\U0001F4D6 Reference Manual")
         doc_btn.setObjectName("urbanResilienceDocBtn")
         doc_btn.setToolTip("Open the comprehensive academic reference manual (GitHub Pages)")
         doc_btn.clicked.connect(lambda: QDesktopServices.openUrl(QUrl(DOC_BASE_URL)))
         doc_row.addWidget(doc_btn)
+
+        demo_btn = QPushButton("\U0001F9EA Demo Dataset")
+        demo_btn.setObjectName("urbanResilienceDemoBtn")
+        demo_btn.setToolTip("Launch the Synthetic Resilience Demo Dataset generator")
+        demo_btn.clicked.connect(
+            lambda: self._launch_alg_id(f"{PROVIDER_ID}:synthetic_resilience_demo_dataset")
+        )
+        doc_row.addWidget(demo_btn)
         layout.addLayout(doc_row)
 
         self.search = QLineEdit()
         self.search.setObjectName("urbanResilienceSearch")
-        self.search.setPlaceholderText("Search tools...")
+        self.search.setPlaceholderText("Search 45 tools by name, domain, or ID...")
         self.search.setClearButtonEnabled(True)
         self.search.textChanged.connect(self._filter)
         layout.addWidget(self.search)
+
+        ctrl_row = QHBoxLayout()
+        self.count_label = QLabel("")
+        self.count_label.setObjectName("urbanResilienceCount")
+        ctrl_row.addWidget(self.count_label, 1)
+
+        expand_btn = QPushButton("Expand All")
+        expand_btn.setObjectName("urbanResilienceUtilBtn")
+        expand_btn.setToolTip("Expand all hazard domain groups")
+        expand_btn.clicked.connect(lambda: self.tree.expandAll())
+        ctrl_row.addWidget(expand_btn)
+
+        collapse_btn = QPushButton("Collapse All")
+        collapse_btn.setObjectName("urbanResilienceUtilBtn")
+        collapse_btn.setToolTip("Collapse all hazard domain groups")
+        collapse_btn.clicked.connect(lambda: self.tree.collapseAll())
+        ctrl_row.addWidget(collapse_btn)
+        layout.addLayout(ctrl_row)
 
         self.tree = QTreeWidget()
         self.tree.setHeaderHidden(True)
@@ -125,25 +163,30 @@ class UrbanResilienceDock(QDockWidget):
         body.setStyleSheet(_QSS)
         self.setWidget(body)
 
+        self._total_tools = 0
         self._populate()
 
     # ------------------------------------------------------------------ #
     def _populate(self):
         self.tree.clear()
+        self._total_tools = 0
         provider = QgsApplication.processingRegistry().providerById(PROVIDER_ID)
         if provider is None:
             self.tree.addTopLevelItem(
                 QTreeWidgetItem(["PlanX Urban Resilience provider not loaded"]))
+            self.count_label.setText("Provider not loaded")
             return
-        fallback = QIcon(os.path.join(PLUGIN_DIR, "icons", "plugin.svg"))
+        fallback = QIcon(os.path.join(PLUGIN_DIR, "icons", "icon.png"))
         by_group_id = {}
         for alg in provider.algorithms():
             by_group_id.setdefault(alg.groupId(), []).append(alg)
+        group_count = 0
         for display_name, group_id, color1, _color2 in ALL_GROUPS:
             algs = by_group_id.get(group_id, [])
             if not algs:
                 continue
-            parent = QTreeWidgetItem([display_name])
+            group_count += 1
+            parent = QTreeWidgetItem([f"{display_name} ({len(algs)})"])
             parent.setIcon(0, _swatch_icon(color1))
             font = parent.font(0)
             font.setBold(True)
@@ -151,6 +194,7 @@ class UrbanResilienceDock(QDockWidget):
             parent.setForeground(0, QBrush(QColor(color1)))
             self.tree.addTopLevelItem(parent)
             for alg in sorted(algs, key=lambda a: a.displayName()):
+                self._total_tools += 1
                 item = QTreeWidgetItem([alg.displayName()])
                 try:
                     icon = alg.icon()
@@ -161,18 +205,27 @@ class UrbanResilienceDock(QDockWidget):
                 item.setData(0, Qt.ItemDataRole.UserRole, alg.id())
                 parent.addChild(item)
             parent.setExpanded(True)
+        self.count_label.setText(
+            f"Showing {self._total_tools} / {self._total_tools} tools ({group_count} domains)"
+        )
 
     # ------------------------------------------------------------------ #
-    def _launch(self, item, _column):
-        alg_id = item.data(0, Qt.ItemDataRole.UserRole)
+    def _launch_alg_id(self, alg_id: str):
         if not alg_id:
             return
         try:
             import processing
             processing.execAlgorithmDialog(alg_id, {})
         except Exception as exc:
-            self.iface.messageBar().pushWarning(
-                "PlanX Urban Resilience", f"Could not open tool: {exc}")
+            if self.iface:
+                self.iface.messageBar().pushWarning(
+                    "PlanX Urban Resilience", f"Could not open tool: {exc}")
+
+    def _launch(self, item, _column):
+        alg_id = item.data(0, Qt.ItemDataRole.UserRole)
+        if not alg_id:
+            return
+        self._launch_alg_id(alg_id)
 
     def _context_menu(self, pos):
         item = self.tree.itemAt(pos)
@@ -185,22 +238,46 @@ class UrbanResilienceDock(QDockWidget):
         if alg is None:
             return
         menu = QMenu(self)
+        run_action = menu.addAction("Run Tool...")
+        run_action.triggered.connect(lambda: self._launch_alg_id(alg_id))
+        copy_action = menu.addAction("Copy Algorithm ID")
+        copy_action.triggered.connect(lambda: QApplication.clipboard().setText(alg_id))
+        menu.addSeparator()
         help_action = menu.addAction("View Documentation")
         help_action.triggered.connect(
             lambda: QDesktopServices.openUrl(QUrl(alg.helpUrl())))
-        menu.exec_(self.tree.viewport().mapToGlobal(pos))
+        exec_fn = getattr(menu, "exec", None) or getattr(menu, "exec_", None)
+        if exec_fn:
+            exec_fn(self.tree.viewport().mapToGlobal(pos))
 
     # ------------------------------------------------------------------ #
     def _filter(self, text: str):
         needle = text.strip().lower()
+        visible_count = 0
+        visible_groups = 0
         for i in range(self.tree.topLevelItemCount()):
             group_item = self.tree.topLevelItem(i)
+            group_text = group_item.text(0).lower()
             any_visible = False
             for j in range(group_item.childCount()):
                 child = group_item.child(j)
-                visible = not needle or needle in child.text(0).lower()
+                alg_id = str(child.data(0, Qt.ItemDataRole.UserRole) or "").lower()
+                visible = (
+                    not needle
+                    or needle in child.text(0).lower()
+                    or needle in alg_id
+                    or needle in group_text
+                )
                 child.setHidden(not visible)
-                any_visible = any_visible or visible
+                if visible:
+                    visible_count += 1
+                    any_visible = True
             group_item.setHidden(not any_visible)
-            if needle:
+            if any_visible:
+                visible_groups += 1
+            if needle and any_visible:
                 group_item.setExpanded(True)
+        self.count_label.setText(
+            f"Showing {visible_count} / {self._total_tools} tools ({visible_groups} domains)"
+        )
+

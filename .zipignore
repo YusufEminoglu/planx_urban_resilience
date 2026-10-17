@@ -4,6 +4,9 @@ setup.cfg
 ENHANCEMENT_PLAN_v1.26.md
 DEEPSEEK_PROMPT_v1.26.txt
 REPORT_v1.26.md
+ENHANCEMENT_PLAN_v2.2.md
+REPORT_v2.2.md
+scratch
 
 # Repository-only content, not part of the installed plugin.
 #

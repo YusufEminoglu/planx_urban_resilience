@@ -71,6 +71,18 @@ INTERVENTION_CATALOG = {
         "Establish redundant access corridors to underserved clusters.",
         "Procurement of mobile emergency assets for last-mile coverage.",
     ],
+    "wildfire": [
+        "Enforce 30-100 m defensible-space fuel breaks along WUI parcel boundaries.",
+        "Mandate ember-resistant roofing, vents, and non-combustible siding in WUI zones.",
+        "Establish secondary emergency egress roads for single-outlet hillside neighbourhoods.",
+        "Thin high-slope brush and crown fuels upslope of residential clusters.",
+    ],
+    "coastal": [
+        "Living shorelines, salt-marsh restoration, and dune nourishment buffers.",
+        "Raise minimum finished-floor freeboard above projected SLR + 100-yr storm surge.",
+        "Install tidal backflow preventers on coastal stormwater outfalls.",
+        "Designate rolling-easement or managed-retreat corridors in connected low-lying zones.",
+    ],
 }
 
 GENERIC_INTERVENTIONS = [
@@ -85,6 +97,10 @@ def _normalise_hazard(label: str) -> str:
     if not label:
         return ""
     s = label.lower()
+    if "wui" in s or "fire" in s:
+        return "wildfire"
+    if "slr" in s or "coast" in s or "surge" in s:
+        return "coastal"
     # Map common variants to catalogue keys.
     for key in INTERVENTION_CATALOG:
         if key in s:

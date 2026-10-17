@@ -95,7 +95,7 @@ QgsApplication.processingRegistry().addProvider(_provider)
 _algos = _provider.algorithms()
 _algo_count = len(_algos)
 print(f"Algorithm count: {_algo_count}")
-assert _algo_count == 43, f"Expected 43 algorithms, got {_algo_count}"
+assert _algo_count == 45, f"Expected 45 algorithms, got {_algo_count}"
 
 _group_ids = {a.groupId() for a in _algos}
 print(f"Group count: {len(_group_ids)} -> {sorted(_group_ids)}")

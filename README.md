@@ -1,26 +1,26 @@
 <div align="center">
 
-<img src="icons/plugin.svg" width="96" alt="PlanX Urban Resilience icon"/>
+<img src="icons/icon.png" width="112" alt="PlanX Urban Resilience icon"/>
 
 # PlanX: Urban Resilience
 
-**City-scale resilience screening for QGIS — 43 Processing tools: seismic, flood, heat, social vulnerability, evacuation, spatial statistics, scenarios, reports.**
+**City-scale resilience screening for QGIS — 45 Processing tools: seismic, flood, coastal SLR, heat, wildfire WUI, social vulnerability, evacuation, spatial statistics, scenarios, reports.**
 
 [![QGIS](https://img.shields.io/badge/QGIS-3.28%2B-93b023?logo=qgis&logoColor=white)](https://plugins.qgis.org/plugins/planx_urban_resilience/)
 [![Version](https://img.shields.io/github/v/tag/YusufEminoglu/planx_urban_resilience?label=version&color=blue)](https://gitlab.com/geophilo1/planx_urban_resilience/releases)
 [![License](https://img.shields.io/badge/license-GPL--3.0-orange)](LICENSE)
 [![QGIS Plugin Hub](https://img.shields.io/badge/QGIS%20Hub-install-589632?logo=qgis&logoColor=white)](https://plugins.qgis.org/plugins/planx_urban_resilience/)
-[![Documentation](https://img.shields.io/badge/📖_Reference_Manual-43_algorithms-13a0a0)](https://geophilo.com/planx_urban_resilience/)
+[![Documentation](https://img.shields.io/badge/📖_Reference_Manual-45_algorithms-13a0a0)](https://geophilo.com/planx_urban_resilience/)
 
 </div>
 
 ---
 
-PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. The suite ships **43 Processing algorithms**: synthetic QA data, seismic debris and cascade, heat, flood, social vulnerability, Euclidean and network emergency access, evacuation simulation, optimal shelter siting, network criticality, air and drought screening, adaptation/multi-hazard/equity/climate/recovery/sensitivity synthesis, hot-spot (Getis-Ord Gi*) and LISA cluster statistics with FDR-adjusted significance, correlation matrix, IDW vulnerability surfaces, Pareto and cost-benefit economics, lifecycle NPV, time-series tracking, scenario templates and comparison, HTML/Markdown/PDF reporting, 3D risk export, and QGIS style presets — plus a docked Processing panel, colour-grouped by hazard domain with a per-tool icon, for module discovery. All 43 algorithms run on both QGIS 3.44 LTR and QGIS 4.0 — verified via headless e2e harness.
+PlanX Urban Resilience is a modular QGIS suite for early-stage city-scale resilience screening. The suite ships **45 Processing algorithms**: synthetic QA data, seismic debris and cascade, heat, pluvial flood, coastal sea-level-rise (hydrologically connected BFS flood-fill), social vulnerability, Euclidean and network emergency access, evacuation simulation, optimal shelter siting, network criticality, air, drought, wildfire WUI screening, adaptation/multi-hazard/equity/climate/recovery/sensitivity synthesis, hot-spot (Getis-Ord Gi*) and LISA cluster statistics with FDR-adjusted significance, correlation matrix, IDW vulnerability surfaces, Pareto and cost-benefit economics, lifecycle NPV, time-series tracking, scenario templates and comparison, HTML/Markdown/PDF reporting, 3D risk export, and QGIS style presets — plus a docked Processing panel, colour-grouped by hazard domain with a per-tool icon, for module discovery. All 45 algorithms run on both QGIS 3.44 LTR and QGIS 4.2 — verified via headless e2e harness.
 
 ## 📖 Documentation
 
-**[Comprehensive Academic Reference Manual](https://geophilo.com/planx_urban_resilience/)** — 43 algorithms across 10 modules. Every algorithm documented with theoretical background, mathematical formulation, complete parameter tables, output field descriptions, QGIS symbolization guidance, interpretation guides, and DOI-verified academic references. Hosted on Web Documentation with search, collapsible sidebar, and per-algorithm deep links accessible directly from the QGIS Processing dialog (Help button).
+**[Comprehensive Academic Reference Manual](https://geophilo.com/planx_urban_resilience/)** — 45 algorithms across 10 modules. Every algorithm documented with theoretical background, mathematical formulation, complete parameter tables, output field descriptions, QGIS symbolization guidance, interpretation guides, and DOI-verified academic references. Hosted on Web Documentation with search, collapsible sidebar, and per-algorithm deep links accessible directly from the QGIS Processing dialog (Help button).
 
 ## Modules
 
@@ -65,6 +65,16 @@ Outputs:
 - Exposed road segments
 
 This is not a hydrodynamic model. It is intended for planning support, classroom analysis, and prioritization.
+
+### Coastal / Sea-Level-Rise (SLR) Exposure Screening
+
+Hydrologically connected bathtub flood-fill model (Poulter & Halpin, 2008; Gesch, 2009; IPCC AR6, 2021) combining DEM elevations, coastline proximity, tidal datums (MHHW), and asset exposures. A breadth-first search (BFS) flood-fill across 8-connected or 4-connected grid cells ensures that isolated inland depressions below sea level are not falsely flagged as coastal flooding.
+
+Outputs:
+
+- Coastal SLR exposure grid (`elev_m`, `water_lvl_m`, `inund_m`, `freeboard_m`, `sink_depth`, `connected`, `slr_score`, `risk_class`)
+- Hydrologically connected inundation priority zones
+- Exposed coastal structures
 
 ### Social Vulnerability Index
 
@@ -145,6 +155,16 @@ Outputs:
 - `stress_score`
 - `stress_class`
 - High-priority patches
+
+### Wildfire / WUI Exposure Screening
+
+Screens urban and suburban planning areas for Wildland-Urban Interface (WUI) wildfire vulnerability by integrating wildland fuel proximity and coverage (Radeloff et al., 2005), building-to-vegetation interface density within the radiant heat and ember zone (Cohen, 2000), topographic slope rate-of-spread amplification (Rothermel, 1972), and emergency road egress deficits (Cova, 2005).
+
+Outputs:
+
+- WUI exposure screening grid (`fuel_share`, `fuel_dist_m`, `wui_bldg_n`, `slope_pct`, `egress_m`, `wui_score`, `risk_class`)
+- Priority WUI intervention zones
+- Exposed interface structures
 
 ### Climate Adaptation Priority Synthesis
 
