@@ -1,0 +1,27 @@
+{
+  "algo_id": "resilience_score_html_report",
+  "display_name": "Resilience Score HTML Report",
+  "group": "9 - Report and QA",
+  "timestamp": "2026-10-21T18:16:35",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Resilience Score HTML Report - report output preview",
+      "path": "screenshots/resilience_score_html_report/resilience_score_html_report_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters + Report",
+        "Report Map",
+        "Report Output"
+      ]
+    }
+  ],
+  "params": {
+    "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\climate_adaptation_priority_synthesis__OUTPUT.gpkg",
+    "SCORE_FIELD": "adapt_score",
+    "CLASS_FIELD": "adapt_class",
+    "DRIVER_FIELD": "drivers",
+    "TITLE": "PlanX Urban Resilience - Adaptation Priority Report"
+  },
+  "seconds": 0.1
+}

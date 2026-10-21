@@ -1,0 +1,26 @@
+{
+  "algo_id": "apply_resilience_symbology",
+  "display_name": "Apply Resilience Symbology",
+  "group": "9 - Report and QA",
+  "timestamp": "2026-10-21T18:16:38",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Apply Resilience Symbology - style presets applied to the resilience layer",
+      "path": "screenshots/apply_resilience_symbology/apply_resilience_symbology_4panel.png",
+      "panels": [
+        "Input (Raw)",
+        "Parameters",
+        "Output (Styled)",
+        "Legend"
+      ]
+    }
+  ],
+  "params": {
+    "LAYER": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\climate_adaptation_priority_synthesis__OUTPUT.gpkg",
+    "FIELD": "adapt_score",
+    "PRESET": 0,
+    "REFRESH": true
+  },
+  "seconds": 0.0
+}

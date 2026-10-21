@@ -1,0 +1,26 @@
+{
+  "algo_id": "lisa_local_moran",
+  "display_name": "LISA Local Moran's I (cluster + outlier)",
+  "group": "8 - Synthesis: Adaptation Priorities",
+  "timestamp": "2026-10-21T18:16:33",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "LISA Local Moran's I (cluster + outlier) - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/lisa_local_moran/lisa_local_moran_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+    "VALUE_FIELD": "score",
+    "DISTANCE": 500.0,
+    "WEIGHT_METHOD": 0
+  },
+  "seconds": 0.1
+}

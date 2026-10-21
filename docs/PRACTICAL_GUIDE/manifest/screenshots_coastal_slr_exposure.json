@@ -1,0 +1,33 @@
+{
+  "algo_id": "coastal_slr_exposure",
+  "display_name": "Coastal / Sea-Level-Rise (SLR) Exposure Screening",
+  "group": "3 - Flood & Coastal: Pluvial and SLR Susceptibility",
+  "timestamp": "2026-10-21T18:16:28",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Coastal / Sea-Level-Rise (SLR) Exposure Screening - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/coastal_slr_exposure/coastal_slr_exposure_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "STUDY_AREA": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_study_area.gpkg",
+    "DEM": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\dem.tif",
+    "COASTLINE": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\coastline.gpkg",
+    "BUILDINGS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+    "ROADS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\roads_noded.gpkg",
+    "SCENARIO_PRESET": 1,
+    "WATER_LEVEL_M": 1.0,
+    "MHHW_OFFSET_M": 0.0,
+    "CONNECTIVITY_RULE": 0,
+    "CELL_SIZE": 100.0,
+    "NEAR_SHORE_BUFFER_M": 250.0
+  },
+  "seconds": 0.2
+}

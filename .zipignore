@@ -10,9 +10,10 @@ scratch
 
 # Repository-only content, not part of the installed plugin.
 #
-# docs/ is the source of the published manual and landing page; .github/ holds
-# the CI workflows. No shipped code path opens either -- every Help link in the
-# plugin resolves to the online manual -- yet together they were most of the
-# archive. Same convention as zero2cartolab and qgis_25d_styling.
+# docs/ is the source of the published reference manual and the Practical
+# Guide (45 screenshots + the guide itself, ~6 MB). No shipped code path opens
+# it -- every Help link in the plugin resolves to the online manual -- and
+# shipping it would add megabytes to every Hub download. The guide is
+# published through the web portal instead.
 docs
 .github

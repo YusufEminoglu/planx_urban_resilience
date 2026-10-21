@@ -1,0 +1,27 @@
+{
+  "algo_id": "risk_3d_volume_export",
+  "display_name": "3D Risk Volume Export (GeoJSON for PlanX 3D City)",
+  "group": "9 - Report and QA",
+  "timestamp": "2026-10-21T18:16:43",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "3D Risk Volume Export (GeoJSON for PlanX 3D City) - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/risk_3d_volume_export/risk_3d_volume_export_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\climate_adaptation_priority_synthesis__OUTPUT.gpkg",
+    "SCORE_FIELD": "adapt_score",
+    "MAX_HEIGHT": 60.0,
+    "BASE_HEIGHT_FIELD": "fid",
+    "COLOR_RAMP": 0
+  },
+  "seconds": 0.1
+}

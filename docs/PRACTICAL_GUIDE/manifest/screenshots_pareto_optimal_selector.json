@@ -1,0 +1,25 @@
+{
+  "algo_id": "pareto_optimal_selector",
+  "display_name": "Pareto-Optimal Intervention Selector",
+  "group": "8 - Synthesis: Adaptation Priorities",
+  "timestamp": "2026-10-21T18:16:34",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Pareto-Optimal Intervention Selector - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/pareto_optimal_selector/pareto_optimal_selector_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+    "COST_FIELD": "rec_cost",
+    "BENEFIT_FIELD": "rec_benefit"
+  },
+  "seconds": 0.1
+}

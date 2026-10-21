@@ -1,0 +1,34 @@
+{
+  "algo_id": "urban_heat_comfort_risk",
+  "display_name": "Urban Heat Comfort Risk (screening)",
+  "group": "2 - Heat: Comfort and Exposure",
+  "timestamp": "2026-10-21T18:16:27",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Urban Heat Comfort Risk (screening) - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/urban_heat_comfort_risk/urban_heat_comfort_risk_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "STUDY_AREA": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_study_area.gpkg",
+    "BUILDINGS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+    "IMPERVIOUS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_impervious.gpkg",
+    "GREEN": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_green.gpkg",
+    "WATER": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_water.gpkg",
+    "VULNERABLE": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_social_units.gpkg",
+    "CELL_SIZE": 100.0,
+    "COOLING_DISTANCE": 400.0,
+    "IMPERVIOUS_WEIGHT": 0.3,
+    "GREEN_DEFICIT_WEIGHT": 0.3,
+    "BUILDING_WEIGHT": 0.25,
+    "VULNERABILITY_WEIGHT": 0.15
+  },
+  "seconds": 0.3
+}

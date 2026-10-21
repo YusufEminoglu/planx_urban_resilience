@@ -1,0 +1,25 @@
+{
+  "algo_id": "multi_hazard_correlation_matrix",
+  "display_name": "Multi-Hazard Correlation Matrix (HTML + table)",
+  "group": "9 - Report and QA",
+  "timestamp": "2026-10-21T18:16:43",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Multi-Hazard Correlation Matrix (HTML + table) - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/multi_hazard_correlation_matrix/multi_hazard_correlation_matrix_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+    "FIELDS": "['heat_score', 'flood_score', 'air_score', 'access_score', 'wui_score']",
+    "PROJECT": "PlanX Urban Resilience - Demo District"
+  },
+  "seconds": 0.0
+}

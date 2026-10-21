@@ -1,0 +1,29 @@
+{
+  "algo_id": "recommended_actions_report",
+  "display_name": "Recommended Actions Report (Markdown)",
+  "group": "9 - Report and QA",
+  "timestamp": "2026-10-21T18:16:38",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Recommended Actions Report (Markdown) - report output preview",
+      "path": "screenshots/recommended_actions_report/recommended_actions_report_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters + Report",
+        "Report Map",
+        "Report Output"
+      ]
+    }
+  ],
+  "params": {
+    "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\climate_adaptation_priority_synthesis__OUTPUT.gpkg",
+    "SCORE_FIELD": "adapt_score",
+    "CLASS_FIELD": "adapt_class",
+    "HAZARD_FIELD": "drivers",
+    "UNIT_NAME_FIELD": "name",
+    "TOP_N": 10,
+    "PROJECT": "PlanX Urban Resilience - Demo District"
+  },
+  "seconds": 0.2
+}

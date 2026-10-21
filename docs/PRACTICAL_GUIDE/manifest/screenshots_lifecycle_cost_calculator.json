@@ -1,0 +1,34 @@
+{
+  "algo_id": "lifecycle_cost_calculator",
+  "display_name": "Lifecycle Cost Calculator (25-year NPV)",
+  "group": "8 - Synthesis: Adaptation Priorities",
+  "timestamp": "2026-10-21T18:16:34",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Lifecycle Cost Calculator (25-year NPV) - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/lifecycle_cost_calculator/lifecycle_cost_calculator_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+    "CAPEX_FIELD": "capex",
+    "OPEX_FIELD": "opex",
+    "MAINT_INTERVAL": 5,
+    "MAINT_COST": 200.0,
+    "MAINT_COST_FIELD": "fid",
+    "REPL_YEARS": 20,
+    "REPL_COST": 500.0,
+    "REPL_COST_FIELD": "fid",
+    "HORIZON": 25,
+    "DISCOUNT": 4.0,
+    "AREA_SCALE": false
+  },
+  "seconds": 0.1
+}

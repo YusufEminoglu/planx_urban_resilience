@@ -176,7 +176,7 @@ h3[id]:hover .anchor-copy, .anchor-copy:focus { opacity: 1; }
 <nav id="sidebar">
 <div id="sidebar-header">
 <span class="logo">PlanX Urban Resilience</span>
-<span class="subtitle">Academic Reference Manual · v2.1.2 · 43 Tools</span>
+<span class="subtitle">Academic Reference Manual · v2.2.0 · 45 Tools</span>
 </div>
 <div id="search-wrap">
 <input type="text" id="search" placeholder="Search algorithms…" autocomplete="off">
@@ -312,7 +312,7 @@ h3[id]:hover .anchor-copy, .anchor-copy:focus { opacity: 1; }
 <main id="content">
 
 <h1>PlanX Urban Resilience — Academic Reference Manual</h1>
-<p>Covering Urban Resilience v2.1.2 · 43 Algorithms · 10 Tool Groups<br>
+<p>Covering Urban Resilience v2.2.0 · 45 Algorithms · 10 Tool Groups<br>
 Yusuf Eminoğlu · <a href="https://github.com/YusufEminoglu/planx_urban_resilience">github.com/YusufEminoglu/planx_urban_resilience</a> &middot; <a href="https://gitlab.com/yusufeminoglu/planx_urban_resilience">gitlab.com/yusufeminoglu/planx_urban_resilience</a></p>
 <div class="video-embed">
   <iframe src="https://www.youtube-nocookie.com/embed/QKavKhqf7WQ" title="PlanX Urban Resilience &mdash; video walkthrough" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
@@ -404,10 +404,10 @@ Yusuf Eminoğlu · <a href="https://github.com/YusufEminoglu/planx_urban_resilie
 <p class="pid"><b>Processing ID:</b> <code>planx_urban_resilience:synthetic_resilience_demo_dataset</code></p>
 
 <h4>1. Overview</h4>
-<p>Generates a complete artificial resilience-study dataset in a single run. The output consists of nine layers — buildings (with <code>floor_count</code> and <code>construction_year</code> fields), roads (with capacity and class), impervious surfaces, green patches, water bodies, shelter points, social-unit polygons (with population, elderly, children, disability, and low-income fields), and sensitive-receptor points. A <code>SCALE</code> parameter controls spatial extent. Every output is in a projected CRS suitable for metric analysis.</p>
+<p>Generates a complete artificial resilience-study dataset in a single run. The output consists of nine layers — buildings (with <code>floor_count</code> and <code>year</code> fields), roads (with capacity and class), impervious surfaces, green patches, water bodies, shelter points, social-unit polygons (with population, elderly, children, disability, and low-income fields), and sensitive-receptor points. A <code>SCALE</code> parameter controls spatial extent. Every output is in a projected CRS suitable for metric analysis.</p>
 
 <h4>2. Theoretical Background</h4>
-<p><b>Academic lineage.</b> Synthetic datasets are a standard tool in spatial-algorithm validation (Fisher &amp; Tate, 2006), used wherever the goal is to test that a *pipeline* runs correctly rather than to test against ground truth — the GIS analogue of a software unit-test fixture. The generator uses a fixed geometric layout — a central spine road with perpendicular branches, clustered buildings along each branch, and concentric land-use zones — to produce a dataset where every one of the other 42 modules in the suite can find its required inputs (fields, geometry types, CRS) in one run. The geometry is deterministic (no random component; contrast this with the Monte Carlo seed used in the Seismic module), so two runs with the same <code>SCALE</code> value produce byte-identical layers — a property test suites and classroom demonstrations both depend on.</p>
+<p><b>Academic lineage.</b> Synthetic datasets are a standard tool in spatial-algorithm validation (Fisher &amp; Tate, 2006), used wherever the goal is to test that a *pipeline* runs correctly rather than to test against ground truth — the GIS analogue of a software unit-test fixture. The generator uses a fixed geometric layout — four roads (one arterial, two collectors, one local) crossing a 2 × 1.4 grid of blocks, ten building polygons on two rows, two hardscape corridors, three green areas, a blue corridor, two shelters, four social-unit quadrants and four sensitive receptors — to produce a dataset where every one of the other 44 tools in the suite can find its required inputs (fields, geometry types, CRS) in one run. The geometry is deterministic (no random component; contrast this with the Monte Carlo seed used in the Seismic module), so two runs with the same <code>SCALE</code> value produce byte-identical layers — a property test suites and classroom demonstrations both depend on.</p>
 <p><b>Key assumptions.</b></p>
 <ul>
 <li>The layout is a fixed procedural template, not a statistical or agent-based city generator — every <code>SCALE</code> value scales the same relative geometry uniformly. It cannot substitute for empirical urban-form diversity (irregular blocks, mixed densities, real street topology).</li>
@@ -425,9 +425,9 @@ Yusuf Eminoğlu · <a href="https://github.com/YusufEminoglu/planx_urban_resilie
 
 <h4>5. Parameters</h4>
 <table><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
-<tr><td><code>SCALE</code></td><td>Integer</td><td>1000</td><td>Spatial extent in metres. Larger values produce more buildings and longer roads.</td></tr>
+<tr><td><code>SCALE</code></td><td>Double</td><td>1.0</td><td>Scenario scale multiplier (0.25–5.0). It scales the whole fixed layout uniformly in metres; it does <em>not</em> add features, so the feature count and every attribute value stay identical at every scale.</td></tr>
 <tr><td><code>STUDY_AREA</code></td><td>Output sink</td><td>—</td><td>Study-area boundary polygon.</td></tr>
-<tr><td><code>BUILDINGS</code></td><td>Output sink</td><td>—</td><td>Building footprints with <code>floor_count</code>, <code>construction_year</code>, <code>land_use</code>.</td></tr>
+<tr><td><code>BUILDINGS</code></td><td>Output sink</td><td>—</td><td>Building footprints with <code>floor_count</code>, <code>year</code>, <code>land_use</code>.</td></tr>
 <tr><td><code>ROADS</code></td><td>Output sink</td><td>—</td><td>Road network with <code>capacity_ph</code>, <code>class</code>, <code>direction</code>.</td></tr>
 <tr><td><code>IMPERVIOUS</code></td><td>Output sink</td><td>—</td><td>Impervious surface polygons.</td></tr>
 <tr><td><code>GREEN</code></td><td>Output sink</td><td>—</td><td>Green infrastructure / park patches.</td></tr>
@@ -437,7 +437,7 @@ Yusuf Eminoğlu · <a href="https://github.com/YusufEminoglu/planx_urban_resilie
 <tr><td><code>SENSITIVE</code></td><td>Output sink</td><td>—</td><td>Sensitive-receptor points (schools, hospitals).</td></tr></table>
 
 <h4>6. Output Description</h4>
-<p>Nine output layers, each added to the QGIS project. Field schemas are designed to match the input requirements of the hazard, vulnerability, emergency, and synthesis modules. The building layer includes <code>floor_count</code> (integer, 1–8), <code>construction_year</code> (integer, 1960–2020), and <code>land_use</code> (string). Roads include <code>capacity_ph</code> (persons/hour), <code>class</code> (arterial/collector/local), and <code>direction</code> (both/ft/bt). Social units include <code>population</code>, <code>elderly</code>, <code>children</code>, <code>disability</code>, and <code>low_income</code> — all numeric counts.</p>
+<p>Nine output layers, each added to the QGIS project. Field schemas are designed to match the input requirements of the hazard, vulnerability, emergency, and synthesis modules. The building layer includes <code>floor_count</code> (integer, 1–8), <code>year</code> (integer, 1980–2015), <code>land_use</code> (string) and <code>population</code> (integer). Roads include <code>capacity_ph</code> (persons/hour), <code>class</code> (arterial/collector/local), and <code>direction</code> (both/ft/bt). Social units include <code>population</code>, <code>elderly</code>, <code>children</code>, <code>disability</code>, and <code>low_income</code> — all numeric counts.</p>
 
 <h4>7. Symbolic Representation</h4>
 <p>Buildings: single-symbol fill, 20% opacity, dark grey. Roads: categorised by <code>class</code> — arterial = 1.0 mm dark grey, collector = 0.6 mm, local = 0.3 mm light grey. Green: solid #4dac26 fill at 40% opacity. Water: solid #0571b0 fill. Shelters: green triangle markers, size 4 mm. Sensitive receptors: red circle markers, size 3 mm. Social units: graduated by <code>population</code>, OrRd ramp, 5 natural-breaks classes.</p>
@@ -480,7 +480,7 @@ $$\text{debris\_volume} = A_{\text{footprint}} \times H \times v_r \quad \text{(
 
 <h4>4. Input Data Requirements</h4>
 <table><tr><th>Input</th><th>Type</th><th>Required</th><th>Notes</th></tr>
-<tr><td>Building Footprints</td><td>Vector (Polygon)</td><td>Yes</td><td>Must have numeric <code>floor_count</code> and <code>construction_year</code> fields. Missing values default to 1 floor and year 2000.</td></tr>
+<tr><td>Building Footprints</td><td>Vector (Polygon)</td><td>Yes</td><td>Must have numeric <code>floor_count</code> and <code>year</code> fields. Missing values default to 1 floor and year 2000.</td></tr>
 <tr><td>Cadastral Parcels</td><td>Vector (Polygon)</td><td>Yes</td><td>Used for morphological encroachment (setback) analysis.</td></tr>
 <tr><td>Study Area / Network Boundary</td><td>Vector (Polygon)</td><td>Yes</td><td>Defines the road/void fabric. Buildings are subtracted from this to produce the net road network.</td></tr></table>
 
@@ -1078,11 +1078,12 @@ $$\text{P50}(s) = \min \left\{ t : \text{cumulative\_pct}(s, t) \ge 50 \right\} 
 
 <h4>5. Parameters</h4>
 <table><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
-<tr><td><code>EVAC_ORIGINS</code></td><td>Vector (Point)</td><td>—</td><td>Evacuation Time Simulation origin output layer.</td></tr>
+<tr><td><code>INPUT</code></td><td>Vector (Point)</td><td>—</td><td>Evacuation Time Simulation origin output layer.</td></tr>
 <tr><td><code>SHELTER_FIELD</code></td><td>Field (String/ID)</td><td>evac_shelter</td><td>Field identifying the assigned shelter per origin.</td></tr>
-<tr><td><code>TIME_FIELD</code></td><td>Field (Numeric)</td><td>evac_min</td><td>Total evacuation time per origin (minutes).</td></tr>
 <tr><td><code>POP_FIELD</code></td><td>Field (Numeric)</td><td>evac_pop</td><td>Population assigned to each origin.</td></tr>
-<tr><td><code>TIMESTEP_MINUTES</code></td><td>Double</td><td>5.0</td><td>Bin width for arrival-count aggregation. Should match the timestep used in Evacuation Time Simulation.</td></tr>
+<tr><td><code>TIMESTEP_FIELD</code></td><td>Field (Numeric)</td><td>(optional)</td><td>Simulation timestep index per origin (e.g. <code>evac_timestep</code>). When supplied it wins over <code>MINUTES_FIELD</code> and the arrivals are aggregated per simulation step.</td></tr>
+<tr><td><code>MINUTES_FIELD</code></td><td>Field (Numeric)</td><td>(optional)</td><td>Total evacuation time per origin in minutes (e.g. <code>evac_min</code>). Used as the fallback when <code>TIMESTEP_FIELD</code> is left empty.</td></tr>
+<tr><td><code>MINUTE_BIN</code></td><td>Double</td><td>5.0</td><td>Bin width in minutes for arrival-count aggregation. Only applies when the arrivals are binned by <code>MINUTES_FIELD</code>.</td></tr>
 <tr><td><code>OUTPUT_HTML</code></td><td>File</td><td>—</td><td>Path for the HTML arrival-curve report.</td></tr>
 <tr><td><code>OUTPUT_TABLE</code></td><td>Vector (NoGeometry)</td><td>—</td><td>Per-shelter per-timestep long-format table for further analysis.</td></tr></table>
 
@@ -1344,13 +1345,15 @@ $$\text{adapt\_score} = \frac{\sum_{k} w_k \cdot \text{clamp}(s_k)}{\sum_{k : w_
 <h4>5. Parameters</h4>
 <table><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
 <tr><td><code>UNITS</code></td><td>Vector (Polygon)</td><td>—</td><td>Joined risk layer.</td></tr>
-<tr><td><code>HEAT_FIELD</code>…<code>DROUGHT_FIELD</code></td><td>Field (Numeric)</td><td>(optional)</td><td>Six hazard score fields.</td></tr>
+<tr><td><code>HEAT_FIELD</code>, <code>FLOOD_FIELD</code>, <code>SOCIAL_FIELD</code>, <code>AIR_FIELD</code>, <code>ACCESS_FIELD</code>, <code>DROUGHT_FIELD</code>, <code>WUI_FIELD</code>, <code>COASTAL_FIELD</code></td><td>Field (Numeric)</td><td>(optional)</td><td>Eight hazard score fields, one per hazard domain: heat, flood, social, air, access, drought, wildfire (WUI) and coastal (SLR). Each one names the column of the joined layer that carries that domain's 0–100 score. A field that is absent from the layer is reported in the <code>missing</code> output column rather than silently scored as zero.</td></tr>
 <tr><td><code>WEIGHT_HEAT</code></td><td>Double</td><td>0.20</td><td>Heat weight.</td></tr>
 <tr><td><code>WEIGHT_FLOOD</code></td><td>Double</td><td>0.20</td><td>Flood weight.</td></tr>
 <tr><td><code>WEIGHT_SOCIAL</code></td><td>Double</td><td>0.20</td><td>Social vulnerability weight.</td></tr>
 <tr><td><code>WEIGHT_AIR</code></td><td>Double</td><td>0.15</td><td>Air exposure weight.</td></tr>
 <tr><td><code>WEIGHT_ACCESS</code></td><td>Double</td><td>0.15</td><td>Accessibility deficit weight.</td></tr>
-<tr><td><code>WEIGHT_DROUGHT</code></td><td>Double</td><td>0.10</td><td>Green infrastructure stress weight.</td></tr></table>
+<tr><td><code>WEIGHT_DROUGHT</code></td><td>Double</td><td>0.10</td><td>Green infrastructure stress weight.</td></tr>
+<tr><td><code>WEIGHT_WUI</code></td><td>Double</td><td>0.15</td><td>Wildfire / wildland-urban interface weight.</td></tr>
+<tr><td><code>WEIGHT_COASTAL</code></td><td>Double</td><td>0.15</td><td>Coastal sea-level-rise exposure weight.</td></tr></table>
 <h4>6. Output Description</h4>
 <table><tr><th>Field</th><th>Type</th><th>Description</th></tr>
 <tr><td><code>adapt_score</code></td><td>Double</td><td>Weighted composite 0–100.</td></tr>
@@ -2250,6 +2253,7 @@ $$C_i = \begin{cases} \text{Improved} & \Delta_i \le -\tau \\ \text{Stable} & -\
 
 <h4>5. Parameters</h4>
 <table><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
+<tr><td><code>INPUT</code></td><td>Vector (Polygon)</td><td>—</td><td>Planning-unit layer carrying <code>BASELINE_FIELD</code> and <code>SCENARIO_FIELD</code> in the same row.</td></tr>
 <tr><td><code>BASELINE_FIELD</code></td><td>Field (Numeric)</td><td>—</td><td>Baseline score field (0–100).</td></tr>
 <tr><td><code>SCENARIO_FIELD</code></td><td>Field (Numeric)</td><td>—</td><td>Scenario/proposed score field (0–100).</td></tr>
 <tr><td><code>THRESHOLD</code></td><td>Double</td><td>5.0</td><td>Meaningful-change threshold. Deltas with |delta| < threshold are classified as Stable.</td></tr></table>
@@ -2749,7 +2753,7 @@ $$\text{color}_i = \begin{cases} f_{\text{YlRd}}(\text{norm}) & \text{(sequentia
 
 <hr style="margin:2rem 0;border-color:var(--border);">
 <p style="text-align:center;color:var(--muted);font-size:0.85em;">
-PlanX Urban Resilience — Academic Reference Manual · v2.1.2 · 43 Algorithms<br>
+PlanX Urban Resilience — Academic Reference Manual · v2.2.0 · 45 Algorithms<br>
 Yusuf Eminoğlu · August 2026 · <a href="https://github.com/YusufEminoglu/planx_urban_resilience">GitHub</a> &middot; <a href="https://gitlab.com/yusufeminoglu/planx_urban_resilience">GitLab</a>
 </p>
 

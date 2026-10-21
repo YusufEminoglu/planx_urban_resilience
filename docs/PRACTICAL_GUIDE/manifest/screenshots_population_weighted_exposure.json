@@ -1,0 +1,25 @@
+{
+  "algo_id": "population_weighted_exposure",
+  "display_name": "Population-Weighted Exposure",
+  "group": "8 - Synthesis: Adaptation Priorities",
+  "timestamp": "2026-10-21T18:16:33",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Population-Weighted Exposure - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/population_weighted_exposure/population_weighted_exposure_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+    "SCORE_FIELD": "score",
+    "POP_FIELD": "population"
+  },
+  "seconds": 0.1
+}

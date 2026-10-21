@@ -1,0 +1,38 @@
+{
+  "algo_id": "join_scores_to_planning_units",
+  "display_name": "Join Hazard Scores to Planning Units",
+  "group": "8 - Synthesis: Adaptation Priorities",
+  "timestamp": "2026-10-21T18:16:31",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Join Hazard Scores to Planning Units - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/join_scores_to_planning_units/join_scores_to_planning_units_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "UNITS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\planning_units.gpkg",
+    "SOURCE1": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\urban_heat_comfort_risk__OUTPUT_GRID.gpkg",
+    "FIELD1": "heat_score",
+    "OUT1": "heat_score",
+    "SOURCE2": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\pluvial_flood_susceptibility__OUTPUT_GRID.gpkg",
+    "FIELD2": "flood_score",
+    "OUT2": "flood_score",
+    "SOURCE3": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\air_quality_exposure_screening__OUTPUT_GRID.gpkg",
+    "FIELD3": "air_score",
+    "OUT3": "air_score",
+    "SOURCE4": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\emergency_accessibility_shelter_coverage__OUTPUT_GRID.gpkg",
+    "FIELD4": "access_score",
+    "OUT4": "access_score",
+    "SOURCE5": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\wui_exposure_screening__OUTPUT_GRID.gpkg",
+    "FIELD5": "wui_score",
+    "OUT5": "wui_score"
+  },
+  "seconds": 0.4
+}

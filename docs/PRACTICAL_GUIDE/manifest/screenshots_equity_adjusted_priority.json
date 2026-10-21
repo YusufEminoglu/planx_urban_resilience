@@ -1,0 +1,26 @@
+{
+  "algo_id": "equity_adjusted_priority",
+  "display_name": "Equity-Adjusted Adaptation Priority",
+  "group": "8 - Synthesis: Adaptation Priorities",
+  "timestamp": "2026-10-21T18:16:32",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Equity-Adjusted Adaptation Priority - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/equity_adjusted_priority/equity_adjusted_priority_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\multi_hazard_composite_index__OUTPUT.gpkg",
+    "HAZARD_FIELD": "mh_score",
+    "SVI_FIELD": "fid",
+    "EQUITY_WEIGHT": 0.5
+  },
+  "seconds": 0.1
+}

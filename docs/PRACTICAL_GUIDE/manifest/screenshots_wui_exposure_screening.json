@@ -1,0 +1,34 @@
+{
+  "algo_id": "wui_exposure_screening",
+  "display_name": "Wildfire / WUI Exposure Screening",
+  "group": "7 - Drought & Wildfire: Green and WUI Stress",
+  "timestamp": "2026-10-21T18:16:31",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Wildfire / WUI Exposure Screening - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/wui_exposure_screening/wui_exposure_screening_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "STUDY_AREA": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_study_area.gpkg",
+    "VEGETATION": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\vegetation.gpkg",
+    "BUILDINGS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+    "ROADS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\roads_noded.gpkg",
+    "DEM": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\dem.tif",
+    "CELL_SIZE": 100.0,
+    "WUI_BUFFER": 300.0,
+    "MAX_EGRESS_DIST": 400.0,
+    "WEIGHT_FUEL": 0.35,
+    "WEIGHT_INTERFACE": 0.3,
+    "WEIGHT_SLOPE": 0.2,
+    "WEIGHT_EGRESS": 0.15
+  },
+  "seconds": 0.3
+}

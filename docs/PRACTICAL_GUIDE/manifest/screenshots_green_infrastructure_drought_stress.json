@@ -1,0 +1,32 @@
+{
+  "algo_id": "green_infrastructure_drought_stress",
+  "display_name": "Drought and Green Infrastructure Stress",
+  "group": "7 - Drought & Wildfire: Green and WUI Stress",
+  "timestamp": "2026-10-21T18:16:30",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Drought and Green Infrastructure Stress - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/green_infrastructure_drought_stress/green_infrastructure_drought_stress_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "GREEN": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_green.gpkg",
+    "STUDY_AREA": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_study_area.gpkg",
+    "IMPERVIOUS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_impervious.gpkg",
+    "WATER": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_water.gpkg",
+    "TREES": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\trees.gpkg",
+    "MAX_WATER_DISTANCE": 500.0,
+    "IMPERVIOUS_WEIGHT": 0.35,
+    "WATER_WEIGHT": 0.25,
+    "SIZE_WEIGHT": 0.25,
+    "TREE_WEIGHT": 0.15
+  },
+  "seconds": 0.1
+}

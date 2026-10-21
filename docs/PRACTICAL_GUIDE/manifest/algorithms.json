@@ -1,0 +1,345 @@
+{
+  "version": "1.0",
+  "generated": "2026-10-21",
+  "provider": "planx_urban_resilience",
+  "total_algorithms": 45,
+  "groups": {
+    "0 - Demo and QA": [
+      "synthetic_resilience_demo_dataset"
+    ],
+    "1 - Seismic: Debris and Logistics": [
+      "seismic_debris_monte_carlo"
+    ],
+    "2 - Heat: Comfort and Exposure": [
+      "urban_heat_comfort_risk"
+    ],
+    "3 - Flood & Coastal: Pluvial and SLR Susceptibility": [
+      "coastal_slr_exposure",
+      "pluvial_flood_susceptibility"
+    ],
+    "4 - Social: Vulnerability and Equity": [
+      "social_vulnerability_index"
+    ],
+    "5 - Emergency: Accessibility and Coverage": [
+      "emergency_accessibility_shelter_coverage",
+      "evacuation_time_simulation",
+      "network_criticality",
+      "network_emergency_accessibility",
+      "optimal_shelter_siting",
+      "seismic_cascade_accessibility"
+    ],
+    "6 - Air: Exposure Screening": [
+      "air_quality_exposure_screening"
+    ],
+    "7 - Drought & Wildfire: Green and WUI Stress": [
+      "green_infrastructure_drought_stress",
+      "wui_exposure_screening"
+    ],
+    "8 - Synthesis: Adaptation Priorities": [
+      "climate_adaptation_priority_synthesis",
+      "climate_projection_overlay",
+      "cost_benefit_analyzer",
+      "critical_infrastructure_exposure",
+      "equity_adjusted_priority",
+      "hazard_frequency_aggregation",
+      "hotspot_analysis_getis_ord",
+      "join_scores_to_planning_units",
+      "lifecycle_cost_calculator",
+      "lisa_local_moran",
+      "multi_hazard_composite_index",
+      "pareto_optimal_selector",
+      "population_weighted_exposure",
+      "recovery_capacity_index",
+      "risk_recovery_priority_matrix",
+      "risk_trend_hotspot",
+      "scenario_sensitivity",
+      "vulnerability_surface_idw"
+    ],
+    "9 - Report and QA": [
+      "apply_resilience_symbology",
+      "bivariate_choropleth_symbology",
+      "evacuation_shelter_arrival_summary",
+      "multi_hazard_correlation_matrix",
+      "recommended_actions_report",
+      "resilience_pdf_atlas",
+      "resilience_scenario_comparison",
+      "resilience_score_html_report",
+      "resilience_studio_brief_markdown",
+      "resilience_time_series",
+      "risk_3d_volume_export",
+      "scenario_planning_template"
+    ]
+  },
+  "algorithms": [
+    {
+      "algo_id": "air_quality_exposure_screening",
+      "display_name": "Air Quality / Urban Exposure (screening)",
+      "group": "6 - Air: Exposure Screening",
+      "group_id": "planx_urban_resilience_air"
+    },
+    {
+      "algo_id": "apply_resilience_symbology",
+      "display_name": "Apply Resilience Symbology",
+      "group": "9 - Report and QA",
+      "group_id": "planx_urban_resilience_reporting"
+    },
+    {
+      "algo_id": "bivariate_choropleth_symbology",
+      "display_name": "Bivariate Choropleth Symbology (risk × vulnerability)",
+      "group": "9 - Report and QA",
+      "group_id": "planx_urban_resilience_reporting"
+    },
+    {
+      "algo_id": "climate_adaptation_priority_synthesis",
+      "display_name": "Climate Adaptation Priority Synthesis",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "group_id": "planx_urban_resilience_synthesis"
+    },
+    {
+      "algo_id": "climate_projection_overlay",
+      "display_name": "Climate Projection Overlay",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "group_id": "planx_urban_resilience_synthesis"
+    },
+    {
+      "algo_id": "coastal_slr_exposure",
+      "display_name": "Coastal / Sea-Level-Rise (SLR) Exposure Screening",
+      "group": "3 - Flood & Coastal: Pluvial and SLR Susceptibility",
+      "group_id": "planx_urban_resilience_flood"
+    },
+    {
+      "algo_id": "cost_benefit_analyzer",
+      "display_name": "Cost-Benefit Analyzer (planning prioritisation)",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "group_id": "planx_urban_resilience_synthesis"
+    },
+    {
+      "algo_id": "critical_infrastructure_exposure",
+      "display_name": "Critical Infrastructure Exposure",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "group_id": "planx_urban_resilience_synthesis"
+    },
+    {
+      "algo_id": "emergency_accessibility_shelter_coverage",
+      "display_name": "Emergency Accessibility and Shelter Coverage",
+      "group": "5 - Emergency: Accessibility and Coverage",
+      "group_id": "planx_urban_resilience_emergency"
+    },
+    {
+      "algo_id": "equity_adjusted_priority",
+      "display_name": "Equity-Adjusted Adaptation Priority",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "group_id": "planx_urban_resilience_synthesis"
+    },
+    {
+      "algo_id": "evacuation_shelter_arrival_summary",
+      "display_name": "Evacuation Shelter Arrival Summary",
+      "group": "9 - Report and QA",
+      "group_id": "planx_urban_resilience_reporting"
+    },
+    {
+      "algo_id": "evacuation_time_simulation",
+      "display_name": "Evacuation Time Simulation",
+      "group": "5 - Emergency: Accessibility and Coverage",
+      "group_id": "planx_urban_resilience_emergency"
+    },
+    {
+      "algo_id": "green_infrastructure_drought_stress",
+      "display_name": "Drought and Green Infrastructure Stress",
+      "group": "7 - Drought & Wildfire: Green and WUI Stress",
+      "group_id": "planx_urban_resilience_drought"
+    },
+    {
+      "algo_id": "hazard_frequency_aggregation",
+      "display_name": "Multi-Period Hazard Frequency Aggregation",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "group_id": "planx_urban_resilience_synthesis"
+    },
+    {
+      "algo_id": "hotspot_analysis_getis_ord",
+      "display_name": "Hot-Spot Cluster Analysis (Getis-Ord Gi*)",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "group_id": "planx_urban_resilience_synthesis"
+    },
+    {
+      "algo_id": "join_scores_to_planning_units",
+      "display_name": "Join Hazard Scores to Planning Units",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "group_id": "planx_urban_resilience_synthesis"
+    },
+    {
+      "algo_id": "lifecycle_cost_calculator",
+      "display_name": "Lifecycle Cost Calculator (25-year NPV)",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "group_id": "planx_urban_resilience_synthesis"
+    },
+    {
+      "algo_id": "lisa_local_moran",
+      "display_name": "LISA Local Moran's I (cluster + outlier)",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "group_id": "planx_urban_resilience_synthesis"
+    },
+    {
+      "algo_id": "multi_hazard_composite_index",
+      "display_name": "Multi-Hazard Composite Index",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "group_id": "planx_urban_resilience_synthesis"
+    },
+    {
+      "algo_id": "multi_hazard_correlation_matrix",
+      "display_name": "Multi-Hazard Correlation Matrix (HTML + table)",
+      "group": "9 - Report and QA",
+      "group_id": "planx_urban_resilience_reporting"
+    },
+    {
+      "algo_id": "network_criticality",
+      "display_name": "Network Criticality (edge betweenness proxy)",
+      "group": "5 - Emergency: Accessibility and Coverage",
+      "group_id": "planx_urban_resilience_emergency"
+    },
+    {
+      "algo_id": "network_emergency_accessibility",
+      "display_name": "Network Emergency Accessibility",
+      "group": "5 - Emergency: Accessibility and Coverage",
+      "group_id": "planx_urban_resilience_emergency"
+    },
+    {
+      "algo_id": "optimal_shelter_siting",
+      "display_name": "Optimal Shelter Siting (greedy maximal coverage)",
+      "group": "5 - Emergency: Accessibility and Coverage",
+      "group_id": "planx_urban_resilience_emergency"
+    },
+    {
+      "algo_id": "pareto_optimal_selector",
+      "display_name": "Pareto-Optimal Intervention Selector",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "group_id": "planx_urban_resilience_synthesis"
+    },
+    {
+      "algo_id": "pluvial_flood_susceptibility",
+      "display_name": "Pluvial Flood Susceptibility (screening)",
+      "group": "3 - Flood & Coastal: Pluvial and SLR Susceptibility",
+      "group_id": "planx_urban_resilience_flood"
+    },
+    {
+      "algo_id": "population_weighted_exposure",
+      "display_name": "Population-Weighted Exposure",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "group_id": "planx_urban_resilience_synthesis"
+    },
+    {
+      "algo_id": "recommended_actions_report",
+      "display_name": "Recommended Actions Report (Markdown)",
+      "group": "9 - Report and QA",
+      "group_id": "planx_urban_resilience_reporting"
+    },
+    {
+      "algo_id": "recovery_capacity_index",
+      "display_name": "Recovery Capacity Index",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "group_id": "planx_urban_resilience_synthesis"
+    },
+    {
+      "algo_id": "resilience_pdf_atlas",
+      "display_name": "Resilience PDF Atlas",
+      "group": "9 - Report and QA",
+      "group_id": "planx_urban_resilience_reporting"
+    },
+    {
+      "algo_id": "resilience_scenario_comparison",
+      "display_name": "Scenario Comparison / Delta Map",
+      "group": "9 - Report and QA",
+      "group_id": "planx_urban_resilience_reporting"
+    },
+    {
+      "algo_id": "resilience_score_html_report",
+      "display_name": "Resilience Score HTML Report",
+      "group": "9 - Report and QA",
+      "group_id": "planx_urban_resilience_reporting"
+    },
+    {
+      "algo_id": "resilience_studio_brief_markdown",
+      "display_name": "Resilience Studio Brief (Markdown)",
+      "group": "9 - Report and QA",
+      "group_id": "planx_urban_resilience_reporting"
+    },
+    {
+      "algo_id": "resilience_time_series",
+      "display_name": "Resilience Time-Series Tracker",
+      "group": "9 - Report and QA",
+      "group_id": "planx_urban_resilience_reporting"
+    },
+    {
+      "algo_id": "risk_3d_volume_export",
+      "display_name": "3D Risk Volume Export (GeoJSON for PlanX 3D City)",
+      "group": "9 - Report and QA",
+      "group_id": "planx_urban_resilience_reporting"
+    },
+    {
+      "algo_id": "risk_recovery_priority_matrix",
+      "display_name": "Risk-Recovery Priority Matrix",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "group_id": "planx_urban_resilience_synthesis"
+    },
+    {
+      "algo_id": "risk_trend_hotspot",
+      "display_name": "Risk Trend Hot-Spot (Gi* × Δ score)",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "group_id": "planx_urban_resilience_synthesis"
+    },
+    {
+      "algo_id": "scenario_planning_template",
+      "display_name": "Scenario Planning Template",
+      "group": "9 - Report and QA",
+      "group_id": "planx_urban_resilience_reporting"
+    },
+    {
+      "algo_id": "scenario_sensitivity",
+      "display_name": "Scenario Sensitivity Analysis",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "group_id": "planx_urban_resilience_synthesis"
+    },
+    {
+      "algo_id": "seismic_cascade_accessibility",
+      "display_name": "Seismic Cascade: Debris → Network Degradation",
+      "group": "5 - Emergency: Accessibility and Coverage",
+      "group_id": "planx_urban_resilience_emergency"
+    },
+    {
+      "algo_id": "seismic_debris_monte_carlo",
+      "display_name": "Post-Earthquake Collapse, Debris & Evacuation Network (Monte Carlo)",
+      "group": "1 - Seismic: Debris and Logistics",
+      "group_id": "planx_urban_resilience_seismic"
+    },
+    {
+      "algo_id": "social_vulnerability_index",
+      "display_name": "Social Vulnerability Index (screening)",
+      "group": "4 - Social: Vulnerability and Equity",
+      "group_id": "planx_urban_resilience_social"
+    },
+    {
+      "algo_id": "synthetic_resilience_demo_dataset",
+      "display_name": "Synthetic Resilience Demo Dataset",
+      "group": "0 - Demo and QA",
+      "group_id": "planx_urban_resilience_demo"
+    },
+    {
+      "algo_id": "urban_heat_comfort_risk",
+      "display_name": "Urban Heat Comfort Risk (screening)",
+      "group": "2 - Heat: Comfort and Exposure",
+      "group_id": "planx_urban_resilience_heat"
+    },
+    {
+      "algo_id": "vulnerability_surface_idw",
+      "display_name": "Vulnerability Surface (IDW interpolation)",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "group_id": "planx_urban_resilience_synthesis"
+    },
+    {
+      "algo_id": "wui_exposure_screening",
+      "display_name": "Wildfire / WUI Exposure Screening",
+      "group": "7 - Drought & Wildfire: Green and WUI Stress",
+      "group_id": "planx_urban_resilience_drought"
+    }
+  ]
+}

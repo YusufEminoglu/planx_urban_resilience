@@ -1,0 +1,29 @@
+{
+  "algo_id": "resilience_time_series",
+  "display_name": "Resilience Time-Series Tracker",
+  "group": "9 - Report and QA",
+  "timestamp": "2026-10-21T18:16:35",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Resilience Time-Series Tracker - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/resilience_time_series/resilience_time_series_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "EARLIER": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+    "EARLIER_ID": "uid",
+    "EARLIER_SCORE": "score",
+    "LATER": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\climate_adaptation_priority_synthesis__OUTPUT.gpkg",
+    "LATER_ID": "uid",
+    "LATER_SCORE": "adapt_score",
+    "TARGET_VALUE": 40.0
+  },
+  "seconds": 0.1
+}

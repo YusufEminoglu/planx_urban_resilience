@@ -1,0 +1,26 @@
+{
+  "algo_id": "climate_projection_overlay",
+  "display_name": "Climate Projection Overlay",
+  "group": "8 - Synthesis: Adaptation Priorities",
+  "timestamp": "2026-10-21T18:16:32",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Climate Projection Overlay - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/climate_projection_overlay/climate_projection_overlay_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\climate_adaptation_priority_synthesis__OUTPUT.gpkg",
+    "SCORE_FIELD": "adapt_score",
+    "SCENARIO": 3,
+    "CUSTOM_FACTOR": 1.3
+  },
+  "seconds": 0.1
+}

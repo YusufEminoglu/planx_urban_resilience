@@ -1,0 +1,32 @@
+{
+  "algo_id": "seismic_debris_monte_carlo",
+  "display_name": "Post-Earthquake Collapse, Debris & Evacuation Network (Monte Carlo)",
+  "group": "1 - Seismic: Debris and Logistics",
+  "timestamp": "2026-10-21T18:16:28",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Post-Earthquake Collapse, Debris & Evacuation Network (Monte Carlo) - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/seismic_debris_monte_carlo/seismic_debris_monte_carlo_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "INPUT_BUILDINGS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+    "FIELD_FLOORS": "floor_count",
+    "FIELD_YEAR": "year",
+    "MAGNITUDE": 7.0,
+    "INPUT_PARCELS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\land_parcels.gpkg",
+    "INPUT_STUDY_AREA": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_study_area.gpkg",
+    "FLOOR_HEIGHT": 3.0,
+    "DEBRIS_FACTOR": 0.5,
+    "SOLID_VOLUME_RATIO": 0.3,
+    "SEED": 42
+  },
+  "seconds": 0.3
+}

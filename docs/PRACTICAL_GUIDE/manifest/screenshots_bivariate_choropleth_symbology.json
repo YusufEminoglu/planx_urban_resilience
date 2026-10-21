@@ -1,0 +1,25 @@
+{
+  "algo_id": "bivariate_choropleth_symbology",
+  "display_name": "Bivariate Choropleth Symbology (risk × vulnerability)",
+  "group": "9 - Report and QA",
+  "timestamp": "2026-10-21T18:16:38",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Bivariate Choropleth Symbology (risk × vulnerability) - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/bivariate_choropleth_symbology/bivariate_choropleth_symbology_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+    "RISK_FIELD": "score",
+    "VULN_FIELD": "pop_density"
+  },
+  "seconds": 0.1
+}

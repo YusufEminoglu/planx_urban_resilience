@@ -1,0 +1,28 @@
+{
+  "algo_id": "evacuation_shelter_arrival_summary",
+  "display_name": "Evacuation Shelter Arrival Summary",
+  "group": "9 - Report and QA",
+  "timestamp": "2026-10-21T18:16:30",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Evacuation Shelter Arrival Summary - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/evacuation_shelter_arrival_summary/evacuation_shelter_arrival_summary_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\evacuation_time_simulation__OUTPUT_ORIGINS.gpkg",
+    "SHELTER_FIELD": "evac_shelter",
+    "POP_FIELD": "evac_pop",
+    "TIMESTEP_FIELD": "fid",
+    "MINUTES_FIELD": "evac_min",
+    "MINUTE_BIN": 1.0
+  },
+  "seconds": 0.1
+}

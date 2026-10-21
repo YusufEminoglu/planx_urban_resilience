@@ -1,0 +1,33 @@
+{
+  "algo_id": "pluvial_flood_susceptibility",
+  "display_name": "Pluvial Flood Susceptibility (screening)",
+  "group": "3 - Flood & Coastal: Pluvial and SLR Susceptibility",
+  "timestamp": "2026-10-21T18:16:27",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Pluvial Flood Susceptibility (screening) - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/pluvial_flood_susceptibility/pluvial_flood_susceptibility_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "DEM": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\dem.tif",
+    "STUDY_AREA": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_study_area.gpkg",
+    "BUILDINGS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+    "ROADS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\roads_noded.gpkg",
+    "DRAINAGE": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_water.gpkg",
+    "CELL_SIZE": 100.0,
+    "NEIGHBORHOOD": 150.0,
+    "ELEVATION_WEIGHT": 0.45,
+    "SLOPE_WEIGHT": 0.3,
+    "DRAINAGE_WEIGHT": 0.25,
+    "EXPOSURE_THRESHOLD": 55.0
+  },
+  "seconds": 0.2
+}

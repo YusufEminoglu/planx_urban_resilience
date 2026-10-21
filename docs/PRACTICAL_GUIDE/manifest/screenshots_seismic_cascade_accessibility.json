@@ -1,0 +1,27 @@
+{
+  "algo_id": "seismic_cascade_accessibility",
+  "display_name": "Seismic Cascade: Debris → Network Degradation",
+  "group": "5 - Emergency: Accessibility and Coverage",
+  "timestamp": "2026-10-21T18:16:29",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Seismic Cascade: Debris → Network Degradation - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/seismic_cascade_accessibility/seismic_cascade_accessibility_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "ROADS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\roads_noded.gpkg",
+    "DEBRIS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\seismic_debris_monte_carlo__OUTPUT_HAZARD_MODEL.gpkg",
+    "ORIGINS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+    "DESTINATIONS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_shelters.gpkg",
+    "SNAP_TOLERANCE": 25.0
+  },
+  "seconds": 0.1
+}

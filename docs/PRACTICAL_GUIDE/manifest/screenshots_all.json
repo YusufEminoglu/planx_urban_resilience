@@ -1,0 +1,727 @@
+{
+  "total": 45,
+  "ok": 45,
+  "failed": 0,
+  "no_setup": 0,
+  "generated": "2026-10-21T18:16:43",
+  "results": {
+    "synthetic_resilience_demo_dataset": {
+      "ok": true,
+      "display_name": "Synthetic Resilience Demo Dataset",
+      "group": "0 - Demo and QA",
+      "png": "screenshots/synthetic_resilience_demo_dataset/synthetic_resilience_demo_dataset_4panel.png",
+      "params": {
+        "SCALE": 1.0
+      },
+      "seconds": 0.2
+    },
+    "urban_heat_comfort_risk": {
+      "ok": true,
+      "display_name": "Urban Heat Comfort Risk (screening)",
+      "group": "2 - Heat: Comfort and Exposure",
+      "png": "screenshots/urban_heat_comfort_risk/urban_heat_comfort_risk_4panel.png",
+      "params": {
+        "STUDY_AREA": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_study_area.gpkg",
+        "BUILDINGS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+        "IMPERVIOUS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_impervious.gpkg",
+        "GREEN": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_green.gpkg",
+        "WATER": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_water.gpkg",
+        "VULNERABLE": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_social_units.gpkg",
+        "CELL_SIZE": 100.0,
+        "COOLING_DISTANCE": 400.0,
+        "IMPERVIOUS_WEIGHT": 0.3,
+        "GREEN_DEFICIT_WEIGHT": 0.3,
+        "BUILDING_WEIGHT": 0.25,
+        "VULNERABILITY_WEIGHT": 0.15
+      },
+      "seconds": 0.3
+    },
+    "pluvial_flood_susceptibility": {
+      "ok": true,
+      "display_name": "Pluvial Flood Susceptibility (screening)",
+      "group": "3 - Flood & Coastal: Pluvial and SLR Susceptibility",
+      "png": "screenshots/pluvial_flood_susceptibility/pluvial_flood_susceptibility_4panel.png",
+      "params": {
+        "DEM": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\dem.tif",
+        "STUDY_AREA": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_study_area.gpkg",
+        "BUILDINGS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+        "ROADS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\roads_noded.gpkg",
+        "DRAINAGE": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_water.gpkg",
+        "CELL_SIZE": 100.0,
+        "NEIGHBORHOOD": 150.0,
+        "ELEVATION_WEIGHT": 0.45,
+        "SLOPE_WEIGHT": 0.3,
+        "DRAINAGE_WEIGHT": 0.25,
+        "EXPOSURE_THRESHOLD": 55.0
+      },
+      "seconds": 0.2
+    },
+    "coastal_slr_exposure": {
+      "ok": true,
+      "display_name": "Coastal / Sea-Level-Rise (SLR) Exposure Screening",
+      "group": "3 - Flood & Coastal: Pluvial and SLR Susceptibility",
+      "png": "screenshots/coastal_slr_exposure/coastal_slr_exposure_4panel.png",
+      "params": {
+        "STUDY_AREA": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_study_area.gpkg",
+        "DEM": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\dem.tif",
+        "COASTLINE": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\coastline.gpkg",
+        "BUILDINGS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+        "ROADS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\roads_noded.gpkg",
+        "SCENARIO_PRESET": 1,
+        "WATER_LEVEL_M": 1.0,
+        "MHHW_OFFSET_M": 0.0,
+        "CONNECTIVITY_RULE": 0,
+        "CELL_SIZE": 100.0,
+        "NEAR_SHORE_BUFFER_M": 250.0
+      },
+      "seconds": 0.2
+    },
+    "social_vulnerability_index": {
+      "ok": true,
+      "display_name": "Social Vulnerability Index (screening)",
+      "group": "4 - Social: Vulnerability and Equity",
+      "png": "screenshots/social_vulnerability_index/social_vulnerability_index_4panel.png",
+      "params": {
+        "AREAS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_social_units.gpkg",
+        "POPULATION_FIELD": "population",
+        "ELDERLY_FIELD": "elderly",
+        "CHILDREN_FIELD": "children",
+        "DISABILITY_FIELD": "disability",
+        "LOW_INCOME_FIELD": "low_income",
+        "WEIGHT_ELDERLY": 0.25,
+        "WEIGHT_CHILDREN": 0.15,
+        "WEIGHT_DISABILITY": 0.2,
+        "WEIGHT_LOW_INCOME": 0.25,
+        "WEIGHT_DENSITY": 0.15
+      },
+      "seconds": 0.1
+    },
+    "seismic_debris_monte_carlo": {
+      "ok": true,
+      "display_name": "Post-Earthquake Collapse, Debris & Evacuation Network (Monte Carlo)",
+      "group": "1 - Seismic: Debris and Logistics",
+      "png": "screenshots/seismic_debris_monte_carlo/seismic_debris_monte_carlo_4panel.png",
+      "params": {
+        "INPUT_BUILDINGS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+        "FIELD_FLOORS": "floor_count",
+        "FIELD_YEAR": "year",
+        "MAGNITUDE": 7.0,
+        "INPUT_PARCELS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\land_parcels.gpkg",
+        "INPUT_STUDY_AREA": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_study_area.gpkg",
+        "FLOOR_HEIGHT": 3.0,
+        "DEBRIS_FACTOR": 0.5,
+        "SOLID_VOLUME_RATIO": 0.3,
+        "SEED": 42
+      },
+      "seconds": 0.3
+    },
+    "emergency_accessibility_shelter_coverage": {
+      "ok": true,
+      "display_name": "Emergency Accessibility and Shelter Coverage",
+      "group": "5 - Emergency: Accessibility and Coverage",
+      "png": "screenshots/emergency_accessibility_shelter_coverage/emergency_accessibility_shelter_coverage_4panel.png",
+      "params": {
+        "STUDY_AREA": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_study_area.gpkg",
+        "SHELTERS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_shelters.gpkg",
+        "POPULATION_ASSETS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+        "BARRIERS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_impervious.gpkg",
+        "CELL_SIZE": 100.0,
+        "SERVICE_DISTANCE": 500.0,
+        "CRITICAL_DISTANCE": 1200.0,
+        "BARRIER_WEIGHT": 25.0
+      },
+      "seconds": 0.1
+    },
+    "network_emergency_accessibility": {
+      "ok": true,
+      "display_name": "Network Emergency Accessibility",
+      "group": "5 - Emergency: Accessibility and Coverage",
+      "png": "screenshots/network_emergency_accessibility/network_emergency_accessibility_4panel.png",
+      "params": {
+        "ROADS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\roads_noded.gpkg",
+        "ORIGINS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+        "DESTINATIONS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_shelters.gpkg",
+        "SPEED_KMH": 4.5,
+        "TARGET_MINUTES": 10.0,
+        "CRITICAL_MINUTES": 25.0,
+        "SNAP_TOLERANCE": 25.0
+      },
+      "seconds": 0.1
+    },
+    "network_criticality": {
+      "ok": true,
+      "display_name": "Network Criticality (edge betweenness proxy)",
+      "group": "5 - Emergency: Accessibility and Coverage",
+      "png": "screenshots/network_criticality/network_criticality_4panel.png",
+      "params": {
+        "ROADS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\roads_noded.gpkg",
+        "ORIGINS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+        "DESTINATIONS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_shelters.gpkg",
+        "SNAP_TOLERANCE": 25.0,
+        "ROAD_DIRECTION_FIELD": "direction"
+      },
+      "seconds": 0.1
+    },
+    "evacuation_time_simulation": {
+      "ok": true,
+      "display_name": "Evacuation Time Simulation",
+      "group": "5 - Emergency: Accessibility and Coverage",
+      "png": "screenshots/evacuation_time_simulation/evacuation_time_simulation_4panel.png",
+      "params": {
+        "ROADS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\roads_noded.gpkg",
+        "ORIGINS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+        "POP_FIELD": "population",
+        "SHELTERS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_shelters.gpkg",
+        "CAPACITY_FIELD": "capacity",
+        "SPEED_KMH": 30.0,
+        "TARGET_MINUTES": 15.0,
+        "CRITICAL_MINUTES": 45.0,
+        "ROAD_CAPACITY_FIELD": "capacity_ph",
+        "ROAD_CLASS_FIELD": "class",
+        "ROAD_DIRECTION_FIELD": "direction",
+        "DEFAULT_LANE_CAPACITY": 1200.0,
+        "TIMESTEP_MINUTES": 0.0,
+        "MAX_TIMESTEPS": 60,
+        "SNAP_TOLERANCE": 25.0,
+        "ASSIGN_ORDER": 0
+      },
+      "seconds": 0.2
+    },
+    "seismic_cascade_accessibility": {
+      "ok": true,
+      "display_name": "Seismic Cascade: Debris → Network Degradation",
+      "group": "5 - Emergency: Accessibility and Coverage",
+      "png": "screenshots/seismic_cascade_accessibility/seismic_cascade_accessibility_4panel.png",
+      "params": {
+        "ROADS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\roads_noded.gpkg",
+        "DEBRIS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\seismic_debris_monte_carlo__OUTPUT_HAZARD_MODEL.gpkg",
+        "ORIGINS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+        "DESTINATIONS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_shelters.gpkg",
+        "SNAP_TOLERANCE": 25.0
+      },
+      "seconds": 0.1
+    },
+    "optimal_shelter_siting": {
+      "ok": true,
+      "display_name": "Optimal Shelter Siting (greedy maximal coverage)",
+      "group": "5 - Emergency: Accessibility and Coverage",
+      "png": "screenshots/optimal_shelter_siting/optimal_shelter_siting_4panel.png",
+      "params": {
+        "CANDIDATES": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\shelter_candidates.gpkg",
+        "DEMAND": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+        "POP_FIELD": "population",
+        "MAX_DISTANCE": 400.0,
+        "NUM_SITES": 3,
+        "EXISTING": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_shelters.gpkg"
+      },
+      "seconds": 0.1
+    },
+    "evacuation_shelter_arrival_summary": {
+      "ok": true,
+      "display_name": "Evacuation Shelter Arrival Summary",
+      "group": "9 - Report and QA",
+      "png": "screenshots/evacuation_shelter_arrival_summary/evacuation_shelter_arrival_summary_4panel.png",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\evacuation_time_simulation__OUTPUT_ORIGINS.gpkg",
+        "SHELTER_FIELD": "evac_shelter",
+        "POP_FIELD": "evac_pop",
+        "TIMESTEP_FIELD": "fid",
+        "MINUTES_FIELD": "evac_min",
+        "MINUTE_BIN": 1.0
+      },
+      "seconds": 0.1
+    },
+    "air_quality_exposure_screening": {
+      "ok": true,
+      "display_name": "Air Quality / Urban Exposure (screening)",
+      "group": "6 - Air: Exposure Screening",
+      "png": "screenshots/air_quality_exposure_screening/air_quality_exposure_screening_4panel.png",
+      "params": {
+        "STUDY_AREA": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_study_area.gpkg",
+        "ROADS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\roads_noded.gpkg",
+        "EMISSION_SOURCES": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\emission_sources.gpkg",
+        "SENSITIVE": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_sensitive.gpkg",
+        "GREEN_BUFFERS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_green.gpkg",
+        "CELL_SIZE": 100.0,
+        "ROAD_DISTANCE": 300.0,
+        "SOURCE_DISTANCE": 600.0,
+        "ROAD_WEIGHT": 0.35,
+        "SOURCE_WEIGHT": 0.25,
+        "SENSITIVE_WEIGHT": 0.25,
+        "BUFFER_WEIGHT": 0.15
+      },
+      "seconds": 0.2
+    },
+    "green_infrastructure_drought_stress": {
+      "ok": true,
+      "display_name": "Drought and Green Infrastructure Stress",
+      "group": "7 - Drought & Wildfire: Green and WUI Stress",
+      "png": "screenshots/green_infrastructure_drought_stress/green_infrastructure_drought_stress_4panel.png",
+      "params": {
+        "GREEN": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_green.gpkg",
+        "STUDY_AREA": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_study_area.gpkg",
+        "IMPERVIOUS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_impervious.gpkg",
+        "WATER": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_water.gpkg",
+        "TREES": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\trees.gpkg",
+        "MAX_WATER_DISTANCE": 500.0,
+        "IMPERVIOUS_WEIGHT": 0.35,
+        "WATER_WEIGHT": 0.25,
+        "SIZE_WEIGHT": 0.25,
+        "TREE_WEIGHT": 0.15
+      },
+      "seconds": 0.1
+    },
+    "wui_exposure_screening": {
+      "ok": true,
+      "display_name": "Wildfire / WUI Exposure Screening",
+      "group": "7 - Drought & Wildfire: Green and WUI Stress",
+      "png": "screenshots/wui_exposure_screening/wui_exposure_screening_4panel.png",
+      "params": {
+        "STUDY_AREA": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_study_area.gpkg",
+        "VEGETATION": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\vegetation.gpkg",
+        "BUILDINGS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+        "ROADS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\roads_noded.gpkg",
+        "DEM": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\dem.tif",
+        "CELL_SIZE": 100.0,
+        "WUI_BUFFER": 300.0,
+        "MAX_EGRESS_DIST": 400.0,
+        "WEIGHT_FUEL": 0.35,
+        "WEIGHT_INTERFACE": 0.3,
+        "WEIGHT_SLOPE": 0.2,
+        "WEIGHT_EGRESS": 0.15
+      },
+      "seconds": 0.3
+    },
+    "join_scores_to_planning_units": {
+      "ok": true,
+      "display_name": "Join Hazard Scores to Planning Units",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "png": "screenshots/join_scores_to_planning_units/join_scores_to_planning_units_4panel.png",
+      "params": {
+        "UNITS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\planning_units.gpkg",
+        "SOURCE1": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\urban_heat_comfort_risk__OUTPUT_GRID.gpkg",
+        "FIELD1": "heat_score",
+        "OUT1": "heat_score",
+        "SOURCE2": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\pluvial_flood_susceptibility__OUTPUT_GRID.gpkg",
+        "FIELD2": "flood_score",
+        "OUT2": "flood_score",
+        "SOURCE3": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\air_quality_exposure_screening__OUTPUT_GRID.gpkg",
+        "FIELD3": "air_score",
+        "OUT3": "air_score",
+        "SOURCE4": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\emergency_accessibility_shelter_coverage__OUTPUT_GRID.gpkg",
+        "FIELD4": "access_score",
+        "OUT4": "access_score",
+        "SOURCE5": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\wui_exposure_screening__OUTPUT_GRID.gpkg",
+        "FIELD5": "wui_score",
+        "OUT5": "wui_score"
+      },
+      "seconds": 0.4
+    },
+    "multi_hazard_composite_index": {
+      "ok": true,
+      "display_name": "Multi-Hazard Composite Index",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "png": "screenshots/multi_hazard_composite_index/multi_hazard_composite_index_4panel.png",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+        "HAZARD_FIELDS": "['heat_score', 'flood_score', 'air_score', 'access_score', 'wui_score']",
+        "WEIGHTS": "0.25,0.25,0.20,0.15,0.15"
+      },
+      "seconds": 0.1
+    },
+    "equity_adjusted_priority": {
+      "ok": true,
+      "display_name": "Equity-Adjusted Adaptation Priority",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "png": "screenshots/equity_adjusted_priority/equity_adjusted_priority_4panel.png",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\multi_hazard_composite_index__OUTPUT.gpkg",
+        "HAZARD_FIELD": "mh_score",
+        "SVI_FIELD": "fid",
+        "EQUITY_WEIGHT": 0.5
+      },
+      "seconds": 0.1
+    },
+    "climate_adaptation_priority_synthesis": {
+      "ok": true,
+      "display_name": "Climate Adaptation Priority Synthesis",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "png": "screenshots/climate_adaptation_priority_synthesis/climate_adaptation_priority_synthesis_4panel.png",
+      "params": {
+        "UNITS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+        "HEAT_FIELD": "heat_score",
+        "FLOOD_FIELD": "flood_score",
+        "SOCIAL_FIELD": "fid",
+        "AIR_FIELD": "air_score",
+        "ACCESS_FIELD": "access_score",
+        "DROUGHT_FIELD": "fid",
+        "WUI_FIELD": "wui_score",
+        "COASTAL_FIELD": "fid",
+        "WEIGHT_HEAT": 0.2,
+        "WEIGHT_FLOOD": 0.2,
+        "WEIGHT_SOCIAL": 0.2,
+        "WEIGHT_AIR": 0.15,
+        "WEIGHT_ACCESS": 0.15,
+        "WEIGHT_DROUGHT": 0.1,
+        "WEIGHT_WUI": 0.15,
+        "WEIGHT_COASTAL": 0.15
+      },
+      "seconds": 0.2
+    },
+    "climate_projection_overlay": {
+      "ok": true,
+      "display_name": "Climate Projection Overlay",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "png": "screenshots/climate_projection_overlay/climate_projection_overlay_4panel.png",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\climate_adaptation_priority_synthesis__OUTPUT.gpkg",
+        "SCORE_FIELD": "adapt_score",
+        "SCENARIO": 3,
+        "CUSTOM_FACTOR": 1.3
+      },
+      "seconds": 0.1
+    },
+    "recovery_capacity_index": {
+      "ok": true,
+      "display_name": "Recovery Capacity Index",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "png": "screenshots/recovery_capacity_index/recovery_capacity_index_4panel.png",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+        "DIVERSITY_FIELDS": "['diversity']",
+        "REDUNDANCY_FIELD": "redundancy",
+        "REDUNDANCY_SCALE": 25.0,
+        "GREEN_FIELD": "green_ratio",
+        "COHESION_FIELD": "cohesion",
+        "WEIGHTS": "1,1,1,1"
+      },
+      "seconds": 0.1
+    },
+    "risk_recovery_priority_matrix": {
+      "ok": true,
+      "display_name": "Risk-Recovery Priority Matrix",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "png": "screenshots/risk_recovery_priority_matrix/risk_recovery_priority_matrix_4panel.png",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\recovery_capacity_index__OUTPUT.gpkg",
+        "HAZARD_FIELD": "fid",
+        "RECOVERY_FIELD": "rc_score",
+        "RECOVERY_WEIGHT": 0.5
+      },
+      "seconds": 0.1
+    },
+    "hotspot_analysis_getis_ord": {
+      "ok": true,
+      "display_name": "Hot-Spot Cluster Analysis (Getis-Ord Gi*)",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "png": "screenshots/hotspot_analysis_getis_ord/hotspot_analysis_getis_ord_4panel.png",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+        "VALUE_FIELD": "score",
+        "DISTANCE": 500.0,
+        "WEIGHT_METHOD": 0
+      },
+      "seconds": 0.1
+    },
+    "lisa_local_moran": {
+      "ok": true,
+      "display_name": "LISA Local Moran's I (cluster + outlier)",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "png": "screenshots/lisa_local_moran/lisa_local_moran_4panel.png",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+        "VALUE_FIELD": "score",
+        "DISTANCE": 500.0,
+        "WEIGHT_METHOD": 0
+      },
+      "seconds": 0.1
+    },
+    "population_weighted_exposure": {
+      "ok": true,
+      "display_name": "Population-Weighted Exposure",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "png": "screenshots/population_weighted_exposure/population_weighted_exposure_4panel.png",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+        "SCORE_FIELD": "score",
+        "POP_FIELD": "population"
+      },
+      "seconds": 0.1
+    },
+    "hazard_frequency_aggregation": {
+      "ok": true,
+      "display_name": "Multi-Period Hazard Frequency Aggregation",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "png": "screenshots/hazard_frequency_aggregation/hazard_frequency_aggregation_4panel.png",
+      "params": {
+        "UNITS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\planning_units.gpkg",
+        "SOURCES": "['C:\\\\Users\\\\YE\\\\PyCharmMiscProject\\\\qgis_plugins\\\\planx_urban_resilience\\\\docs\\\\PRACTICAL_GUIDE\\\\work\\\\hazard_period_t1.gpkg', 'C:\\\\Users\\\\YE\\\\PyCharmMiscProject\\\\qgis_plugins\\\\planx_urban_resilience\\\\docs\\\\PRACTICAL_GUIDE\\\\work\\\\hazard_period_t2.gpkg']",
+        "SCORE_FIELD": "score",
+        "THRESHOLD": 50.0,
+        "AGG_MODE": 2
+      },
+      "seconds": 0.1
+    },
+    "vulnerability_surface_idw": {
+      "ok": true,
+      "display_name": "Vulnerability Surface (IDW interpolation)",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "png": "screenshots/vulnerability_surface_idw/vulnerability_surface_idw_4panel.png",
+      "params": {
+        "POINTS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\vulnerability_points.gpkg",
+        "VALUE_FIELD": "vulnerability",
+        "STUDY": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_study_area.gpkg",
+        "CELL_SIZE": 200.0,
+        "POWER": 2.0,
+        "RADIUS": 0.0,
+        "MAX_NEIGHBOURS": 12
+      },
+      "seconds": 0.1
+    },
+    "critical_infrastructure_exposure": {
+      "ok": true,
+      "display_name": "Critical Infrastructure Exposure",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "png": "screenshots/critical_infrastructure_exposure/critical_infrastructure_exposure_4panel.png",
+      "params": {
+        "HAZARD": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\urban_heat_comfort_risk__OUTPUT_GRID.gpkg",
+        "HAZARD_FIELD": "heat_score",
+        "FACILITIES": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_shelters.gpkg",
+        "CRITICALITY_FIELD": "fid",
+        "CRITICALITY_DEFAULT": 1.0,
+        "NAME_FIELD": "name",
+        "CLASS_FIELD": "fid"
+      },
+      "seconds": 0.1
+    },
+    "scenario_sensitivity": {
+      "ok": true,
+      "display_name": "Scenario Sensitivity Analysis",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "png": "screenshots/scenario_sensitivity/scenario_sensitivity_4panel.png",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+        "COMPONENT_FIELDS": "['heat_score', 'flood_score', 'air_score']",
+        "WEIGHTS": "0.4,0.4,0.2",
+        "PERTURB": 0.3,
+        "SAMPLES": 60,
+        "SEED": 42
+      },
+      "seconds": 0.1
+    },
+    "risk_trend_hotspot": {
+      "ok": true,
+      "display_name": "Risk Trend Hot-Spot (Gi* × Δ score)",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "png": "screenshots/risk_trend_hotspot/risk_trend_hotspot_4panel.png",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+        "LATER_SCORE": "scen_score",
+        "DELTA_FIELD": "delta",
+        "DISTANCE": 500.0,
+        "DELTA_TOL": 1.0
+      },
+      "seconds": 0.1
+    },
+    "cost_benefit_analyzer": {
+      "ok": true,
+      "display_name": "Cost-Benefit Analyzer (planning prioritisation)",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "png": "screenshots/cost_benefit_analyzer/cost_benefit_analyzer_4panel.png",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+        "SCORE_FIELD": "score",
+        "UNIT_COST": 100.0,
+        "UNIT_COST_FIELD": "fid",
+        "DEFAULT_REDUCTION": 0.7,
+        "REDUCTION_FIELD": "fid",
+        "POP_FIELD": "population"
+      },
+      "seconds": 0.1
+    },
+    "pareto_optimal_selector": {
+      "ok": true,
+      "display_name": "Pareto-Optimal Intervention Selector",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "png": "screenshots/pareto_optimal_selector/pareto_optimal_selector_4panel.png",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+        "COST_FIELD": "rec_cost",
+        "BENEFIT_FIELD": "rec_benefit"
+      },
+      "seconds": 0.1
+    },
+    "lifecycle_cost_calculator": {
+      "ok": true,
+      "display_name": "Lifecycle Cost Calculator (25-year NPV)",
+      "group": "8 - Synthesis: Adaptation Priorities",
+      "png": "screenshots/lifecycle_cost_calculator/lifecycle_cost_calculator_4panel.png",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+        "CAPEX_FIELD": "capex",
+        "OPEX_FIELD": "opex",
+        "MAINT_INTERVAL": 5,
+        "MAINT_COST": 200.0,
+        "MAINT_COST_FIELD": "fid",
+        "REPL_YEARS": 20,
+        "REPL_COST": 500.0,
+        "REPL_COST_FIELD": "fid",
+        "HORIZON": 25,
+        "DISCOUNT": 4.0,
+        "AREA_SCALE": false
+      },
+      "seconds": 0.1
+    },
+    "resilience_time_series": {
+      "ok": true,
+      "display_name": "Resilience Time-Series Tracker",
+      "group": "9 - Report and QA",
+      "png": "screenshots/resilience_time_series/resilience_time_series_4panel.png",
+      "params": {
+        "EARLIER": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+        "EARLIER_ID": "uid",
+        "EARLIER_SCORE": "score",
+        "LATER": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\climate_adaptation_priority_synthesis__OUTPUT.gpkg",
+        "LATER_ID": "uid",
+        "LATER_SCORE": "adapt_score",
+        "TARGET_VALUE": 40.0
+      },
+      "seconds": 0.1
+    },
+    "resilience_scenario_comparison": {
+      "ok": true,
+      "display_name": "Scenario Comparison / Delta Map",
+      "group": "9 - Report and QA",
+      "png": "screenshots/resilience_scenario_comparison/resilience_scenario_comparison_4panel.png",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+        "BASELINE_FIELD": "score",
+        "SCENARIO_FIELD": "scen_score",
+        "THRESHOLD": 5.0
+      },
+      "seconds": 0.1
+    },
+    "scenario_planning_template": {
+      "ok": true,
+      "display_name": "Scenario Planning Template",
+      "group": "9 - Report and QA",
+      "png": "screenshots/scenario_planning_template/scenario_planning_template_4panel.png",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\planning_units.gpkg",
+        "BASE_SCORE_FIELD": "score",
+        "DEFAULT_BASE_SCORE": 50.0,
+        "SCENARIO_NAME": "Green corridor retrofit",
+        "INTERVENTION_TYPE": 0,
+        "EXPECTED_REDUCTION": 15.0
+      },
+      "seconds": 0.1
+    },
+    "resilience_score_html_report": {
+      "ok": true,
+      "display_name": "Resilience Score HTML Report",
+      "group": "9 - Report and QA",
+      "png": "screenshots/resilience_score_html_report/resilience_score_html_report_4panel.png",
+      "report": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\resilience_score_html_report__OUTPUT_HTML.html",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\climate_adaptation_priority_synthesis__OUTPUT.gpkg",
+        "SCORE_FIELD": "adapt_score",
+        "CLASS_FIELD": "adapt_class",
+        "DRIVER_FIELD": "drivers",
+        "TITLE": "PlanX Urban Resilience - Adaptation Priority Report"
+      },
+      "seconds": 0.1
+    },
+    "resilience_studio_brief_markdown": {
+      "ok": true,
+      "display_name": "Resilience Studio Brief (Markdown)",
+      "group": "9 - Report and QA",
+      "png": "screenshots/resilience_studio_brief_markdown/resilience_studio_brief_markdown_4panel.png",
+      "report": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\resilience_studio_brief_markdown__OUTPUT_MD.md",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\climate_adaptation_priority_synthesis__OUTPUT.gpkg",
+        "SCORE_FIELD": "adapt_score",
+        "CLASS_FIELD": "adapt_class",
+        "DRIVER_FIELD": "drivers",
+        "TITLE": "PlanX Urban Resilience - Studio Brief",
+        "STUDY_CONTEXT": "Demo district, EPSG:3857 synthetic fixture, screening-level screening for teaching use."
+      },
+      "seconds": 0.1
+    },
+    "recommended_actions_report": {
+      "ok": true,
+      "display_name": "Recommended Actions Report (Markdown)",
+      "group": "9 - Report and QA",
+      "png": "screenshots/recommended_actions_report/recommended_actions_report_4panel.png",
+      "report": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\recommended_actions_report__OUTPUT.md",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\climate_adaptation_priority_synthesis__OUTPUT.gpkg",
+        "SCORE_FIELD": "adapt_score",
+        "CLASS_FIELD": "adapt_class",
+        "HAZARD_FIELD": "drivers",
+        "UNIT_NAME_FIELD": "name",
+        "TOP_N": 10,
+        "PROJECT": "PlanX Urban Resilience - Demo District"
+      },
+      "seconds": 0.2
+    },
+    "apply_resilience_symbology": {
+      "ok": true,
+      "display_name": "Apply Resilience Symbology",
+      "group": "9 - Report and QA",
+      "png": "screenshots/apply_resilience_symbology/apply_resilience_symbology_4panel.png",
+      "params": {
+        "LAYER": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\climate_adaptation_priority_synthesis__OUTPUT.gpkg",
+        "FIELD": "adapt_score",
+        "PRESET": 0,
+        "REFRESH": true
+      },
+      "seconds": 0.0
+    },
+    "bivariate_choropleth_symbology": {
+      "ok": true,
+      "display_name": "Bivariate Choropleth Symbology (risk × vulnerability)",
+      "group": "9 - Report and QA",
+      "png": "screenshots/bivariate_choropleth_symbology/bivariate_choropleth_symbology_4panel.png",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+        "RISK_FIELD": "score",
+        "VULN_FIELD": "pop_density"
+      },
+      "seconds": 0.1
+    },
+    "resilience_pdf_atlas": {
+      "ok": true,
+      "display_name": "Resilience PDF Atlas",
+      "group": "9 - Report and QA",
+      "png": "screenshots/resilience_pdf_atlas/resilience_pdf_atlas_4panel.png",
+      "report": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\resilience_pdf_atlas__OUTPUT.pdf",
+      "seconds": 4.6
+    },
+    "multi_hazard_correlation_matrix": {
+      "ok": true,
+      "display_name": "Multi-Hazard Correlation Matrix (HTML + table)",
+      "group": "9 - Report and QA",
+      "png": "screenshots/multi_hazard_correlation_matrix/multi_hazard_correlation_matrix_4panel.png",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+        "FIELDS": "['heat_score', 'flood_score', 'air_score', 'access_score', 'wui_score']",
+        "PROJECT": "PlanX Urban Resilience - Demo District"
+      },
+      "seconds": 0.0
+    },
+    "risk_3d_volume_export": {
+      "ok": true,
+      "display_name": "3D Risk Volume Export (GeoJSON for PlanX 3D City)",
+      "group": "9 - Report and QA",
+      "png": "screenshots/risk_3d_volume_export/risk_3d_volume_export_4panel.png",
+      "params": {
+        "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\climate_adaptation_priority_synthesis__OUTPUT.gpkg",
+        "SCORE_FIELD": "adapt_score",
+        "MAX_HEIGHT": 60.0,
+        "BASE_HEIGHT_FIELD": "fid",
+        "COLOR_RAMP": 0
+      },
+      "seconds": 0.1
+    }
+  }
+}

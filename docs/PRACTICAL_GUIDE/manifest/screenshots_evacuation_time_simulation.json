@@ -1,0 +1,38 @@
+{
+  "algo_id": "evacuation_time_simulation",
+  "display_name": "Evacuation Time Simulation",
+  "group": "5 - Emergency: Accessibility and Coverage",
+  "timestamp": "2026-10-21T18:16:29",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Evacuation Time Simulation - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/evacuation_time_simulation/evacuation_time_simulation_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "ROADS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\roads_noded.gpkg",
+    "ORIGINS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+    "POP_FIELD": "population",
+    "SHELTERS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_shelters.gpkg",
+    "CAPACITY_FIELD": "capacity",
+    "SPEED_KMH": 30.0,
+    "TARGET_MINUTES": 15.0,
+    "CRITICAL_MINUTES": 45.0,
+    "ROAD_CAPACITY_FIELD": "capacity_ph",
+    "ROAD_CLASS_FIELD": "class",
+    "ROAD_DIRECTION_FIELD": "direction",
+    "DEFAULT_LANE_CAPACITY": 1200.0,
+    "TIMESTEP_MINUTES": 0.0,
+    "MAX_TIMESTEPS": 60,
+    "SNAP_TOLERANCE": 25.0,
+    "ASSIGN_ORDER": 0
+  },
+  "seconds": 0.2
+}

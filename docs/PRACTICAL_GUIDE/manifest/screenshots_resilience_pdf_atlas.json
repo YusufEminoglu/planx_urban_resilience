@@ -1,0 +1,31 @@
+{
+  "algo_id": "resilience_pdf_atlas",
+  "display_name": "Resilience PDF Atlas",
+  "group": "9 - Report and QA",
+  "timestamp": "2026-10-21T18:16:43",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Resilience PDF Atlas - print atlas preview",
+      "path": "screenshots/resilience_pdf_atlas/resilience_pdf_atlas_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Atlas Map",
+        "Atlas Output"
+      ]
+    }
+  ],
+  "params": {
+    "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\climate_adaptation_priority_synthesis__OUTPUT.gpkg",
+    "SCORE_FIELD": "adapt_score",
+    "CLASS_FIELD": "adapt_class",
+    "TITLE": "PlanX Urban Resilience - Demo District Atlas",
+    "SUBTITLE": "Screening atlas (not engineering-grade simulation)",
+    "AUTHOR": "Yusuf Eminoglu",
+    "PROJECT": "PlanX Urban Resilience",
+    "METHOD": 1,
+    "ATLAS_PRESET": 0
+  },
+  "seconds": 4.6
+}

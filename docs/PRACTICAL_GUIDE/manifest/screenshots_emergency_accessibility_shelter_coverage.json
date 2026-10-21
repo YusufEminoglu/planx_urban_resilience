@@ -1,0 +1,30 @@
+{
+  "algo_id": "emergency_accessibility_shelter_coverage",
+  "display_name": "Emergency Accessibility and Shelter Coverage",
+  "group": "5 - Emergency: Accessibility and Coverage",
+  "timestamp": "2026-10-21T18:16:28",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Emergency Accessibility and Shelter Coverage - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/emergency_accessibility_shelter_coverage/emergency_accessibility_shelter_coverage_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "STUDY_AREA": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_study_area.gpkg",
+    "SHELTERS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_shelters.gpkg",
+    "POPULATION_ASSETS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+    "BARRIERS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_impervious.gpkg",
+    "CELL_SIZE": 100.0,
+    "SERVICE_DISTANCE": 500.0,
+    "CRITICAL_DISTANCE": 1200.0,
+    "BARRIER_WEIGHT": 25.0
+  },
+  "seconds": 0.1
+}

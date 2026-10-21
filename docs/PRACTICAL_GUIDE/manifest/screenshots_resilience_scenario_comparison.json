@@ -1,0 +1,26 @@
+{
+  "algo_id": "resilience_scenario_comparison",
+  "display_name": "Scenario Comparison / Delta Map",
+  "group": "9 - Report and QA",
+  "timestamp": "2026-10-21T18:16:35",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Scenario Comparison / Delta Map - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/resilience_scenario_comparison/resilience_scenario_comparison_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+    "BASELINE_FIELD": "score",
+    "SCENARIO_FIELD": "scen_score",
+    "THRESHOLD": 5.0
+  },
+  "seconds": 0.1
+}

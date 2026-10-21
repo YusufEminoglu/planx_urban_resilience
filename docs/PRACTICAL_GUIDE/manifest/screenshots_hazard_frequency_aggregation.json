@@ -1,0 +1,27 @@
+{
+  "algo_id": "hazard_frequency_aggregation",
+  "display_name": "Multi-Period Hazard Frequency Aggregation",
+  "group": "8 - Synthesis: Adaptation Priorities",
+  "timestamp": "2026-10-21T18:16:33",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Multi-Period Hazard Frequency Aggregation - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/hazard_frequency_aggregation/hazard_frequency_aggregation_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "UNITS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\planning_units.gpkg",
+    "SOURCES": "['C:\\\\Users\\\\YE\\\\PyCharmMiscProject\\\\qgis_plugins\\\\planx_urban_resilience\\\\docs\\\\PRACTICAL_GUIDE\\\\work\\\\hazard_period_t1.gpkg', 'C:\\\\Users\\\\YE\\\\PyCharmMiscProject\\\\qgis_plugins\\\\planx_urban_resilience\\\\docs\\\\PRACTICAL_GUIDE\\\\work\\\\hazard_period_t2.gpkg']",
+    "SCORE_FIELD": "score",
+    "THRESHOLD": 50.0,
+    "AGG_MODE": 2
+  },
+  "seconds": 0.1
+}

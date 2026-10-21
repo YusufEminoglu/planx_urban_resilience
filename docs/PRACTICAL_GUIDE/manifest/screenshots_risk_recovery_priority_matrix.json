@@ -1,0 +1,26 @@
+{
+  "algo_id": "risk_recovery_priority_matrix",
+  "display_name": "Risk-Recovery Priority Matrix",
+  "group": "8 - Synthesis: Adaptation Priorities",
+  "timestamp": "2026-10-21T18:16:32",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Risk-Recovery Priority Matrix - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/risk_recovery_priority_matrix/risk_recovery_priority_matrix_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\recovery_capacity_index__OUTPUT.gpkg",
+    "HAZARD_FIELD": "fid",
+    "RECOVERY_FIELD": "rc_score",
+    "RECOVERY_WEIGHT": 0.5
+  },
+  "seconds": 0.1
+}

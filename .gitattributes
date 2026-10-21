@@ -1,0 +1,12 @@
+# Normalise line endings on checkout so a Windows editor cannot turn a
+# one-line change into a whole-file rewrite in the next commit.
+# `text=auto` keeps binary assets (icons, PNGs) untouched.
+* text=auto eol=lf
+
+*.py text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.html text eol=lf
+*.qml text eol=lf
+*.cfg text eol=lf
+*.toml text eol=lf

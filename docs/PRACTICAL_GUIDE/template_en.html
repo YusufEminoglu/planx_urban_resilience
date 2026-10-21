@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PlanX Urban Resilience — Practical Guide (print edition)</title>
+<style>
+@page { margin: 1.8cm; size: A4; }
+* { box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 9.5pt; line-height: 1.5;
+  color: #17201e; max-width: 100%; margin: 0; padding: 0; }
+h1 { font-size: 21pt; color: #0b6b60; border-bottom: 3px solid #0d9488; padding-bottom: 0.3em;
+  margin: 0 0 0.5em; page-break-after: avoid; }
+h2 { font-size: 15pt; color: #0b6b60; border-bottom: 2px solid #0d9488; padding-bottom: 0.2em;
+  margin: 2em 0 0.7em; page-break-after: avoid; }
+h3 { font-size: 11.5pt; color: #0d9488; margin: 1.4em 0 0.4em; page-break-after: avoid; }
+h4 { font-size: 9.5pt; color: #4a5b58; margin: 0.9em 0 0.25em; page-break-after: avoid; }
+p { margin: 0.45em 0; }
+table { width: 100%; border-collapse: collapse; margin: 0.7em 0; font-size: 8.5pt; }
+th, td { border: 1px solid #d5e0de; padding: 3.5px 6px; text-align: left; vertical-align: top; }
+th { background: #e6f6f4; font-weight: 600; }
+tr:nth-child(even) td { background: #f8fbfa; }
+td code:first-child, .param-table td:first-child { font-family: 'Consolas', monospace;
+  font-weight: 600; white-space: nowrap; }
+code { font-family: 'Consolas', monospace; font-size: 8.5pt; background: #f1f7f6;
+  padding: 0.1em 0.3em; border-radius: 3px; }
+pre { background: #f1f7f6; padding: 0.6em; border-radius: 4px; font-size: 8pt;
+  margin: 0.5em 0; white-space: pre-wrap; }
+.note { background: #e6f6f4; border-left: 4px solid #0d9488; padding: 0.6em 1em;
+  margin: 0.7em 0; border-radius: 0 4px 4px 0; font-size: 9pt; }
+.warn { background: #fff8e6; border-left: 4px solid #d9a800; padding: 0.6em 1em;
+  margin: 0.7em 0; border-radius: 0 4px 4px 0; font-size: 9pt; }
+.algo-block { margin: 1em 0; padding: 0.9em; border: 1px solid #dbe5e3; border-radius: 6px;
+  background: #fbfdfd; page-break-inside: avoid; }
+.algo-title { font-weight: 700; font-size: 11pt; color: #0b6b60; margin-bottom: 0.4em; }
+.algo-meta { font-size: 8pt; color: #66736f; margin-bottom: 0.7em; }
+.section { margin: 0.8em 0; }
+.section-title { font-weight: 600; color: #0b6b60; margin-bottom: 0.35em;
+  border-bottom: 1px solid #e2e9e8; padding-bottom: 0.2em; }
+.help-text { white-space: pre-wrap; font-size: 8.5pt; line-height: 1.5; background: #fbfdfd;
+  padding: 0.7em; border: 1px solid #eef3f2; border-radius: 4px; }
+.shot { width: 100%; border: 1px solid #dbe5e3; border-radius: 4px; margin: 0.5em 0; }
+.shot figcaption { font-size: 8pt; color: #66736f; margin-top: 0.3em; }
+ul, ol { margin: 0.4em 0; padding-left: 1.4em; }
+li { margin: 0.18em 0; }
+.toc { columns: 2; column-gap: 2em; font-size: 8.5pt; }
+.toc a { text-decoration: none; color: #0b6b60; }
+.footer { margin-top: 2.5em; padding-top: 1em; border-top: 1px solid #d5e0de; font-size: 7.5pt;
+  color: #7d8b88; text-align: center; }
+@media print {
+  .no-print { display: none !important; }
+  .algo-block { page-break-inside: avoid; }
+  h2, h3, h4 { page-break-after: avoid; }
+  a { color: #0b6b60; }
+}
+</style>
+</head>
+<body>
+
+<h1>PlanX Urban Resilience — Practical Guide</h1>
+<p><strong>Edition:</strong> {{EDITION}} | <strong>Companion:</strong>
+  <a href="../URBAN_RESILIENCE_REFERENCE_MANUAL.html">Academic Reference Manual</a>
+  | <strong>Author:</strong> Yusuf Eminoğlu</p>
+
+<div class="note">
+  <strong>What this guide is:</strong> a practical companion to the academic reference manual.
+  It documents all 45 PlanX Urban Resilience Processing tools - what each one computes,
+  which inputs it needs, which parameters matter, and how to read the result - using
+  real screenshots captured from actual QGIS runs on the plugin's own synthetic demo
+  district. For the derivation of every formula, the modelling assumptions and the
+  literature behind them, see the
+  <a href="../URBAN_RESILIENCE_REFERENCE_MANUAL.html">reference manual</a>.
+</div>
+
+<div class="note">
+  <strong>How the screenshots were made:</strong> a headless QGIS session runs each tool
+  in turn, renders the input layers, the raw result, the styled result and the exact
+  parameter values used, and writes them into this document. No figure is drawn by hand
+  and no number is illustrative.
+</div>
+
+<div class="warn">
+  <strong>To create a PDF:</strong> in the browser press <kbd>Ctrl+P</kbd> (or
+  <kbd>Cmd+P</kbd>) → Destination: <em>Save as PDF</em> → Paper: A4, margins: Default.
+</div>
+
+---
+
+## Table of Contents
+<div class="toc">
+<ol>
+{{TOC}}
+</ol>
+</div>
+
+---
+
+{{CONTENT}}
+
+<div class="footer">
+  PlanX Urban Resilience — Practical Guide, {{ALGO_COUNT}} tools in {{GROUP_COUNT}} groups |
+  GPL-3.0 © Yusuf Eminoğlu |
+  Reference manual: <a href="../URBAN_RESILIENCE_REFERENCE_MANUAL.html">URBAN_RESILIENCE_REFERENCE_MANUAL.html</a>
+</div>
+
+</body>
+</html>

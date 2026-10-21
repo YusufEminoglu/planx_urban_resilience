@@ -1,0 +1,29 @@
+{
+  "algo_id": "cost_benefit_analyzer",
+  "display_name": "Cost-Benefit Analyzer (planning prioritisation)",
+  "group": "8 - Synthesis: Adaptation Priorities",
+  "timestamp": "2026-10-21T18:16:34",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Cost-Benefit Analyzer (planning prioritisation) - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/cost_benefit_analyzer/cost_benefit_analyzer_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+    "SCORE_FIELD": "score",
+    "UNIT_COST": 100.0,
+    "UNIT_COST_FIELD": "fid",
+    "DEFAULT_REDUCTION": 0.7,
+    "REDUCTION_FIELD": "fid",
+    "POP_FIELD": "population"
+  },
+  "seconds": 0.1
+}

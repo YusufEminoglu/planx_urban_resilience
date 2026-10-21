@@ -1,0 +1,28 @@
+{
+  "algo_id": "scenario_sensitivity",
+  "display_name": "Scenario Sensitivity Analysis",
+  "group": "8 - Synthesis: Adaptation Priorities",
+  "timestamp": "2026-10-21T18:16:33",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Scenario Sensitivity Analysis - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/scenario_sensitivity/scenario_sensitivity_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+    "COMPONENT_FIELDS": "['heat_score', 'flood_score', 'air_score']",
+    "WEIGHTS": "0.4,0.4,0.2",
+    "PERTURB": 0.3,
+    "SAMPLES": 60,
+    "SEED": 42
+  },
+  "seconds": 0.1
+}

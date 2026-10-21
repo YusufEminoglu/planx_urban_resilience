@@ -1,0 +1,29 @@
+{
+  "algo_id": "network_emergency_accessibility",
+  "display_name": "Network Emergency Accessibility",
+  "group": "5 - Emergency: Accessibility and Coverage",
+  "timestamp": "2026-10-21T18:16:29",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Network Emergency Accessibility - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/network_emergency_accessibility/network_emergency_accessibility_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "ROADS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\roads_noded.gpkg",
+    "ORIGINS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+    "DESTINATIONS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_shelters.gpkg",
+    "SPEED_KMH": 4.5,
+    "TARGET_MINUTES": 10.0,
+    "CRITICAL_MINUTES": 25.0,
+    "SNAP_TOLERANCE": 25.0
+  },
+  "seconds": 0.1
+}

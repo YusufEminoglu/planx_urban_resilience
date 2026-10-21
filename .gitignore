@@ -3,3 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 tests/_gui_grabs/
+
+.idea/
+
+# Practical Guide scratch: generated inputs and outputs, wiped on every run
+docs/PRACTICAL_GUIDE/work/

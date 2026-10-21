@@ -1,0 +1,23 @@
+{
+  "algo_id": "synthetic_resilience_demo_dataset",
+  "display_name": "Synthetic Resilience Demo Dataset",
+  "group": "0 - Demo and QA",
+  "timestamp": "2026-10-21T18:16:26",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Synthetic Resilience Demo Dataset - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/synthetic_resilience_demo_dataset/synthetic_resilience_demo_dataset_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "SCALE": 1.0
+  },
+  "seconds": 0.2
+}

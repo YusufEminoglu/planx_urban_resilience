@@ -1,0 +1,27 @@
+{
+  "algo_id": "risk_trend_hotspot",
+  "display_name": "Risk Trend Hot-Spot (Gi* × Δ score)",
+  "group": "8 - Synthesis: Adaptation Priorities",
+  "timestamp": "2026-10-21T18:16:34",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Risk Trend Hot-Spot (Gi* × Δ score) - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/risk_trend_hotspot/risk_trend_hotspot_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "INPUT": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+    "LATER_SCORE": "scen_score",
+    "DELTA_FIELD": "delta",
+    "DISTANCE": 500.0,
+    "DELTA_TOL": 1.0
+  },
+  "seconds": 0.1
+}

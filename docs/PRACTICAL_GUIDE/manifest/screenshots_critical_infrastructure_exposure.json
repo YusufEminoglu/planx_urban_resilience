@@ -1,0 +1,29 @@
+{
+  "algo_id": "critical_infrastructure_exposure",
+  "display_name": "Critical Infrastructure Exposure",
+  "group": "8 - Synthesis: Adaptation Priorities",
+  "timestamp": "2026-10-21T18:16:33",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Critical Infrastructure Exposure - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/critical_infrastructure_exposure/critical_infrastructure_exposure_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "HAZARD": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\urban_heat_comfort_risk__OUTPUT_GRID.gpkg",
+    "HAZARD_FIELD": "heat_score",
+    "FACILITIES": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_shelters.gpkg",
+    "CRITICALITY_FIELD": "fid",
+    "CRITICALITY_DEFAULT": 1.0,
+    "NAME_FIELD": "name",
+    "CLASS_FIELD": "fid"
+  },
+  "seconds": 0.1
+}

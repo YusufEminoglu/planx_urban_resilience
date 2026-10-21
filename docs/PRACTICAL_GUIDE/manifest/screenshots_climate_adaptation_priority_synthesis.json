@@ -1,0 +1,39 @@
+{
+  "algo_id": "climate_adaptation_priority_synthesis",
+  "display_name": "Climate Adaptation Priority Synthesis",
+  "group": "8 - Synthesis: Adaptation Priorities",
+  "timestamp": "2026-10-21T18:16:32",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Climate Adaptation Priority Synthesis - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/climate_adaptation_priority_synthesis/climate_adaptation_priority_synthesis_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "UNITS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\join_scores_to_planning_units__OUTPUT.gpkg",
+    "HEAT_FIELD": "heat_score",
+    "FLOOD_FIELD": "flood_score",
+    "SOCIAL_FIELD": "fid",
+    "AIR_FIELD": "air_score",
+    "ACCESS_FIELD": "access_score",
+    "DROUGHT_FIELD": "fid",
+    "WUI_FIELD": "wui_score",
+    "COASTAL_FIELD": "fid",
+    "WEIGHT_HEAT": 0.2,
+    "WEIGHT_FLOOD": 0.2,
+    "WEIGHT_SOCIAL": 0.2,
+    "WEIGHT_AIR": 0.15,
+    "WEIGHT_ACCESS": 0.15,
+    "WEIGHT_DROUGHT": 0.1,
+    "WEIGHT_WUI": 0.15,
+    "WEIGHT_COASTAL": 0.15
+  },
+  "seconds": 0.2
+}

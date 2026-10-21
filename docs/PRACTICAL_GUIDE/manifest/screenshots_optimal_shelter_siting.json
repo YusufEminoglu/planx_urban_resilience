@@ -1,0 +1,28 @@
+{
+  "algo_id": "optimal_shelter_siting",
+  "display_name": "Optimal Shelter Siting (greedy maximal coverage)",
+  "group": "5 - Emergency: Accessibility and Coverage",
+  "timestamp": "2026-10-21T18:16:30",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Optimal Shelter Siting (greedy maximal coverage) - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/optimal_shelter_siting/optimal_shelter_siting_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "CANDIDATES": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\shelter_candidates.gpkg",
+    "DEMAND": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+    "POP_FIELD": "population",
+    "MAX_DISTANCE": 400.0,
+    "NUM_SITES": 3,
+    "EXISTING": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_shelters.gpkg"
+  },
+  "seconds": 0.1
+}

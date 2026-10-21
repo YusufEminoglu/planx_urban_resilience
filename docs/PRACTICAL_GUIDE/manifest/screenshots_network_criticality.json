@@ -1,0 +1,27 @@
+{
+  "algo_id": "network_criticality",
+  "display_name": "Network Criticality (edge betweenness proxy)",
+  "group": "5 - Emergency: Accessibility and Coverage",
+  "timestamp": "2026-10-21T18:16:29",
+  "screenshots": [
+    {
+      "step": 1,
+      "caption": "Network Criticality (edge betweenness proxy) - 4-panel view (Input | Parameters | Raw Output | Styled Output)",
+      "path": "screenshots/network_criticality/network_criticality_4panel.png",
+      "panels": [
+        "Input Data",
+        "Parameters",
+        "Raw Output",
+        "Styled Output"
+      ]
+    }
+  ],
+  "params": {
+    "ROADS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\roads_noded.gpkg",
+    "ORIGINS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_buildings.gpkg",
+    "DESTINATIONS": "C:\\Users\\YE\\PyCharmMiscProject\\qgis_plugins\\planx_urban_resilience\\docs\\PRACTICAL_GUIDE\\work\\demo_shelters.gpkg",
+    "SNAP_TOLERANCE": 25.0,
+    "ROAD_DIRECTION_FIELD": "direction"
+  },
+  "seconds": 0.1
+}
