@@ -405,15 +405,15 @@ def _render(layers, extent, size):
 def _panel_label(painter, x, y, w, text, sub=""):
     painter.fillRect(QRectF(x, y, w, 34), QColor(13, 148, 136, 240))
     painter.setPen(QColor("#ffffff"))
-    painter.setFont(QFont("Segoe UI", 10, QFont.Bold))
+    painter.setFont(QFont("Segoe UI", 10, QFont.Weight.Bold))
     painter.drawText(QRectF(x + 10, y + 4, w - 20, 26),
-                     Qt.AlignLeft | Qt.AlignVCenter, text)
+                     Qt.AlignmentFlag.AlignLeft | Qt.AlignVCenter, text)
     if sub:
         painter.setPen(QColor("#083c38"))
         painter.setFont(QFont("Segoe UI", 8))
         painter.fillRect(QRectF(x, y + 34, w, 19), QColor(255, 255, 255, 228))
         painter.drawText(QRectF(x + 10, y + 34, w - 20, 19),
-                         Qt.AlignLeft | Qt.AlignVCenter, sub)
+                         Qt.AlignmentFlag.AlignLeft | Qt.AlignVCenter, sub)
 
 
 def _extent_of(layers):
@@ -480,7 +480,7 @@ def capture_4panel(algo_id, display_name, input_layers, output_layers, param_tex
             p.fillRect(QRectF(x, y, PW, PH), QColor("#f4f6f6"))
             p.setPen(QColor("#99a5a5"))
             p.setFont(QFont("Segoe UI", 13))
-            p.drawText(QRectF(x, y, PW, PH), Qt.AlignCenter, "no layer for this panel")
+            p.drawText(QRectF(x, y, PW, PH), Qt.AlignmentFlag.AlignCenter, "no layer for this panel")
         else:
             im = _render(layers, extent, QSize(PW, PH))
             if not im.isNull():
@@ -530,7 +530,7 @@ def capture_4panel(algo_id, display_name, input_layers, output_layers, param_tex
 
     p.fillRect(QRectF(0, 0, PW * 2, HDR), QColor("#0b2b28"))
     p.setPen(QColor("#7fe3d6"))
-    p.setFont(QFont("Segoe UI", 12, QFont.Bold))
+    p.setFont(QFont("Segoe UI", 12, QFont.Weight.Bold))
     p.drawText(12, 21, f"PlanX Urban Resilience - {display_name}  ({algo_id})")
     p.setPen(QColor("#9fd6c9"))
     p.setFont(QFont("Segoe UI", 8))
@@ -587,7 +587,7 @@ def capture_report_4panel(algo_id, display_name, input_layers, report_path,
             p.fillRect(QRectF(x, y, PW, PH), QColor("#f4f6f6"))
             p.setPen(QColor("#99a5a5"))
             p.setFont(QFont("Segoe UI", 13))
-            p.drawText(QRectF(x, y, PW, PH), Qt.AlignCenter, "no layer for this panel")
+            p.drawText(QRectF(x, y, PW, PH), Qt.AlignmentFlag.AlignCenter, "no layer for this panel")
         else:
             im = _render(layers, extent, QSize(PW, PH))
             if not im.isNull():
@@ -614,7 +614,7 @@ def capture_report_4panel(algo_id, display_name, input_layers, report_path,
 
     p.fillRect(QRectF(0, 0, PW * 2, HDR), QColor("#0b2b28"))
     p.setPen(QColor("#7fe3d6"))
-    p.setFont(QFont("Segoe UI", 12, QFont.Bold))
+    p.setFont(QFont("Segoe UI", 12, QFont.Weight.Bold))
     p.drawText(12, 21, f"PlanX Urban Resilience - {display_name}  ({algo_id})")
     p.setPen(QColor("#9fd6c9"))
     p.setFont(QFont("Segoe UI", 8))
@@ -640,7 +640,7 @@ def capture_symbology_4panel(algo_id, display_name, raw_layer, styled_layer,
             p.fillRect(QRectF(x, y, PW, PH), QColor("#f4f6f6"))
             p.setPen(QColor("#99a5a5"))
             p.setFont(QFont("Segoe UI", 13))
-            p.drawText(QRectF(x, y, PW, PH), Qt.AlignCenter, "no layer for this panel")
+            p.drawText(QRectF(x, y, PW, PH), Qt.AlignmentFlag.AlignCenter, "no layer for this panel")
         else:
             im = _render(layers, extent, QSize(PW, PH))
             if not im.isNull():
@@ -693,7 +693,7 @@ def capture_symbology_4panel(algo_id, display_name, raw_layer, styled_layer,
                 p.drawRect(QRectF(30, y - 13, 30, 18))
             p.setPen(QColor("#1a1a1a"))
             p.setFont(QFont("Segoe UI", 9))
-            p.drawText(QRectF(70, y - 15, PW - 110, 22), Qt.AlignLeft | Qt.AlignVCenter,
+            p.drawText(QRectF(70, y - 15, PW - 110, 22), Qt.AlignmentFlag.AlignLeft | Qt.AlignVCenter,
                        label_text)
             y += 28
             if y > HDR + PH + PH - 40:
@@ -702,12 +702,12 @@ def capture_symbology_4panel(algo_id, display_name, raw_layer, styled_layer,
             p.setPen(QColor("#1a1a1a"))
             p.setFont(QFont("Segoe UI", 9))
             p.drawText(QRectF(30, HDR + PH + 70, PW - 60, 40),
-                       Qt.AlignLeft | Qt.AlignVCenter, preset_name)
+                       Qt.AlignmentFlag.AlignLeft | Qt.AlignVCenter, preset_name)
     except Exception:
         p.setPen(QColor("#1a1a1a"))
         p.setFont(QFont("Segoe UI", 9))
         p.drawText(QRectF(30, HDR + PH + 70, PW - 60, 40),
-                   Qt.AlignLeft | Qt.AlignVCenter, preset_name)
+                   Qt.AlignmentFlag.AlignLeft | Qt.AlignVCenter, preset_name)
 
     # panel 2: parameters
     param_lines = param_text.splitlines()
@@ -718,7 +718,7 @@ def capture_symbology_4panel(algo_id, display_name, raw_layer, styled_layer,
 
     p.fillRect(QRectF(0, 0, PW * 2, HDR), QColor("#0b2b28"))
     p.setPen(QColor("#7fe3d6"))
-    p.setFont(QFont("Segoe UI", 12, QFont.Bold))
+    p.setFont(QFont("Segoe UI", 12, QFont.Weight.Bold))
     p.drawText(12, 21, f"PlanX Urban Resilience - {display_name}  ({algo_id})")
     p.setPen(QColor("#9fd6c9"))
     p.setFont(QFont("Segoe UI", 8))

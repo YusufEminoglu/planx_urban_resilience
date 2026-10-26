@@ -18,7 +18,7 @@ deprecated=False
 qgisMaximumVersion=4.99
 hasProcessingProvider=yes
 plugin_dependencies=
-license=GPL-3
+license=GPL-3.0-or-later
 changelog=
     2.2.0 - Major suite expansion: Wildfire WUI and Coastal Sea-Level-Rise modules, icon refresh, dock UX enhancements, and synthesis integration.
         - Brand-new official 3D isometric plugin icon (icons/icon.png) matching PlanX GeoStats and 02CadGis visual style: circular deep-teal pedestal, tactile architectural urban diorama, layered green/blue infrastructure, and multi-hazard resilience shields.
