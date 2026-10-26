@@ -388,7 +388,7 @@ def _order_for_drawing(layers):
 
 def _render(layers, extent, size):
     settings = QgsMapSettings()
-    settings.setLayers([l for l in layers if l is not None and l.isValid()])
+    settings.setLayers([ly for ly in layers if ly is not None and ly.isValid()])
     settings.setExtent(extent)
     settings.setOutputSize(size)
     settings.setBackgroundColor(QColor("#ffffff"))
@@ -473,7 +473,7 @@ def capture_4panel(algo_id, display_name, input_layers, output_layers, param_tex
     p = QPainter(img)
     p.setRenderHint(QPainter.Antialiasing)
 
-    extent = _extent_of([l for l in (input_layers + output_layers) if l is not None])
+    extent = _extent_of([ly for ly in (input_layers + output_layers) if ly is not None])
 
     def draw_map(x, y, layers, label, sub):
         if not layers:
@@ -1652,8 +1652,8 @@ def main():
             noparam += 1
             continue
         P = resolve_params(aid, algo, P)
-        O = dest_paths(aid, algo)
-        res = run(aid, P, O)
+        dests = dest_paths(aid, algo)
+        res = run(aid, P, dests)
         if res is None:
             print(f"[{i:2d}/{len(order)}] {aid}: RUN FAILED", flush=True)
             results[aid] = {"ok": False, "reason": "run failed"}
@@ -1678,7 +1678,7 @@ def main():
         PRODUCED[aid] = produced
 
         in_layers = [load_layer(LAYERS[k], k) for k in inp_keys] if inp_keys else []
-        in_layers = [l for l in in_layers if l is not None]
+        in_layers = [ly for ly in in_layers if ly is not None]
 
         png_rel = f"screenshots/{aid}/{aid}_4panel.png"
         png = SHOT_DIR / aid / f"{aid}_4panel.png"
@@ -1713,7 +1713,7 @@ def main():
                 # the algorithm styles the layer in place; re-run it on our own
                 # object so the captured render shows the plugin's preset rather
                 # than the guide's automatic styling
-                run(aid, dict(P, LAYER=styled), O)
+                run(aid, dict(P, LAYER=styled), dests)
             ok_capture = capture_symbology_4panel(
                 aid, algo.displayName(), raw, styled, param_text, sh(png),
                 target, algo.parameterDefinitions()[2].options()[
