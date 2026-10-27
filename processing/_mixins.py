@@ -80,7 +80,7 @@ class HelpUrlMixin:
     The HELP_URL class attribute can be overridden per algorithm.
     """
 
-    DOC_BASE_URL = "https://yusufeminoglu.github.io/planx_urban_resilience/URBAN_RESILIENCE_REFERENCE_MANUAL.html"
+    DOC_BASE_URL = "https://geophilo.com/planx_urban_resilience/manual.html"
 
     def helpUrl(self):
         return self.DOC_BASE_URL + "#" + self.name()

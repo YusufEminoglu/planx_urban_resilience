@@ -3,14 +3,24 @@ name=Urban Resilience Lab
 email=yusuf.eminoglu@deu.edu.tr
 author=Geophilo
 qgisMinimumVersion=3.28
-description=PlanX urban resilience suite (45 tools): seismic, heat, flood, coastal SLR, social, emergency access, evacuation, network criticality, air, drought, wildfire WUI, synthesis, hot-spot/LISA statistics, risk-recovery matrix, time-series, scenario tools, HTML/Markdown/PDF atlas, symbology.
-about=45 Processing algorithms and a docked Processing panel (colour-grouped, per-tool icons) for city-scale resilience screening: synthetic QA, seismic debris, heat, pluvial flood, coastal sea-level-rise (hydrologically connected BFS flood-fill), social vulnerability, Euclidean and network emergency access, evacuation simulation with optional timestep queue, network criticality, air, green drought stress, wildfire WUI exposure screening, multi-hazard and equity-adjusted synthesis, climate projection overlay, recovery capacity, scenario sensitivity, risk-recovery priority matrix, time-series tracking, scenario templates, HTML/Markdown/PDF atlas with map-book presets, shelter arrival summaries, and symbology. Online User Manual & Documentation: https://geophilo.com/planx_urban_resilience/ | If you find this plugin helpful, please consider starring the repository on GitLab (https://gitlab.com/geophilo1/planx_urban_resilience)!
+description=45 Processing tools for city-scale resilience screening: earthquake debris, heat, pluvial and coastal flooding, social vulnerability, emergency access, evacuation and a printable atlas.
+about=Urban Resilience Lab helps a planning team see where a city is exposed, who is vulnerable there, how quickly help can reach them and which interventions to fund first. It provides 45 Processing tools and a docked panel with colour-coded groups and an icon for every tool.
+    HAZARD AND EXPOSURE SCREENING: Urban heat comfort risk, pluvial flood susceptibility, coastal sea-level-rise exposure with hydrologically connected flood-fill (only cells that water can actually reach are flooded), drought and green infrastructure stress, wildfire exposure at the wildland-urban interface, air quality exposure, critical infrastructure exposure, population-weighted exposure and multi-period hazard frequency aggregation.
+    EARTHQUAKE: Post-earthquake collapse, debris and evacuation network analysis as a Monte Carlo simulation, and a seismic cascade that follows debris into network degradation.
+    EMERGENCY ACCESS AND EVACUATION: Emergency accessibility and shelter coverage by straight line or along the street network, evacuation time simulation with an optional time-step queue, shelter arrival summaries, optimal shelter siting by greedy maximal coverage, and network criticality from edge betweenness.
+    VULNERABILITY AND EQUITY: A social vulnerability index, a recovery capacity index, an interpolated vulnerability surface and equity-adjusted adaptation priorities, so the same hazard counts for more where people have less capacity to recover.
+    SYNTHESIS AND PRIORITIES: A multi-hazard composite index, a climate adaptation priority synthesis, climate projection overlays, a risk-recovery priority matrix, scenario sensitivity analysis, cost-benefit analysis for planning prioritisation, a 25-year lifecycle cost (NPV) calculator and a Pareto-optimal intervention selector.
+    SPATIAL STATISTICS: Getis-Ord Gi* hot spots, LISA clusters and outliers, risk-trend hot spots that combine Gi* with the change in score, a multi-hazard correlation matrix, and a tool that joins hazard scores to planning units.
+    SCENARIOS AND MONITORING: Scenario planning templates, scenario comparison and delta maps, and a time-series tracker for following a city's resilience score over the years.
+    REPORTING AND SYMBOLOGY: One-click resilience symbology, bivariate risk-by-vulnerability choropleths, an HTML resilience score report, recommended-action and studio-brief reports in Markdown, a PDF atlas with map-book presets, and a 3D risk volume export for 3D City Studio.
+    A synthetic demo city is included, so every workflow can be taught and checked before real data is used. All tools are screening instruments for planning; they do not replace engineering studies.
+    Manual: https://geophilo.com/planx_urban_resilience/manual.html
 version=2.2.0
 tracker=https://gitlab.com/geophilo1/planx_urban_resilience/-/issues
 repository=https://gitlab.com/geophilo1/planx_urban_resilience
 
 category=Processing
-tags=planx,urban resilience,drr,seismic,debris,heat,flood,social vulnerability,emergency accessibility,network analysis,air quality,drought,adaptation,scenario planning,scenario comparison,reporting,markdown,symbology,synthetic data,climate,spatial planning,QGIS,processing
+tags=planx,urban resilience,drr,seismic,debris,heat,flood,social vulnerability,emergency accessibility,network analysis,air quality,drought,adaptation,scenario planning,scenario comparison,reporting,markdown,symbology,synthetic data,climate,spatial planning,processing,disaster risk,evacuation,wildfire,sea level rise,geophilo
 homepage=https://geophilo.com/planx_urban_resilience/
 icon=icons/icon.png
 experimental=False
