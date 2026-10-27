@@ -22,9 +22,13 @@ import base64
 import json
 import re
 from datetime import date
+import os
 from pathlib import Path
 
 GUIDE = Path(__file__).resolve().parent
+# The public manual lives in the portal repository (geophilo_project), not
+# in this plugin repository or its Hub zip. GEOPHILO_MANUALS overrides it.
+MANUALS = Path(os.environ.get("GEOPHILO_MANUALS") or GUIDE.parents[1].parents[1] / "geophilo_project" / "_manual_sources") / "planx_urban_resilience" / "PRACTICAL_GUIDE"
 SHOT = GUIDE / "screenshots"
 MAN = GUIDE / "manifest"
 
@@ -457,7 +461,8 @@ def build():
             .replace("__JS__", js)
             .replace("__META__", json.dumps(meta, ensure_ascii=False)))
 
-    out = GUIDE / "practical_guide.html"
+    MANUALS.mkdir(parents=True, exist_ok=True)
+    out = MANUALS / "practical_guide.html"
     out.write_text(html, encoding="utf-8")
     print(f"[OK] {out.name}: {out.stat().st_size / 1024:.0f} kB, "
           f"{len(data)} algorithms, {ok_count} with screenshots")

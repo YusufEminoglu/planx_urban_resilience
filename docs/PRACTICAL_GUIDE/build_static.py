@@ -14,9 +14,13 @@ import base64
 import html
 import json
 from datetime import date
+import os
 from pathlib import Path
 
 GUIDE = Path(__file__).resolve().parent
+# The public manual lives in the portal repository (geophilo_project), not
+# in this plugin repository or its Hub zip. GEOPHILO_MANUALS overrides it.
+MANUALS = Path(os.environ.get("GEOPHILO_MANUALS") or GUIDE.parents[1].parents[1] / "geophilo_project" / "_manual_sources") / "planx_urban_resilience" / "PRACTICAL_GUIDE"
 SHOT = GUIDE / "screenshots"
 MAN = GUIDE / "manifest"
 
@@ -126,7 +130,7 @@ def build():
                              + rows + "</tbody></table></div>")
             body.append("".join(block) + "</div>")
 
-    template = (GUIDE / "template_en.html").read_text(encoding="utf-8")
+    template = (MANUALS / "template_en.html").read_text(encoding="utf-8")
     out = (template
            .replace("{{CONTENT}}", "\n".join(body))
            .replace("{{TOC}}", "\n".join(toc))
@@ -134,7 +138,8 @@ def build():
            .replace("{{ALGO_COUNT}}", str(len(details)))
            .replace("{{GROUP_COUNT}}", str(len(groups_map))))
 
-    target = GUIDE / "practical_guide_static.html"
+    MANUALS.mkdir(parents=True, exist_ok=True)
+    target = MANUALS / "practical_guide_static.html"
     target.write_text(out, encoding="utf-8")
     print(f"[OK] {target.name}: {target.stat().st_size / 1024:.0f} kB, "
           f"{len(details)} tools")

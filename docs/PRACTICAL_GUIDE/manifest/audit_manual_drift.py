@@ -23,7 +23,7 @@ import re
 import sys
 from pathlib import Path
 
-MANUAL = Path(r"C:\Users\YE\PyCharmMiscProject\qgis_plugins\planx_urban_resilience\docs\URBAN_RESILIENCE_REFERENCE_MANUAL.html")
+MANUAL = Path(r"C:\Users\YE\PyCharmMiscProject\geophilo_project\_manual_sources\planx_urban_resilience\URBAN_RESILIENCE_REFERENCE_MANUAL.html")
 GUIDE = Path(r"C:\Users\YE\PyCharmMiscProject\qgis_plugins\planx_urban_resilience\docs\PRACTICAL_GUIDE")
 
 html = MANUAL.read_text(encoding="utf-8")
