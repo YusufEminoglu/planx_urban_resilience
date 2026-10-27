@@ -1382,7 +1382,7 @@ def build_setup(aid):
              "SCORE_FIELD": "adapt_score", "CLASS_FIELD": "adapt_class",
              "TITLE": "PlanX Urban Resilience - Demo District Atlas",
              "SUBTITLE": "Screening atlas (not engineering-grade simulation)",
-             "AUTHOR": "Yusuf Eminoglu", "PROJECT": "PlanX Urban Resilience",
+             "AUTHOR": "Geophilo", "PROJECT": "PlanX Urban Resilience",
              "METHOD": 1, "ATLAS_PRESET": 0}
         use("units")
 

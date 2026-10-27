@@ -1,10 +1,10 @@
 [general]
-name=PlanX: Urban Resilience
+name=Urban Resilience Lab
 email=yusuf.eminoglu@deu.edu.tr
-author=Yusuf Eminoglu
+author=Geophilo
 qgisMinimumVersion=3.28
 description=PlanX urban resilience suite (45 tools): seismic, heat, flood, coastal SLR, social, emergency access, evacuation, network criticality, air, drought, wildfire WUI, synthesis, hot-spot/LISA statistics, risk-recovery matrix, time-series, scenario tools, HTML/Markdown/PDF atlas, symbology.
-about=45 Processing algorithms and a docked Processing panel (colour-grouped, per-tool icons) for city-scale resilience screening: synthetic QA, seismic debris, heat, pluvial flood, coastal sea-level-rise (hydrologically connected BFS flood-fill), social vulnerability, Euclidean and network emergency access, evacuation simulation with optional timestep queue, network criticality, air, green drought stress, wildfire WUI exposure screening, multi-hazard and equity-adjusted synthesis, climate projection overlay, recovery capacity, scenario sensitivity, risk-recovery priority matrix, time-series tracking, scenario templates, HTML/Markdown/PDF atlas with map-book presets, shelter arrival summaries, and symbology. DEU City and Regional Planning educational workflows. Online User Manual & Documentation: https://geophilo.com/planx_urban_resilience/ | If you find this plugin helpful, please consider starring the repository on GitLab (https://gitlab.com/geophilo1/planx_urban_resilience)!
+about=45 Processing algorithms and a docked Processing panel (colour-grouped, per-tool icons) for city-scale resilience screening: synthetic QA, seismic debris, heat, pluvial flood, coastal sea-level-rise (hydrologically connected BFS flood-fill), social vulnerability, Euclidean and network emergency access, evacuation simulation with optional timestep queue, network criticality, air, green drought stress, wildfire WUI exposure screening, multi-hazard and equity-adjusted synthesis, climate projection overlay, recovery capacity, scenario sensitivity, risk-recovery priority matrix, time-series tracking, scenario templates, HTML/Markdown/PDF atlas with map-book presets, shelter arrival summaries, and symbology. Online User Manual & Documentation: https://geophilo.com/planx_urban_resilience/ | If you find this plugin helpful, please consider starring the repository on GitLab (https://gitlab.com/geophilo1/planx_urban_resilience)!
 version=2.2.0
 tracker=https://gitlab.com/geophilo1/planx_urban_resilience/-/issues
 repository=https://gitlab.com/geophilo1/planx_urban_resilience
@@ -175,7 +175,7 @@ changelog=
     PlanX Urban Resilience 1.1.0 - Added QGIS dashboard, Urban Heat Comfort Risk screening, and Pluvial Flood Susceptibility screening modules.
         - Added module cards, project data readiness guidance, and Processing launch shortcuts.
         - Registered heat and flood Processing groups alongside the existing seismic debris module.
-    PlanX Urban Resilience 1.0.3 - Standardized author/email metadata, added DEU educational context, marked the plugin stable, and refreshed the Plugin Hub release package.
+    PlanX Urban Resilience 1.0.3 - Standardized author/email metadata, added educational context, marked the plugin stable, and refreshed the Plugin Hub release package.
     PlanX Urban Resilience 1.0.2 - Refreshed the release for Plugin Hub publication.
         - Update package metadata for the next published version.
         - Rebuild the Hub-ready ZIP archive from the current plugin sources.
